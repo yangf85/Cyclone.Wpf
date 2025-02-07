@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyVersion>1.25.2.0</AssemblyVersion>
+    <FileVersion>1.25.2.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
+    <PackageReference Include="ToastNotifications.Net5" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>

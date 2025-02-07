@@ -1,0 +1,50 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:Double x:Key="RowHeight">24</sys:Double>
+
+    <!--  FontSize  -->
+    <sys:Double x:Key="FontSizePrompt">10</sys:Double>
+    <sys:Double x:Key="FontSizeDescription">12</sys:Double>
+    <sys:Double x:Key="FontSizeContent">14</sys:Double>
+    <sys:Double x:Key="FontSizeTitle">18</sys:Double>
+
+    <!--  ControlSzie  -->
+    <sys:Double x:Key="HorizontalItemHeight">21</sys:Double>
+    <sys:Double x:Key="HorizontalControlHeight">24</sys:Double>
+    <sys:Double x:Key="HorizontalHeaderHeight">27</sys:Double>
+
+    <sys:Double x:Key="VerticalItemWidth">20</sys:Double>
+    <sys:Double x:Key="VerticalControlWidth">24</sys:Double>
+    <sys:Double x:Key="VerticalHeaderWidth">30</sys:Double>
+    <!--  Spacing  -->
+    <Thickness x:Key="ElementSpacingLeft">5,0,0,0</Thickness>
+    <Thickness x:Key="ElementSpacingRight">0,0,5,0</Thickness>
+    <Thickness x:Key="ElementSpacingTop">0,5,0,0</Thickness>
+    <Thickness x:Key="ElementSpacingBottom">0,0,0,5</Thickness>
+
+    <!--  CornerRadius  -->
+    <CornerRadius x:Key="CornerRadiusNone">0</CornerRadius>
+    <CornerRadius x:Key="CornerRadiusSmall">1</CornerRadius>
+    <CornerRadius x:Key="CornerRadiusNormal">2</CornerRadius>
+    <CornerRadius x:Key="CornerRadiusLarge">3</CornerRadius>
+
+    <!--  BorderThickness  -->
+    <Thickness x:Key="BorderThicknessNone">0</Thickness>
+    <Thickness x:Key="BorderThicknessNormal">1</Thickness>
+    <Thickness x:Key="BorderThicknessThick">2</Thickness>
+
+    <!--  Padding  -->
+    <Thickness x:Key="PaddingNone">0</Thickness>
+    <Thickness x:Key="PaddingSmall">3</Thickness>
+    <Thickness x:Key="PaddingNormal">5</Thickness>
+    <Thickness x:Key="PaddingLarge">7</Thickness>
+
+    <!--  Margin  -->
+    <Thickness x:Key="MarginNone">0</Thickness>
+    <Thickness x:Key="MarginSmall">3</Thickness>
+    <Thickness x:Key="MarginNormal">5</Thickness>
+    <Thickness x:Key="MarginLarge">7</Thickness>
+</ResourceDictionary>

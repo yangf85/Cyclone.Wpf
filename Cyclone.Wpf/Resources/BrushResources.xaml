@@ -1,0 +1,151 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  基础状态  -->
+    <SolidColorBrush
+        x:Key="DefaultBorderBrush"
+        Color="#FF707070" />
+    <SolidColorBrush
+        x:Key="DefaultBackgroundBrush"
+        Color="#FFECECEC" />
+    <SolidColorBrush
+        x:Key="DefaultForegroundBrush"
+        Color="#FF1B293E" />
+
+    <!--  悬停状态  -->
+    <SolidColorBrush
+        x:Key="HoverBackgroundBrush"
+        Color="#FFD1ECF8" />
+    <SolidColorBrush
+        x:Key="HoverBorderBrush"
+        Color="#FF3C7FB1" />
+    <SolidColorBrush
+        x:Key="HoverForegroundBrush"
+        Color="#FF000000" />
+
+    <!--  按压状态  -->
+    <SolidColorBrush
+        x:Key="PressedBackgroundBrush"
+        Color="#FF90C3E8" />
+    <SolidColorBrush
+        x:Key="PressedBorderBrush"
+        Color="#FF2C628B" />
+    <SolidColorBrush
+        x:Key="PressedForegroundBrush"
+        Color="#FF000000" />
+
+    <!--  布尔状态  -->
+    <SolidColorBrush
+        x:Key="CheckedBackgroundBrush"
+        Color="#FFA9DAF3" />
+    <SolidColorBrush
+        x:Key="CheckedBorderBrush"
+        Color="#FF2C628B" />
+    <SolidColorBrush
+        x:Key="CheckedForegroundBrush"
+        Color="#FF000000" />
+
+    <!--  编辑中状态  -->
+    <SolidColorBrush
+        x:Key="EditingBackgroundBrush"
+        Color="#FFECECEC" />
+    <SolidColorBrush
+        x:Key="EditingBorderBrush"
+        Color="#FF1FAEFF" />
+    <SolidColorBrush
+        x:Key="EditingForegroundBrush"
+        Color="#FF000000" />
+
+    <!--  聚焦状态  -->
+    <SolidColorBrush
+        x:Key="FocusedBackgroundBrush"
+        Color="#FF99D3F0" />
+    <SolidColorBrush
+        x:Key="FocusedBorderBrush"
+        Color="#FF1FAEFF" />
+    <SolidColorBrush
+        x:Key="FocusedForegroundBrush"
+        Color="#FF000000" />
+
+    <!--  选中元素  -->
+    <SolidColorBrush
+        x:Key="SelectedBackgroundBrush"
+        Color="#FF1FAEFF" />
+    <SolidColorBrush
+        x:Key="SelectedBorderBrush"
+        Color="#FFC2E4F6" />
+    <SolidColorBrush
+        x:Key="SelectedForegroundBrush"
+        Color="#FF1A1A1A" />
+
+    <!--  警告和错误  -->
+    <SolidColorBrush
+        x:Key="WarningBackgroundBrush"
+        Color="#FFFFC107" />
+    <SolidColorBrush
+        x:Key="WarningBorderBrush"
+        Color="#FFFFA000" />
+    <SolidColorBrush
+        x:Key="WarningForegroundBrush"
+        Color="#FF000000" />
+
+    <SolidColorBrush
+        x:Key="ErrorBackgroundBrush"
+        Color="#FFF44336" />
+    <SolidColorBrush
+        x:Key="ErrorBorderBrush"
+        Color="#FFD32F2F" />
+    <SolidColorBrush
+        x:Key="ErrorForegroundBrush"
+        Color="#FFFFFFFF" />
+
+    <!--  成功和信息  -->
+    <SolidColorBrush
+        x:Key="SuccessBackgroundBrush"
+        Color="#FF4CAF50" />
+    <SolidColorBrush
+        x:Key="SuccessBorderBrush"
+        Color="#FF388E3C" />
+    <SolidColorBrush
+        x:Key="SuccessForegroundBrush"
+        Color="#FFFFFFFF" />
+
+    <SolidColorBrush
+        x:Key="InfoBackgroundBrush"
+        Color="#FF2196F3" />
+    <SolidColorBrush
+        x:Key="InfoBorderBrush"
+        Color="#FF1976D2" />
+    <SolidColorBrush
+        x:Key="InfoForegroundBrush"
+        Color="#FFFFFFFF" />
+
+    <!--  禁用状态  -->
+    <SolidColorBrush
+        x:Key="DisabledBackgroundBrush"
+        Color="#FFBDBDBD" />
+    <SolidColorBrush
+        x:Key="DisabledBorderBrush"
+        Color="#FF9E9E9E" />
+    <SolidColorBrush
+        x:Key="DisabledForegroundBrush"
+        Color="#FF757575" />
+
+    <!--  图标或辅助  -->
+    <SolidColorBrush
+        x:Key="IconBrush"
+        Color="#FF757575" />
+
+    <!--  阴影和高光  -->
+    <SolidColorBrush
+        x:Key="ShadowBrush"
+        Color="#40000000" />
+    <SolidColorBrush
+        x:Key="HighlightBrush"
+        Color="#80FFFFFF" />
+
+    <!--  强调颜色  -->
+    <SolidColorBrush
+        x:Key="AccentBrush"
+        Color="#FFFF4081" />
+</ResourceDictionary>

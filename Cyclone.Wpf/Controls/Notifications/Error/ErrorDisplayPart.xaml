@@ -1,0 +1,52 @@
+﻿<core:NotificationDisplayPart
+    x:Class="Cyclone.Wpf.Controls.Notifications.ErrorDisplayPart"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:ToastNotifications.Core;assembly=ToastNotifications"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignWidth="250"
+    mc:Ignorable="d">
+    <core:NotificationDisplayPart.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Controls/Notifications/NotificationResource.xaml" />
+    </core:NotificationDisplayPart.Resources>
+    <Border
+        x:Name="ContentWrapper"
+        Background="{StaticResource ErrorColorBrush}"
+        Style="{StaticResource NotificationBorder}">
+        <Grid x:Name="ContentContainer">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Rectangle
+                x:Name="Icon"
+                Width="24"
+                Height="24">
+                <Rectangle.Fill>
+                    <VisualBrush Visual="{StaticResource ErrorIcon}" />
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <TextBlock
+                x:Name="Text"
+                Grid.Column="1"
+                Style="{StaticResource NotificationText}"
+                Text="{Binding Message, Mode=OneTime}" />
+            <Button
+                x:Name="CloseButton"
+                Grid.Column="2"
+                Padding="1"
+                Click="OnClose"
+                Style="{StaticResource NotificationCloseButton}"
+                Visibility="Hidden">
+                <Rectangle Margin="2" Style="{StaticResource CloseButtonIcon}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource CloseIcon}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </Grid>
+    </Border>
+</core:NotificationDisplayPart>
