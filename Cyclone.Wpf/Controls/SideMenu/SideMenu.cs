@@ -31,15 +31,17 @@ public class SideMenu:ItemsControl
 
     #endregion
 
-    #region IsExpanded
-    public bool IsExpanded
+
+
+    #region IsCompact
+    public bool IsCompact
     {
-        get => (bool)GetValue(IsExpandedProperty);
-        set => SetValue(IsExpandedProperty, value);
+        get => (bool)GetValue(IsCompactProperty);
+        set => SetValue(IsCompactProperty, value);
     }
 
-    public static readonly DependencyProperty IsExpandedProperty =
-        DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(SideMenu), new PropertyMetadata(default(bool)));
+    public static readonly DependencyProperty IsCompactProperty =
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu), new PropertyMetadata(default(bool)));
 
     #endregion
 
@@ -104,5 +106,40 @@ public class SideMenu:ItemsControl
     {
         return item is SideMenuItem;
     }
+
+
     #endregion
+
+
+
+
+    internal void DeactivateItems()
+    {
+        // 从顶层开始递归取消所有子项的激活状态
+        DeactivateItemsRecursively(this);
+    }
+
+    /// <summary>
+    /// 递归取消传入 ItemsControl 内所有子项的激活状态
+    /// </summary>
+    /// <param name="itemsControl">当前遍历的 ItemsControl</param>
+    private void DeactivateItemsRecursively(ItemsControl itemsControl)
+    {
+        foreach (var item in itemsControl.Items)
+        {
+            // 获取该项对应的容器
+            if (itemsControl.ItemContainerGenerator.ContainerFromItem(item) is SideMenuItem menuItem)
+            {
+                // 取消当前菜单项的激活状态
+                menuItem.SetInactive();
+
+                // 如果当前菜单项内还有嵌套的子项，则递归调用
+                if (menuItem.HasItems)
+                {
+                    DeactivateItemsRecursively(menuItem);
+                }
+            }
+        }
+    }
+
 }

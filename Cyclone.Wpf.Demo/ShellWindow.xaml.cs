@@ -20,11 +20,8 @@ public partial class ShellWindow : AdvancedWindow
     public ShellWindow()
     {
         InitializeComponent();
-        Loaded += MainWindow_Loaded;
+       
     }
 
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        var t = this.Style;
-    }
+   
 }

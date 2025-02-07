@@ -21,6 +21,20 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
        
     }
 
+
+
+    #region RowHeight
+    public double RowHeight
+    {
+        get => (double)GetValue(RowHeightProperty);
+        set => SetValue(RowHeightProperty, value);
+    }
+
+    public static readonly DependencyProperty RowHeightProperty =
+        DependencyProperty.Register(nameof(RowHeight), typeof(double), typeof(SideMenuItem), new PropertyMetadata(32d));
+
+    #endregion
+
     #region IsExpanded
     public bool IsExpanded
     {
@@ -35,24 +49,28 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
 
 
-    #region IsActived
+    #region IsActived 
+
+    private static readonly DependencyPropertyKey IsActivedPropertyKey =
+        DependencyProperty.RegisterReadOnly(
+            nameof(IsActived),
+            typeof(bool),
+            typeof(SideMenuItem),
+            new PropertyMetadata(false));
+
+    public static readonly DependencyProperty IsActivedProperty = IsActivedPropertyKey.DependencyProperty;
+
     public bool IsActived
     {
         get => (bool)GetValue(IsActivedProperty);
-        set => SetValue(IsActivedProperty, value);
     }
-
-    public static readonly DependencyProperty IsActivedProperty =
-        DependencyProperty.Register(nameof(IsActived), typeof(bool), typeof(SideMenuItem), new PropertyMetadata(default(bool),OnIsActivedChanged));
-
-    private static void OnIsActivedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        
-    }
-
     
 
     #endregion
+
+
+
+
 
 
 
@@ -90,38 +108,39 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     }
 
 
+    /// <summary>
+    /// 在视觉树中查找当前元素的上一级（最近的） SideMenuItem 父元素，跳过其他非 SideMenuItem 的容器
+    /// </summary>
+    private static SideMenuItem FindVisualParentSideMenuItem(DependencyObject child)
+    {
+        DependencyObject parent = VisualTreeHelper.GetParent(child);
+        while (parent != null && parent is not SideMenuItem)
+        {
+            parent = VisualTreeHelper.GetParent(parent);
+        }
+        return parent as SideMenuItem;
+    }
+
     private int GetDepth()
     {
         int depth = 0;
         DependencyObject current = this;
 
-        // 逐级向上查找父级 SideMenuItem
-        while (current is SideMenuItem)
+        if (_root.IsCompact)
         {
-            // 获取父级容器（可能是 SideMenu 或另一个 SideMenuItem）
-            DependencyObject parent = VisualTreeHelper.GetParent(current);
+            return 0;
+        }
 
-            // 如果父级是 SideMenu，说明已到达根节点，终止循环
-            if (parent is SideMenu)
-            {
-                break;
-            }
-
-            // 如果父级是 SideMenuItem，深度加一
-            if (parent is SideMenuItem)
-            {
-                depth++;
-                current = parent;
-            }
-            else
-            {
-                // 其他情况（例如非容器父级），直接终止循环
-                break;
-            }
+        // 每次获取视觉树中最近的 SideMenuItem 父级
+        while ((current = FindVisualParentSideMenuItem(current)) != null)
+        {
+            depth++;
         }
 
         return depth;
     }
+
+
 
     public double Indent
     {
@@ -149,6 +168,20 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
         DependencyProperty.Register(nameof(Icon), typeof(object), typeof(SideMenuItem), new PropertyMetadata(default(object)));
 
     #endregion
+
+
+    #region IconTemplate
+    public DataTemplate IconTemplate
+    {
+        get => (DataTemplate)GetValue(IconTemplateProperty);
+        set => SetValue(IconTemplateProperty, value);
+    }
+
+    public static readonly DependencyProperty IconTemplateProperty =
+        DependencyProperty.Register(nameof(IconTemplate), typeof(DataTemplate), typeof(SideMenuItem), new PropertyMetadata(default(DataTemplate)));
+
+    #endregion
+
 
 
     #region Impl CommandSource
@@ -199,21 +232,43 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     #region Override
 
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        
+    }
+
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonUp(e);
+
         if (Command != null && Command.CanExecute(CommandParameter))
         {
             Command.Execute(CommandParameter);
         }
 
-        if (e.Source ==this)
+        // 获取当前点击的 SideMenuItem
+        var source = e.OriginalSource as DependencyObject;
+        var clickedItem = VisualHelper.TryFindParent<SideMenuItem>(source);
+
+
+
+        // 如果点击的是当前的 SideMenuItem
+        if (clickedItem == this)
         {
-            SetCurrentValue(IsExpandedProperty, !IsExpanded);
-            SetCurrentValue(IsActivedProperty, !IsActived);
+            SetValue(IsExpandedProperty, !IsExpanded);
+
+
+            var flag = IsActived;
+
+            _root?.DeactivateItems();
+
+            SetValue(IsActivedPropertyKey, !flag);
         }
-        
     }
+
+   
 
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
@@ -226,6 +281,7 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     public override void OnApplyTemplate()
     {
+    
         base.OnApplyTemplate();
         _root = VisualHelper.TryFindParent<SideMenu>(this);
 
@@ -237,6 +293,10 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     #endregion
 
+    internal void SetInactive()
+    {
+        SetValue(IsActivedPropertyKey, false);
+    }
 
 
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,12 @@ namespace Cyclone.Wpf.Demo
         public MainView()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+        }
+
+        private void SideMenu_Loaded(object sender, RoutedEventArgs e)
+        {
+            var t = SideMenu.ItemContainerStyle;
         }
     }
 }
