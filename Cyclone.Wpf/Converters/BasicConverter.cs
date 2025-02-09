@@ -93,25 +93,36 @@ public class FuncValueConverter<TIn, TParam, TOut> : IValueConverter
         {
             return DependencyProperty.UnsetValue;
         }
-        if (parameter is TParam param)
+
+
+        var objConverter = TypeDescriptor.GetConverter(typeof(TIn));
+        if (value is not TIn obj)
         {
-            var typeConverter = TypeDescriptor.GetConverter(typeof(TIn));
-
-            if (value is not TIn obj)
+            if (objConverter.CanConvertFrom(value.GetType()))
             {
-                if (typeConverter.CanConvertFrom(value.GetType()))
-                {
-                    obj = (TIn)typeConverter.ConvertFrom(value);
-                }
-                else
-                {
-                    return DependencyProperty.UnsetValue;
-                }
+                obj = (TIn)objConverter.ConvertFrom(value);
             }
-
-            return _convert(obj, param);
+            else
+            {
+                return DependencyProperty.UnsetValue;
+            }
         }
-        return DependencyProperty.UnsetValue;
+
+        var paramConverter = TypeDescriptor.GetConverter(typeof(TParam));
+        if (parameter is not TParam param)
+        {
+            if (paramConverter.CanConvertFrom(parameter.GetType()))
+            {
+                param = (TParam)paramConverter.ConvertFrom(parameter);
+            }
+            else
+            {
+                return DependencyProperty.UnsetValue;
+            }
+        }
+
+        return _convert(obj, param);
+
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

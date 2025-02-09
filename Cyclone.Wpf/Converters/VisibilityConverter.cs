@@ -7,9 +7,9 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Converters;
 
-internal class VisibilityConverter
+public class VisibilityConverter
 {
-    public static FuncValueConverter<bool?, Visibility> BooleanToVisibilityConverter { get; } =
+    public static FuncValueConverter<bool?, Visibility> VisibleWhenTrue { get; } =
        new(b =>
        {
            return b switch
@@ -19,4 +19,15 @@ internal class VisibilityConverter
                _ => Visibility.Hidden
            };
        });
+
+    public static FuncValueConverter<bool?, Visibility> VisibleWhenFalse { get; } =
+      new(b =>
+      {
+          return b switch
+          {
+              true => Visibility.Collapsed,
+              false => Visibility.Visible,
+              _ => Visibility.Hidden
+          };
+      });
 }

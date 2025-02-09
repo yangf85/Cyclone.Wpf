@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cy="https://www.cyclone/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Cyclone.Wpf.Demo.ViewModels"
@@ -13,37 +14,49 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <cy:SideMenu
             x:Name="SideMenu"
             Width="200"
             HorizontalAlignment="Left"
-            Indent="15"
+            Indent="10"
+            IsCompact="False"
             ItemsSource="{Binding SideMenu.Items}"
             Loaded="SideMenu_Loaded">
             <cy:SideMenu.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontFamily="{DynamicResource IconFont}"
-                            FontSize="20"
-                            Text="{Binding Icon}" />
-                        <TextBlock
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Text="{Binding Header}" />
-                    </StackPanel>
+                    <Grid>
+                        <StackPanel
+                            Background="Transparent"
+                            IsHitTestVisible="True"
+                            Orientation="Horizontal">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding Path=DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontFamily="{DynamicResource IconFont}"
+                                FontSize="20"
+                                Text="{Binding Icon}" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                Text="{Binding Header}" />
+                        </StackPanel>
+                    </Grid>
+
                 </HierarchicalDataTemplate>
             </cy:SideMenu.ItemTemplate>
-
         </cy:SideMenu>
         <Grid Grid.Column="1">
-            <Button
-                x:Name="AAA"
-                Content="1234" />
+            <ContentControl Content="{Binding CurrentView}" />
         </Grid>
     </Grid>
 </UserControl>

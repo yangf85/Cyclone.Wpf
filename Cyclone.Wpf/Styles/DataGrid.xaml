@@ -211,7 +211,7 @@
                             <Control
                                 SnapsToDevicePixels="false"
                                 Template="{Binding ValidationErrorTemplate, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
-                                Visibility="{Binding (Validation.HasError), Converter={x:Static conv:VisibilityConverter.BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" />
+                                Visibility="{Binding (Validation.HasError), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" />
                         </StackPanel>
 
                         <Thumb

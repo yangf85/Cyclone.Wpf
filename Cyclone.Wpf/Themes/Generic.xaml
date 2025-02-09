@@ -8,6 +8,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/EditableTextBlock.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/PopupBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Switch.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ToggleButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextBox.xaml" />

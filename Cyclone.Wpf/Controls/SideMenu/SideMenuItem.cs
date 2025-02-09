@@ -16,10 +16,7 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     }
 
     SideMenu _root;
-    public SideMenuItem()
-    {
-       
-    }
+   
 
 
 
@@ -123,14 +120,13 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     private int GetDepth()
     {
-        int depth = 0;
-        DependencyObject current = this;
-
         if (_root.IsCompact)
         {
             return 0;
         }
 
+        int depth = 0;
+        DependencyObject current = this;
         // 每次获取视觉树中最近的 SideMenuItem 父级
         while ((current = FindVisualParentSideMenuItem(current)) != null)
         {
@@ -238,7 +234,6 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
         
     }
-
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonUp(e);
@@ -252,20 +247,19 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
         var source = e.OriginalSource as DependencyObject;
         var clickedItem = VisualHelper.TryFindParent<SideMenuItem>(source);
 
-
-
         // 如果点击的是当前的 SideMenuItem
         if (clickedItem == this)
         {
             SetValue(IsExpandedProperty, !IsExpanded);
-
-
             var flag = IsActived;
-
-            _root?.DeactivateItems();
-
-            SetValue(IsActivedPropertyKey, !flag);
+            if (!flag)
+            {
+                _root?.DeactivateItems();
+                SetValue(IsActivedPropertyKey, !flag);
+            }
+          
         }
+        
     }
 
    

@@ -35,7 +35,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
-                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             <ContentPresenter
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
@@ -75,7 +75,7 @@
                                 HorizontalAlignment="Left"
                                 Content="选择全部"
                                 IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             <ItemsPresenter Grid.Row="1" />
                         </StackPanel>
                     </Border>

@@ -31,7 +31,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Fill="{StaticResource CheckedBorderBrush}"
-                    Visibility="{Binding Path=IsChecked, Converter={x:Static conv:VisibilityConverter.BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    Visibility="{Binding Path=IsChecked, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
             </Grid>
             <Grid
                 Name="ContentGrid"
