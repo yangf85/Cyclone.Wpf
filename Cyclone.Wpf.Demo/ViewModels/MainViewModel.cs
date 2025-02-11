@@ -24,17 +24,14 @@ public partial class MainViewModel:ObservableObject
         if (item == null) { return; }
 
 
-      switch (item.Header)
-      {
-          case "Button":
-              CurrentView = new ButtonView();
-              break;
-         
-          default:
-              CurrentView = new object();
-              break;
-      }
-
+        CurrentView = item.Header switch
+        {
+            "Button" => new ButtonView(),
+            "Text" => new TextView(),
+            "Nesting" => new NestingView(),
+            "Selector"=> new SelectorView(),
+            _ => new object(),
+        };
     }
 
 }
@@ -50,7 +47,7 @@ public partial class SideMenuViewModel:ObservableObject
     {
         Items.Add(new SideMenuItemViewModel()
         {
-            Header="Input",
+            Header= "Interaction",
             Icon= "\xe60f",
             Items = 
             [
@@ -76,6 +73,16 @@ public partial class SideMenuViewModel:ObservableObject
         {
             Header="Navigation",
             Icon= "\xe81a",
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header="Nesting",
+            Icon= "\xe81a",
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header = "Selector",
+            Icon = "\xe81a",
         });
     }
 }

@@ -6,9 +6,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="DefaultComboBoxItemStyle"
-        TargetType="ComboBoxItem">
+    <Style TargetType="ComboBoxItem">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
@@ -63,7 +61,7 @@
     </ControlTemplate>
 
     <ControlTemplate
-        x:Key="ComboBoxTextBox"
+        x:Key="ComboBox.TextBox"
         TargetType="TextBox">
         <Border
             x:Name="PART_ContentHost"
@@ -72,7 +70,7 @@
     </ControlTemplate>
 
     <Style TargetType="ComboBox">
-        <Setter Property="ItemContainerStyle" Value="{StaticResource DefaultComboBoxItemStyle}" />
+
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
@@ -110,7 +108,7 @@
                                 Focusable="True"
                                 IsReadOnly="{TemplateBinding IsReadOnly}"
                                 Style="{x:Null}"
-                                Template="{StaticResource ComboBoxTextBox}"
+                                Template="{StaticResource ComboBox.TextBox}"
                                 Visibility="Hidden" />
                             <Popup
                                 Name="Popup"

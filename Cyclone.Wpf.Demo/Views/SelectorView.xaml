@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="Cyclone.Wpf.Demo.Views.SelectorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cy="https://www.cyclone/wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:CascadePickerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <cy:SpacingStackPanel Spacing="20">
+        <HeaderedContentControl Header="CascadePicker">
+            <cy:SpacingUniformGrid
+                HorizontalSpacing="5"
+                Rows="1">
+                <cy:CascadePicker Watermark="Normal" SelectedChanged="CascadePicker_SelectedChanged">
+                    <cy:CascadePickerItem Header="A">
+                        <cy:CascadePickerItem Header="A1" />
+                        <cy:CascadePickerItem Header="A2" />
+                        <cy:CascadePickerItem Header="A3" />
+                    </cy:CascadePickerItem>
+                    <cy:CascadePickerItem Header="B">
+                        <cy:CascadePickerItem Header="B1" />
+                        <cy:CascadePickerItem Header="B2" />
+                        <cy:CascadePickerItem Header="B3" />
+                    </cy:CascadePickerItem>
+                    <cy:CascadePickerItem Header="A" />
+                </cy:CascadePicker>
+                <cy:CascadePicker
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Cities}"
+                    Watermark="DataTemplate" />
+
+            </cy:SpacingUniformGrid>
+        </HeaderedContentControl>
+
+    </cy:SpacingStackPanel>
+</UserControl>

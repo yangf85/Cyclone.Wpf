@@ -49,6 +49,7 @@ namespace Cyclone.Wpf.Controls
 
         static NumberBox()
         {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(NumberBox), new FrameworkPropertyMetadata(typeof(NumberBox)));
             InitializeCommand();
         }
 
@@ -131,7 +132,7 @@ namespace Cyclone.Wpf.Controls
         #region DecimalPlaces
 
         public static readonly DependencyProperty DecimalPlacesProperty =
-                            DependencyProperty.Register(nameof(DecimalPlaces), typeof(int), typeof(NumberBox), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnDecimalPlacesChanged, CoerceDecimalPlaces));
+                            DependencyProperty.Register(nameof(DecimalPlaces), typeof(int), typeof(NumberBox), new FrameworkPropertyMetadata(2, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnDecimalPlacesChanged, CoerceDecimalPlaces));
 
         public int DecimalPlaces
         {

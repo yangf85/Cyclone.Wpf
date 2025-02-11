@@ -85,13 +85,13 @@
                     x:Name="PART_InputTextBox"
                     Grid.Column="0"
                     Padding="3,0,0,0"
+                    VerticalAlignment="Center"
                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                     Background="Transparent"
                     BorderThickness="0"
                     Foreground="{TemplateBinding Foreground}"
                     InputMethod.IsInputMethodEnabled="False"
-                    KeyboardNavigation.TabNavigation="Local"
-                    Style="{x:Null}" />
+                    KeyboardNavigation.TabNavigation="Local" />
                 <Rectangle
                     x:Name="VerticalSeperater"
                     Grid.Column="1"
@@ -197,7 +197,7 @@
     <Style TargetType="ctl:NumberBox">
         <Setter Property="Template" Value="{StaticResource BasicNumberBoxControlTemplate}" />
         <Setter Property="Height" Value="{DynamicResource HorizontalControlHeight}" />
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

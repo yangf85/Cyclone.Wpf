@@ -8,9 +8,9 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Helpers;
 
-public static class VisualHelper
+public static class ElementHelper
 {
-    public static T TryFindParent<T>(this DependencyObject child) where T : DependencyObject
+    public static T? TryFindVisualParent<T>(this DependencyObject child) where T : DependencyObject
     {
         while (true)
         {
@@ -29,4 +29,22 @@ public static class VisualHelper
             }
         }
     }
+
+    public static T? TryFindLogicalParent<T>(this DependencyObject child) where T : DependencyObject
+    {
+        while (true)
+        {
+            var parentObject = LogicalTreeHelper.GetParent(child);
+            if (parentObject == null)
+                return null;
+
+            if (parentObject is T parent)
+            {
+                return parent;
+            }
+
+            child = parentObject;
+        }
+    }
+
 }
