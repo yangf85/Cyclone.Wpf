@@ -15,7 +15,7 @@
             <cy:SpacingUniformGrid
                 HorizontalSpacing="5"
                 Rows="1">
-                <cy:CascadePicker Watermark="Normal" SelectedChanged="CascadePicker_SelectedChanged">
+                <cy:CascadePicker Watermark="Normal" IsKeyboardFocusWithinChanged="CascadePicker_IsKeyboardFocusWithinChanged" SelectedChanged="CascadePicker_SelectedChanged">
                     <cy:CascadePickerItem Header="A">
                         <cy:CascadePickerItem Header="A1" />
                         <cy:CascadePickerItem Header="A2" />
@@ -28,13 +28,18 @@
                     </cy:CascadePickerItem>
                     <cy:CascadePickerItem Header="A" />
                 </cy:CascadePicker>
-                <cy:CascadePicker
+                <!--<cy:CascadePicker
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding Cities}"
-                    Watermark="DataTemplate" />
-
+                    Watermark="DataTemplate" />-->
+  
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
+
+        <cy:TransitionBox x:Name="transitionBox" Width="200" Height="100">
+            <Button Content="Click Me"/>
+        </cy:TransitionBox>
+        <Button Content="Change Content" Click="OnChangeContent"  Margin="0,150,0,0"/>
 
     </cy:SpacingStackPanel>
 </UserControl>

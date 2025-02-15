@@ -5,30 +5,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type ContextMenu}">
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}" />
-        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}" />
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="true">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+   
 
     <Style
         x:Key="{x:Static MenuItem.SeparatorStyleKey}"
@@ -55,7 +32,7 @@
     </Style>
 
     <Style
-        x:Key="MenuRepeatButtonStyle"
+        x:Key="Menu.RepeatButtonStyle"
         TargetType="{x:Type RepeatButton}">
         <Setter Property="ClickMode" Value="Hover" />
         <Setter Property="Template">
@@ -116,7 +93,7 @@
                             Command="ScrollBar.LineUpCommand"
                             CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                             Focusable="False"
-                            Style="{StaticResource MenuRepeatButtonStyle}">
+                            Style="{StaticResource Menu.RepeatButtonStyle}">
                             <RepeatButton.Visibility>
                                 <MultiBinding
                                     ConverterParameter="0"
@@ -149,7 +126,7 @@
                             Command="ScrollBar.LineDownCommand"
                             CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                             Focusable="False"
-                            Style="{StaticResource MenuRepeatButtonStyle}">
+                            Style="{StaticResource Menu.RepeatButtonStyle}">
                             <RepeatButton.Visibility>
                                 <MultiBinding
                                     ConverterParameter="100"
@@ -657,7 +634,6 @@
     </ControlTemplate>
 
     <Style
-        x:Key="MenuItemStyle"
         TargetType="{x:Type MenuItem}">
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -696,7 +672,7 @@
         <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}" />
         <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemStyle}" />
+        <!--<Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemStyle}" />-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Menu}">

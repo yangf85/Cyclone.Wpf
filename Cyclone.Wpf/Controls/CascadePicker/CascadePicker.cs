@@ -23,7 +23,7 @@ namespace Cyclone.Wpf.Controls;
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(CascadePickerItem))]
 [TemplatePart(Name = "PART_DisplayedTextBox", Type = typeof(TextBox))]
 [TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
-public class CascadePicker : Menu
+public class CascadePicker : Selector
 {
     private const string PART_DisplayedTextBox = "PART_DisplayedTextBox";
     private const string PART_Popup = "PART_Popup";
@@ -38,7 +38,7 @@ public class CascadePicker : Menu
 
     public CascadePicker()
     {
-        AddHandler(CascadePickerItem.ClickEvent, new RoutedEventHandler(Item_Click));
+        AddHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
 
     }
 
@@ -48,8 +48,13 @@ public class CascadePicker : Menu
         if (e.Source is CascadePickerItem item)
         {
             SetValue(DisplayedNodePathProperty, GetDisplayedPath(item));
+          
             SetValue(SelectedItemProperty, item);
             RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
+            if (!item.HasItems)
+            {
+                SetValue(IsOpenedProperty, false);
+            }
         }
         
     }
@@ -99,7 +104,7 @@ public class CascadePicker : Menu
     }
 
     public static readonly DependencyProperty DisplayedNodePathProperty =
-        DependencyProperty.Register(nameof(DisplayedNodePath), typeof(string), typeof(CascadePicker), new PropertyMetadata(default(string)));
+        DependencyProperty.Register(nameof(DisplayedNodePath), typeof(string), typeof(CascadePicker), new FrameworkPropertyMetadata(string.Empty,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     #endregion
 

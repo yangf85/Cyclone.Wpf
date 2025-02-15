@@ -13,7 +13,7 @@ using System.Windows.Input;
 namespace Cyclone.Wpf.Controls;
 
 
-public class CascadePickerItem : MenuItem,ICascadeNode
+public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
 {
     CascadePicker _root;
     static CascadePickerItem()
@@ -28,11 +28,16 @@ public class CascadePickerItem : MenuItem,ICascadeNode
     {
         base.OnApplyTemplate();
         _root = ElementHelper.TryFindLogicalParent<CascadePicker>(this);
-        
     }
 
-    
-   
+    protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnPreviewMouseLeftButtonDown(e);
+        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
+    }
+
+
+
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is CascadePickerItem;
@@ -69,7 +74,38 @@ public class CascadePickerItem : MenuItem,ICascadeNode
 
     #endregion
 
+    #region ItemClickEvent
 
- 
+    public static readonly RoutedEvent ItemClickEvent = EventManager.RegisterRoutedEvent("ItemClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePickerItem));
+
+    public event RoutedEventHandler ItemClick
+    {
+        add => AddHandler(ItemClickEvent, value);
+        remove => RemoveHandler(ItemClickEvent, value);
+    }
+
+    private void OnItemClick(object sender, RoutedEventArgs e)
+    {
+        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
+    }
+
+
+    #endregion
+
+
+    #region IsHighlighted
+    public bool IsHighlighted
+    {
+        get => (bool)GetValue(IsHighlightedProperty);
+        set => SetValue(IsHighlightedProperty, value);
+    }
+
+    static readonly  DependencyPropertyKey IsHighlightedPropertyKey=
+        DependencyProperty.RegisterReadOnly(nameof(IsHighlighted), typeof(bool), typeof(CascadePickerItem), new PropertyMetadata(default(bool)));
+
+    public static readonly DependencyProperty IsHighlightedProperty = IsHighlightedPropertyKey.DependencyProperty;
+        
+
+    #endregion
 
 }

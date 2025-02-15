@@ -10,24 +10,28 @@ namespace Cyclone.Wpf.Converters;
 public class VisibilityConverter
 {
     public static FuncValueConverter<bool?, Visibility> VisibleWhenTrue { get; } =
-       new(b =>
-       {
-           return b switch
-           {
-               true => Visibility.Visible,
-               false => Visibility.Collapsed,
-               _ => Visibility.Hidden
-           };
-       });
+        new(b =>
+        {
+            return b switch
+            {
+                true => Visibility.Visible,
+                false => Visibility.Collapsed,
+                _ => Visibility.Hidden
+            };
+        });
 
     public static FuncValueConverter<bool?, Visibility> VisibleWhenFalse { get; } =
-      new(b =>
-      {
-          return b switch
-          {
-              true => Visibility.Collapsed,
-              false => Visibility.Visible,
-              _ => Visibility.Hidden
-          };
-      });
+        new(b =>
+        {
+            return b switch
+            {
+                true => Visibility.Collapsed,
+                false => Visibility.Visible,
+                _ => Visibility.Hidden
+            };
+        });
+
+    public static FuncValueConverter<string, Visibility> VisibleWhenNullOrWhiteSpace { get; } =
+        new(s => string.IsNullOrWhiteSpace(s) ? Visibility.Visible : Visibility.Collapsed);
+
 }

@@ -76,7 +76,7 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     private void SideMenuItem_Unloaded(object sender, RoutedEventArgs e)
     {
-       
+        
         if (_root != null)
         {
             var descriptor = DependencyPropertyDescriptor.FromProperty(SideMenu.IndentProperty, typeof(SideMenu));

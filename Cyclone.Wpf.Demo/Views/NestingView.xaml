@@ -29,8 +29,5 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
 
-     
-
-
     </cy:SpacingStackPanel>
 </UserControl>

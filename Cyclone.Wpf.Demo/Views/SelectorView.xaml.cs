@@ -34,6 +34,30 @@ public partial class SelectorView : UserControl
     {
         var t = (CascadePicker)sender;
         var t1 = t.SelectedItem;
+
+    }
+
+    private void CascadePicker_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        var t = (CascadePicker)sender;
+        var t1 = t.SelectedItem;
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void OnChangeContent(object sender, RoutedEventArgs e)
+    {
+        // 切换内容
+        transitionBox.Content = new TextBlock
+        {
+            Text = "New Content",
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            FontSize = 20
+        };
     }
 }
 
