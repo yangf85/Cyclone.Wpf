@@ -47,7 +47,7 @@ public class CascadePicker : Selector
     {
         if (e.Source is CascadePickerItem item)
         {
-            SetValue(DisplayedNodePathProperty, GetDisplayedPath(item));
+            SetValue(DisplayedNodePathProperty, GetSelectedPath(item));
           
             SetValue(SelectedItemProperty, item);
             RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
@@ -59,25 +59,26 @@ public class CascadePicker : Selector
         
     }
 
-    private string GetDisplayedPath(CascadePickerItem item)
+    public string GetSelectedPath(CascadePickerItem item)
     {
-        return IsShowFullPath ? GetFullPath(item) : item.Header?.ToString() ?? string.Empty;
-    }
-
-    private string GetFullPath(CascadePickerItem item)
-    {
+        if (item==null)
+        {
+            return string.Empty;
+        }
         var pathList = new List<string>();
         var currentItem = item;
 
-
+        // 从当前节点向上遍历父节点
         while (currentItem != null)
         {
             pathList.Insert(0, currentItem.NodePath);
             currentItem = currentItem.Parent as CascadePickerItem;
         }
 
-        return string.Join(Separator.ToString(), pathList);
+        // 使用指定的分隔符连接路径
+        return string.Join(Separator, pathList);
     }
+
     #endregion
 
 
@@ -140,7 +141,7 @@ public class CascadePicker : Selector
     }
 
     public static readonly DependencyProperty IsOpenedProperty =
-        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
+        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(CascadePicker), new FrameworkPropertyMetadata(default(bool),FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     #endregion
 
     #region IsShowFullPath
@@ -156,30 +157,20 @@ public class CascadePicker : Selector
 
 
     #region Separator
-    public object Separator
+    public string Separator
     {
-        get => (object)GetValue(SeparatorProperty);
+        get => (string)GetValue(SeparatorProperty);
         set => SetValue(SeparatorProperty, value);
     }
 
     public static readonly DependencyProperty SeparatorProperty =
-        DependencyProperty.Register(nameof(Separator), typeof(object), typeof(CascadePicker), new PropertyMetadata('/'));
+        DependencyProperty.Register(nameof(Separator), typeof(string), typeof(CascadePicker), new PropertyMetadata("/"));
 
     #endregion
 
 
 
-    #region SeparatorTemplate
-    public DataTemplate SeparatorTemplate
-    {
-        get => (DataTemplate)GetValue(SeparatorTemplateProperty);
-        set => SetValue(SeparatorTemplateProperty, value);
-    }
 
-    public static readonly DependencyProperty SeparatorTemplateProperty =
-        DependencyProperty.Register(nameof(SeparatorTemplate), typeof(DataTemplate), typeof(CascadePicker), new PropertyMetadata(default(DataTemplate)));
-
-    #endregion
 
     #region Override
     public override void OnApplyTemplate()

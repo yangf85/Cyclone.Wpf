@@ -26,16 +26,37 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
 
     public override void OnApplyTemplate()
     {
+        
         base.OnApplyTemplate();
         _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
+    }
+
+    protected override void OnHeaderChanged(object oldHeader, object newHeader)
+    {
+        base.OnHeaderChanged(oldHeader, newHeader);
+        UpdateNodePath();
     }
 
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnPreviewMouseLeftButtonDown(e);
+        SetValue(IsPressedPropertyKey, true);
+        CaptureMouse(); 
         RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
     }
 
+    protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+    {
+        base.OnPreviewMouseLeftButtonUp(e);
+        SetValue(IsPressedPropertyKey, false);
+        ReleaseMouseCapture(); // 释放鼠标捕获
+    }
+  
+    protected override void OnLostMouseCapture(MouseEventArgs e)
+    {
+        base.OnLostMouseCapture(e);
+        SetValue(IsPressedPropertyKey, false);
+    }
 
 
     protected override bool IsItemItsOwnContainerOverride(object item)
@@ -59,17 +80,27 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
 
     public static readonly DependencyProperty NodePathProperty =
         DependencyProperty.Register(nameof(NodePath), typeof(string), typeof(CascadePickerItem),
-            new PropertyMetadata(default(string), null, CoerceNodePathValue));
-    private static object CoerceNodePathValue(DependencyObject d, object baseValue)
-    {
-        if (d is not CascadePickerItem item) { return baseValue; }
+            new PropertyMetadata(default(string), OnNodePathChanged));
 
-        if (item.ItemTemplate != null && item.DataContext is ICascadeNode node)
+    private static void OnNodePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CascadePickerItem item)
         {
-            return node.NodePath;
+            // 更新 NodePath 的值
+            item.UpdateNodePath();
         }
-        
-        return item?.Header?.ToString() ?? baseValue;
+    }
+
+    private void UpdateNodePath()
+    {
+        if (DataContext is ICascadeNode node)
+        {
+            SetCurrentValue(NodePathProperty, node.NodePath);
+        }
+        else
+        {
+            SetCurrentValue(NodePathProperty, Header?.ToString() ?? string.Empty);
+        }
     }
 
     #endregion
@@ -105,6 +136,23 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
 
     public static readonly DependencyProperty IsHighlightedProperty = IsHighlightedPropertyKey.DependencyProperty;
         
+
+    #endregion
+
+    #region IsPressed
+    public bool IsPressed
+        {
+            get => (bool)GetValue(IsPressedProperty);
+            
+        }
+
+
+    private static readonly DependencyPropertyKey IsPressedPropertyKey=
+        DependencyProperty.RegisterReadOnly(nameof(IsPressed), typeof(bool), typeof(CascadePickerItem), new PropertyMetadata(default(bool)));
+
+    
+
+    public static readonly DependencyProperty IsPressedProperty = IsPressedPropertyKey.DependencyProperty;
 
     #endregion
 

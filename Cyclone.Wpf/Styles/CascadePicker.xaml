@@ -15,19 +15,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:CascadePickerItem">
-                    <Border x:Name="RootBorder">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="3">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*"
-                                    SharedSizeGroup="Header" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Content="{TemplateBinding Header}"
-                                Grid.IsSharedSizeScope="True" />
+                                Content="{TemplateBinding Header}" />
                             <Path
                                 x:Name="Arrow"
                                 Grid.Column="1"
@@ -42,24 +41,26 @@
                             <Popup
                                 x:Name="ItemsContainer"
                                 AllowsTransparency="True"
+                                HorizontalOffset="3"
                                 Placement="Right"
                                 PlacementTarget="{Binding ElementName=RootBoder}"
-                                VerticalOffset="-1">
-                                <Grid Margin="5">
-                                    <Border
+                                VerticalOffset="-4">
+                                <Border
+                                    MinWidth="150"
+                                    BorderBrush="{DynamicResource DefaultBorderBrush}"
+                                    BorderThickness="1">
+                                    <Grid
                                         x:Name="ItemPresenterBoder"
-                                        Width="200"
-                                        Background="{DynamicResource DefaultBackgroundBrush}"
-                                        BorderThickness="1">
+                                        Background="{DynamicResource DefaultBackgroundBrush}">
                                         <ItemsPresenter />
-                                    </Border>
-                                </Grid>
+                                    </Grid>
+                                </Border>
                             </Popup>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ItemsContainer" Property="IsOpen" Value="True" />
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource PressedBackgroundBrush}" />
                         </Trigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
@@ -67,6 +68,13 @@
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="HasItems" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="ItemsContainer" Property="IsOpen" Value="True" />
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -101,40 +109,43 @@
                                 Grid.Column="0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
-                                Panel.ZIndex="99"
                                 Background="Transparent"
+                                BorderThickness="0"
                                 IsReadOnly="True"
                                 Text="{Binding Path=DisplayedNodePath, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ctl:CascadePicker, Mode=FindAncestor}}" />
-                            <!--<ToggleButton
+                            <ToggleButton
+                                x:Name="PART_OpenToggleButton"
                                 Grid.Column="1"
-                                Width="30"
-                                IsChecked="{Binding Path=IsOpened, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />-->
+                                Width="15"
+                                IsChecked="{Binding Path=IsOpened, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <Popup
                                 x:Name="PART_Popup"
                                 AllowsTransparency="True"
                                 Focusable="False"
-                                IsOpen="{Binding Path=IsOpened, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:CascadePicker}}"
+                                HorizontalOffset="0"
+                                IsOpen="{Binding ElementName=PART_OpenToggleButton, Path=IsChecked, Mode=TwoWay}"
                                 Placement="Bottom"
                                 PlacementTarget="{Binding ElementName=RootBorder}"
                                 PopupAnimation="Slide"
-                                StaysOpen="True"
-                                VerticalOffset="1">
-                                <Grid Margin="5">
-                                    <Border
+                                VerticalOffset="0">
+                                <Border
+                                    MinWidth="150"
+                                    BorderBrush="{DynamicResource DefaultBorderBrush}"
+                                    BorderThickness="1">
+                                    <Grid
                                         x:Name="ItemPresenterBoder"
-                                        Width="200"
-                                        Background="{DynamicResource DefaultBackgroundBrush}"
-                                        BorderThickness="1">
+                                        Background="{DynamicResource DefaultBackgroundBrush}">
                                         <ItemsPresenter />
-                                    </Border>
-                                </Grid>
+                                    </Grid>
+
+                                </Border>
                             </Popup>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger SourceName="PART_DisplayedTextBox" Property="IsFocused" Value="True">
+                        <Trigger SourceName="PART_DisplayedTextBox" Property="IsKeyboardFocusWithin" Value="True">
                             <Setter TargetName="WatermarkTextBlock" Property="Visibility" Value="Collapsed" />
-                            <Setter Property="IsOpened" Value="True" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource EditingBorderBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

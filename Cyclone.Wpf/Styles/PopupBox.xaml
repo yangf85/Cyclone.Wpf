@@ -65,7 +65,6 @@
                 <Grid x:Name="PopupContentBorder">
                     <Border Padding="5">
                         <Grid Background="{Binding Path=PopupContentBackground, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-
                             <Grid.Effect>
                                 <DropShadowEffect
                                     BlurRadius="5"
