@@ -1,21 +1,22 @@
 ﻿<UserControl
-    x:Class="LoadingDemo.Controls.CustomLoading"
+    x:Class="Cyclone.Wpf.Styles.NormalLoading"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:LoadingDemo.Controls"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Styles"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     d:DesignHeight="50"
     d:DesignWidth="50"
     mc:Ignorable="d">
-    <Viewbox>
+    <Viewbox
+        Width="24"
+        Height="24"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
         <Grid Width="50" Height="50">
             <Grid.Resources>
-                <!--  Value Converters  -->
-
-                <!--  Particle Styling ,must to has RelativeSource  -->
-                <SolidColorBrush x:Key="ParticleColor" Color="{Binding Path=FillColor, RelativeSource={RelativeSource AncestorType=local:CustomLoading}}" />
+                <SolidColorBrush x:Key="ParticleColor" Color="#FF0D47A1" />
                 <SolidColorBrush x:Key="ParticleBackgroundColor" Color="Transparent" />
                 <system:Double x:Key="ParticleOpacity">1</system:Double>
                 <system:Double x:Key="ParticleRadius">5</system:Double>

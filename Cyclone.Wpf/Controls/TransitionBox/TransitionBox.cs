@@ -11,17 +11,17 @@ namespace Cyclone.Wpf.Controls;
 public class TransitionBox : ContentControl
 {
     // 定义依赖属性，并提供默认的 FadeTransition 实例
-    public static readonly DependencyProperty AnimationProperty =
+    public static readonly DependencyProperty TransitionProperty =
         DependencyProperty.Register(
-            nameof(Animation),
+            nameof(Transition),
             typeof(ITransition),
             typeof(TransitionBox),
             new PropertyMetadata(new FadeTransition())); // 默认动画
 
-    public ITransition Animation
+    public ITransition Transition
     {
-        get => (ITransition)GetValue(AnimationProperty);
-        set => SetValue(AnimationProperty, value);
+        get => (ITransition)GetValue(TransitionProperty);
+        set => SetValue(TransitionProperty, value);
     }
 
     public TransitionBox()
@@ -29,39 +29,32 @@ public class TransitionBox : ContentControl
         Unloaded += OnUnloaded; // 挂接 Unloaded 事件
     }
 
-    protected override async void OnContentChanged(object oldContent, object newContent)
+    protected override void OnContentChanged(object oldContent, object newContent)
     {
         // 停止旧内容的动画
-        if (Animation != null && oldContent is FrameworkElement oldElement)
+        if (Transition != null && oldContent is FrameworkElement oldElement)
         {
-            Animation.Stop(oldElement);
-            await Task.Delay(Animation.Duration); // 等待动画完成
+            Transition.Stop(oldElement);
         }
 
         base.OnContentChanged(oldContent, newContent);
 
         // 启动新内容的动画
-        if (Animation != null && newContent is FrameworkElement newElement)
+        if (Transition != null && newContent is FrameworkElement newElement)
         {
-            Animation.Start(newElement);
+            Transition.Start(newElement);
         }
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         // 清理资源，停止动画
-        if (Animation != null && Content is FrameworkElement element)
+        if (Transition != null && Content is FrameworkElement element)
         {
-            Animation.Stop(element);
+            Transition.Stop(element);
         }
 
         // 移除事件处理器
         Unloaded -= OnUnloaded;
     }
 }
-
-
-
-
-
-

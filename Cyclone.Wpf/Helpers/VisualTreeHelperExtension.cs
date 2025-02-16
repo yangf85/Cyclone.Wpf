@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Helpers;
 
-public static class ElementHelper
+public static class VisualTreeHelperExtension
 {
     public static T? TryFindVisualParent<T>(this DependencyObject child) where T : DependencyObject
     {

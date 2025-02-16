@@ -27,7 +27,7 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        _root = ElementHelper.TryFindLogicalParent<CascadePicker>(this);
+        _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
     }
 
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)

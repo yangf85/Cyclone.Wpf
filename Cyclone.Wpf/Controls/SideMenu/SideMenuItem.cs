@@ -246,7 +246,7 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
         // 获取当前点击的 SideMenuItem
         var source = e.OriginalSource as DependencyObject;
-        var clickedItem = ElementHelper.TryFindVisualParent<SideMenuItem>(source);
+        var clickedItem = VisualTreeHelperExtension.TryFindVisualParent<SideMenuItem>(source);
 
         // 如果点击的是当前的 SideMenuItem
         if (clickedItem == this)
@@ -278,7 +278,7 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     {
     
         base.OnApplyTemplate();
-        _root = ElementHelper.TryFindVisualParent<SideMenu>(this);
+        _root = VisualTreeHelperExtension.TryFindVisualParent<SideMenu>(this);
 
         Loaded += SideMenuItem_Loaded;
         Unloaded += SideMenuItem_Unloaded;

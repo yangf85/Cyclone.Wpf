@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Cyclone.Wpf.Demo.ViewModels;
 
-public partial class MainViewModel:ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial SideMenuViewModel SideMenu { get; set; } = new SideMenuViewModel();
@@ -23,33 +23,30 @@ public partial class MainViewModel:ObservableObject
     {
         if (item == null) { return; }
 
-
         CurrentView = item.Header switch
         {
             "Button" => new ButtonView(),
             "Text" => new TextView(),
             "Nesting" => new NestingView(),
-            "Selector"=> new SelectorView(),
+            "Selector" => new SelectorView(),
+            "Loading" => new LoadingView(),
             _ => new object(),
         };
     }
-
 }
 
-
-public partial class SideMenuViewModel:ObservableObject
+public partial class SideMenuViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial ObservableCollection<SideMenuItemViewModel> Items { get; set; } = [];
-
 
     public SideMenuViewModel()
     {
         Items.Add(new SideMenuItemViewModel()
         {
-            Header= "Interaction",
-            Icon= "\xe60f",
-            Items = 
+            Header = "Interaction",
+            Icon = "\xe60f",
+            Items =
             [
                 new SideMenuItemViewModel()
                 {
@@ -66,28 +63,33 @@ public partial class SideMenuViewModel:ObservableObject
         });
         Items.Add(new SideMenuItemViewModel()
         {
-            Header="Items",
-            Icon= "\xe6d5",
+            Header = "Items",
+            Icon = "\xe6d5",
         });
         Items.Add(new SideMenuItemViewModel()
         {
-            Header="Navigation",
-            Icon= "\xe81a",
+            Header = "Navigation",
+            Icon = "\xe81a",
         });
         Items.Add(new SideMenuItemViewModel()
         {
-            Header="Nesting",
-            Icon= "\xe81a",
+            Header = "Nesting",
+            Icon = "\xe7a3",
         });
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Selector",
-            Icon = "\xe81a",
+            Icon = "\xe78a",
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header = "Loading",
+            Icon = "\xe891",
         });
     }
 }
 
-public partial class SideMenuItemViewModel:ObservableObject
+public partial class SideMenuItemViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial string Header { get; set; }
@@ -97,5 +99,4 @@ public partial class SideMenuItemViewModel:ObservableObject
 
     [ObservableProperty]
     public partial ObservableCollection<SideMenuItemViewModel> Items { get; set; } = [];
-
 }

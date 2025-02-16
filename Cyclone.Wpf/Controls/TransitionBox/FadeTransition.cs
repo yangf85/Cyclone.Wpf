@@ -7,10 +7,10 @@ namespace Cyclone.Wpf.Controls;
 public class FadeTransition : TransitionBase
 {
     public double FromOpacity { get; set; } = 0;
-    public double ToOpacity { get; set; } = 1;
-    public override TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
 
-    public event EventHandler Completed;
+    public double ToOpacity { get; set; } = 1;
+
+    public override TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
 
     public override void Start(FrameworkElement element)
     {
@@ -23,6 +23,7 @@ public class FadeTransition : TransitionBase
                 Duration = Duration,
                 AutoReverse = false
             };
+
             animation.Completed += (s, e) => Completed?.Invoke(this, EventArgs.Empty);
             element.BeginAnimation(UIElement.OpacityProperty, animation);
         }
@@ -37,10 +38,6 @@ public class FadeTransition : TransitionBase
         // 使用 HandoffBehavior.SnapshotAndReplace 停止当前动画
         element.BeginAnimation(UIElement.OpacityProperty, null, HandoffBehavior.SnapshotAndReplace);
     }
+
+    public event EventHandler Completed;
 }
-
-
-
-
-
-

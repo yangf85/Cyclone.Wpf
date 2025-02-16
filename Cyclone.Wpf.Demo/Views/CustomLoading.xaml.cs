@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LoadingDemo.Controls
+namespace Cyclone.Wpf.Demo.Views;
+
+/// <summary>
+/// Loading.xaml 的交互逻辑
+/// </summary>
+public partial class CustomLoading : UserControl
 {
-    /// <summary>
-    /// Loading.xaml 的交互逻辑
-    /// </summary>
-    public partial class Loading : UserControl
+    public CustomLoading()
     {
-        public Loading()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
