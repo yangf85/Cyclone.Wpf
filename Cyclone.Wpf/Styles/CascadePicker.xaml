@@ -14,7 +14,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:CascadePickerItem">
-                    <Border x:Name="RootBorder" Padding="3">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="3">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -47,7 +49,9 @@
                                     MinWidth="150"
                                     BorderBrush="{DynamicResource DefaultBorderBrush}"
                                     BorderThickness="1">
-                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource DefaultBackgroundBrush}">
+                                    <Grid
+                                        x:Name="ItemPresenterBoder"
+                                        Background="{DynamicResource DefaultBackgroundBrush}">
                                         <ItemsPresenter />
                                     </Grid>
                                 </Border>
@@ -77,16 +81,20 @@
         </Setter>
     </Style>
 
-    <Style x:Key="CascadePicker.OpenToggleButton" TargetType="ToggleButton">
+    <Style
+        x:Key="CascadePicker.OpenToggleButton"
+        TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
                         <Path
                             x:Name="Arrow"
                             Width="20"
                             Height="20"
-                            Data="M20 80 L50 50 L80 80"
+                            Data="M20 20 L50 50 L80 20"
                             Stretch="Uniform"
                             Stroke="{DynamicResource DefaultBorderBrush}"
                             StrokeThickness="1.5" />
@@ -94,7 +102,7 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Arrow" Property="Data" Value="M20 20 L50 50 L80 20" />
+                            <Setter TargetName="Arrow" Property="Data" Value="M20 80 L50 50 L80 80" />
                         </Trigger>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
                             <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource HoverBorderBrush}" />
@@ -158,7 +166,9 @@
                                     MinWidth="150"
                                     BorderBrush="{DynamicResource DefaultBorderBrush}"
                                     BorderThickness="1">
-                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource DefaultBackgroundBrush}">
+                                    <Grid
+                                        x:Name="ItemPresenterBoder"
+                                        Background="{DynamicResource DefaultBackgroundBrush}">
                                         <ItemsPresenter />
                                     </Grid>
                                 </Border>

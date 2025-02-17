@@ -91,9 +91,6 @@
                 <cy:HyperlinkButton
                     DisplayText="百度"
                     NavigateUri="http://www.baidu.com" />
-
-
-
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
     </cy:SpacingStackPanel>

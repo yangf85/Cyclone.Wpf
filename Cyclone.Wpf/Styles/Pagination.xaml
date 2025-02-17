@@ -6,13 +6,21 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="Pagination.PrevNextRepeatButtonStyle" TargetType="RepeatButton" />
+    <Style
+        x:Key="Pagination.PrevNextRepeatButtonStyle"
+        TargetType="RepeatButton" />
 
-    <Style x:Key="Pagination.GotoPageButtonStyle" TargetType="Button" />
+    <Style
+        x:Key="Pagination.GotoPageButtonStyle"
+        TargetType="Button" />
 
-    <Style x:Key="Pagination.GotoPageNumberBoxStyle" TargetType="ctl:NumberBox" />
+    <Style
+        x:Key="Pagination.GotoPageNumberBoxStyle"
+        TargetType="ctl:NumberBox" />
 
-    <Style x:Key="Pagination.SelectListBoxItemStyleKey" TargetType="{x:Type ListBoxItem}">
+    <Style
+        x:Key="Pagination.SelectListBoxItemStyleKey"
+        TargetType="{x:Type ListBoxItem}">
         <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -43,7 +51,9 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding .}" Value="···">
+            <DataTrigger
+                Binding="{Binding .}"
+                Value="···">
                 <Setter Property="IsEnabled" Value="False" />
                 <Setter Property="FontWeight" Value="Bold" />
             </DataTrigger>
@@ -59,7 +69,9 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="Pagination.SelectListBoxStyle" TargetType="{x:Type ListBox}">
+    <Style
+        x:Key="Pagination.SelectListBoxStyle"
+        TargetType="{x:Type ListBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -71,7 +83,9 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True">
-                        <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="False">
+                        <ScrollViewer
+                            Padding="{TemplateBinding Padding}"
+                            Focusable="False">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Border>
@@ -85,7 +99,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="BasicPaginationControlTemplate" TargetType="{x:Type ctl:Pagination}">
+    <ControlTemplate
+        x:Key="BasicPaginationControlTemplate"
+        TargetType="{x:Type ctl:Pagination}">
         <Border
             x:Name="RootBorder"
             Padding="{TemplateBinding Padding}"
@@ -111,12 +127,16 @@
                     Grid.Column="1"
                     Margin="10,0,5,0"
                     Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="每页 " />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="每页 " />
                     <ComboBox
                         x:Name="PART_PerpageCountComboBox"
                         MinWidth="75"
                         SelectedValue="{Binding Path=PerpageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                    <TextBlock VerticalAlignment="Center" Text=" 条" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text=" 条" />
                 </StackPanel>
                 <StackPanel
                     Grid.Column="2"
