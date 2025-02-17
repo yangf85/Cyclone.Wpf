@@ -11,9 +11,7 @@
     <Geometry x:Key="ArrowTop">M 3 0 L 6 3 0 3z</Geometry>
     <Geometry x:Key="ArrowBottom">M 0 0 L 3 3 6 0z</Geometry>
 
-    <Style
-        x:Key="DataGrid.SelectAllButtonStyle"
-        TargetType="{x:Type Button}">
+    <Style x:Key="DataGrid.SelectAllButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -49,9 +47,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.CellStyle"
-        TargetType="{x:Type DataGridCell}">
+    <Style x:Key="DataGrid.CellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
@@ -86,26 +82,20 @@
         </Style.Triggers>
     </Style>
 
-    <Style
-        x:Key="DataGrid.ColumnHeaderGripperStyle"
-        TargetType="{x:Type Thumb}">
+    <Style x:Key="DataGrid.ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Width" Value="8" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeWE" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.ColumnHeaderStyle"
-        TargetType="{x:Type DataGridColumnHeader}">
+    <Style x:Key="DataGrid.ColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
         <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
@@ -170,26 +160,20 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowHeaderGripperStyle"
-        TargetType="{x:Type Thumb}">
+    <Style x:Key="DataGrid.RowHeaderGripperStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Height" Value="8" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeNS" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowHeaderStyle"
-        TargetType="{x:Type DataGridRowHeader}">
+    <Style x:Key="DataGrid.RowHeaderStyle" TargetType="{x:Type DataGridRowHeader}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
         <Setter Property="Background" Value="Transparent" />
@@ -237,9 +221,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowStyle"
-        TargetType="{x:Type DataGridRow}">
+    <Style x:Key="DataGrid.RowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="ValidationErrorTemplate">
@@ -330,9 +312,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True">
-                        <ScrollViewer
-                            x:Name="DG_ScrollViewer"
-                            Focusable="false">
+                        <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                             <ScrollViewer.Template>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                                     <Grid>
@@ -373,9 +353,7 @@
                                             ViewportSize="{TemplateBinding ViewportHeight}"
                                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                             Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <Grid
-                                            Grid.Row="2"
-                                            Grid.Column="1">
+                                        <Grid Grid.Row="2" Grid.Column="1">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                                 <ColumnDefinition Width="*" />

@@ -6,15 +6,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="BasicHyperlinkButtonControlTemplate"
-        TargetType="ctl:HyperlinkButton">
-        <Button
-            x:Name="PART_NavigationButton"
-            Command="{x:Static ctl:HyperlinkButton.OpenUrlCommand}">
-            <TextBlock
-                x:Name="PART_DisplayTextBlock"
-                Text="{TemplateBinding DisplayText}" />
+    <ControlTemplate x:Key="BasicHyperlinkButtonControlTemplate" TargetType="ctl:HyperlinkButton">
+        <Button x:Name="PART_NavigationButton" Command="{x:Static ctl:HyperlinkButton.OpenUrlCommand}">
+            <TextBlock x:Name="PART_DisplayTextBlock" Text="{TemplateBinding DisplayText}" />
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <ContentPresenter

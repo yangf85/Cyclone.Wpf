@@ -7,9 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="BasicRadioButtonControlTemplate"
-        TargetType="RadioButton">
+    <ControlTemplate x:Key="BasicRadioButtonControlTemplate" TargetType="RadioButton">
         <StackPanel
             Margin="{TemplateBinding Padding}"
             Background="Transparent"

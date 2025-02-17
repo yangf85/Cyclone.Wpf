@@ -33,9 +33,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="ComboBox.ToggleButton"
-        TargetType="ToggleButton">
+    <ControlTemplate x:Key="ComboBox.ToggleButton" TargetType="ToggleButton">
         <Grid>
             <Border
                 x:Name="Root"
@@ -60,9 +58,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <ControlTemplate
-        x:Key="ComboBox.TextBox"
-        TargetType="TextBox">
+    <ControlTemplate x:Key="ComboBox.TextBox" TargetType="TextBox">
         <Border
             x:Name="PART_ContentHost"
             Background="{TemplateBinding Background}"
@@ -128,9 +124,7 @@
                                         Background="{StaticResource DefaultBackgroundBrush}"
                                         BorderBrush="{StaticResource DefaultBorderBrush}"
                                         BorderThickness="1">
-                                        <StackPanel
-                                            IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </Border>
                                 </Grid>
                             </Popup>

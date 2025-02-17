@@ -12,9 +12,7 @@
 
 
 
-    <Style
-        x:Key="NumberBox.SpinButtonStyle"
-        TargetType="RepeatButton">
+    <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
         <Setter Property="MinWidth" Value="25" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
@@ -55,18 +53,14 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="NumberBox.SliderStyle"
-        TargetType="Slider">
+    <Style x:Key="NumberBox.SliderStyle" TargetType="Slider">
         <Setter Property="MinWidth" Value="25" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <ControlTemplate
-        x:Key="BasicNumberBoxControlTemplate"
-        TargetType="ctl:NumberBox">
+    <ControlTemplate x:Key="BasicNumberBoxControlTemplate" TargetType="ctl:NumberBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -105,12 +99,8 @@
                     PopupAnimation="Slide"
                     VerticalOffset="5"
                     Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                    <Grid
-                        Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                        Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                        <Border
-                            Margin="5"
-                            Focusable="True">
+                    <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                        <Border Margin="5" Focusable="True">
                             <Slider
                                 x:Name="PART_ValueSlider"
                                 IsMoveToPointEnabled="True"

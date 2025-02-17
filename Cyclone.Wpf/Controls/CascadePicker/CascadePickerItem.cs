@@ -12,24 +12,21 @@ using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
-
-public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
+[TemplatePart(Name = PART_ItemsPopup, Type = typeof(Popup))]
+public class CascadePickerItem : HeaderedItemsControl, ICascadeNode
 {
+    private const string PART_ItemsPopup = "PART_ItemsPopup";
+
+    private Popup _popup;
+
     CascadePicker _root;
+
     static CascadePickerItem()
     {
-
         DefaultStyleKeyProperty.OverrideMetadata(typeof(CascadePickerItem), new FrameworkPropertyMetadata(typeof(CascadePickerItem)));
     }
 
     #region Override
-
-    public override void OnApplyTemplate()
-    {
-        
-        base.OnApplyTemplate();
-        _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
-    }
 
     protected override void OnHeaderChanged(object oldHeader, object newHeader)
     {
@@ -41,7 +38,7 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
     {
         base.OnPreviewMouseLeftButtonDown(e);
         SetValue(IsPressedPropertyKey, true);
-        CaptureMouse(); 
+        CaptureMouse();
         RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
     }
 
@@ -51,13 +48,12 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
         SetValue(IsPressedPropertyKey, false);
         ReleaseMouseCapture(); // 释放鼠标捕获
     }
-  
+
     protected override void OnLostMouseCapture(MouseEventArgs e)
     {
         base.OnLostMouseCapture(e);
         SetValue(IsPressedPropertyKey, false);
     }
-
 
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
@@ -68,25 +64,31 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
     {
         return new CascadePickerItem();
     }
-    #endregion
 
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
+    }
+
+    #endregion Override
 
     #region NodePath
+
+    public static readonly DependencyProperty NodePathProperty =
+        DependencyProperty.Register(nameof(NodePath), typeof(string), typeof(CascadePickerItem),
+            new PropertyMetadata(default(string), OnNodePathChanged));
+
     public string NodePath
     {
         get => (string)GetValue(NodePathProperty);
         set => SetValue(NodePathProperty, value);
     }
 
-    public static readonly DependencyProperty NodePathProperty =
-        DependencyProperty.Register(nameof(NodePath), typeof(string), typeof(CascadePickerItem),
-            new PropertyMetadata(default(string), OnNodePathChanged));
-
     private static void OnNodePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is CascadePickerItem item)
         {
-            // 更新 NodePath 的值
             item.UpdateNodePath();
         }
     }
@@ -103,11 +105,16 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
         }
     }
 
-    #endregion
+    #endregion NodePath
 
     #region ItemClickEvent
 
     public static readonly RoutedEvent ItemClickEvent = EventManager.RegisterRoutedEvent("ItemClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePickerItem));
+
+    private void OnItemClick(object sender, RoutedEventArgs e)
+    {
+        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
+    }
 
     public event RoutedEventHandler ItemClick
     {
@@ -115,45 +122,23 @@ public class CascadePickerItem : HeaderedItemsControl,ICascadeNode
         remove => RemoveHandler(ItemClickEvent, value);
     }
 
-    private void OnItemClick(object sender, RoutedEventArgs e)
-    {
-        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
-    }
-
-
-    #endregion
-
-
-    #region IsHighlighted
-    public bool IsHighlighted
-    {
-        get => (bool)GetValue(IsHighlightedProperty);
-        set => SetValue(IsHighlightedProperty, value);
-    }
-
-    static readonly  DependencyPropertyKey IsHighlightedPropertyKey=
-        DependencyProperty.RegisterReadOnly(nameof(IsHighlighted), typeof(bool), typeof(CascadePickerItem), new PropertyMetadata(default(bool)));
-
-    public static readonly DependencyProperty IsHighlightedProperty = IsHighlightedPropertyKey.DependencyProperty;
-        
-
-    #endregion
+    #endregion ItemClickEvent
 
     #region IsPressed
-    public bool IsPressed
-        {
-            get => (bool)GetValue(IsPressedProperty);
-            
-        }
 
-
-    private static readonly DependencyPropertyKey IsPressedPropertyKey=
-        DependencyProperty.RegisterReadOnly(nameof(IsPressed), typeof(bool), typeof(CascadePickerItem), new PropertyMetadata(default(bool)));
-
-    
+    private static readonly DependencyPropertyKey IsPressedPropertyKey =
+               DependencyProperty.RegisterReadOnly(
+           nameof(IsPressed),
+           typeof(bool),
+           typeof(CascadePickerItem),
+           new PropertyMetadata(false));
 
     public static readonly DependencyProperty IsPressedProperty = IsPressedPropertyKey.DependencyProperty;
 
-    #endregion
+    public bool IsPressed
+    {
+        get => (bool)GetValue(IsPressedProperty);
+    }
 
+    #endregion IsPressed
 }

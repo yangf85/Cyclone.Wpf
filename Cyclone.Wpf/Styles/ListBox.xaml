@@ -7,9 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="DefaultListBoxItemStyle"
-        TargetType="ListBoxItem">
+    <Style x:Key="DefaultListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -25,9 +23,7 @@
                         UseLayoutRounding="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="Auto"
-                                    SharedSizeGroup="ListBoxItem" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="ListBoxItem" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <CheckBox

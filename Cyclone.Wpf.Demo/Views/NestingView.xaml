@@ -11,9 +11,7 @@
     mc:Ignorable="d">
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="Menu">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <Menu>
                     <MenuItem Header="File">
                         <MenuItem Header="New">

@@ -6,22 +6,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignInstance Type=local:CascadePickerViewModel}"
+    d:DataContext="{d:DesignInstance Type=local:SelectorViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="CascadePicker">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <cy:CascadePicker
                     IsKeyboardFocusWithinChanged="CascadePicker_IsKeyboardFocusWithinChanged"
                     SelectedChanged="CascadePicker_SelectedChanged"
-                    Separator="-"
+                    Separator="/"
                     Watermark="Normal">
                     <cy:CascadePickerItem Header="A">
-                        <cy:CascadePickerItem Header="A1" />
+                        <cy:CascadePickerItem Header="A1">
+                            <cy:CascadePickerItem Header="A1-1" />
+                            <cy:CascadePickerItem Header="A1-1" />
+                            <cy:CascadePickerItem Header="A1-1" />
+                            <cy:CascadePickerItem Header="A1-1" />
+                        </cy:CascadePickerItem>
                         <cy:CascadePickerItem Header="A2" />
                         <cy:CascadePickerItem Header="A3" />
                     </cy:CascadePickerItem>
@@ -32,21 +35,26 @@
                     </cy:CascadePickerItem>
                     <cy:CascadePickerItem Header="A" />
                 </cy:CascadePicker>
-                <!--<cy:CascadePicker
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding Cities}"
-                    Watermark="DataTemplate" />-->
+                <cy:CascadePicker
+                    ItemsSource="{Binding CascadePicker.Cities}"
+                    Loaded="CascadePicker_Loaded"
+                    SelectedItem="{Binding CascadePicker.City}"
+                    Separator="-"
+                    Watermark="DataTemplate">
+                    <cy:CascadePicker.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Cyties}">
+                            <TextBlock Text="{Binding NodePath}" />
+                        </HierarchicalDataTemplate>
+                    </cy:CascadePicker.ItemTemplate>
+                </cy:CascadePicker>
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
 
-        <cy:TransitionBox
-            x:Name="transitionBox"
-            Width="200"
-            Height="100">
+        <cy:TransitionBox x:Name="transitionBox">
             <!--<cy:TransitionBox.Transition>
                 <cy:SlideTransition />
             </cy:TransitionBox.Transition>-->
-            <Button Content="Click Me" />
+            <Button Command="{Binding CascadePicker.GetCityCommand}" Content="Click Me" />
         </cy:TransitionBox>
         <Button
             Margin="0,150,0,0"

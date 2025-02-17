@@ -14,4 +14,8 @@
     <PackageReference Include="ToastNotifications.Net5" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controls\FluidTabControl\" />
+  </ItemGroup>
+
 </Project>

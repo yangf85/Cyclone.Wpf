@@ -9,7 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/Generic.xaml" />
                 <ResourceDictionary>
-                    <FontFamily x:Key="IconFont" >
+                    <FontFamily x:Key="IconFont">
                         pack://application:,,,/Cyclone.Wpf.Demo;component/Assets/#iconfont
                     </FontFamily>
                 </ResourceDictionary>

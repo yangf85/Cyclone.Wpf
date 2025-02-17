@@ -11,9 +11,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="Window.CaptionButtonStyle"
-        TargetType="Button">
+    <Style x:Key="Window.CaptionButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
@@ -24,9 +22,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -45,9 +41,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="Window.CaptionCloseButtonStyle"
-        TargetType="Button">
+    <Style x:Key="Window.CaptionCloseButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
@@ -58,9 +52,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -79,16 +71,12 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="Window.TopmostButtonStyle"
-        TargetType="ToggleButton">
+    <Style x:Key="Window.TopmostButtonStyle" TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                         <ContentPresenter Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -105,9 +93,7 @@
     </Style>
 
 
-    <ControlTemplate
-        x:Key="BasicWindowControlTemplate"
-        TargetType="ctl:AdvancedWindow">
+    <ControlTemplate x:Key="BasicWindowControlTemplate" TargetType="ctl:AdvancedWindow">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
@@ -115,9 +101,7 @@
             BorderThickness="{TemplateBinding BorderThickness}"
             SnapsToDevicePixels="True"
             UseLayoutRounding="True">
-            <Grid
-                x:Name="LayoutRoot"
-                Background="{TemplateBinding Background}">
+            <Grid x:Name="LayoutRoot" Background="{TemplateBinding Background}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -147,9 +131,7 @@
                         FontSize="15"
                         FontWeight="Regular"
                         Foreground="{TemplateBinding TitleBrush}" />
-                    <ContentPresenter
-                        Grid.Column="2"
-                        Content="{TemplateBinding FunctionalZone}" />
+                    <ContentPresenter Grid.Column="2" Content="{TemplateBinding FunctionalZone}" />
 
                     <UniformGrid
                         Grid.Column="3"
@@ -220,9 +202,7 @@
                     </UniformGrid>
                 </Grid>
                 <!--  ClientArea  -->
-                <AdornerDecorator
-                    Grid.Row="1"
-                    KeyboardNavigation.IsTabStop="False">
+                <AdornerDecorator Grid.Row="1" KeyboardNavigation.IsTabStop="False">
                     <Grid Background="{TemplateBinding Background}">
                         <ContentPresenter
                             x:Name="MainContentPresenter"

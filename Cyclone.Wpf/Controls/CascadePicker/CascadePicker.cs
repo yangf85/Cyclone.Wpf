@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cyclone.Wpf.Helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,163 +22,141 @@ using System.Windows.Shapes;
 namespace Cyclone.Wpf.Controls;
 
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(CascadePickerItem))]
-[TemplatePart(Name = "PART_DisplayedTextBox", Type = typeof(TextBox))]
-[TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
+[TemplatePart(Name = PART_DisplayedTextBox, Type = typeof(TextBox))]
+[TemplatePart(Name = PART_ItemsPopup, Type = typeof(Popup))]
 public class CascadePicker : Selector
 {
     private const string PART_DisplayedTextBox = "PART_DisplayedTextBox";
-    private const string PART_Popup = "PART_Popup";
+
+    private const string PART_ItemsPopup = "PART_ItemsPopup";
 
     private TextBox _textBox;
+
     private Popup _popup;
+
     static CascadePicker()
     {
-        
         DefaultStyleKeyProperty.OverrideMetadata(typeof(CascadePicker), new FrameworkPropertyMetadata(typeof(CascadePicker)));
     }
 
     public CascadePicker()
     {
         AddHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
-
     }
 
     #region Item_Click
+
     private void Item_Click(object sender, RoutedEventArgs e)
     {
-        if (e.Source is CascadePickerItem item)
+        if (e.OriginalSource is CascadePickerItem item)
         {
             SetValue(DisplayedNodePathProperty, GetSelectedPath(item));
-          
-            SetValue(SelectedItemProperty, item);
+            SetCurrentValue(SelectedItemProperty, item);
             RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
             if (!item.HasItems)
             {
                 SetValue(IsOpenedProperty, false);
             }
         }
-        
     }
 
     public string GetSelectedPath(CascadePickerItem item)
     {
-        if (item==null)
-        {
-            return string.Empty;
-        }
+        if (item == null) { return string.Empty; }
+
         var pathList = new List<string>();
         var currentItem = item;
 
-        // 从当前节点向上遍历父节点
         while (currentItem != null)
         {
             pathList.Insert(0, currentItem.NodePath);
-            currentItem = currentItem.Parent as CascadePickerItem;
+            var parentContainer = ItemsControl.ItemsControlFromItemContainer(currentItem) as CascadePickerItem;
+            currentItem = parentContainer;
         }
 
-        // 使用指定的分隔符连接路径
         return string.Join(Separator, pathList);
     }
 
-    #endregion
-
-
+    #endregion Item_Click
 
     #region Watermark
+
+    public static readonly DependencyProperty WatermarkProperty =
+        DependencyProperty.Register(nameof(Watermark), typeof(string), typeof(CascadePicker), new PropertyMetadata(string.Empty));
+
     public string Watermark
     {
         get => (string)GetValue(WatermarkProperty);
         set => SetValue(WatermarkProperty, value);
     }
 
-    public static readonly DependencyProperty WatermarkProperty =
-        DependencyProperty.Register(nameof(Watermark), typeof(string), typeof(CascadePicker), new PropertyMetadata(string.Empty));
-
-    #endregion
-
-
+    #endregion Watermark
 
     #region DisplayedNodePath
+
+    public static readonly DependencyProperty DisplayedNodePathProperty =
+        DependencyProperty.Register(nameof(DisplayedNodePath), typeof(string), typeof(CascadePicker), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
     public string DisplayedNodePath
     {
         get => (string)GetValue(DisplayedNodePathProperty);
         set => SetValue(DisplayedNodePathProperty, value);
     }
 
-    public static readonly DependencyProperty DisplayedNodePathProperty =
-        DependencyProperty.Register(nameof(DisplayedNodePath), typeof(string), typeof(CascadePicker), new FrameworkPropertyMetadata(string.Empty,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    #endregion
-
-
-    #region SelectedItem
-    public object SelectedItem
-    {
-        get => (object)GetValue(SelectedItemProperty);
-        set => SetValue(SelectedItemProperty, value);
-    }
-
-    public static readonly DependencyProperty SelectedItemProperty =
-        DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(CascadePicker), new PropertyMetadata(default(object)));
-
-    #endregion
+    #endregion DisplayedNodePath
 
     #region SelectedChanged
+
+    public static readonly RoutedEvent SelectedChangedEvent = EventManager.RegisterRoutedEvent("SelectedChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePicker));
+
     public event RoutedEventHandler SelectedChanged
     {
         add => AddHandler(SelectedChangedEvent, value);
         remove => RemoveHandler(SelectedChangedEvent, value);
     }
 
-
-    public static readonly RoutedEvent SelectedChangedEvent = EventManager.RegisterRoutedEvent("SelectedChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePicker));
-    #endregion
+    #endregion SelectedChanged
 
     #region IsOpened
+
+    public static readonly DependencyProperty IsOpenedProperty =
+        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(CascadePicker), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
     public bool IsOpened
     {
         get => (bool)GetValue(IsOpenedProperty);
         set => SetValue(IsOpenedProperty, value);
     }
 
-    public static readonly DependencyProperty IsOpenedProperty =
-        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(CascadePicker), new FrameworkPropertyMetadata(default(bool),FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-    #endregion
+    #endregion IsOpened
 
     #region IsShowFullPath
+
+    public static readonly DependencyProperty IsShowFullPathProperty =
+        DependencyProperty.Register(nameof(IsShowFullPath), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
+
     public bool IsShowFullPath
     {
         get => (bool)GetValue(IsShowFullPathProperty);
         set => SetValue(IsShowFullPathProperty, value);
     }
 
-    public static readonly DependencyProperty IsShowFullPathProperty =
-        DependencyProperty.Register(nameof(IsShowFullPath), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
-    #endregion
-
+    #endregion IsShowFullPath
 
     #region Separator
+
+    public static readonly DependencyProperty SeparatorProperty =
+        DependencyProperty.Register(nameof(Separator), typeof(string), typeof(CascadePicker), new PropertyMetadata("/"));
+
     public string Separator
     {
         get => (string)GetValue(SeparatorProperty);
         set => SetValue(SeparatorProperty, value);
     }
 
-    public static readonly DependencyProperty SeparatorProperty =
-        DependencyProperty.Register(nameof(Separator), typeof(string), typeof(CascadePicker), new PropertyMetadata("/"));
-
-    #endregion
-
-
-
-
+    #endregion Separator
 
     #region Override
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-        
-    }
 
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
@@ -189,8 +168,12 @@ public class CascadePicker : Selector
         return new CascadePickerItem();
     }
 
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        _textBox = GetTemplateChild(PART_DisplayedTextBox) as TextBox;
+        _popup = GetTemplateChild(PART_ItemsPopup) as Popup;
+    }
 
-    #endregion
-
-
+    #endregion Override
 }

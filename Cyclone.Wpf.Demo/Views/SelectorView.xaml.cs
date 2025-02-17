@@ -27,14 +27,13 @@ public partial class SelectorView : UserControl
     public SelectorView()
     {
         InitializeComponent();
-        DataContext=new SelectorViewModel();
+        DataContext = new SelectorViewModel();
     }
 
     private void CascadePicker_SelectedChanged(object sender, RoutedEventArgs e)
     {
         var t = (CascadePicker)sender;
         var t1 = t.SelectedItem;
-
     }
 
     private void CascadePicker_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -45,7 +44,6 @@ public partial class SelectorView : UserControl
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-
     }
 
     private void OnChangeContent(object sender, RoutedEventArgs e)
@@ -59,6 +57,16 @@ public partial class SelectorView : UserControl
             FontSize = 20
         };
     }
+
+    private void CascadePicker_Loaded(object sender, RoutedEventArgs e)
+    {
+        var t = (CascadePicker)sender;
+        var t1 = t.SelectedItem;
+    }
+
+    private void Button_Click_1(object sender, RoutedEventArgs e)
+    {
+    }
 }
 
 public partial class SelectorViewModel : ObservableObject
@@ -69,107 +77,114 @@ public partial class SelectorViewModel : ObservableObject
 
 public partial class CascadePickerViewModel : ObservableObject
 {
+    [ObservableProperty]
+    public partial City City { get; set; }
+
+    [ObservableProperty]
+    public partial ObservableCollection<City> Cities { get; set; }
+
     public CascadePickerViewModel()
     {
         Cities =
         [
-            new CityInfo
+            new City
             {
-                Name = "北京",
-                ItemsSource = new List<CityInfo>
-                    {
-                        new CityInfo {Name = "西城区"}, new CityInfo {Name = "东城区"}, new CityInfo {Name = "海淀区"},
-                        new CityInfo {Name = "朝阳区"}, new CityInfo {Name = "丰台区"}, new CityInfo {Name = "石景山区"}
-                    }
+                NodePath = "北京",
+                Cyties =
+                    [
+                        new City {NodePath = "西城区"}, new City {NodePath = "东城区"}, new City {NodePath = "海淀区"},
+                        new City {NodePath = "朝阳区"}, new City {NodePath = "丰台区"}, new City {NodePath = "石景山区"}
+                    ]
             },
-            new CityInfo
+            new City
             {
-                Name = "四川",
-                ItemsSource = new List<CityInfo>
-                    {
-                        new CityInfo {Name = "成都市"},
-                        new CityInfo
+                NodePath = "四川",
+                Cyties =
+                    [
+                        new City {NodePath = "成都市"},
+                        new City
                         {
-                            Name = "巴中市", ItemsSource = new List<CityInfo>
-                            {
-                                new CityInfo
+                            NodePath = "巴中市", Cyties =
+                            [
+                                new City
                                 {
-                                    Name = "恩阳区"
+                                    NodePath = "恩阳区"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "南江县"
+                                    NodePath = "南江县"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "通江县"
+                                    NodePath = "通江县"
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
             },
-            new CityInfo
+            new City
             {
-                Name = "山东",
-                ItemsSource = new List<CityInfo>
-                    {
-                        new CityInfo {Name = "青岛市"},
-                        new CityInfo {Name = "烟台市"},
-                        new CityInfo {Name = "威海市"},
-                        new CityInfo {Name = "枣庄市"},
-                        new CityInfo
+                NodePath = "山东",
+                Cyties =
+                    [
+                        new City {NodePath = "青岛市"},
+                        new City {NodePath = "烟台市"},
+                        new City {NodePath = "威海市"},
+                        new City {NodePath = "枣庄市"},
+                        new City
                         {
-                            Name = "潍坊市",
-                            ItemsSource = new List<CityInfo>
-                            {
-                                new CityInfo
+                            NodePath = "潍坊市",
+                            Cyties =
+                            [
+                                new City
                                 {
-                                    Name = "青州市"
+                                    NodePath = "青州市"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "诸城市"
+                                    NodePath = "诸城市"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "寿光市"
+                                    NodePath = "寿光市"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "安丘市"
+                                    NodePath = "安丘市"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "高密市"
+                                    NodePath = "高密市"
                                 },
-                                new CityInfo
+                                new City
                                 {
-                                    Name = "昌邑市"
+                                    NodePath = "昌邑市"
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
             },
         ];
     }
 
-    [ObservableProperty]
-    public partial string City { get; set; }
-
-    [ObservableProperty]
-    public partial ObservableCollection<CityInfo> Cities { get; set; }
-    
-
     [RelayCommand]
     private void GetCity()
     {
-        if (string.IsNullOrWhiteSpace(City)) return;
-        System.Windows.MessageBox.Show($"选择的城市为：{City}");
+        if (City != null)
+        {
+            System.Windows.MessageBox.Show($"选择的城市为：{City}");
+        }
     }
 }
 
-public struct CityInfo
+public class City : ICascadeNode
 {
-    public string Name { get; set; }
-    public List<CityInfo> ItemsSource { get; set; }
+    public string NodePath { get; set; } = string.Empty;
+
+    public List<City> Cyties { get; set; } = [];
+
+    public override string ToString()
+    {
+        return NodePath;
+    }
 }

@@ -49,9 +49,7 @@
                                     StrokeThickness="0"
                                     Visibility="{Binding Path=IsCompact, Converter={x:Static conv:VisibilityConverter.VisibleWhenFalse}, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" />
                             </Grid>
-                            <ItemsPresenter
-                                x:Name="ItemsContainer"
-                                Visibility="Collapsed" />
+                            <ItemsPresenter x:Name="ItemsContainer" Visibility="Collapsed" />
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -95,15 +93,11 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Grid
-                                x:Name="HeaderGrid"
-                                Grid.Row="0">
+                            <Grid x:Name="HeaderGrid" Grid.Row="0">
                                 <ContentPresenter Content="{TemplateBinding Header}" />
                             </Grid>
                             <ItemsPresenter Grid.Row="1" />
-                            <ContentPresenter
-                                Grid.Row="2"
-                                Content="{TemplateBinding Footer}" />
+                            <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
