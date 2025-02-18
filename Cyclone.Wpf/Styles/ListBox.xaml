@@ -7,7 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="DefaultListBoxItemStyle" TargetType="ListBoxItem">
+    <Style TargetType="ListBoxItem">
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

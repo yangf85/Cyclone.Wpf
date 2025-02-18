@@ -12,21 +12,15 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <cy:SpacingStackPanel Spacing="20">
-        <cy:Switch
-            x:Name="LoadingSwitch"
-            Content="IsLoading" />
+        <cy:Switch x:Name="LoadingSwitch" Content="IsLoading" />
         <HeaderedContentControl Header="Nomarl">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <Button cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}">Button</Button>
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="Custom">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <TextBox
                     Height="50"
                     cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}"
@@ -50,9 +44,7 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="XamlAnimatedGif">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <Label
                     Height="50"
                     HorizontalAlignment="Center"
@@ -70,12 +62,8 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="WebBrowser">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
-                <Button
-                    Height="50"
-                    cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <Button Height="50" cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}">
                     <cy:LoadingAdorner.LoadingContent>
                         <WebBrowser
                             Width="32"
@@ -96,12 +84,8 @@
                     Width="35"
                     Height="35" />
             </HeaderedContentControl.Resources>
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
-                <Button
-                    Height="50"
-                    cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <Button Height="50" cy:LoadingAdorner.IsLoading="{Binding ElementName=LoadingSwitch, Path=IsChecked}">
                     Button
                 </Button>
             </cy:SpacingUniformGrid>
@@ -109,23 +93,42 @@
 
         <HeaderedContentControl Header="AsyncLoading">
             <cy:SpacingStackPanel Orientation="Horizontal">
-                <Button
+                <ToggleButton
                     x:Name="LoadButton"
                     Height="50"
-                    Command="{Binding LoadImageCommand}">
+                    Command="{Binding LoadImageCommand}"
+                    CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}">
                     LoadImage
-                </Button>
-                <Border
-                    BorderBrush="Black"
-                    BorderThickness="1">
-                    <Image
-                        Width="200"
-                        Height="200"
-                        cy:LoadingAdorner.IsLoading="{Binding IsLoadingImage}"
-                        Source="{Binding ImageSource}"
-                        Stretch="Uniform" />
+                </ToggleButton>
+                <Border cy:LoadingAdorner.IsLoading="{Binding LoadImageCommand.IsRunning}">
+                    <ListBox ItemsSource="{Binding Images}">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Height" Value="Auto" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <cy:SpacingUniformGrid
+                                    Columns="4"
+                                    HorizontalSpacing="5"
+                                    Rows="4"
+                                    VerticalSpacing="5" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <Image
+                                        Width="100"
+                                        Height="100"
+                                        Source="{Binding Image}"
+                                        Stretch="Fill" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Border>
-
             </cy:SpacingStackPanel>
         </HeaderedContentControl>
     </cy:SpacingStackPanel>

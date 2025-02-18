@@ -137,61 +137,6 @@ public class LoadingAdorner : Adorner, IDisposable
     public static readonly DependencyProperty IsLoadingProperty =
         DependencyProperty.RegisterAttached("IsLoading", typeof(bool), typeof(LoadingAdorner), new PropertyMetadata(IsLoadingPropertyChangedCallback));
 
-    public static bool GetIsLoading(DependencyObject obj)
-    {
-        return (bool)obj.GetValue(IsLoadingProperty);
-    }
-
-    public static void SetIsLoading(DependencyObject obj, bool value)
-    {
-        obj.SetValue(IsLoadingProperty, value);
-    }
-
-    public static void Loading(FrameworkElement element, bool isOpen = true)
-    {
-        if (element == null) return;
-        //移除遮罩
-        if (!isOpen)
-        {
-            ClearAdorners(element);
-            return;
-        }
-
-        //获取遮罩元素
-        var LoadingContent = GetLoadingContent(element);
-        if (LoadingContent == null)
-        {
-            LoadingContent = element.TryFindResource("LoadingContent");
-            LoadingContent ??= new NormalLoading()
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-        }
-
-        //获取装饰层
-        var adornerLayer = AdornerLayer.GetAdornerLayer(element) ?? throw new Exception("未找到装饰层。");
-
-        //添加遮罩层
-        if (LoadingContent is FrameworkElement maskElement)
-        {
-            if (maskElement.Parent != null)
-            {
-                var type = LoadingContent.GetType();
-                var properties = type.GetProperties().Where(p => p.CanWrite).ToArray();
-                var obj = Activator.CreateInstance(type);
-                foreach (var property in properties)
-                {
-                    if (property.Name == "Content" || property.Name == "Child" || property.Name == "Children")
-                        continue;
-                    property.SetValue(obj, property.GetValue(LoadingContent));
-                }
-                LoadingContent = obj;
-            }
-        }
-        adornerLayer.Add(new LoadingAdorner(element, LoadingContent));
-    }
-
     private static void IsLoadingPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is FrameworkElement control)
@@ -232,6 +177,61 @@ public class LoadingAdorner : Adorner, IDisposable
                 }
             }
         }
+    }
+
+    public static bool GetIsLoading(DependencyObject obj)
+    {
+        return (bool)obj.GetValue(IsLoadingProperty);
+    }
+
+    public static void SetIsLoading(DependencyObject obj, bool value)
+    {
+        obj.SetValue(IsLoadingProperty, value);
+    }
+
+    public static void Loading(FrameworkElement element, bool isOpen = true)
+    {
+        if (element == null) return;
+        //移除遮罩
+        if (!isOpen)
+        {
+            ClearAdorners(element);
+            return;
+        }
+
+        //获取遮罩元素
+        var loadingContent = GetLoadingContent(element);
+        if (loadingContent == null)
+        {
+            loadingContent = element.TryFindResource("LoadingContent");
+            loadingContent ??= new NormalLoading()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+        }
+
+        //获取装饰层
+        var adornerLayer = AdornerLayer.GetAdornerLayer(element) ?? throw new Exception("未找到装饰层。");
+
+        //添加遮罩层
+        if (loadingContent is FrameworkElement maskElement)
+        {
+            if (maskElement.Parent != null)
+            {
+                var type = loadingContent.GetType();
+                var properties = type.GetProperties().Where(p => p.CanWrite).ToArray();
+                var obj = Activator.CreateInstance(type);
+                foreach (var property in properties)
+                {
+                    if (property.Name == "Content" || property.Name == "Child" || property.Name == "Children")
+                        continue;
+                    property.SetValue(obj, property.GetValue(loadingContent));
+                }
+                loadingContent = obj;
+            }
+        }
+        adornerLayer.Add(new LoadingAdorner(element, loadingContent));
     }
 
     #endregion IsLoading

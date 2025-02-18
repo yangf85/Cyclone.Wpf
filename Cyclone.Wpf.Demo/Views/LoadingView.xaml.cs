@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -16,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.WebRequestMethods;
 
 namespace Cyclone.Wpf.Demo.Views
 {
@@ -38,54 +41,67 @@ namespace Cyclone.Wpf.Demo.Views
         }
     }
 
-    public partial class LoadingViewModel : ObservableObject
+    public partial class ImageViewModel : ObservableObject
     {
         [ObservableProperty]
-        public partial bool IsLoadingImage { get; set; }
+        public partial BitmapImage Image { get; set; }
+    }
+
+    public partial class LoadingViewModel : ObservableObject
+    {
+        List<string> _urls =
+        [
+            "http://img11.360buyimg.com//n3/g2/M00/06/1D/rBEGEVAkffUIAAAAAAB54F55qh8AABWrQLxLr0AAHn4106.jpg",
+            "http://img12.360buyimg.com//n3/g1/M00/06/1D/rBEGDVAkffQIAAAAAAB0mDavAccAABWrQMCUdwAAHSw197.jpg",
+            "http://img13.360buyimg.com//n3/g2/M00/06/1D/rBEGElAkffIIAAAAAADVR1yd_X0AABWrQKlu2MAANVf537.jpg",
+            "http://img10.360buyimg.com//n3/g5/M02/1C/00/rBEIC1Akfe8IAAAAAABDtsBt3bQAAFeCQAh13kAAEPO445.jpg",
+            "http://img11.360buyimg.com//n3/g3/M00/06/1D/rBEGE1AkfgIIAAAAAACfm_MhwRYAABWrQMmK8kAAJ-z240.jpg",
+            "http://img12.360buyimg.com//n3/g3/M00/06/1D/rBEGFFAkfhQIAAAAAABHekJE6jQAABWrQOGiEUAAEeS965.jpg",
+            "http://img13.360buyimg.com//n3/g2/M00/06/1D/rBEGElAkfegIAAAAAAClvhjSNQoAABWrQJ0KTIAAKXW818.jpg",
+            "http://img14.360buyimg.com//n3/g1/M00/06/1D/rBEGDlAkfe4IAAAAAABQsM9eGEoAABWrQJ4WIwAAFDI883.jpg",
+            "http://img10.360buyimg.com//n3/g3/M00/06/1D/rBEGE1AkfgQIAAAAAACBZc_HeVAAABWrQM293sAAIF9407.jpg",
+            "http://img11.360buyimg.com//n3/g3/M00/06/1D/rBEGE1AkfgkIAAAAAAC_6A3AnhwAABWrQOfht8AAMAA406.jpg",
+            "http://img12.360buyimg.com//n3/g5/M02/1C/00/rBEDilAkfeAIAAAAAACdJBYljH0AAFeCQAuIsMAAJ08326.jpg",
+            "http://img13.360buyimg.com//n3/g1/M00/06/1D/rBEGDVAkfe4IAAAAAACXzwGDqfoAABWrQKpCmEAAJfn685.jpg",
+            "http://img12.360buyimg.com//n3/g3/M00/06/1D/rBEGE1AkfgcIAAAAAAC5nK25hEQAABWrQOCa3sAALm0258.jpg",
+            "http://img14.360buyimg.com//n3/g2/M00/06/1D/rBEGEFAkfdUIAAAAAACZblNaX_kAABWrQJ0zwgAAJmG566.jpg",
+            "http://img14.360buyimg.com//n3/g2/M00/06/1D/rBEGEFAkfewIAAAAAACfqQVJlNoAABWrQOirGwAAJ_B820.jpg",
+            "http://img11.360buyimg.com//n3/g2/M01/06/1D/rBEGEFAkffMIAAAAAACgY4EpzwYAABWrgAfHyIAAKB7880.jpg",
+        ];
 
         [ObservableProperty]
-        public partial BitmapImage ImageSource { get; set; }
+        public partial ObservableCollection<ImageViewModel> Images { get; set; } = [];
+
         public LoadingViewModel()
         {
-            IsLoadingImage = true;
         }
 
         [RelayCommand]
-        private async Task LoadImageAsync()
+        private async Task LoadImageAsync(bool isLoad)
         {
-            try
+            if (!isLoad)
             {
-                IsLoadingImage = true;
+                Images.Clear();
+                return;
+            }
 
-                string imageUrl = "https://images.unsplash.com/photo-1541963463532-d68292c34b19";
-
-                // 在后台线程中下载图片数据
-
-                // 在 UI 线程上更新 ImageSource
-                await Application.Current.Dispatcher.InvokeAsync(async () =>
+            for (int i = 0; i < _urls.Count; i++)
+            {
+                try
                 {
-                    using HttpClient httpClient = new HttpClient();
-                    var imageData = await httpClient.GetByteArrayAsync(imageUrl);
-
-                    using var stream = new MemoryStream(imageData);
-                    var image = new BitmapImage();
-                    image.BeginInit();
-                    image.CacheOption = BitmapCacheOption.OnLoad; // 确保图片加载完成后释放流
-                    image.StreamSource = stream;
-                    image.EndInit();
-
-                    ImageSource = image;
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to load image: {ex.Message}");
-            }
-            finally
-            {
-                IsLoadingImage = false;
+                    var image = new ImageViewModel();
+                    var imageBytes = await new HttpClient().GetByteArrayAsync(_urls[i]);
+                    image.Image = new BitmapImage();
+                    image.Image.BeginInit();
+                    image.Image.StreamSource = new MemoryStream(imageBytes);
+                    image.Image.EndInit();
+                    Images.Add(image);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
-
     }
 }
