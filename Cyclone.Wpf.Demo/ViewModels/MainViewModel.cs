@@ -30,6 +30,7 @@ public partial class MainViewModel : ObservableObject
             "Nesting" => new NestingView(),
             "Selector" => new SelectorView(),
             "Loading" => new LoadingView(),
+            "Collection" => new CollectionView(),
             _ => new object(),
         };
     }
@@ -58,36 +59,12 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="Text",
                     Icon= "\xe603",
                 },
-
             ]
         });
         Items.Add(new SideMenuItemViewModel()
         {
-            Header = "List",
+            Header = "Collection",
             Icon = "\xe6d5",
-            Items =
-            [
-                new SideMenuItemViewModel()
-                {
-                    Header="List",
-                    Icon= "\xe6d5",
-                },
-                new SideMenuItemViewModel()
-                {
-                    Header="ListView",
-                    Icon= "\xe6d5",
-                },
-                new SideMenuItemViewModel()
-                {
-                    Header="TreeView",
-                    Icon= "\xe6d5",
-                },
-                new SideMenuItemViewModel()
-                {
-                    Header="DataGrid",
-                    Icon= "\xe6d5",
-                },
-            ]
         });
         Items.Add(new SideMenuItemViewModel()
         {

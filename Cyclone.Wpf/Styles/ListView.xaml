@@ -3,7 +3,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+    <Style x:Key="DefaultListViewItemStyle" TargetType="{x:Type ListViewItem}">
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Background" Value="Transparent" />
@@ -20,19 +20,9 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="true">
-                        <ContentPresenter
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <GridViewRowPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="Selector.IsSelectionActive" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource SelectedBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}" />
-                        </MultiTrigger>-->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
@@ -41,7 +31,6 @@
                             <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource SelectedBackgroundBrush}" />
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}" />
                         </Trigger>
-
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="RootBorder" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
                         </Trigger>
@@ -50,6 +39,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem" />
 
     <Style TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
@@ -60,9 +51,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
-        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ListViewItemStyle}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
@@ -72,8 +61,11 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="true">
-                        <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="False">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ScrollViewer
+                            Grid.Row="1"
+                            Padding="{TemplateBinding Padding}"
+                            Focusable="False">
+                            <ItemsPresenter />
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>

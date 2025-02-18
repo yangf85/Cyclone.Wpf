@@ -103,7 +103,7 @@
                 <Border cy:LoadingAdorner.IsLoading="{Binding LoadImageCommand.IsRunning}">
                     <ListBox ItemsSource="{Binding Images}">
                         <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource DefaultListBoxItemStyle}">
                                 <Setter Property="Height" Value="Auto" />
                             </Style>
                         </ListBox.ItemContainerStyle>

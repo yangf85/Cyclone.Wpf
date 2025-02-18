@@ -7,7 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="ListBoxItem">
+    <Style x:Key="DefaultListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -30,6 +30,7 @@
                                 x:Name="SelectedCheckBox"
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
                                 IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
                                 Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             <ContentPresenter
@@ -52,6 +53,8 @@
         </Setter>
     </Style>
 
+    <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="ListBoxItem" />
+
     <Style TargetType="ListBox">
         <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource DefaultListBoxItemStyle}" />
@@ -64,16 +67,25 @@
                         x:Name="Root"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <StackPanel>
-                            <CheckBox
-                                x:Name="SelectAllCheckBox"
-                                Grid.Row="0"
-                                HorizontalAlignment="Left"
-                                Content="选择全部"
-                                IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-                            <ItemsPresenter Grid.Row="1" />
-                        </StackPanel>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <CheckBox
+                                    x:Name="SelectAllCheckBox"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    Content="选择全部"
+                                    IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                    Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                                <ItemsPresenter
+                                    Grid.Row="1"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                            </Grid>
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

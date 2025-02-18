@@ -44,6 +44,7 @@
                             </Border>
                         </BulletDecorator.Bullet>
                         <ContentPresenter
+                            x:Name="ContentContainer"
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             RecognizesAccessKey="True" />
@@ -54,6 +55,9 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter TargetName="ContentContainer" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
