@@ -78,6 +78,7 @@
                     <DataGrid
                         Height="200"
                         AutoGenerateColumns="False"
+                        CanUserAddRows="False"
                         ItemsSource="{Binding DataGridData}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
