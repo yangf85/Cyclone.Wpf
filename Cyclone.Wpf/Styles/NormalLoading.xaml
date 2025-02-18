@@ -14,10 +14,16 @@
         Height="24"
         HorizontalAlignment="Center"
         VerticalAlignment="Center">
-        <Grid Width="50" Height="50">
+        <Grid
+            Width="50"
+            Height="50">
             <Grid.Resources>
-                <SolidColorBrush x:Key="ParticleColor" Color="#FF0D47A1" />
-                <SolidColorBrush x:Key="ParticleBackgroundColor" Color="Transparent" />
+                <SolidColorBrush
+                    x:Key="ParticleColor"
+                    Color="#FF0D47A1" />
+                <SolidColorBrush
+                    x:Key="ParticleBackgroundColor"
+                    Color="Transparent" />
                 <system:Double x:Key="ParticleOpacity">1</system:Double>
                 <system:Double x:Key="ParticleRadius">5</system:Double>
 
@@ -60,7 +66,9 @@
                 <system:TimeSpan x:Key="ParticleBeginTime3">00:00:01.052</system:TimeSpan>
                 <Duration x:Key="ParticleDuration3">00:00:00.750</Duration>
 
-                <Style x:Key="EllipseStyle" TargetType="Ellipse">
+                <Style
+                    x:Key="EllipseStyle"
+                    TargetType="Ellipse">
                     <Setter Property="Width" Value="{StaticResource ParticleRadius}" />
                     <Setter Property="Height" Value="{StaticResource ParticleRadius}" />
                     <Setter Property="Fill" Value="{StaticResource ParticleColor}" />
@@ -232,7 +240,9 @@
                         <RotateTransform />
                     </Border.RenderTransform>
                     <Border.RenderTransformOrigin>
-                        <Point X="{StaticResource RotationPointX}" Y="{StaticResource RotationPointY}" />
+                        <Point
+                            X="{StaticResource RotationPointX}"
+                            Y="{StaticResource RotationPointY}" />
                     </Border.RenderTransformOrigin>
                     <Ellipse Style="{StaticResource EllipseStyle}">
                         <Ellipse.RenderTransform>
@@ -251,7 +261,9 @@
                         <RotateTransform />
                     </Border.RenderTransform>
                     <Border.RenderTransformOrigin>
-                        <Point X="{StaticResource RotationPointX}" Y="{StaticResource RotationPointY}" />
+                        <Point
+                            X="{StaticResource RotationPointX}"
+                            Y="{StaticResource RotationPointY}" />
                     </Border.RenderTransformOrigin>
                     <Ellipse Style="{StaticResource EllipseStyle}">
                         <Ellipse.RenderTransform>
@@ -270,7 +282,9 @@
                         <RotateTransform />
                     </Border.RenderTransform>
                     <Border.RenderTransformOrigin>
-                        <Point X="{StaticResource RotationPointX}" Y="{StaticResource RotationPointY}" />
+                        <Point
+                            X="{StaticResource RotationPointX}"
+                            Y="{StaticResource RotationPointY}" />
                     </Border.RenderTransformOrigin>
                     <Ellipse Style="{StaticResource EllipseStyle}">
                         <Ellipse.RenderTransform>
@@ -289,7 +303,9 @@
                         <RotateTransform />
                     </Border.RenderTransform>
                     <Border.RenderTransformOrigin>
-                        <Point X="{StaticResource RotationPointX}" Y="{StaticResource RotationPointY}" />
+                        <Point
+                            X="{StaticResource RotationPointX}"
+                            Y="{StaticResource RotationPointY}" />
                     </Border.RenderTransformOrigin>
                     <Ellipse Style="{StaticResource EllipseStyle}">
                         <Ellipse.RenderTransform>
@@ -308,7 +324,9 @@
                         <RotateTransform />
                     </Border.RenderTransform>
                     <Border.RenderTransformOrigin>
-                        <Point X="{StaticResource RotationPointX}" Y="{StaticResource RotationPointY}" />
+                        <Point
+                            X="{StaticResource RotationPointX}"
+                            Y="{StaticResource RotationPointY}" />
                     </Border.RenderTransformOrigin>
                     <Ellipse Style="{StaticResource EllipseStyle}">
                         <Ellipse.RenderTransform>

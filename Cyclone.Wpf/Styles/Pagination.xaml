@@ -37,7 +37,6 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource CornerRadiusNormal}"
                         SnapsToDevicePixels="True"
                         UseLayoutRounding="True">
                         <ContentPresenter
@@ -170,7 +169,7 @@
                         Style="{StaticResource Pagination.SelectListBoxStyle}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
+                                <UniformGrid Rows="1" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>

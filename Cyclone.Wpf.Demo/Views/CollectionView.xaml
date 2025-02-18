@@ -28,10 +28,10 @@
             </HeaderedContentControl>
             <HeaderedContentControl Header="ListView">
                 <ListView
-                    Height="200" Style="{x:Null}"
+                    Height="200"
                     ItemsSource="{Binding ListViewData}">
                     <ListView.View>
-                        <GridView  ColumnHeaderContainerStyle="{StaticResource DefaultGridViewColumnHeaderStyle}">
+                        <GridView>
                             <GridViewColumn
                                 Width="100"
                                 DisplayMemberBinding="{Binding FirstName}"
@@ -71,6 +71,43 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="DataGrid">
+                <StackPanel>
+                    <DataGrid
+                        Height="200"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding DataGridData}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Binding="{Binding FirstName}"
+                                Header="First Name" />
+                            <DataGridTextColumn
+                                Binding="{Binding LastName}"
+                                Header="Last Name" />
+                            <DataGridTextColumn
+                                Binding="{Binding Age}"
+                                Header="Age" />
+                            <DataGridTextColumn
+                                Binding="{Binding Email}"
+                                Header="Email" />
+                            <DataGridTextColumn
+                                Binding="{Binding Address}"
+                                Header="Address" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding City}"
+                                Header="City" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <cy:Pagination
+                        Margin="0,5,0,0"
+                        ItemCount="{Binding Total, Mode=TwoWay}"
+                        PerpageCount="{Binding PerPageCount, Mode=TwoWay}"
+                        PageIndex="{Binding PageIndex, Mode=TwoWay}" />
+                </StackPanel>
+
             </HeaderedContentControl>
         </cy:SpacingStackPanel>
     </ScrollViewer>

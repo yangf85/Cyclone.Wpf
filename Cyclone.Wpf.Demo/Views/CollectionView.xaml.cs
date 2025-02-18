@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,17 +32,56 @@ public partial class CollectionView : UserControl
     }
 }
 
-public partial class CollectionViewModel : ObservableObject
+public partial class CollectionViewModel : ObservableObject,IPagination
 {
+    List<FakerData> _source;
+
     [ObservableProperty]
     public partial ObservableCollection<FakerData> ListBoxData { get; set; } = [];
 
     [ObservableProperty]
     public partial ObservableCollection<FakerData> ListViewData { get; set; } = [];
 
+
+
+
+    [ObservableProperty]
+    public partial ObservableCollection<FakerData> DataGridData { get; set; } = [];
+
+    [ObservableProperty]
+    public partial int PageIndex { get; set; } = 5;
+    [ObservableProperty]
+    public partial int PerPageCount { get; set; } = 10;
+    [ObservableProperty]
+    public partial int Total { get; set; } = 100;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        switch (e.PropertyName)
+        {
+            case nameof(PageIndex):
+            
+            case nameof(PerPageCount):
+                
+            case nameof(Total):
+                Update();
+                break;
+            default : return;
+        }
+    }
+
+    void Update()
+    {
+        DataGridData = [.. _source.Skip((PageIndex - 1) * PerPageCount).Take(PerPageCount)];
+    }
+
     public CollectionViewModel()
     {
-        ListBoxData = FakerDataHelper.GenerateFakerDataCollection(50);
-        ListViewData = FakerDataHelper.GenerateFakerDataCollection(50);
+        _source = FakerDataHelper.GenerateFakerDataCollection(1000);
+        ListBoxData = [.. _source.Take(50)];
+        ListViewData = [.. _source.Take(50)];
+        Update();
     }
 }

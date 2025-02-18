@@ -11,9 +11,9 @@ namespace Cyclone.Wpf.Demo.Helper;
 public class FakerDataHelper
 {
    
-    public static ObservableCollection<FakerData> GenerateFakerDataCollection(int count)
+    public static List<FakerData> GenerateFakerDataCollection(int count)
     {
-        var collection = new ObservableCollection<FakerData>();
+        var collection = new List<FakerData>();
         for (int i = 0; i < count; i++)
         {
             collection.Add(new FakerData());
@@ -22,9 +22,9 @@ public class FakerDataHelper
     }
 
     // 生成 TreeFakerData 随机树形数据集
-    public static ObservableCollection<TreeFakerData> GenerateTreeFakerDataCollection(int count)
+    public static List<TreeFakerData> GenerateTreeFakerDataCollection(int count)
     {
-        var collection = new ObservableCollection<TreeFakerData>();
+        var collection = new List<TreeFakerData>();
         for (int i = 0; i < count; i++)
         {
             var node = new TreeFakerData
@@ -51,7 +51,7 @@ public class FakerDataHelper
                 var child = new TreeFakerData
                 {
                     Node =Faker. Name.FullName(), // 随机生成子节点名称
-                    Children = GenerateRandomTreeChildren(maxDepth - 1, maxChildren) // 递归生成子节点
+                    Children = [.. GenerateRandomTreeChildren(maxDepth - 1, maxChildren)] // 递归生成子节点
                 };
                 children.Add(child);
             }
