@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\FluidTabControl\" />
+    <Folder Include="Controls\Card\" />
   </ItemGroup>
 
 </Project>
