@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Controls\Card\" />
+    <Folder Include="Controls\DatePicker\" />
   </ItemGroup>
 
 </Project>
