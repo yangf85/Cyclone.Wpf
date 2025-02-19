@@ -184,7 +184,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style TargetType="ctl:NumberBox">
+    <Style x:Key="NumberBox.Style.Basic" TargetType="ctl:NumberBox">
         <Setter Property="Template" Value="{StaticResource BasicNumberBoxControlTemplate}" />
         <Setter Property="Height" Value="{DynamicResource HorizontalControlHeight}" />
         <Setter Property="Background" Value="Transparent" />
@@ -192,4 +192,5 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
+    <Style TargetType="ctl:NumberBox" BasedOn="{StaticResource NumberBox.Style.Basic}"/>
 </ResourceDictionary>

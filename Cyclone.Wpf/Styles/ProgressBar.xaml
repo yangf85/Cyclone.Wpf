@@ -6,7 +6,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ProgressBar.Animation" TargetType="{x:Type ProgressBar}">
+    <Style
+        x:Key="ProgressBar.Animation"
+        TargetType="{x:Type ProgressBar}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -30,13 +32,15 @@
                                                     <SkewTransform AngleX="-30" />
                                                 </TransformGroup>
                                             </LinearGradientBrush.Transform>
-                                            <GradientStop Offset="0" Color="#FF4CAF50" />
-                                            <GradientStop Offset="0.5" Color="#FF4CAF50" />
+                                            <GradientStop Offset="0" Color="#FF1E88E5" />
+                                            <GradientStop Offset="0.5" Color="#FF1E88E5" />
                                             <GradientStop Offset="0.5" Color="#FFFFFFFF" />
                                         </LinearGradientBrush>
                                     </Rectangle.Fill>
                                 </Rectangle>
-                                <Rectangle x:Name="IndeterminateRoot" Visibility="Collapsed">
+                                <Rectangle
+                                    x:Name="IndeterminateRoot"
+                                    Visibility="Collapsed">
                                     <Rectangle.Fill>
                                         <LinearGradientBrush MappingMode="Absolute" SpreadMethod="Repeat" EndPoint="20 0">
                                             <LinearGradientBrush.Transform>
@@ -45,8 +49,8 @@
                                                     <SkewTransform AngleX="-30" />
                                                 </TransformGroup>
                                             </LinearGradientBrush.Transform>
-                                            <GradientStop Offset="0" Color="#FF4CAF50" />
-                                            <GradientStop Offset="0.5" Color="#FF4CAF50" />
+                                            <GradientStop Offset="0" Color="#FF1E88E5" />
+                                            <GradientStop Offset="0.5" Color="#FF1E88E5" />
                                             <GradientStop Offset="0.5" Color="#FFFFFFFF" />
                                         </LinearGradientBrush>
                                     </Rectangle.Fill>
@@ -57,17 +61,29 @@
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Determinate">
                                     <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TransX1" Storyboard.TargetProperty="X">
-                                            <SplineDoubleKeyFrame KeyTime="0" Value="0" />
-                                            <SplineDoubleKeyFrame KeyTime="00:00:.35" Value="20" />
+                                        <DoubleAnimationUsingKeyFrames
+                                            Storyboard.TargetName="TransX1"
+                                            Storyboard.TargetProperty="X">
+                                            <SplineDoubleKeyFrame
+                                                KeyTime="0"
+                                                Value="0" />
+                                            <SplineDoubleKeyFrame
+                                                KeyTime="00:00:.35"
+                                                Value="20" />
                                         </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Indeterminate">
                                     <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TransX2" Storyboard.TargetProperty="X">
-                                            <SplineDoubleKeyFrame KeyTime="0" Value="0" />
-                                            <SplineDoubleKeyFrame KeyTime="00:00:.35" Value="20" />
+                                        <DoubleAnimationUsingKeyFrames
+                                            Storyboard.TargetName="TransX2"
+                                            Storyboard.TargetProperty="X">
+                                            <SplineDoubleKeyFrame
+                                                KeyTime="0"
+                                                Value="0" />
+                                            <SplineDoubleKeyFrame
+                                                KeyTime="00:00:.35"
+                                                Value="20" />
                                         </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -92,83 +108,15 @@
         </Setter>
     </Style>
 
-    <!--<Style x:Key="ProgressBar.Basic" TargetType="{x:Type ProgressBar}">
-        <Setter Property="Foreground" Value="{DynamicResource DefaultForegroundBrush}" />
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ProgressBar}">
-                    <Grid x:Name="TemplateRoot">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}" />
-                        <Rectangle x:Name="PART_Track" />
-                        <Border>
-                            <Grid
-                                x:Name="PART_Indicator"
-                                HorizontalAlignment="Left"
-                                ClipToBounds="True">
-                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}" />
-                                <Rectangle
-                                    x:Name="Animation"
-                                    Fill="{DynamicResource SuccessBackgroundBrush}"
-                                    RenderTransformOrigin="0.5,0.5">
-                                    <Rectangle.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform />
-                                            <SkewTransform />
-                                            <RotateTransform />
-                                            <TranslateTransform />
-                                        </TransformGroup>
-                                    </Rectangle.RenderTransform>
-                                </Rectangle>
-                            </Grid>
-                        </Border>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Determinate" />
-                                <VisualState x:Name="Indeterminate">
-                                    <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                            <EasingDoubleKeyFrame KeyTime="0" Value="0.25" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25" />
-                                        </DoubleAnimationUsingKeyFrames>
-                                        <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
-                                            <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5" />
-                                            <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5" />
-                                            <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5" />
-                                        </PointAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter TargetName="TemplateRoot" Property="LayoutTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsIndeterminate" Value="True">
-                            <Setter TargetName="Indicator" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>-->
 
-    <Style x:Key="ProgressBar.Basic" TargetType="{x:Type ProgressBar}">
+
+    <Style
+        x:Key="ProgressBar.Style.Basic"
+        TargetType="{x:Type ProgressBar}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Height" Value="15" />
-        <Setter Property="Background" Value="{StaticResource SuccessBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource DraggingBackgroundBrush}" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Padding" Value="5,0" />
         <Setter Property="Template">
@@ -179,7 +127,9 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid Height="{TemplateBinding Height}">
-                            <Border Background="#000000" Opacity="0.05" />
+                            <Border
+                                Background="#000000"
+                                Opacity="0.05" />
                             <Border
                                 BorderBrush="#000000"
                                 BorderThickness="1"
@@ -192,9 +142,13 @@
                                     ClipToBounds="True">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition x:Name="Width1" />
-                                        <ColumnDefinition x:Name="Width2" Width="0" />
+                                        <ColumnDefinition
+                                            x:Name="Width2"
+                                            Width="0" />
                                     </Grid.ColumnDefinitions>
-                                    <Grid x:Name="Animation" RenderTransformOrigin="0.5,0.5">
+                                    <Grid
+                                        x:Name="Animation"
+                                        RenderTransformOrigin="0.5,0.5">
                                         <Grid.RenderTransform>
                                             <TransformGroup>
                                                 <ScaleTransform ScaleX="1" ScaleY="-1" />
@@ -240,10 +194,18 @@
                                 <VisualState x:Name="Determinate" />
                                 <VisualState x:Name="Indeterminate">
                                     <Storyboard RepeatBehavior="Forever">
-                                        <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
-                                            <EasingPointKeyFrame KeyTime="0:0:0" Value="0.5,0.5" />
-                                            <EasingPointKeyFrame KeyTime="0:0:1.5" Value="1.95,0.5" />
-                                            <EasingPointKeyFrame KeyTime="0:0:3" Value="0.5,0.5" />
+                                        <PointAnimationUsingKeyFrames
+                                            Storyboard.TargetName="Animation"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                            <EasingPointKeyFrame
+                                                KeyTime="0:0:0"
+                                                Value="0.5,0.5" />
+                                            <EasingPointKeyFrame
+                                                KeyTime="0:0:1.5"
+                                                Value="1.95,0.5" />
+                                            <EasingPointKeyFrame
+                                                KeyTime="0:0:3"
+                                                Value="0.5,0.5" />
                                         </PointAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -260,5 +222,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style BasedOn="{StaticResource ProgressBar.Basic}" TargetType="ProgressBar" />
+    <Style
+        BasedOn="{StaticResource ProgressBar.Style.Basic}"
+        TargetType="ProgressBar" />
 </ResourceDictionary>

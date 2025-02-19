@@ -21,39 +21,35 @@ using System.Windows.Shapes;
 namespace Cyclone.Wpf.Demo.Views;
 
 /// <summary>
-/// ListView.xaml 的交互逻辑
+/// DataGridView.xaml 的交互逻辑
 /// </summary>
-public partial class CollectionView : UserControl
+public partial class DataGridView : UserControl
 {
-    public CollectionView()
+    public DataGridView()
     {
         InitializeComponent();
-        DataContext = new CollectionViewModel();
+        DataContext= new DataGridViewModel();
     }
 }
 
-public partial class CollectionViewModel : ObservableObject,IPagination
+public partial class DataGridViewModel : ObservableObject, IPagination
 {
-    List<FakerData> _source;
-
-    [ObservableProperty]
-    public partial ObservableCollection<FakerData> ListBoxData { get; set; } = [];
-
-    [ObservableProperty]
-    public partial ObservableCollection<FakerData> ListViewData { get; set; } = [];
-
-
-
-
-    [ObservableProperty]
-    public partial ObservableCollection<FakerData> DataGridData { get; set; } = [];
-
     [ObservableProperty]
     public partial int PageIndex { get; set; } = 5;
     [ObservableProperty]
     public partial int PerPageCount { get; set; } = 10;
     [ObservableProperty]
     public partial int Total { get; set; } = 100;
+    [ObservableProperty]
+    public partial ObservableCollection<FakerData> DataGridData { get; set; } = [];
+
+    List<FakerData> _source;
+    public DataGridViewModel()
+    {
+        _source = FakerDataHelper.GenerateFakerDataCollection(100);
+        DataGridData = [.. _source.Take(50)];
+        Update();
+    }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -62,26 +58,18 @@ public partial class CollectionViewModel : ObservableObject,IPagination
         switch (e.PropertyName)
         {
             case nameof(PageIndex):
-            
+
             case nameof(PerPageCount):
-                
+
             case nameof(Total):
                 Update();
                 break;
-            default : return;
+            default: return;
         }
     }
 
     void Update()
     {
         DataGridData = [.. _source.Skip((PageIndex - 1) * PerPageCount).Take(PerPageCount)];
-    }
-
-    public CollectionViewModel()
-    {
-        _source = FakerDataHelper.GenerateFakerDataCollection(1000);
-        ListBoxData = [.. _source.Take(50)];
-        ListViewData = [.. _source.Take(50)];
-        Update();
     }
 }

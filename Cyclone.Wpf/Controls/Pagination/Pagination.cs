@@ -134,18 +134,30 @@ public class Pagination : Control
 
     private static void OnPerpageCountPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var ctrl = d as Pagination;
+        if(d is not Pagination pagination)
+        {
+            return;
+        }
+       
         var countPerpage = (int)e.NewValue;
 
-        if (ctrl._perPageCountTextBox != null)
-            ctrl._perPageCountTextBox.Text = countPerpage.ToString();
+        if ( pagination._perPageCountTextBox != null)
+        {
+            pagination._perPageCountTextBox.Text = countPerpage.ToString();
+        }
+           
 
-        ctrl.SetValue(PageCountPropertyKey, (int)Math.Ceiling(ctrl.ItemCount * 1.0 / countPerpage));
+        pagination.SetValue(PageCountPropertyKey, (int)Math.Ceiling(pagination.ItemCount * 1.0 / countPerpage));
 
-        if (ctrl.PageIndex != 1)
-            ctrl.PageIndex = 1;
+        if (pagination.PageIndex != 1)
+        {
+            pagination.PageIndex = 1;
+        }
         else
-            ctrl.UpdatePages();
+        {
+            pagination.UpdatePages();
+        }
+           
     }
 
     #endregion PerPageCount

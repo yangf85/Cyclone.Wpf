@@ -5,7 +5,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type Button}">
+    <Style
+        x:Key="Button.Style.Basic"
+        TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
         <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
@@ -49,4 +51,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style
+        BasedOn="{StaticResource Button.Style.Basic}"
+        TargetType="{x:Type Button}" />
 </ResourceDictionary>

@@ -14,7 +14,9 @@
                         x:Name="RootBorder"
                         Padding="10,5"
                         Background="Transparent">
-                        <ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                        <ContentPresenter
+                            Content="{TemplateBinding Header}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -32,12 +34,16 @@
                         </Grid.ColumnDefinitions>
 
                         <!--  左侧导航标签  -->
-                        <StackPanel Grid.Column="0" Background="LightGray">
+                        <StackPanel
+                            Grid.Column="0"
+                            Background="LightGray">
                             <ItemsPresenter />
                         </StackPanel>
 
                         <!--  右侧内容区域  -->
-                        <ScrollViewer x:Name="PART_ScrollViewer" Grid.Column="1" />
+                        <ScrollViewer
+                            x:Name="PART_ScrollViewer"
+                            Grid.Column="1" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

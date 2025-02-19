@@ -4,18 +4,24 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style
         x:Key="Pagination.PrevNextRepeatButtonStyle"
+        BasedOn="{StaticResource RepeatButton.Style.Basic}"
         TargetType="RepeatButton" />
 
     <Style
         x:Key="Pagination.GotoPageButtonStyle"
+        BasedOn="{StaticResource Button.Style.Basic}"
         TargetType="Button" />
 
     <Style
         x:Key="Pagination.GotoPageNumberBoxStyle"
+        BasedOn="{StaticResource NumberBox.Style.Basic}"
         TargetType="ctl:NumberBox" />
 
     <Style
@@ -25,7 +31,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="5,0" />
+        <Setter Property="Padding" Value="3,0" />
         <Setter Property="Margin" Value="3,0" />
         <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
@@ -62,8 +68,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource HoverForegroundBrush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource CheckedBackgroundBrush}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource AccentBrush}" />
+                <Setter Property="Background" Value="{DynamicResource SelectedBackgroundBrush}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource SelectedForegroundBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -99,7 +105,7 @@
     </Style>
 
     <ControlTemplate
-        x:Key="BasicPaginationControlTemplate"
+        x:Key="Pagination.ControlTemplate.Basic"
         TargetType="{x:Type ctl:Pagination}">
         <Border
             x:Name="RootBorder"
@@ -151,9 +157,9 @@
                         <RepeatButton.Content>
                             <Path
                                 x:Name="PrevPath"
-                                Width="16"
-                                Height="16"
-                                Data="M18,49.1,68.3,79.5a4.6,4.6,0,0,0,4.4.1,4.3,4.3,0,0,0,2.2-3.8V15a4.3,4.3,0,0,0-2.2-3.8,4.3,4.3,0,0,0-4.4.1L18,41.7a4.3,4.3,0,0,0,0,7.4Zm0,0"
+                                Width="15"
+                                Height="15"
+                                Data="M100,0 L100,100 L13.4,50 Z"
                                 Fill="{DynamicResource DefaultForegroundBrush}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
@@ -181,9 +187,9 @@
                         <RepeatButton.Content>
                             <Path
                                 x:Name="NextPath"
-                                Width="16"
-                                Height="16"
-                                Data="M72.7,41.6,22.4,11.2a4.6,4.6,0,0,0-4.4-.1,4.4,4.4,0,0,0-2.2,3.8V75.7A4.3,4.3,0,0,0,18,79.5a4.3,4.3,0,0,0,4.4-.1L72.7,49a4.3,4.3,0,0,0,0-7.4Zm0,0"
+                                Width="15"
+                                Height="15"
+                                Data="M0,0 L0,100 L86.6,50 Z"
                                 Fill="{DynamicResource DefaultForegroundBrush}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
@@ -233,7 +239,7 @@
     </ControlTemplate>
 
     <Style TargetType="{x:Type ctl:Pagination}">
-        <Setter Property="Template" Value="{StaticResource BasicPaginationControlTemplate}" />
+        <Setter Property="Template" Value="{StaticResource Pagination.ControlTemplate.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />

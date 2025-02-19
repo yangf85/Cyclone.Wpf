@@ -1,15 +1,19 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="/Cyclone.UI;component/Styles/Resources/StyleResourceCollection.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/FontIconStyle.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/ControlStyle.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="RepeatButton">
+    <Style
+        x:Key="RepeatButton.Style.Basic"
+        TargetType="RepeatButton">
         <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
@@ -45,4 +49,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style
+        BasedOn="{StaticResource RepeatButton.Style.Basic}"
+        TargetType="RepeatButton" />
 </ResourceDictionary>

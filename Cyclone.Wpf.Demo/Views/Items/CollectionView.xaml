@@ -73,43 +73,7 @@
                 </ListView>
             </HeaderedContentControl>
 
-            <HeaderedContentControl Header="DataGrid">
-                <StackPanel>
-                    <DataGrid
-                        Height="200"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        ItemsSource="{Binding DataGridData}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Binding="{Binding FirstName}"
-                                Header="First Name" />
-                            <DataGridTextColumn
-                                Binding="{Binding LastName}"
-                                Header="Last Name" />
-                            <DataGridTextColumn
-                                Binding="{Binding Age}"
-                                Header="Age" />
-                            <DataGridTextColumn
-                                Binding="{Binding Email}"
-                                Header="Email" />
-                            <DataGridTextColumn
-                                Binding="{Binding Address}"
-                                Header="Address" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding City}"
-                                Header="City" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <cy:Pagination
-                        Margin="0,5,0,0"
-                        ItemCount="{Binding Total, Mode=TwoWay}"
-                        PerpageCount="{Binding PerPageCount, Mode=TwoWay}"
-                        PageIndex="{Binding PageIndex, Mode=TwoWay}" />
-                </StackPanel>
-
-            </HeaderedContentControl>
+          
         </cy:SpacingStackPanel>
     </ScrollViewer>
 </UserControl>
