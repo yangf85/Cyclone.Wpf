@@ -32,6 +32,7 @@ public partial class MainViewModel : ObservableObject
             "Loading" => new LoadingView(),
             "DataGrid" => new DataGridView(),
             "Date" => new DateView(),
+            "Range" => new RangeView(),
             _ => new object(),
         };
     }
@@ -59,6 +60,11 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header="Text",
                     Icon= "\xe603",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="Range",
+                    Icon= "\xe605",
                 },
             ]
         });
