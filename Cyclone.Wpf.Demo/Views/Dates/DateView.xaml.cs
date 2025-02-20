@@ -24,11 +24,12 @@ public partial class DateView : UserControl
     public DateView()
     {
         InitializeComponent();
+        DataContext = new DateViewModel();
     }
 }
 
 public partial class DateViewModel : ObservableObject
 {
     [ObservableProperty]
-    public partial DateTime Date { get; set; } = DateTime.Now;
+    public partial DateTime Date { get; set; } = DateTime.Now.AddDays(1);
 }

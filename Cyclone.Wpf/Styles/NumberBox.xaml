@@ -192,5 +192,5 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
-    <Style TargetType="ctl:NumberBox" BasedOn="{StaticResource NumberBox.Style.Basic}"/>
+    <Style BasedOn="{StaticResource NumberBox.Style.Basic}" TargetType="ctl:NumberBox" />
 </ResourceDictionary>

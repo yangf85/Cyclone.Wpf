@@ -23,7 +23,7 @@ public class BrushConverter
             _ => Brushes.Green
         });
 
-    public static FuncValueConverter<CalendarDayButton, Brush> DateToBrushConverter { get; } =
+    public static FuncValueConverter<CalendarDayButton, Brush> WeekendDate { get; } =
         new(calendarDayButton =>
         {
             var dateTime = (DateTime)calendarDayButton.DataContext;

@@ -80,10 +80,6 @@
     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#FFEEEEEE" />
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#FFBDBDBD" />
 
-    <!--  图标  -->
-    <SolidColorBrush x:Key="IconForegroundBrush" Color="#FF757575" />
-    <SolidColorBrush x:Key="IconBackgroundBrush" Color="#FFF5F5F5" />
-
     <!--  阴影和高光  -->
     <SolidColorBrush x:Key="ShadowBrush" Color="#40000000" />
     <SolidColorBrush x:Key="HighlightBrush" Color="#80FFFFFF" />
@@ -91,4 +87,9 @@
 
     <!--  强调颜色  -->
     <SolidColorBrush x:Key="AccentBrush" Color="#FFFF4081" />
+
+    <!--  图标  -->
+    <SolidColorBrush x:Key="IconDefaultForegroundBrush" Color="#FF333333" />
+    <SolidColorBrush x:Key="IconHoverForegroundBrush" Color="#FF1E88E5" />
+    <SolidColorBrush x:Key="IconSelectedForegroundBrush" Color="#FF1976D2" />
 </ResourceDictionary>
