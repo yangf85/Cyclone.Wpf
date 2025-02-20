@@ -28,9 +28,6 @@ namespace Cyclone.Wpf.Demo
             DataContext = new MainViewModel();
         }
 
-        private void SideMenu_Loaded(object sender, RoutedEventArgs e)
-        {
-            var t = SideMenu.ItemContainerStyle;
-        }
+      
     }
 }

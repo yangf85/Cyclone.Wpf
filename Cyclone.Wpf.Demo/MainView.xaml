@@ -23,8 +23,7 @@
             HorizontalAlignment="Left"
             Indent="10"
             IsCompact="False"
-            ItemsSource="{Binding SideMenu.Items}"
-            Loaded="SideMenu_Loaded">
+            ItemsSource="{Binding SideMenu.Items}">
             <cy:SideMenu.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Items}">
                     <Grid>
@@ -34,7 +33,9 @@
                             Orientation="Horizontal">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonUp">
-                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                                    <i:InvokeCommandAction
+                                        Command="{Binding Path=DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBlock
