@@ -34,6 +34,7 @@ public partial class MainViewModel : ObservableObject
             "Date" => new DateView(),
             "Range" => new RangeView(),
             "TabControl" => new TabControlView(),
+            "ComboBox" => new ComboBoxView(),
             _ => new object(),
         };
     }
@@ -67,6 +68,11 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="Range",
                     Icon= "\xe605",
                 },
+                 new SideMenuItemViewModel()
+                {
+                    Header="ComboBox",
+                    Icon= "\xe605",
+                },
             ]
         });
         Items.Add(new SideMenuItemViewModel()
@@ -75,6 +81,7 @@ public partial class SideMenuViewModel : ObservableObject
             Icon = "\xe6d5",
             Items =
             [
+
                 new SideMenuItemViewModel()
                 {
                     Header="ListBox",
@@ -105,6 +112,7 @@ public partial class SideMenuViewModel : ObservableObject
                 },
             ]
         });
+
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Nesting",
