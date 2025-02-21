@@ -42,6 +42,9 @@
             </Grid>
         </StackPanel>
         <ControlTemplate.Triggers>
+            <Trigger SourceName="OuterEllipse" Property="IsMouseOver" Value="True">
+                <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource Hover.Background}" />
+            </Trigger>
             <Trigger SourceName="InnerEllipse" Property="IsMouseOver" Value="True">
                 <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource Icon.Hover.Foreground}" />
             </Trigger>

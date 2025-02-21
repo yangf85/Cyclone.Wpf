@@ -72,9 +72,8 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="ctl:SideMenu">
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
 

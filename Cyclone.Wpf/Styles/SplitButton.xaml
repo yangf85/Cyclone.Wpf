@@ -10,7 +10,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Focusable" Value="True" />
-        <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -21,9 +21,9 @@
                         SnapsToDevicePixels="True"
                         UseLayoutRounding="True">
                         <Path
-                            x:Name="path"
-                            Width="8"
-                            Height="8"
+                            x:Name="Indicator"
+                            Width="14"
+                            Height="14"
                             Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -33,13 +33,10 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Cursor" Value="Arrow" />
-                            <Setter Property="Cursor" Value="Arrow" />
                             <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Root" Property="Cursor" Value="Arrow" />
-                            <Setter Property="Background" Value="{StaticResource CheckedBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Checked.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -48,10 +45,10 @@
     </Style>
 
     <Style TargetType="{x:Type ctl:SplitButtonItem}">
-        <Setter Property="Height" Value="{StaticResource HorizontalItemHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-        <Setter Property="Background" Value="{Binding Path=Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:SplitButton}}" />
+        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
         <Setter Property="BorderBrush" Value="{Binding Path=BorderBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:SplitButton}}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:SplitButton}}" />
@@ -60,7 +57,7 @@
                 <ControlTemplate TargetType="{x:Type ctl:SplitButtonItem}">
                     <Border
                         x:Name="Root"
-                        Padding="{TemplateBinding Padding}"
+                        Padding="{DynamicResource Padding.Horizontal}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -72,7 +69,6 @@
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
-
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
@@ -86,7 +82,6 @@
     </Style>
 
     <Style TargetType="{x:Type ctl:SplitButton}">
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
@@ -97,7 +92,7 @@
                 <ControlTemplate TargetType="{x:Type ctl:SplitButton}">
                     <Border
                         x:Name="Root"
-                        Background="{TemplateBinding Background}"
+                        Background="Transparent"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True"
@@ -108,8 +103,9 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Grid x:Name="ContentGrid">
+                            <Grid x:Name="ContentGrid" Background="Transparent">
                                 <ContentPresenter
+                                    Margin="{DynamicResource Margin.Horizontal}"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     Content="{TemplateBinding Label}" />
@@ -154,7 +150,7 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger SourceName="ContentGrid" Property="UIElement.IsMouseOver" Value="True">
                             <Setter TargetName="ContentGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

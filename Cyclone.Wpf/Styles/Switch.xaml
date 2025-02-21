@@ -7,8 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type ctl:Switch}">
-        <!--  设置默认宽高，可根据需要调整  -->
-        <Setter Property="TrackWidth" Value="50" />
+        <Setter Property="TrackWidth" Value="40" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -17,7 +16,7 @@
                         <BulletDecorator.Bullet>
                             <Grid
                                 Width="{TemplateBinding TrackWidth}"
-                                Height="{TemplateBinding Height}"
+                                Margin="0,3"
                                 SnapsToDevicePixels="True">
                                 <Border
                                     x:Name="SwitchTrack"
@@ -27,11 +26,11 @@
                                 <Border
                                     x:Name="SwitchThumb"
                                     Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                                    Height="{Binding ActualHeight, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={x:Static conv:MathConverter.Scale}, ConverterParameter=0.8}"
-                                    Margin="2"
+                                    Height="{Binding ActualHeight, ElementName=SwitchTrack, Converter={x:Static conv:MathConverter.Scale}, ConverterParameter=0.8}"
+                                    Margin="2.5"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="{DynamicResource Icon.Default.Foreground}"
+                                    Background="{DynamicResource Default.Border}"
                                     BorderBrush="{DynamicResource Default.Border}"
                                     BorderThickness="1" />
                             </Grid>

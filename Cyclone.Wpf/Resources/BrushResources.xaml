@@ -25,7 +25,7 @@
     <SolidColorBrush x:Key="Checked.Foreground" Color="#FF000000" />
 
     <!--  编辑  -->
-    <SolidColorBrush x:Key="Editing.Background" Color="#FFB3E0FF" />
+    <SolidColorBrush x:Key="Editing.Background" Color="#FFFFFF" />
     <SolidColorBrush x:Key="Editing.Border" Color="#FF1565C0" />
     <SolidColorBrush x:Key="Editing.Foreground" Color="#FF000000" />
 

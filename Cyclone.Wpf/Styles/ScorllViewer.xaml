@@ -123,7 +123,7 @@
     <Style x:Key="ScrollBar.VerticalStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderThickness" Value="1,0" />
@@ -258,7 +258,7 @@
     <Style x:Key="ScrollBar.HorizontalStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderThickness" Value="1,0" />

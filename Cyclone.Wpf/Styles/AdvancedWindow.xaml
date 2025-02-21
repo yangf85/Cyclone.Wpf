@@ -30,7 +30,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource }" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="RootGrid" Property="Opacity" Value="0.5" />
@@ -77,11 +77,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <ContentPresenter Content="{TemplateBinding Content}" />
+                        <Path
+                            x:Name="IndicatorTopmost"
+                            Width="16"
+                            Height="16"
+                            Data="M405.333333 430.933333l136.533334-136.533333-29.866667-29.866667L605.866667 170.666667l273.066666 273.066666-89.6 89.6-29.866666-29.866666-140.8 136.533333 59.733333 59.733333-89.6 89.6L256 460.8l89.6-89.6 59.733333 59.733333z m-89.6 29.866667l273.066667 273.066667 29.866667-29.866667-59.733334-64 200.533334-200.533333 29.866666 29.866666 29.866667-29.866666-209.066667-209.066667-29.866666 29.866667 29.866666 29.866666-200.533333 200.533334-59.733333-59.733334-34.133334 29.866667z m55.466667 192l29.866667 29.866667-200.533334 200.533333-29.866666-34.133333 200.533333-196.266667z"
+                            Fill="White"
+                            Stretch="Uniform"
+                            StrokeThickness="0" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="IndicatorTopmost" Property="Data" Value="M533.333333 358.4v516.266667h-42.666666V358.4l-140.8 140.8-29.866667-29.866667L512 277.333333l192 192-29.866667 29.866667-140.8-140.8z m213.333334-123.733333h-469.333334v-42.666667h469.333334v42.666667z" />
                         </Trigger>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
@@ -140,15 +147,7 @@
                             x:Name="PART_TopmostButton"
                             Command="{x:Static ctl:CaptionButtonCommand.TopmostCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"
-                            Style="{StaticResource Window.TopmostButtonStyle}">
-                            <Path
-                                Width="16"
-                                Height="16"
-                                Data="M 2,1 L 6,1 M 4,1 L 4,7 M 2,3 L 4,1 L 6,3"
-                                Stretch="Uniform"
-                                Stroke="White"
-                                StrokeThickness="1" />
-                        </ToggleButton>
+                            Style="{StaticResource Window.TopmostButtonStyle}" />
                         <Button
                             x:Name="PART_MinimizeButton"
                             Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}"

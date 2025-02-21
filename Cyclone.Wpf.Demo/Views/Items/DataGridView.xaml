@@ -12,30 +12,18 @@
     mc:Ignorable="d">
     <cy:SpacingStackPanel Spacing="10">
         <StackPanel>
-            <Label
-                Background="{DynamicResource WarningBackgroundBrush}"
-                Content="Normal" />
+            <Label Background="{DynamicResource WarningBackgroundBrush}" Content="Normal" />
             <DataGrid
                 Height="300"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 ItemsSource="{Binding DataGridData}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Binding="{Binding FirstName}"
-                        Header="First Name" />
-                    <DataGridTextColumn
-                        Binding="{Binding LastName}"
-                        Header="Last Name" />
-                    <DataGridTextColumn
-                        Binding="{Binding Age}"
-                        Header="Age" />
-                    <DataGridTextColumn
-                        Binding="{Binding Email}"
-                        Header="Email" />
-                    <DataGridTextColumn
-                        Binding="{Binding Address}"
-                        Header="Address" />
+                    <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
+                    <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
+                    <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
+                    <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
+                    <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding City}"

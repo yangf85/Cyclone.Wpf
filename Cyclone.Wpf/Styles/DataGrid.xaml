@@ -75,8 +75,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Default.Background}" />
-                <Setter Property="BorderBrush" Value="{StaticResource EditingBorderBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Editing.Border}" />
                 <Setter Property="BorderThickness" Value="1" />
             </Trigger>
         </Style.Triggers>
@@ -305,7 +304,6 @@
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGrid.ColumnHeaderStyle}" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="AutoGenerateColumns" Value="False" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">
@@ -315,7 +313,10 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True">
-                        <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                        <ScrollViewer
+                            x:Name="DG_ScrollViewer"
+                            Background="Transparent"
+                            Focusable="false">
                             <ScrollViewer.Template>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                                     <Grid>

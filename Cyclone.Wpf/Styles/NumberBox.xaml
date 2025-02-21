@@ -7,10 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Slider.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
-
     </ResourceDictionary.MergedDictionaries>
-
-
 
     <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
         <Setter Property="MinWidth" Value="25" />
@@ -67,8 +64,7 @@
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+            SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -78,7 +74,6 @@
                 <TextBox
                     x:Name="PART_InputTextBox"
                     Grid.Column="0"
-                    Padding="3,0,0,0"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                     Background="Transparent"

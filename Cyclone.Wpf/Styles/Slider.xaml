@@ -89,7 +89,7 @@
                 <Track.IncreaseRepeatButton>
                     <RepeatButton
                         x:Name="UnpassedTrack"
-                        Background="{DynamicResource Default.Border}"
+                        Background="{DynamicResource Default.Background}"
                         Command="{x:Static Slider.IncreaseLarge}"
                         Style="{StaticResource Slider.HorizontalRepeatButtonStyle}" />
                 </Track.IncreaseRepeatButton>
