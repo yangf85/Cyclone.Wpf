@@ -7,7 +7,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
+    <Style
+        x:Key="TabItem.Style.Horizontal"
+        TargetType="TabItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Foreground" Value="{DynamicResource DefaultForegroundBrush}" />
@@ -40,7 +42,9 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource FocusedBorderBrush}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Bottom">
+                        <DataTrigger
+                            Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}"
+                            Value="Bottom">
                             <Setter TargetName="Indicator" Property="VerticalAlignment" Value="Top" />
                         </DataTrigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
@@ -52,7 +56,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="TableControl.ControlTemplate.Top" TargetType="TabControl">
+    <ControlTemplate
+        x:Key="TableControl.ControlTemplate.Top"
+        TargetType="TabControl">
         <Border
             x:Name="Root"
             Background="{TemplateBinding Background}"
@@ -78,13 +84,17 @@
                     Grid.Row="1"
                     Width="{Binding ElementName=HeaderPanel, Path=ActualWidth}"
                     Background="Transparent">
-                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                    <ContentPresenter
+                        x:Name="PART_SelectedContentHost"
+                        ContentSource="SelectedContent" />
                 </Border>
             </Grid>
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="TableControl.ControlTemplate.Left" TargetType="TabControl">
+    <ControlTemplate
+        x:Key="TableControl.ControlTemplate.Left"
+        TargetType="TabControl">
         <Grid
             KeyboardNavigation.TabNavigation="Local"
             SnapsToDevicePixels="True"
@@ -104,7 +114,9 @@
                 x:Name="ContentBorder"
                 Grid.Column="1"
                 Background="Transparent">
-                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                <ContentPresenter
+                    x:Name="PART_SelectedContentHost"
+                    ContentSource="SelectedContent" />
             </Border>
         </Grid>
     </ControlTemplate>

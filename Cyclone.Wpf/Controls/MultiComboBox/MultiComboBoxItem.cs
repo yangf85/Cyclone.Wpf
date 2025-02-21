@@ -10,32 +10,10 @@ namespace Cyclone.Wpf.Controls;
 
 public class MultiComboBoxItem : ListBoxItem
 {
-    #region HasCheckBox
-
-    public static readonly DependencyProperty HasCheckBoxProperty =
-        DependencyProperty.Register(nameof(HasCheckBox), typeof(bool), typeof(MultiComboBoxItem), new PropertyMetadata(true));
-
-    public bool HasCheckBox
+    static MultiComboBoxItem()
     {
-        get => (bool)GetValue(HasCheckBoxProperty);
-        set => SetValue(HasCheckBoxProperty, value);
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiComboBoxItem), new FrameworkPropertyMetadata(typeof(MultiComboBoxItem)));
     }
-
-    #endregion HasCheckBox
-
-    #region CheckBoxStyle
-
-    public static readonly DependencyProperty CheckBoxStyleProperty =
-        DependencyProperty.Register(nameof(CheckBoxStyle), typeof(Style), typeof(MultiComboBoxItem), new PropertyMetadata(default(Style)));
-
-    public Style CheckBoxStyle
-    {
-        get => (Style)GetValue(CheckBoxStyleProperty);
-        set => SetValue(CheckBoxStyleProperty, value);
-    }
-
-    #endregion CheckBoxStyle
-
     public MultiComboBoxItem()
     {
     }

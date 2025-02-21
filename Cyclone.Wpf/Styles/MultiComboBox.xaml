@@ -9,16 +9,51 @@
 
     <Style
         x:Key="MultiComboBoxItem.SelectedCheckBoxStyle"
-        BasedOn="{StaticResource {x:Static k:StyleKeys.CheckBox}}"
         TargetType="CheckBox" />
-    <ControlTemplate x:Key="BasicMultiComboBoxItemControlTemplate" TargetType="ctl:MultiComboBoxItem">
+
+    <Style
+        x:Key="MultiComboBox.OpenButtonStyle"
+        TargetType="{x:Type ToggleButton}">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
+                        <Path
+                            x:Name="Indicator"
+                            Width="18"
+                            Height="18"
+                            Margin="{DynamicResource Margin.Right}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Data="M 0 0 L 6 6 L 12 0 Z"
+                            Fill="{DynamicResource Default.Foreground}"
+                            Stretch="Uniform" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Indicator" Property="Data" Value="M 0 6 L 6 0 L 12 6 Z" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate
+        x:Key="MultiComboBoxItem.ControlTemplate.Basic"
+        TargetType="ctl:MultiComboBoxItem">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+            SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -27,10 +62,10 @@
                 <CheckBox
                     x:Name="SelectedCheckBox"
                     Grid.Column="0"
-                    Margin="0,0,5,0"
+                    Margin="3,0"
                     VerticalAlignment="Center"
                     IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                    Visibility="{Binding Path=HasCheckBox, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    Visibility="Collapsed" />
                 <ContentPresenter
                     x:Name="ContentContainer"
                     Grid.Column="1"
@@ -43,39 +78,53 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <!--<Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="RootBorder" Property="Background" Value="{Binding Path=(at:ControlAttacher.SelectedBackground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+            <DataTrigger
+                Binding="{Binding Path=IsShowCheckBox, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
+                Value="True">
+                <Setter TargetName="SelectedCheckBox" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Selected.Background}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="RootBorder" Property="Background" Value="{Binding Path=(at:ControlAttacher.HoverBackground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
             </Trigger>
-            <Trigger Property="HasCheckBox" Value="False">
-                <Setter TargetName="SelectedCheckBox" Property="Margin" Value="0" />
-            </Trigger>-->
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+
     <Style
-        x:Key="{x:Static k:StyleKeys.MultiComboBoxItem}"
-        BasedOn="{StaticResource BasicControlStyle}"
-        TargetType="ctl:MultiComboBoxItem">
-        <Setter Property="Template" Value="{StaticResource BasicMultiComboBoxItemControlTemplate}" />
-        <Setter Property="Height" Value="{StaticResource HorizontalItemHeight}" />
-        <Setter Property="Background" Value="{DynamicResource ReverseBackground}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="CheckBoxStyle" Value="{StaticResource MultiComboBoxItem.SelectedCheckBoxStyle}" />
+        x:Key="MultiComboBox.DeselectButtonStyle"
+        TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
+                        <Path
+                            x:Name="Indicator"
+                            Width="14"
+                            Height="14"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
+                            Fill="{DynamicResource Default.Foreground}"
+                            Stretch="Uniform" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Hover.Foreground}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style
-        x:Key="MultiComboBox.ExpansionToggleButtonStyle"
-        BasedOn="{StaticResource {x:Static k:StyleKeys.ToggleButton}}"
-        TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="ClickMode" Value="Press" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
-    <Style x:Key="MultiComboBox.PresentItemStyle" TargetType="ListBoxItem">
+        x:Key="MultiComboBox.PresentItemStyle"
+        TargetType="ListBoxItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
@@ -84,27 +133,16 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+                        <ContentPresenter
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
                         <Button
                             x:Name="DeselectButton"
                             Grid.Column="1"
-                            VerticalAlignment="Center"
                             Command="{x:Static ctl:MultiComboBox.DeselectItemCommand}"
-                            CommandParameter="{TemplateBinding Content}">
-                            <Button.Content>
-                                <Path
-                                    x:Name="DeselectPath"
-                                    Width="18"
-                                    Height="18"
-                                    Stretch="Uniform" />
-                            </Button.Content>
-                        </Button>
+                            CommandParameter="{TemplateBinding Content}"
+                            Style="{StaticResource MultiComboBox.DeselectButtonStyle}" />
                     </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger SourceName="DeselectPath" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="DeselectPath" Property="Opacity" Value="0.85" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -115,108 +153,131 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="MultiComboBox.DeselectButtonStyle" TargetType="Button">
-        <Setter Property="BorderThickness" Value="0" />
-
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Background" Value="Transparent" />
-
-        <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
+    <Style
+        x:Key="MultiComboBox.PresentListBoxStyle"
+        TargetType="ListBox">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MultiComboBox.PresentItemStyle}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <UniformGrid
+                        Columns="{Binding Path=MaxColumns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
+                        Rows="{Binding Path=MaxRows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Grid>
+                        <ItemsPresenter />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <ControlTemplate x:Key="BasicMultiComboBoxControlTemplate" TargetType="ctl:MultiComboBox">
+    <Style
+        x:Key="MultiComboBoxItem.Style.Basic"
+        TargetType="ctl:MultiComboBoxItem">
+        <Setter Property="Template" Value="{StaticResource MultiComboBoxItem.ControlTemplate.Basic}" />
+        <Setter Property="Height" Value="{StaticResource Height.Horizontal.Item}" />
+        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+
+
+
+
+    <ControlTemplate
+        x:Key="MultiComboBox.ControlTemplate.Basic"
+        TargetType="ctl:MultiComboBox">
         <Border
             Name="RootBorder"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+            SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Grid x:Name="PresenterGrid" Grid.Column="0">
-                    <ListBox
-                        BorderThickness="0"
-                        ItemContainerStyle="{TemplateBinding PresenteItemStyle}"
-                        ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="{Binding Path=MaxColumns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
-                    <Popup
-                        x:Name="PART_Popup"
-                        AllowsTransparency="true"
-                        HorizontalOffset="-0.5"
-                        IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                        Placement="Bottom"
-                        PopupAnimation="Slide"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True"
-                        VerticalOffset="3">
-                        <Border
-                            x:Name="ExpansionBorder"
-                            Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
-                            MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                            Background="{DynamicResource ReverseBackground}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <CheckBox
-                                    Grid.Row="0"
-                                    Content="SelectAll"
-                                    IsChecked="{Binding Path=IsSelectAll, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                                <ScrollViewer Grid.Row="1">
-                                    <ItemsPresenter />
-                                </ScrollViewer>
-                            </Grid>
-                        </Border>
-                    </Popup>
-                </Grid>
+                <ListBox
+                    Grid.Column="0"
+                    ItemContainerStyle="{StaticResource MultiComboBox.PresentItemStyle}"
+                    ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
+                    Style="{StaticResource MultiComboBox.PresentListBoxStyle}" />
                 <ToggleButton
-                    x:Name="ExpansionToggleButton"
+                    x:Name="PART_OpenButton"
                     Grid.Column="1"
-                    Height="{TemplateBinding Height}"
-                    Margin="5,0"
+                    Height="Auto"
                     Focusable="False"
-                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                    <ToggleButton.Content>
-                        <Path
-                            x:Name="OpenedPath"
-                            Width="18"
-                            Height="18"
-                            Stretch="Uniform" />
-                    </ToggleButton.Content>
-                </ToggleButton>
+                    IsChecked="{Binding Path=IsOpened, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                    Style="{StaticResource MultiComboBox.OpenButtonStyle}" />
+                <Popup
+                    x:Name="PART_Popup"
+                    ctl:PopupBox.IsPositionUpdate="True"
+                    AllowsTransparency="True"
+                    IsOpen="{Binding IsOpened, RelativeSource={RelativeSource TemplatedParent}}"
+                    Placement="Bottom"
+                    PlacementTarget="{Binding ElementName=RootBorder}"
+                    PopupAnimation="Slide"
+                    SnapsToDevicePixels="True"
+                    VerticalOffset="1">
+                    <Border
+                        x:Name="ExpansionBorder"
+                        Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
+                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                        Background="{DynamicResource ReverseBackground}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <CheckBox
+                                Grid.Row="0"
+                                Height="Auto"
+                                Content="{TemplateBinding SelectAllText}"
+                                IsChecked="{Binding Path=IsSelectAll, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <Rectangle
+                                Grid.Row="1"
+                                Height="1"
+                                Margin="0,1"
+                                Fill="{TemplateBinding BorderBrush}" />
+                            <ScrollViewer
+                                Grid.Row="2"
+                                Background="Transparent"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Popup>
+
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger SourceName="OpenedPath" Property="IsMouseOver" Value="True">
+            <!--<Trigger SourceName="OpenedPath" Property="IsMouseOver" Value="True">
                 <Setter TargetName="OpenedPath" Property="Opacity" Value="0.75" />
             </Trigger>
             <Trigger SourceName="ClosedPath" Property="IsMouseOver" Value="True">
                 <Setter TargetName="ClosedPath" Property="Opacity" Value="0.75" />
-            </Trigger>
+            </Trigger>-->
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style TargetType="ctl:MultiComboBox">
-        <Setter Property="MinHeight" Value="{DynamicResource HorizontalControlHeight}" />
-        <Setter Property="Template" Value="{StaticResource BasicMultiComboBoxControlTemplate}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Template" Value="{StaticResource MultiComboBox.ControlTemplate.Basic}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource NormalForeground}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource BorderThicknessNormal}" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Static k:StyleKeys.MultiComboBoxItem}}" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MultiComboBoxItem.Style.Basic}" />
         <Setter Property="PresenteItemStyle" Value="{StaticResource MultiComboBox.PresentItemStyle}" />
     </Style>
 </ResourceDictionary>

@@ -41,9 +41,13 @@
                 Click="OnClose"
                 Style="{StaticResource NotificationCloseButton}"
                 Visibility="Hidden">
-                <Rectangle Margin="2" Style="{StaticResource CloseButtonIcon}">
+                <Rectangle
+                    Margin="2"
+                    Style="{StaticResource CloseButtonIcon}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource CloseIcon}" />
+                        <VisualBrush
+                            Stretch="Fill"
+                            Visual="{StaticResource CloseIcon}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

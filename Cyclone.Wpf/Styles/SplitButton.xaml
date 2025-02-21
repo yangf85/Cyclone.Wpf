@@ -6,7 +6,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="SplitButton.DropDownToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style
+        x:Key="SplitButton.DropDownToggleButtonStyle"
+        TargetType="{x:Type ToggleButton}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Focusable" Value="True" />
@@ -103,7 +105,9 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Grid x:Name="ContentGrid" Background="Transparent">
+                            <Grid
+                                x:Name="ContentGrid"
+                                Background="Transparent">
                                 <ContentPresenter
                                     Margin="{DynamicResource Margin.Horizontal}"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"

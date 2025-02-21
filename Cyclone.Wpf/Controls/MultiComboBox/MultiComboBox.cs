@@ -11,31 +11,34 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Controls;
 
+[StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(MultiComboBoxItem))]
+[TemplatePart(Name = PART_SelectionListBox, Type = (typeof(ListBox)))]
+[TemplatePart(Name = PART_OpenButton, Type = (typeof(ToggleButton)))]
 [TemplatePart(Name = PART_Popup, Type = (typeof(Popup)))]
-public class MultiSelectComboBox : ListBox
+public class MultiComboBox : MultiSelector
 {
+    private const string PART_OpenButton = nameof(PART_OpenButton);
     private const string PART_Popup = nameof(PART_Popup);
 
     private const string PART_SelectionListBox = nameof(PART_SelectionListBox);
 
     private Popup _popup;
 
-    static MultiSelectComboBox()
+    static MultiComboBox()
     {
-        SelectionModeProperty.OverrideMetadata(typeof(MultiSelectComboBox), new FrameworkPropertyMetadata(SelectionMode.Multiple));
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiComboBox), new FrameworkPropertyMetadata(typeof(MultiComboBox)));
 
-        CommandManager.RegisterClassCommandBinding(typeof(MultiSelectComboBox),
+        CommandManager.RegisterClassCommandBinding(typeof(MultiComboBox),
               new CommandBinding(DeselectItemCommand, OnDeselectItemCommand, OnCanDeselectItemCommand));
     }
 
-    public MultiSelectComboBox()
+    public MultiComboBox()
     {
         SelectionChanged += MultiSelectComboBox_SelectionChanged;
     }
 
     private void MultiSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var comboBox = (MultiSelectComboBox)sender;
         foreach (var item in e.RemovedItems)
         {
             BindableSelectItems?.Remove(item);
@@ -45,13 +48,7 @@ public class MultiSelectComboBox : ListBox
             BindableSelectItems?.Add(item);
         }
 
-        //在呈现容器添加子项以后，刷新popup的位置
-        if (_popup != null)
-        {
-            _popup.UpdateLayout();
-            var method = typeof(Popup).GetMethod("UpdatePosition", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            method.Invoke(_popup, null);
-        }
+       
     }
 
     #region Override
@@ -69,7 +66,7 @@ public class MultiSelectComboBox : ListBox
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
-        IsDropDownOpen = false;
+        IsOpened = false;
     }
 
     public override void OnApplyTemplate()
@@ -84,7 +81,7 @@ public class MultiSelectComboBox : ListBox
     #region MaxColumns
 
     public static readonly DependencyProperty MaxColumnsProperty =
-        DependencyProperty.Register(nameof(MaxColumns), typeof(int), typeof(MultiSelectComboBox), new PropertyMetadata(5));
+        DependencyProperty.Register(nameof(MaxColumns), typeof(int), typeof(MultiComboBox), new PropertyMetadata(5));
 
     public int MaxColumns
     {
@@ -94,10 +91,22 @@ public class MultiSelectComboBox : ListBox
 
     #endregion MaxColumns
 
+    #region MaxRows
+    public int MaxRows
+    {
+        get => (int)GetValue(MaxRowsProperty);
+        set => SetValue(MaxRowsProperty, value);
+    }
+
+    public static readonly DependencyProperty MaxRowsProperty =
+        DependencyProperty.Register(nameof(MaxRows), typeof(int), typeof(MultiComboBox), new PropertyMetadata(default(int)));
+
+    #endregion
+
     #region IsSelectAll
 
     public static readonly DependencyProperty IsSelectAllProperty =
-                DependencyProperty.Register(nameof(IsSelectAll), typeof(bool), typeof(MultiSelectComboBox), new PropertyMetadata(default(bool), OnIsSelectAllChanged));
+                DependencyProperty.Register(nameof(IsSelectAll), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool), OnIsSelectAllChanged));
 
     public bool IsSelectAll
     {
@@ -107,7 +116,7 @@ public class MultiSelectComboBox : ListBox
 
     private static void OnIsSelectAllChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var box = d as MultiSelectComboBox;
+        var box = d as MultiComboBox;
         if ((bool)e.NewValue)
         {
             box.SelectAll();
@@ -120,10 +129,23 @@ public class MultiSelectComboBox : ListBox
 
     #endregion IsSelectAll
 
+
+    #region SelectAllText
+    public string SelectAllText
+    {
+        get => (string)GetValue(SelectAllTextProperty);
+        set => SetValue(SelectAllTextProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectAllTextProperty =
+        DependencyProperty.Register(nameof(SelectAllText), typeof(string), typeof(MultiComboBox), new PropertyMetadata("SelectAll"));
+
+    #endregion
+
     #region BindableSelectItems
 
     public static readonly DependencyProperty BindableSelectItemsProperty =
-        DependencyProperty.Register(nameof(BindableSelectItems), typeof(IList), typeof(MultiSelectComboBox), new PropertyMetadata(default(IList)));
+        DependencyProperty.Register(nameof(BindableSelectItems), typeof(IList), typeof(MultiComboBox), new PropertyMetadata(default(IList)));
 
     public IList BindableSelectItems
     {
@@ -133,23 +155,23 @@ public class MultiSelectComboBox : ListBox
 
     #endregion BindableSelectItems
 
-    #region IsDropDownOpen
+    #region IsOpened
 
-    public static readonly DependencyProperty IsDropDownOpenProperty =
-        DependencyProperty.Register(nameof(IsDropDownOpen), typeof(bool), typeof(MultiSelectComboBox), new PropertyMetadata(default(bool)));
+    public static readonly DependencyProperty IsOpenedProperty =
+        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool)));
 
-    public bool IsDropDownOpen
+    public bool IsOpened
     {
-        get => (bool)GetValue(IsDropDownOpenProperty);
-        set => SetValue(IsDropDownOpenProperty, value);
+        get => (bool)GetValue(IsOpenedProperty);
+        set => SetValue(IsOpenedProperty, value);
     }
 
-    #endregion IsDropDownOpen
+    #endregion IsOpened
 
     #region MaxDropDownHeight
 
     public static readonly DependencyProperty MaxDropDownHeightProperty =
-        DependencyProperty.Register(nameof(MaxDropDownHeight), typeof(double), typeof(MultiSelectComboBox), new PropertyMetadata(320d));
+        DependencyProperty.Register(nameof(MaxDropDownHeight), typeof(double), typeof(MultiComboBox), new PropertyMetadata(320d));
 
     public double MaxDropDownHeight
     {
@@ -162,7 +184,7 @@ public class MultiSelectComboBox : ListBox
     #region PresenteItemStyle
 
     public static readonly DependencyProperty PresenteItemStyleProperty =
-        DependencyProperty.Register(nameof(PresenteItemStyle), typeof(Style), typeof(MultiSelectComboBox), new PropertyMetadata(default(Style)));
+        DependencyProperty.Register(nameof(PresenteItemStyle), typeof(Style), typeof(MultiComboBox), new PropertyMetadata(default(Style)));
 
     public Style PresenteItemStyle
     {
@@ -174,7 +196,7 @@ public class MultiSelectComboBox : ListBox
 
     #region DeselectItemCommand
 
-    public static RoutedCommand DeselectItemCommand { get; private set; } = new RoutedCommand("DeselectItem", typeof(MultiSelectComboBox));
+    public static RoutedCommand DeselectItemCommand { get; private set; } = new RoutedCommand("DeselectItem", typeof(MultiComboBox));
 
     private static void OnCanDeselectItemCommand(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -183,7 +205,7 @@ public class MultiSelectComboBox : ListBox
 
     private static void OnDeselectItemCommand(object sender, ExecutedRoutedEventArgs e)
     {
-        var multiComboBox = (MultiSelectComboBox)sender;
+        var multiComboBox = (MultiComboBox)sender;
         foreach (var item in multiComboBox.SelectedItems)
         {
             if (item == e.Parameter)
@@ -195,4 +217,18 @@ public class MultiSelectComboBox : ListBox
     }
 
     #endregion DeselectItemCommand
+
+    #region IsShowCheckBox
+
+    public static readonly DependencyProperty IsShowCheckBoxProperty =
+        DependencyProperty.Register(nameof(IsShowCheckBox), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool)));
+
+    public bool IsShowCheckBox
+    {
+        get => (bool)GetValue(IsShowCheckBoxProperty);
+        set => SetValue(IsShowCheckBoxProperty, value);
+    }
+
+    #endregion
+
 }
