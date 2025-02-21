@@ -6,10 +6,10 @@
 
     <Style TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -36,12 +36,12 @@
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource CheckedBackgroundBrush}" />
@@ -52,7 +52,7 @@
                                 <Condition Property="IsChecked" Value="true" />
                                 <Condition Property="IsMouseOver" Value="true" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource CheckedBorderBrush}" />
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="false">
@@ -72,7 +72,7 @@
         TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -96,12 +96,12 @@
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource CheckedBackgroundBrush}" />
@@ -112,7 +112,7 @@
                                 <Condition Property="IsChecked" Value="true" />
                                 <Condition Property="IsMouseOver" Value="true" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource CheckedBorderBrush}" />
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="false">

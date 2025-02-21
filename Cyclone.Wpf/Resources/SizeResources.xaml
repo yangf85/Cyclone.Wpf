@@ -3,48 +3,53 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <sys:Double x:Key="RowHeight">24</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Caption">36</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Header">32</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Control">28</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Item">26</sys:Double>
 
-    <!--  FontSize  -->
-    <sys:Double x:Key="FontSizePrompt">10</sys:Double>
-    <sys:Double x:Key="FontSizeDescription">12</sys:Double>
-    <sys:Double x:Key="FontSizeContent">14</sys:Double>
-    <sys:Double x:Key="FontSizeTitle">18</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Caption">40</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Header">36</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Control">32</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Item">30</sys:Double>
 
-    <!--  ControlSzie  -->
-    <sys:Double x:Key="HorizontalItemHeight">21</sys:Double>
-    <sys:Double x:Key="HorizontalControlHeight">24</sys:Double>
-    <sys:Double x:Key="HorizontalHeaderHeight">27</sys:Double>
+    <sys:Double x:Key="Font.Title">24</sys:Double>
+    <sys:Double x:Key="Font.Subtitle">20</sys:Double>
+    <sys:Double x:Key="Font.Header">18</sys:Double>
+    <sys:Double x:Key="Font.Body">14</sys:Double>
+    <sys:Double x:Key="Font.Input">14</sys:Double>
+    <sys:Double x:Key="Font.Prompt">13</sys:Double>
 
-    <sys:Double x:Key="VerticalItemWidth">20</sys:Double>
-    <sys:Double x:Key="VerticalControlWidth">24</sys:Double>
-    <sys:Double x:Key="VerticalHeaderWidth">30</sys:Double>
-    <!--  Spacing  -->
-    <Thickness x:Key="ElementSpacingLeft">5,0,0,0</Thickness>
-    <Thickness x:Key="ElementSpacingRight">0,0,5,0</Thickness>
-    <Thickness x:Key="ElementSpacingTop">0,5,0,0</Thickness>
-    <Thickness x:Key="ElementSpacingBottom">0,0,0,5</Thickness>
+    <Thickness x:Key="Margin.Left">5,0,0,0</Thickness>
+    <Thickness x:Key="Margin.Right">0,0,5,0</Thickness>
+    <Thickness x:Key="Margin.Top">0,5,0,0</Thickness>
+    <Thickness x:Key="Margin.Bottom">0,0,0,5</Thickness>
+    <Thickness x:Key="Margin.Horizontal">5,0</Thickness>
+    <Thickness x:Key="Margin.Vertical">0,5</Thickness>
+    <Thickness x:Key="Margin.All">5</Thickness>
 
-    <!--  CornerRadius  -->
-    <CornerRadius x:Key="CornerRadiusNone">0</CornerRadius>
-    <CornerRadius x:Key="CornerRadiusSmall">1</CornerRadius>
-    <CornerRadius x:Key="CornerRadiusNormal">2</CornerRadius>
-    <CornerRadius x:Key="CornerRadiusLarge">3</CornerRadius>
+    <Thickness x:Key="Padding.Left">5,0,0,0</Thickness>
+    <Thickness x:Key="Padding.Right">0,0,5,0</Thickness>
+    <Thickness x:Key="Padding.Top">0,5,0,0</Thickness>
+    <Thickness x:Key="Padding.Bottom">0,0,0,5</Thickness>
+    <Thickness x:Key="Padding.Horizontal">5,0</Thickness>
+    <Thickness x:Key="Padding.Vertical">0,5</Thickness>
+    <Thickness x:Key="Padding.All">5</Thickness>
 
-    <!--  BorderThickness  -->
-    <Thickness x:Key="BorderThicknessNone">0</Thickness>
-    <Thickness x:Key="BorderThicknessNormal">1</Thickness>
-    <Thickness x:Key="BorderThicknessThick">2</Thickness>
+    <Thickness x:Key="BorderThickness.None">0</Thickness>
+    <Thickness x:Key="BorderThickness.Thin">1</Thickness>
+    <Thickness x:Key="BorderThickness.Medium">2</Thickness>
+    <Thickness x:Key="BorderThickness.Thick">3</Thickness>
 
-    <!--  Padding  -->
-    <Thickness x:Key="PaddingNone">0</Thickness>
-    <Thickness x:Key="PaddingSmall">3</Thickness>
-    <Thickness x:Key="PaddingNormal">5</Thickness>
-    <Thickness x:Key="PaddingLarge">7</Thickness>
+    <CornerRadius x:Key="CornerRadius.None">0</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Small">1</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Medium">3</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Large">5</CornerRadius>
 
-    <!--  Margin  -->
-    <Thickness x:Key="MarginNone">0</Thickness>
-    <Thickness x:Key="MarginSmall">3</Thickness>
-    <Thickness x:Key="MarginNormal">5</Thickness>
-    <Thickness x:Key="MarginLarge">7</Thickness>
+    <sys:Double x:Key="Spacing.Horizontal">5</sys:Double>
+    <sys:Double x:Key="Spacing.Vertical">5</sys:Double>
+
+    <sys:Double x:Key="Icon.Small">14</sys:Double>
+    <sys:Double x:Key="Icon.Medium">18</sys:Double>
+    <sys:Double x:Key="Icon.Large">22</sys:Double>
 </ResourceDictionary>

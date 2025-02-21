@@ -33,8 +33,8 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="3,0" />
         <Setter Property="Margin" Value="3,0" />
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -63,8 +63,8 @@
                 <Setter Property="FontWeight" Value="Bold" />
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource HoverBorderBrush}" />
-                <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
+                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                 <Setter Property="Foreground" Value="{DynamicResource HoverForegroundBrush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">

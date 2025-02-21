@@ -35,7 +35,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Root" Property="Cursor" Value="Arrow" />
                             <Setter Property="Cursor" Value="Arrow" />
-                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Root" Property="Cursor" Value="Arrow" />
@@ -74,10 +74,10 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Pressed.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -86,12 +86,12 @@
     </Style>
 
     <Style TargetType="{x:Type ctl:SplitButton}">
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SplitButton}">
@@ -125,8 +125,8 @@
                                 VerticalOffset="1">
                                 <Border
                                     MinWidth="{Binding ElementName=Root, Path=ActualWidth}"
-                                    Background="{StaticResource DefaultBackgroundBrush}"
-                                    BorderBrush="{StaticResource DefaultBorderBrush}"
+                                    Background="{DynamicResource Default.Background}"
+                                    BorderBrush="{DynamicResource Default.Border}"
                                     BorderThickness="1"
                                     SnapsToDevicePixels="True"
                                     UseLayoutRounding="True">
@@ -155,7 +155,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ContentGrid" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="ContentGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

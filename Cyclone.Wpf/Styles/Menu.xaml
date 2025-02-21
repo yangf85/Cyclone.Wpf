@@ -3,11 +3,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-
-
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
-        <Setter Property="Background" Value="{StaticResource DefaultBorderBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="MinHeight" Value="3" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Template">
@@ -130,8 +128,8 @@
         <Grid SnapsToDevicePixels="True">
             <Border
                 x:Name="BorderHelper"
-                Background="{StaticResource DefaultBackgroundBrush}"
-                BorderBrush="{StaticResource DefaultBorderBrush}"
+                Background="{DynamicResource Default.Background}"
+                BorderBrush="{DynamicResource Default.Border}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 SnapsToDevicePixels="True"
                 Visibility="Hidden" />
@@ -161,7 +159,7 @@
                         Margin="3"
                         VerticalAlignment="Center"
                         Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z"
-                        Fill="{StaticResource DefaultForegroundBrush}"
+                        Fill="{DynamicResource Default.Foreground}"
                         FlowDirection="LeftToRight"
                         Visibility="Collapsed" />
                     <ContentPresenter
@@ -184,8 +182,8 @@
                         <Border
                             x:Name="SubMenuBorder"
                             Padding="2"
-                            Background="{StaticResource DefaultBackgroundBrush}"
-                            BorderBrush="{StaticResource DefaultBorderBrush}"
+                            Background="{DynamicResource Default.Background}"
+                            BorderBrush="{DynamicResource Default.Border}"
                             BorderThickness="1">
                             <ScrollViewer x:Name="SubMenuScrollViewer" Style="{StaticResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
                                 <Grid x:Name="Grid1" RenderOptions.ClearTypeHint="Enabled">
@@ -206,7 +204,7 @@
                                         Width="1"
                                         Margin="29,2,0,2"
                                         HorizontalAlignment="Left"
-                                        Fill="{StaticResource DefaultBorderBrush}" />
+                                        Fill="{DynamicResource Default.Border}" />
                                     <ItemsPresenter
                                         x:Name="ItemsPresenter"
                                         Grid.IsSharedSizeScope="True"
@@ -232,14 +230,11 @@
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource HoverBackgroundBrush}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{DynamicResource Hover.Background}" />
                 <Setter TargetName="BorderHelper" Property="Visibility" Value="Visible" />
             </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                <Setter TargetName="GlyphPanel" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
-            </Trigger>
+
             <Trigger SourceName="SubMenuScrollViewer" Property="CanContentScroll" Value="False">
                 <Setter TargetName="OpaqueRect" Property="Canvas.Top" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}" />
                 <Setter TargetName="OpaqueRect" Property="Canvas.Left" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}" />
@@ -251,8 +246,8 @@
         <Grid SnapsToDevicePixels="True">
             <Border
                 x:Name="BorderHelper"
-                Background="{StaticResource DefaultBackgroundBrush}"
-                BorderBrush="{StaticResource DefaultBorderBrush}"
+                Background="{DynamicResource Default.Background}"
+                BorderBrush="{DynamicResource Default.Border}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 SnapsToDevicePixels="True"
                 Visibility="Hidden" />
@@ -282,7 +277,7 @@
                         Margin="3"
                         VerticalAlignment="Center"
                         Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z"
-                        Fill="{StaticResource DefaultForegroundBrush}"
+                        Fill="{DynamicResource Default.Foreground}"
                         FlowDirection="LeftToRight"
                         Visibility="Collapsed" />
                     <ContentPresenter
@@ -306,14 +301,11 @@
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource HoverBackgroundBrush}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{DynamicResource Hover.Background}" />
                 <Setter TargetName="BorderHelper" Property="Visibility" Value="Visible" />
             </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                <Setter TargetName="GlyphPanel" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
-            </Trigger>
+
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsHighlighted" Value="True" />
@@ -372,7 +364,7 @@
                             Width="10"
                             Height="11"
                             Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z"
-                            Fill="{StaticResource DefaultForegroundBrush}"
+                            Fill="{DynamicResource Default.Foreground}"
                             FlowDirection="LeftToRight" />
                     </Border>
                     <ContentPresenter
@@ -406,13 +398,10 @@
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource HoverBackgroundBrush}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{DynamicResource Hover.Background}" />
             </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                <Setter TargetName="Glyph" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
-            </Trigger>
+
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsHighlighted" Value="True" />
@@ -469,7 +458,7 @@
                             Width="9"
                             Height="11"
                             Data="{DynamicResource t}"
-                            Fill="{StaticResource DefaultForegroundBrush}"
+                            Fill="{DynamicResource Default.Foreground}"
                             FlowDirection="LeftToRight" />
                     </Border>
                     <ContentPresenter
@@ -496,7 +485,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Data="M0,0L4,3.5 0,7z"
-                        Fill="{StaticResource DefaultForegroundBrush}" />
+                        Fill="{DynamicResource Default.Foreground}" />
                     <Popup
                         x:Name="PART_Popup"
                         AllowsTransparency="True"
@@ -509,8 +498,8 @@
                         <Border
                             x:Name="SubMenuBorder"
                             Padding="2"
-                            Background="{StaticResource DefaultBackgroundBrush}"
-                            BorderBrush="{StaticResource DefaultBorderBrush}"
+                            Background="{DynamicResource Default.Background}"
+                            BorderBrush="{DynamicResource Default.Border}"
                             BorderThickness="1">
                             <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
                                 <Grid RenderOptions.ClearTypeHint="Enabled">
@@ -529,7 +518,7 @@
                                         Width="1"
                                         Margin="29,2,0,2"
                                         HorizontalAlignment="Left"
-                                        Fill="{StaticResource DefaultBorderBrush}" />
+                                        Fill="{DynamicResource Default.Border}" />
                                     <ItemsPresenter
                                         x:Name="ItemsPresenter"
                                         Grid.IsSharedSizeScope="True"
@@ -555,14 +544,10 @@
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource HoverBackgroundBrush}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{DynamicResource Hover.Background}" />
             </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
-                <Setter TargetName="Glyph" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
-                <Setter TargetName="RightArrow" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
-            </Trigger>
+
             <Trigger SourceName="SubMenuScrollViewer" Property="CanContentScroll" Value="False">
                 <Setter TargetName="OpaqueRect" Property="Canvas.Top" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}" />
                 <Setter TargetName="OpaqueRect" Property="Canvas.Left" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}" />
@@ -583,14 +568,14 @@
             <Trigger Property="Role" Value="TopLevelHeader">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
                 <Setter Property="Template" Value="{StaticResource {ComponentResourceKey ResourceId=TopLevelHeaderTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
                 <Setter Property="Padding" Value="6,2,6,2" />
             </Trigger>
             <Trigger Property="Role" Value="TopLevelItem">
-                <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+                <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+                <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
                 <Setter Property="Template" Value="{StaticResource {ComponentResourceKey ResourceId=TopLevelItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
                 <Setter Property="Padding" Value="6,2,6,2" />
             </Trigger>
@@ -601,12 +586,12 @@
     </Style>
 
     <Style TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}" />
         <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}" />
         <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <!--<Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemStyle}" />-->
         <Setter Property="Template">

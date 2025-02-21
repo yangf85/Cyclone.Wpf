@@ -8,8 +8,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
-        <Setter Property="Height" Value="{StaticResource HorizontalHeaderHeight}" />
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Foreground" Value="{DynamicResource DefaultForegroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -44,7 +44,7 @@
                             <Setter TargetName="Indicator" Property="VerticalAlignment" Value="Top" />
                         </DataTrigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -110,7 +110,7 @@
     </ControlTemplate>
 
     <Style TargetType="TabControl">
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Style.Triggers>
             <Trigger Property="TabStripPlacement" Value="Top">

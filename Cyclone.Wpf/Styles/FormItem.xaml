@@ -32,6 +32,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Focusable" Value="False" />
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
     </Style>
 </ResourceDictionary>

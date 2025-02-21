@@ -7,8 +7,8 @@
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="HasDropShadow" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource DefaultForegroundBrush}" />
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="BorderThickness" Value="1" />

@@ -4,11 +4,11 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="RepeatButton.Style.Basic" TargetType="RepeatButton">
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -33,12 +33,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
-                            <Setter TargetName="RootBorder" Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Pressed.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

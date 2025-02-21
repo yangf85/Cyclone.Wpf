@@ -30,7 +30,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource }" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="RootGrid" Property="Opacity" Value="0.5" />
@@ -81,17 +81,16 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource PressedBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Pressed.Background}" />
                         </Trigger>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <ControlTemplate x:Key="BasicWindowControlTemplate" TargetType="ctl:AdvancedWindow">
         <Border

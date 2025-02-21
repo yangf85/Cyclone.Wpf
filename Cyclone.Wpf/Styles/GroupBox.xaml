@@ -4,9 +4,9 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type GroupBox}">
-        <Setter Property="Background" Value="{DynamicResource FocusedBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource HighlightBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -39,14 +39,11 @@
                                 Grid.Row="1"
                                 Margin="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                TextElement.Foreground="{DynamicResource DefaultForegroundBrush}" />
+                                TextElement.Foreground="{DynamicResource Default.Foreground}" />
                         </Grid>
                     </Border>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

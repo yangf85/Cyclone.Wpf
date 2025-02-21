@@ -57,7 +57,7 @@
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger SourceName="HeaderRoot" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
@@ -74,8 +74,8 @@
 
 
     <Style TargetType="ctl:SideMenu">
-        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
 
         <!--<Setter Property="ItemContainerStyle" Value="{StaticResource BasicSideMenuItemStyle}" />-->

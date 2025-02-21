@@ -8,7 +8,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="DefaultListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
@@ -42,10 +42,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{StaticResource SelectedBackgroundBrush}" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Selected.Background}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -56,10 +56,10 @@
     <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="ListBoxItem" />
 
     <Style TargetType="ListBox">
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource DefaultListBoxItemStyle}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">

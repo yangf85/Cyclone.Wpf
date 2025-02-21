@@ -4,7 +4,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="DatePicker.OpenButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Foreground" Value="{DynamicResource IconDefaultForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Icon.Default.Foreground}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -22,10 +22,10 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource IconHoverForegroundBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Hover.Foreground}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DatePicker}}" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource IconSelectedForegroundBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Selected.Foreground}" />
                             <Setter TargetName="IconPath" Property="Data" Value="M384 256h256V213.333333h85.333333v42.666667h128v554.666667H170.666667V256h128V213.333333h85.333333v42.666667zM256 341.333333v384h512V341.333333H256z m170.666667 42.666667v85.333333H298.666667V384h128z" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -65,7 +65,7 @@
         <Setter Property="CalendarStyle" Value="{DynamicResource Calendar.Basic}" />
         <Setter Property="SelectedDateFormat" Value="Short" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Height" Value="{StaticResource HorizontalControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -102,10 +102,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource HoverBorderBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
                         </Trigger>
                         <Trigger Property="IsDropDownOpen" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource EditingBorderBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Editing.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

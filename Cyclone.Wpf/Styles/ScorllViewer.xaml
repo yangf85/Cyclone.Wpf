@@ -20,8 +20,8 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border
                         x:Name="Root"
-                        Background="{StaticResource DefaultBackgroundBrush}"
-                        BorderBrush="{StaticResource DefaultBorderBrush}"
+                        Background="{DynamicResource Default.Background}"
+                        BorderBrush="{DynamicResource Default.Border}"
                         BorderThickness="1"
                         SnapsToDevicePixels="true">
                         <ContentPresenter
@@ -33,12 +33,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}" />
-                            <Setter TargetName="Root" Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Root" Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource PressedBorderBrush}" />
+                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -74,17 +74,17 @@
                         x:Name="DragRectangle"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
-                        Fill="{StaticResource DefaultBackgroundBrush}"
+                        Fill="{DynamicResource Default.Background}"
                         SnapsToDevicePixels="True"
-                        Stroke="{StaticResource DefaultBorderBrush}"
+                        Stroke="{DynamicResource Default.Border}"
                         StrokeThickness="1" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="DragRectangle" Property="Fill" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="DragRectangle" Property="Fill" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="DragRectangle" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter TargetName="DragRectangle" Property="Stroke" Value="{StaticResource PressedBorderBrush}" />
+                            <Setter TargetName="DragRectangle" Property="Fill" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="DragRectangle" Property="Stroke" Value="{DynamicResource Pressed.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -102,17 +102,17 @@
                         x:Name="DragRectangle"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
-                        Fill="{StaticResource DefaultBackgroundBrush}"
+                        Fill="{DynamicResource Default.Background}"
                         SnapsToDevicePixels="True"
-                        Stroke="{StaticResource DefaultBorderBrush}"
+                        Stroke="{DynamicResource Default.Border}"
                         StrokeThickness="1" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="DragRectangle" Property="Fill" Value="{StaticResource HoverBackgroundBrush}" />
+                            <Setter TargetName="DragRectangle" Property="Fill" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
-                            <Setter TargetName="DragRectangle" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter TargetName="DragRectangle" Property="Stroke" Value="{StaticResource PressedBorderBrush}" />
+                            <Setter TargetName="DragRectangle" Property="Fill" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="DragRectangle" Property="Stroke" Value="{DynamicResource Pressed.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -123,9 +123,9 @@
     <Style x:Key="ScrollBar.VerticalStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderThickness" Value="1,0" />
         <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
         <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
@@ -152,7 +152,7 @@
                                 x:Name="ArrowTop"
                                 Margin="1"
                                 Data="{StaticResource ArrowTop}"
-                                Fill="{StaticResource DefaultForegroundBrush}"
+                                Fill="{DynamicResource Default.Foreground}"
                                 Stretch="Uniform" />
                         </RepeatButton>
                         <Track
@@ -180,7 +180,7 @@
                                 x:Name="ArrowBottom"
                                 Margin="1"
                                 Data="{StaticResource ArrowBottom}"
-                                Fill="{StaticResource DefaultForegroundBrush}"
+                                Fill="{DynamicResource Default.Foreground}"
                                 Stretch="Uniform" />
                         </RepeatButton>
                     </Grid>
@@ -217,7 +217,7 @@
                                         x:Name="ArrowLeft"
                                         Margin="1"
                                         Data="{StaticResource ArrowLeft}"
-                                        Fill="{StaticResource DefaultForegroundBrush}"
+                                        Fill="{DynamicResource Default.Foreground}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
                                 <Track
@@ -244,7 +244,7 @@
                                         x:Name="ArrowRight"
                                         Margin="1"
                                         Data="{StaticResource ArrowRight}"
-                                        Fill="{StaticResource DefaultForegroundBrush}"
+                                        Fill="{DynamicResource Default.Foreground}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
                             </Grid>
@@ -258,9 +258,9 @@
     <Style x:Key="ScrollBar.HorizontalStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource DefaultBorderBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderThickness" Value="1,0" />
         <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
         <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
@@ -287,7 +287,7 @@
                                 x:Name="ArrowTop"
                                 Margin="1"
                                 Data="{StaticResource ArrowTop}"
-                                Fill="{StaticResource DefaultForegroundBrush}"
+                                Fill="{DynamicResource Default.Foreground}"
                                 Stretch="Uniform" />
                         </RepeatButton>
                         <Track
@@ -315,7 +315,7 @@
                                 x:Name="ArrowBottom"
                                 Margin="1"
                                 Data="{StaticResource ArrowBottom}"
-                                Fill="{StaticResource DefaultForegroundBrush}"
+                                Fill="{DynamicResource Default.Foreground}"
                                 Stretch="Uniform" />
                         </RepeatButton>
                     </Grid>
@@ -352,7 +352,7 @@
                                         x:Name="ArrowLeft"
                                         Margin="1"
                                         Data="{StaticResource ArrowLeft}"
-                                        Fill="{StaticResource DefaultForegroundBrush}"
+                                        Fill="{DynamicResource Default.Foreground}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
                                 <Track
@@ -379,7 +379,7 @@
                                         x:Name="ArrowRight"
                                         Margin="1"
                                         Data="{StaticResource ArrowRight}"
-                                        Fill="{StaticResource DefaultForegroundBrush}"
+                                        Fill="{DynamicResource Default.Foreground}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
                             </Grid>
@@ -391,7 +391,7 @@
     </Style>
 
     <Style TargetType="{x:Type ScrollViewer}">
-        <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
