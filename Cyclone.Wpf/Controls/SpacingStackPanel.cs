@@ -12,6 +12,57 @@ namespace Cyclone.Wpf.Controls
     /// </summary>
     public class SpacingStackPanel : Panel
     {
+        private static void OnCellAttachedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Visual child = d as Visual;
+
+            if (child != null)
+            {
+                SpacingStackPanel panel = VisualTreeHelper.GetParent(child) as SpacingStackPanel;
+                if (panel != null)
+                {
+                    panel.InvalidateMeasure();
+                }
+            }
+        }
+
+        private CalcStarInfo GetStarArrangeInfo(Size arrangeSize)
+        {
+            IEnumerable<UIElement> controls = InternalChildren.Cast<UIElement>();
+            CalcStarInfo info = new CalcStarInfo();
+
+            //先计算star的高度
+            double totalSpaceLen = (InternalChildren.Count - 1) * Spacing;
+            if (totalSpaceLen < 0)
+            {
+                totalSpaceLen = 0;
+            }
+            info.TotalSpaceLen = totalSpaceLen;
+            if (Orientation == Orientation.Horizontal)
+            {
+                info.OtherTotalLen = controls.Where(p => !GetWeight(p).IsStar).Sum(p => p.DesiredSize.Width);
+                info.StarCount = controls.Where(p => GetWeight(p).IsStar).Sum(p => GetWeight(p).Value);
+                info.StarAvaLen = arrangeSize.Width - info.OtherTotalLen - totalSpaceLen;
+                info.StarUnitLen = 0;
+                if (info.StarAvaLen > 0)
+                {
+                    info.StarUnitLen = info.StarAvaLen / info.StarCount;
+                }
+            }
+            else
+            {
+                info.OtherTotalLen = controls.Where(p => !GetWeight(p).IsStar).Sum(p => p.DesiredSize.Height);
+                info.StarCount = controls.Where(p => GetWeight(p).IsStar).Sum(p => GetWeight(p).Value);
+                info.StarAvaLen = arrangeSize.Height - info.OtherTotalLen - totalSpaceLen;
+                info.StarUnitLen = 0;
+                if (info.StarAvaLen > 0)
+                {
+                    info.StarUnitLen = info.StarAvaLen / info.StarCount;
+                }
+            }
+            return info;
+        }
+
         protected override Size ArrangeOverride(Size arrangeSize)
         {
             IEnumerable<UIElement> controls = InternalChildren.Cast<UIElement>();
@@ -124,57 +175,6 @@ namespace Cyclone.Wpf.Controls
             return stackDesiredSize;
         }
 
-        private static void OnCellAttachedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Visual child = d as Visual;
-
-            if (child != null)
-            {
-                SpacingStackPanel panel = VisualTreeHelper.GetParent(child) as SpacingStackPanel;
-                if (panel != null)
-                {
-                    panel.InvalidateMeasure();
-                }
-            }
-        }
-
-        private CalcStarInfo GetStarArrangeInfo(Size arrangeSize)
-        {
-            IEnumerable<UIElement> controls = InternalChildren.Cast<UIElement>();
-            CalcStarInfo info = new CalcStarInfo();
-
-            //先计算star的高度
-            double totalSpaceLen = (InternalChildren.Count - 1) * Spacing;
-            if (totalSpaceLen < 0)
-            {
-                totalSpaceLen = 0;
-            }
-            info.TotalSpaceLen = totalSpaceLen;
-            if (Orientation == Orientation.Horizontal)
-            {
-                info.OtherTotalLen = controls.Where(p => !GetWeight(p).IsStar).Sum(p => p.DesiredSize.Width);
-                info.StarCount = controls.Where(p => GetWeight(p).IsStar).Sum(p => GetWeight(p).Value);
-                info.StarAvaLen = arrangeSize.Width - info.OtherTotalLen - totalSpaceLen;
-                info.StarUnitLen = 0;
-                if (info.StarAvaLen > 0)
-                {
-                    info.StarUnitLen = info.StarAvaLen / info.StarCount;
-                }
-            }
-            else
-            {
-                info.OtherTotalLen = controls.Where(p => !GetWeight(p).IsStar).Sum(p => p.DesiredSize.Height);
-                info.StarCount = controls.Where(p => GetWeight(p).IsStar).Sum(p => GetWeight(p).Value);
-                info.StarAvaLen = arrangeSize.Height - info.OtherTotalLen - totalSpaceLen;
-                info.StarUnitLen = 0;
-                if (info.StarAvaLen > 0)
-                {
-                    info.StarUnitLen = info.StarAvaLen / info.StarCount;
-                }
-            }
-            return info;
-        }
-
         private class CalcStarInfo
         {
             public double OtherTotalLen { get; set; }
@@ -192,7 +192,7 @@ namespace Cyclone.Wpf.Controls
 
         public static readonly DependencyProperty SpacingProperty = DependencyProperty.Register(
             nameof(Spacing), typeof(double), typeof(SpacingStackPanel),
-            new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
+            new FrameworkPropertyMetadata(5.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         public double Spacing
         {
@@ -235,4 +235,3 @@ namespace Cyclone.Wpf.Controls
         #endregion Weight
     }
 }
-

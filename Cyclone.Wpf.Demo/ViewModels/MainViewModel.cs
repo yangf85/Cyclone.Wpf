@@ -33,6 +33,7 @@ public partial class MainViewModel : ObservableObject
             "DataGrid" => new DataGridView(),
             "Date" => new DateView(),
             "Range" => new RangeView(),
+            "TabControl" => new TabControlView(),
             _ => new object(),
         };
     }
@@ -95,6 +96,14 @@ public partial class SideMenuViewModel : ObservableObject
         {
             Header = "Navigation",
             Icon = "\xe81a",
+            Items =
+            [
+                new SideMenuItemViewModel()
+                {
+                    Header="TabControl",
+                    Icon= "\xe81a",
+                },
+            ]
         });
         Items.Add(new SideMenuItemViewModel()
         {

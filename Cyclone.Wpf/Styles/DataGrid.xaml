@@ -76,7 +76,7 @@
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter Property="Background" Value="{StaticResource DefaultBackgroundBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource PressedForegroundBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource EditingBorderBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
             </Trigger>
         </Style.Triggers>
@@ -303,6 +303,9 @@
         <Setter Property="RowHeaderStyle" Value="{StaticResource DataGrid.RowHeaderStyle}" />
         <Setter Property="CellStyle" Value="{StaticResource DataGrid.CellStyle}" />
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGrid.ColumnHeaderStyle}" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">

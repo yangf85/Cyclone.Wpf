@@ -101,6 +101,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{DynamicResource HoverBorderBrush}" />
+                        </Trigger>
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource EditingBorderBrush}" />
                         </Trigger>
