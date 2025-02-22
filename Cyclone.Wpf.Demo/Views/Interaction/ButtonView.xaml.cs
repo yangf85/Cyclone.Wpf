@@ -1,5 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.Helper;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +28,42 @@ namespace Cyclone.Wpf.Demo.Views
         public ButtonView()
         {
             InitializeComponent();
+            DataContext = new ButtonViewModel();
+        }
+    }
+
+    public partial class ButtonViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial SplitButtonViewModel SplitButton { get; set; } = new SplitButtonViewModel();
+    }
+
+    public partial class SplitButtonViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> FakerData { get; set; }
+
+        [ObservableProperty]
+        public partial int Index { get; set; }
+
+        public SplitButtonViewModel()
+        {
+            FakerData = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(5));
+        }
+
+        [RelayCommand]
+        void ShowData(FakerData data)
+        {
+            if (data != null)
+            {
+                MessageBox.Show($"{data.FirstName} {data.LastName}");
+            }
+        }
+
+        [RelayCommand]
+        void Test(object item)
+        {
+            MessageBox.Show($"{item}----{Index}");
         }
     }
 }

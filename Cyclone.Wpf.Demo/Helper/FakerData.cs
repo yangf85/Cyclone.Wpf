@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Faker;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Cyclone.Wpf.Demo.Helper;
 
@@ -21,7 +23,6 @@ public partial class ContactInfo : ObservableObject
 
 public partial class FakerData : ObservableValidator
 {
-   
     [NotifyDataErrorInfo]
     [ObservableProperty]
     [Range(0, 120, ErrorMessage = "Age must be between 0 and 120")]
@@ -69,7 +70,7 @@ public partial class FakerData : ObservableValidator
         FirstName = Faker.Name.First();        // 随机生成名字
         LastName = Faker.Name.Last();          // 随机生成姓氏
         Email = Faker.Internet.Email();        // 随机生成电子邮件
-        Address =Faker. Address.StreetAddress(); // 随机生成街道地址
+        Address = Faker.Address.StreetAddress(); // 随机生成街道地址
         City = Faker.Address.City();           // 随机生成城市
         DateOfBirth = Faker.Identification.DateOfBirth(); // 随机生成出生日期
         ZipCode = Faker.Address.ZipCode();     // 随机生成邮政编码
@@ -81,9 +82,13 @@ public partial class FakerData : ObservableValidator
             LinkedInProfile = Faker.Internet.Url() // 随机生成 LinkedIn URL
         };
     }
+
+    [RelayCommand]
+    void ShowSelf()
+    {
+        MessageBox.Show($"{FirstName}-{LastName}");
+    }
 }
-
-
 
 public partial class TreeFakerData : ObservableObject
 {
@@ -98,4 +103,3 @@ public partial class TreeFakerData : ObservableObject
         Children = [];
     }
 }
-

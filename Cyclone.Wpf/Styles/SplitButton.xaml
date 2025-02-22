@@ -6,11 +6,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="SplitButton.DropDownToggleButtonStyle"
-        TargetType="{x:Type ToggleButton}">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Style x:Key="SplitButton.OpenButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="True" />
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -18,17 +14,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid
-                        x:Name="Root"
+                        x:Name="RootBorder"
                         Background="{TemplateBinding Background}"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="True">
                         <Path
                             x:Name="Indicator"
                             Width="14"
                             Height="14"
                             Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             Data="M 0 0 L 6 6 L 12 0 Z"
                             Fill="{TemplateBinding Foreground}"
                             Stretch="Uniform" />
@@ -63,12 +56,13 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="true"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="true">
                         <ContentPresenter
-                            Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -93,7 +87,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SplitButton}">
                     <Border
-                        x:Name="Root"
+                        x:Name="RootBorder"
                         Background="Transparent"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -105,26 +99,34 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Grid
-                                x:Name="ContentGrid"
-                                Background="Transparent">
+                            <Grid x:Name="ContentGrid" Background="Transparent">
                                 <ContentPresenter
                                     Margin="{DynamicResource Margin.Horizontal}"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     Content="{TemplateBinding Label}" />
                             </Grid>
+                            <Rectangle
+                                Grid.Column="1"
+                                Width="1"
+                                Fill="{TemplateBinding BorderBrush}" />
+                            <ToggleButton
+                                x:Name="PART_OpenButton"
+                                Grid.Column="2"
+                                IsChecked="{Binding Path=IsOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                Style="{StaticResource SplitButton.OpenButtonStyle}" />
                             <Popup
-                                MinWidth="{Binding ActualWidth, ElementName=Root}"
+                                x:Name="PART_Popup"
+
                                 ctl:PopupBox.IsPositionUpdate="True"
                                 AllowsTransparency="True"
-                                IsOpen="{Binding IsChecked, ElementName=DropDownToggleButton}"
+                                IsOpen="{TemplateBinding IsOpen}"
                                 Placement="Bottom"
-                                PlacementTarget="{Binding ElementName=Root}"
+                                PlacementTarget="{Binding ElementName=RootBorder}"
                                 StaysOpen="False"
                                 VerticalOffset="1">
                                 <Border
-                                    MinWidth="{Binding ElementName=Root, Path=ActualWidth}"
+                                    MinWidth="{Binding ElementName=RootBorder, Path=ActualWidth}"
                                     Background="{DynamicResource Default.Background}"
                                     BorderBrush="{DynamicResource Default.Border}"
                                     BorderThickness="1"
@@ -139,22 +141,10 @@
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
-                            <Rectangle
-                                Grid.Column="1"
-                                Width="1"
-                                Fill="{Binding BorderBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:SplitButton}}"
-                                SnapsToDevicePixels="True"
-                                UseLayoutRounding="True" />
-                            <ToggleButton
-                                x:Name="DropDownToggleButton"
-                                Grid.Column="2"
-                                Padding="5,0"
-                                IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                Style="{StaticResource SplitButton.DropDownToggleButtonStyle}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger SourceName="ContentGrid" Property="UIElement.IsMouseOver" Value="True">
+                        <Trigger SourceName="ContentGrid" Property="IsMouseOver" Value="True">
                             <Setter TargetName="ContentGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

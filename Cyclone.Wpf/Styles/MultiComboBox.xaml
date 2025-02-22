@@ -7,20 +7,14 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="MultiComboBoxItem.SelectedCheckBoxStyle"
-        TargetType="CheckBox" />
+    <Style x:Key="MultiComboBoxItem.SelectedCheckBoxStyle" TargetType="CheckBox" />
 
-    <Style
-        x:Key="MultiComboBox.OpenButtonStyle"
-        TargetType="{x:Type ToggleButton}">
+    <Style x:Key="MultiComboBox.OpenButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="Transparent">
+                    <Grid x:Name="RootGrid" Background="Transparent">
                         <Path
                             x:Name="Indicator"
                             Width="18"
@@ -45,9 +39,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="MultiComboBoxItem.ControlTemplate.Basic"
-        TargetType="ctl:MultiComboBoxItem">
+    <ControlTemplate x:Key="MultiComboBoxItem.ControlTemplate.Basic" TargetType="ctl:MultiComboBoxItem">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
@@ -78,9 +70,7 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <DataTrigger
-                Binding="{Binding Path=IsShowCheckBox, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
-                Value="True">
+            <DataTrigger Binding="{Binding Path=IsShowCheckBox, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}" Value="True">
                 <Setter TargetName="SelectedCheckBox" Property="Visibility" Value="Visible" />
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
@@ -92,16 +82,11 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-
-    <Style
-        x:Key="MultiComboBox.DeselectButtonStyle"
-        TargetType="Button">
+    <Style x:Key="MultiComboBox.DeselectButtonStyle" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="Transparent">
+                    <Grid x:Name="RootGrid" Background="Transparent">
                         <Path
                             x:Name="Indicator"
                             Width="14"
@@ -122,20 +107,16 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="MultiComboBox.PresentItemStyle"
-        TargetType="ListBoxItem">
+    <Style x:Key="MultiComboBox.PresentItemStyle" TargetType="ctl:MultiComboBoxItem">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
+                <ControlTemplate TargetType="ctl:MultiComboBoxItem">
                     <Grid Margin="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter
-                            VerticalAlignment="Center"
-                            Content="{TemplateBinding Content}" />
+                        <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding Content}" />
                         <Button
                             x:Name="DeselectButton"
                             Grid.Column="1"
@@ -153,46 +134,14 @@
         </Style.Triggers>
     </Style>
 
-    <Style
-        x:Key="MultiComboBox.PresentListBoxStyle"
-        TargetType="ListBox">
-        <Setter Property="ItemContainerStyle" Value="{StaticResource MultiComboBox.PresentItemStyle}" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <UniformGrid
-                        Columns="{Binding Path=MaxColumns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
-                        Rows="{Binding Path=MaxRows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListBox">
-                    <Grid>
-                        <ItemsPresenter />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style
-        x:Key="MultiComboBoxItem.Style.Basic"
-        TargetType="ctl:MultiComboBoxItem">
+    <Style x:Key="MultiComboBoxItem.Style.Basic" TargetType="ctl:MultiComboBoxItem">
         <Setter Property="Template" Value="{StaticResource MultiComboBoxItem.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{StaticResource Height.Horizontal.Item}" />
         <Setter Property="Background" Value="{DynamicResource Global.Background}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
-
-
-
-
-    <ControlTemplate
-        x:Key="MultiComboBox.ControlTemplate.Basic"
-        TargetType="ctl:MultiComboBox">
+    <ControlTemplate x:Key="MultiComboBox.ControlTemplate.Basic" TargetType="ctl:MultiComboBox">
         <Border
             Name="RootBorder"
             Background="{TemplateBinding Background}"
@@ -204,11 +153,13 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ListBox
-                    Grid.Column="0"
-                    ItemContainerStyle="{StaticResource MultiComboBox.PresentItemStyle}"
-                    ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}"
-                    Style="{StaticResource MultiComboBox.PresentListBoxStyle}" />
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
                 <ToggleButton
                     x:Name="PART_OpenButton"
                     Grid.Column="1"
@@ -258,7 +209,6 @@
                         </Grid>
                     </Border>
                 </Popup>
-
             </Grid>
         </Border>
         <ControlTemplate.Triggers>

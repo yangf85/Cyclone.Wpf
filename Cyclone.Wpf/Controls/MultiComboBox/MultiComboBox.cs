@@ -12,17 +12,20 @@ using System.Windows;
 namespace Cyclone.Wpf.Controls;
 
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(MultiComboBoxItem))]
-[TemplatePart(Name = PART_SelectionListBox, Type = (typeof(ListBox)))]
+[TemplatePart(Name = PART_SelectedItemsControl, Type = (typeof(ItemsControl)))]
 [TemplatePart(Name = PART_OpenButton, Type = (typeof(ToggleButton)))]
 [TemplatePart(Name = PART_Popup, Type = (typeof(Popup)))]
 public class MultiComboBox : MultiSelector
 {
     private const string PART_OpenButton = nameof(PART_OpenButton);
+
     private const string PART_Popup = nameof(PART_Popup);
 
-    private const string PART_SelectionListBox = nameof(PART_SelectionListBox);
+    private const string PART_SelectedItemsControl = nameof(PART_SelectedItemsControl);
 
     private Popup _popup;
+
+    ItemsControl _itemsControl;
 
     static MultiComboBox()
     {
@@ -47,8 +50,6 @@ public class MultiComboBox : MultiSelector
         {
             BindableSelectItems?.Add(item);
         }
-
-       
     }
 
     #region Override
@@ -92,16 +93,17 @@ public class MultiComboBox : MultiSelector
     #endregion MaxColumns
 
     #region MaxRows
+
+    public static readonly DependencyProperty MaxRowsProperty =
+        DependencyProperty.Register(nameof(MaxRows), typeof(int), typeof(MultiComboBox), new PropertyMetadata(default(int)));
+
     public int MaxRows
     {
         get => (int)GetValue(MaxRowsProperty);
         set => SetValue(MaxRowsProperty, value);
     }
 
-    public static readonly DependencyProperty MaxRowsProperty =
-        DependencyProperty.Register(nameof(MaxRows), typeof(int), typeof(MultiComboBox), new PropertyMetadata(default(int)));
-
-    #endregion
+    #endregion MaxRows
 
     #region IsSelectAll
 
@@ -129,18 +131,18 @@ public class MultiComboBox : MultiSelector
 
     #endregion IsSelectAll
 
-
     #region SelectAllText
+
+    public static readonly DependencyProperty SelectAllTextProperty =
+        DependencyProperty.Register(nameof(SelectAllText), typeof(string), typeof(MultiComboBox), new PropertyMetadata("SelectAll"));
+
     public string SelectAllText
     {
         get => (string)GetValue(SelectAllTextProperty);
         set => SetValue(SelectAllTextProperty, value);
     }
 
-    public static readonly DependencyProperty SelectAllTextProperty =
-        DependencyProperty.Register(nameof(SelectAllText), typeof(string), typeof(MultiComboBox), new PropertyMetadata("SelectAll"));
-
-    #endregion
+    #endregion SelectAllText
 
     #region BindableSelectItems
 
@@ -229,6 +231,5 @@ public class MultiComboBox : MultiSelector
         set => SetValue(IsShowCheckBoxProperty, value);
     }
 
-    #endregion
-
+    #endregion IsShowCheckBox
 }

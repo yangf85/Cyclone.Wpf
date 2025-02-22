@@ -10,27 +10,25 @@ using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
-public class SplitButtonItem :ButtonBase
+public class SplitButtonItem : ButtonBase
 {
-    private SplitButton SplitButton
+    private SplitButton _root;
+
+    protected override void OnClick()
     {
-        get
+        base.OnClick();
+
+        if (_root != null)
         {
-            return ItemsControl.ItemsControlFromItemContainer(this) as SplitButton;
+            _root.SelectedIndex = _root.ItemContainerGenerator.IndexFromContainer(this);
+            _root.ItemClickCommand?.Execute(_root.ItemClickCommandParameter);
         }
     }
 
-    public SplitButtonItem()
+    public override void OnApplyTemplate()
     {
-        PreviewMouseLeftButtonUp += SplitButtonItem_PreviewMouseLeftButtonUp;
-    }
+        base.OnApplyTemplate();
 
-    private void SplitButtonItem_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        if (SplitButton != null)
-        {
-            SplitButton.OnItemClick(this, this);
-            SplitButton.IsDropDownOpen = false;
-        }
+        _root = ItemsControl.ItemsControlFromItemContainer(this) as SplitButton;
     }
 }

@@ -168,6 +168,11 @@ public class CascadePicker : Selector
         return new CascadePickerItem();
     }
 
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+    }
+
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
