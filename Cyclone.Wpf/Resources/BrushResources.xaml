@@ -102,6 +102,11 @@
     <SolidColorBrush x:Key="Secondary.Background" Color="#FF64B5F6" />
     <SolidColorBrush x:Key="Secondary.Foreground" Color="#FF000000" />
 
+    <!--  隔行换色  -->
+    <SolidColorBrush x:Key="Alternation.Dark" Color="#E1F5FE" />
+    <SolidColorBrush x:Key="Alternation.Light" Color="#FFFFFFFF" />
+
+
     <!--  动画和过渡  -->
     <SolidColorBrush x:Key="Transition.Background" Color="#80DDE4EA" />
     <SolidColorBrush x:Key="Gradient.Start" Color="#FF1565C0" />
