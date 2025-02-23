@@ -24,5 +24,20 @@ namespace Cyclone.Wpf.Demo.Views
         {
             InitializeComponent();
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            CountdownControl.Start();
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            CountdownControl.Reset();
+        }
+
+        private void CountdownControl_Completed(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("倒计时结束！");
+        }
     }
 }

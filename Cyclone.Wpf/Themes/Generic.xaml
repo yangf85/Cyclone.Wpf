@@ -22,6 +22,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Pagination.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ProgressBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberCountdown.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/GridView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListBox.xaml" />
