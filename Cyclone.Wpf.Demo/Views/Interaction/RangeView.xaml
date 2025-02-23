@@ -17,5 +17,13 @@
                 <Slider />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
+
+        <HeaderedContentControl Header="ProgressBar">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <ProgressBar IsIndeterminate="True" />
+                <ProgressBar Value="35" Style="{StaticResource ProgressBar.Style.Stripe}" />
+                <ProgressBar />
+            </cy:SpacingUniformGrid>
+        </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>

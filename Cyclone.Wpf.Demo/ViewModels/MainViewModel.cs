@@ -34,7 +34,10 @@ public partial class MainViewModel : ObservableObject
             "Date" => new DateView(),
             "Range" => new RangeView(),
             "TabControl" => new TabControlView(),
+            "FluidTabControl" => new FluidTabControlView(),
             "ComboBox" => new ComboBoxView(),
+            "ListView" => new CollectionView(),
+            "ListBox" => new ListBoxView(),
             _ => new object(),
         };
     }
@@ -108,6 +111,11 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="TabControl",
+                    Icon= "\xe81a",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="FluidTabControl",
                     Icon= "\xe81a",
                 },
             ]

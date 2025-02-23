@@ -34,29 +34,11 @@ public partial class CollectionView : UserControl
 
 public partial class CollectionViewModel : ObservableObject
 {
-    List<FakerData> _source;
-
     [ObservableProperty]
-    public partial ObservableCollection<FakerData> ListBoxData { get; set; } = [];
-
-    [ObservableProperty]
-    public partial ObservableCollection<FakerData> ListViewData { get; set; } = [];
-
-
-
-
-    [ObservableProperty]
-    public partial ObservableCollection<FakerData> DataGridData { get; set; } = [];
-
-  
-
-    
+    public partial ObservableCollection<FakerData> Data { get; set; } = [];
 
     public CollectionViewModel()
     {
-        _source = FakerDataHelper.GenerateFakerDataCollection(1000);
-        ListBoxData = [.. _source.Take(50)];
-        ListViewData = [.. _source.Take(50)];
-      
+        Data = [.. FakerDataHelper.GenerateFakerDataCollection(20)];
     }
 }

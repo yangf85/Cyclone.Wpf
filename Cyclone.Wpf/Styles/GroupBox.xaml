@@ -23,7 +23,7 @@
                             <Border
                                 x:Name="Header"
                                 Grid.Row="0"
-                                Height="{DynamicResource HorizontalHeaderHeight}"
+                                Height="{DynamicResource Height.Horizontal.Header}"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="0,0,0,1">

@@ -8,7 +8,7 @@
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -29,10 +29,7 @@
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Selected.Background}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="RootBorder" Property="TextElement.Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Selected.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -46,7 +43,6 @@
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
@@ -54,7 +50,6 @@
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">

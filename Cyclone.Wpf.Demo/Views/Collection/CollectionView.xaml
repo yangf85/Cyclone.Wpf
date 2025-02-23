@@ -11,69 +11,49 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <cy:SpacingStackPanel Spacing="10">
-            <HeaderedContentControl Header="ListBox">
-                <ListBox
-                    Height="200"
-                    cy:ListBoxHelper.IsSelectAllEnabled="True"
-                    cy:ListBoxHelper.IsSelectedAll="True"
-                    ItemsSource="{Binding ListBoxData}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding FirstName}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </HeaderedContentControl>
-            <HeaderedContentControl Header="ListView">
-                <ListView
-                    Height="200"
-                    ItemsSource="{Binding ListViewData}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn
-                                Width="100"
-                                DisplayMemberBinding="{Binding FirstName}"
-                                Header="First Name" />
-                            <GridViewColumn
-                                Width="100"
-                                DisplayMemberBinding="{Binding LastName}"
-                                Header="Last Name" />
-                            <GridViewColumn
-                                Width="50"
-                                DisplayMemberBinding="{Binding Age}"
-                                Header="Age" />
-                            <GridViewColumn
-                                Width="200"
-                                DisplayMemberBinding="{Binding Email}"
-                                Header="Email" />
-                            <GridViewColumn
-                                Width="150"
-                                DisplayMemberBinding="{Binding Address}"
-                                Header="Address" />
-                            <GridViewColumn
-                                Width="100"
-                                DisplayMemberBinding="{Binding City}"
-                                Header="City" />
-                            <GridViewColumn
-                                Width="100"
-                                DisplayMemberBinding="{Binding Country}"
-                                Header="Country" />
-                            <GridViewColumn
-                                Width="120"
-                                DisplayMemberBinding="{Binding Contact.PhoneNumber}"
-                                Header="Phone Number" />
-                            <GridViewColumn
-                                Width="150"
-                                DisplayMemberBinding="{Binding Contact.LinkedInProfile}"
-                                Header="LinkedIn" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </HeaderedContentControl>
 
-          
-        </cy:SpacingStackPanel>
-    </ScrollViewer>
+    <GroupBox Header="ListView">
+        <ListView ItemsSource="{Binding Data}" Style="{x:Null}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        Width="100"
+                        DisplayMemberBinding="{Binding FirstName}"
+                        Header="First Name" />
+                    <GridViewColumn
+                        Width="100"
+                        DisplayMemberBinding="{Binding LastName}"
+                        Header="Last Name" />
+                    <GridViewColumn
+                    Width="50"
+                    DisplayMemberBinding="{Binding Age}"
+                    Header="Age" />
+                    <GridViewColumn
+                    Width="200"
+                    DisplayMemberBinding="{Binding Email}"
+                    Header="Email" />
+                    <GridViewColumn
+                    Width="150"
+                    DisplayMemberBinding="{Binding Address}"
+                    Header="Address" />
+                    <GridViewColumn
+                    Width="100"
+                    DisplayMemberBinding="{Binding City}"
+                    Header="City" />
+                    <GridViewColumn
+                    Width="100"
+                    DisplayMemberBinding="{Binding Country}"
+                    Header="Country" />
+                    <GridViewColumn
+                    Width="120"
+                    DisplayMemberBinding="{Binding Contact.PhoneNumber}"
+                    Header="Phone Number" />
+                    <GridViewColumn
+                    Width="150"
+                    DisplayMemberBinding="{Binding Contact.LinkedInProfile}"
+                    Header="LinkedIn" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </GroupBox>
 </UserControl>
