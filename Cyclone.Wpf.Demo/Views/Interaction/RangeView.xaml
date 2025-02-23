@@ -38,7 +38,6 @@
                     IsAnimating="{Binding Path=IsChecked, ElementName=AAA}"
                     NumberColor="Red"
                     StartNumber="10" />
-
                 <ToggleButton
                     x:Name="AAA"
                     Margin="10"
