@@ -21,16 +21,54 @@ public enum FluidTabPlacement
     Right,
 }
 
+
+[TemplatePart(Name = "PART_ItemsPanel", Type = typeof(Panel))]
 [TemplatePart(Name = "PART_Container", Type = typeof(ScrollViewer))]
 public class FluidTabControl : Selector
 {
+
+
     private ScrollViewer _container;
-
     private Panel _itemsPanel;
-
     private bool _isSelecting;
-
     private bool _isScrolling;
+    private Storyboard _currentStoryboard;
+
+    #region AnimationDuration
+    public static readonly DependencyProperty AnimationDurationProperty =
+    DependencyProperty.Register("AnimationDuration", typeof(TimeSpan), typeof(FluidTabControl),
+        new FrameworkPropertyMetadata(TimeSpan.FromSeconds(1d)));
+
+    public TimeSpan AnimationDuration
+    {
+        get => (TimeSpan)GetValue(AnimationDurationProperty);
+        set => SetValue(AnimationDurationProperty, value);
+    }
+    #endregion
+
+    #region HeaderWidth
+    public double HeaderWidth
+    {
+        get => (double)GetValue(HeaderWidthProperty);
+        set => SetValue(HeaderWidthProperty, value);
+    }
+
+    public static readonly DependencyProperty HeaderWidthProperty =
+        DependencyProperty.Register(nameof(HeaderWidth), typeof(double), typeof(FluidTabControl), new PropertyMetadata(150d));
+
+    #endregion
+
+    #region FluidTabPlacement
+    public FluidTabPlacement FluidTabPlacement
+    {
+        get => (FluidTabPlacement)GetValue(FluidTabPlacementProperty);
+        set => SetValue(FluidTabPlacementProperty, value);
+    }
+
+    public static readonly DependencyProperty FluidTabPlacementProperty =
+        DependencyProperty.Register(nameof(FluidTabPlacement), typeof(FluidTabPlacement), typeof(FluidTabControl), new PropertyMetadata(default(FluidTabPlacement)));
+
+    #endregion
 
     static FluidTabControl()
     {
@@ -38,6 +76,7 @@ public class FluidTabControl : Selector
             new FrameworkPropertyMetadata(typeof(FluidTabControl)));
     }
 
+    #region Private
     private static FluidTabItem FindContentOwner(DependencyObject element)
     {
         while (element != null)
@@ -56,7 +95,6 @@ public class FluidTabControl : Selector
         }
         return null;
     }
-
     private void UpdateItemsContent()
     {
         if (_container == null || _itemsPanel == null) return;
@@ -83,20 +121,6 @@ public class FluidTabControl : Selector
     private UIElement GetItemContent(FluidTabItem item) =>
         item?.Content as UIElement ?? new FrameworkElement();
 
-    private void OnContainerScrollChanged(object sender, ScrollChangedEventArgs e)
-    {
-        if (_isSelecting || _container == null) return;
-
-        var hitTestPoint = new Point(1, e.VerticalOffset);
-        var hitTestResult = _itemsPanel.InputHitTest(hitTestPoint);
-
-        if (hitTestResult is DependencyObject element)
-        {
-            var targetItem = FindContentOwner(element);
-            HandleScrollPosition(targetItem, e.VerticalOffset);
-        }
-    }
-
     private void HandleScrollPosition(FluidTabItem targetItem, double verticalOffset)
     {
         if (targetItem == null) return;
@@ -118,7 +142,7 @@ public class FluidTabControl : Selector
 
     private FluidTabItem GetLastItem()
     {
-        if (Items.Count == 0) return null;
+        if (Items.Count == 0) { return null; }
         var lastItem = Items[Items.Count - 1];
         return GetFluidTabItem(lastItem);
     }
@@ -131,7 +155,7 @@ public class FluidTabControl : Selector
         if (VisualTreeHelper.GetParent(content) is Border border)
         {
             var position = border.TranslatePoint(new Point(), _itemsPanel);
-            _container?.ScrollToVerticalOffset(position.Y);
+            ScrollToOffset(position.Y);
         }
     }
 
@@ -158,6 +182,56 @@ public class FluidTabControl : Selector
         return null;
     }
 
+    private void ScrollToOffset(double targetOffset)
+    {
+        if (_container == null) return;
+
+        // 停止正在进行的动画
+        _currentStoryboard?.Stop();
+
+        if (AnimationDuration == TimeSpan.Zero || _container.VerticalOffset == targetOffset)
+        {
+            _container.ScrollToVerticalOffset(targetOffset);
+            return;
+        }
+
+        var animation = new DoubleAnimation
+        {
+            From = _container.VerticalOffset,
+            To = targetOffset,
+            Duration = AnimationDuration,
+            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+        };
+
+        _currentStoryboard = new Storyboard();
+        _currentStoryboard.Children.Add(animation);
+
+        Storyboard.SetTarget(animation, _container);
+        Storyboard.SetTargetProperty(animation, new PropertyPath(ScrollViewerBehavior.VerticalOffsetProperty));
+
+        _currentStoryboard.Completed += (s, e) => _currentStoryboard = null;
+        _currentStoryboard.Begin();
+    }
+
+    private void OnContainerScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (_isSelecting || _container == null || _currentStoryboard != null) return;
+
+        var hitTestPoint = new Point(1, e.VerticalOffset);
+        var hitTestResult = _itemsPanel.InputHitTest(hitTestPoint);
+
+        if (hitTestResult is DependencyObject element)
+        {
+            var targetItem = FindContentOwner(element);
+            HandleScrollPosition(targetItem, e.VerticalOffset);
+        }
+    }
+
+    #endregion
+
+
+
+    #region Override
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
@@ -201,4 +275,31 @@ public class FluidTabControl : Selector
 
         UpdateItemsContent();
     }
+    #endregion
+
+
+   
+
+    
+    private static class ScrollViewerBehavior
+    {
+        public static readonly DependencyProperty VerticalOffsetProperty =
+            DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(ScrollViewerBehavior),
+                new FrameworkPropertyMetadata(0.0, OnVerticalOffsetChanged));
+
+        public static double GetVerticalOffset(ScrollViewer obj) => obj.VerticalOffset;
+
+        public static void SetVerticalOffset(ScrollViewer obj, double value) => obj.ScrollToVerticalOffset(value);
+
+        private static void OnVerticalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ScrollViewer scrollViewer)
+            {
+                scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
+            }
+        }
+    }
+
 }
+
+

@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Cyclone.Wpf.Helpers;
 
 public static class ScrollViewerHelper
 {
+
+    #region VerticalOffset
     public static readonly DependencyProperty VerticalOffsetProperty =
         DependencyProperty.RegisterAttached("VerticalOffset", typeof(double),
             typeof(ScrollViewerHelper), new PropertyMetadata(0.0, OnVerticalOffsetChanged));
@@ -25,4 +29,8 @@ public static class ScrollViewerHelper
 
     public static void SetVerticalOffset(DependencyObject obj, double value)
         => obj.SetValue(VerticalOffsetProperty, value);
+
+    #endregion
+
+    
 }

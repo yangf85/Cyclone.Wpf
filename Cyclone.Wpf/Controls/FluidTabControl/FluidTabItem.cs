@@ -11,7 +11,7 @@ using System.Windows.Markup;
 
 namespace Cyclone.Wpf.Controls;
 
-[ContentProperty("Content")]
+[ContentProperty("Content")]//不能继承ContentControl 会导致视觉元素连接错误
 public class FluidTabItem : Control
 {
     internal static readonly DependencyProperty ContentOwnerProperty;

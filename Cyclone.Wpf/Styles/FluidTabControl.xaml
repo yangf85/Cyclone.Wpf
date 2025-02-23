@@ -1,44 +1,45 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="FluidTabItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FluidTabItem}">
-
         <Grid Name="RootGrid" SnapsToDevicePixels="true">
-            <Border
-                x:Name="RootBorder"
-                Height="{TemplateBinding Height}"
-                Background="{TemplateBinding Background}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                SnapsToDevicePixels="True">
+            <Border x:Name="RootBorder"
+                    Height="{TemplateBinding Height}"
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    SnapsToDevicePixels="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition x:Name="LeftColumn" Width="*" />
+                        <ColumnDefinition x:Name="MiddleColumn" Width="5" />
+                        <ColumnDefinition x:Name="RightColumn" Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter
-                        Name="ContentContainer"
-                        Grid.Column="0"
-                        Margin="{TemplateBinding Padding}"
-                        HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                        VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                        ContentSource="Header"
-                        Focusable="False"
-                        RecognizesAccessKey="True" />
-                    <Rectangle
-                        x:Name="Indicator"
-                        Grid.Column="1"
-                        Width="3"
-                        Margin="3,0,0,0"
-                        Fill="Transparent" />
+                    <ContentPresenter Name="ContentContainer"
+                                      Grid.Column="0"
+                                      Margin="{TemplateBinding Padding}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      ContentSource="Header"
+                                      Focusable="False"
+                                      RecognizesAccessKey="True" />
+                    <Rectangle x:Name="Indicator"
+                               Grid.Column="2"
+                               Width="3"
+                               Fill="Transparent" />
                 </Grid>
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=FluidTabPlacement, RelativeSource={RelativeSource AncestorType=ctl:FluidTabControl}}" Value="Right">
+                <Setter TargetName="Indicator" Property="Grid.Column" Value="0" />
+                <Setter TargetName="Indicator" Property="HorizontalAlignment" Value="Left" />
+                <Setter TargetName="ContentContainer" Property="Grid.Column" Value="2" />
+            </DataTrigger>
+
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
             </Trigger>
@@ -53,8 +54,9 @@
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Width" Value="{Binding Path=HeaderWidth, RelativeSource={RelativeSource AncestorType=ctl:FluidTabControl}}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="Template" Value="{StaticResource FluidTabItem.ControlTemplate.Basic}" />
     </Style>
@@ -71,49 +73,51 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:FluidTabControl}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid
-                            ClipToBounds="True"
-                            KeyboardNavigation.TabNavigation="Local"
-                            SnapsToDevicePixels="true">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid ClipToBounds="True"
+                              KeyboardNavigation.TabNavigation="Local"
+                              SnapsToDevicePixels="true">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition x:Name="LeftColumn" Width="Auto" />
+                                <ColumnDefinition x:Name="MiddleColumn" Width="Auto" />
+                                <ColumnDefinition x:Name="RightColumn" Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Grid
-                                Grid.Column="0"
-                                Panel.ZIndex="1"
-                                KeyboardNavigation.TabIndex="1">
+                            <Grid x:Name="ItemHeaderContainer"
+                                  Grid.Column="0"
+                                  Panel.ZIndex="1"
+                                  KeyboardNavigation.TabIndex="1">
                                 <ItemsPresenter />
                             </Grid>
-                            <Rectangle
-                                Grid.Column="1"
-                                Width="1"
-                                Fill="{TemplateBinding BorderBrush}" />
-                            <Grid
-                                x:Name="ContentPanel"
-                                Grid.Column="2"
-                                Background="{TemplateBinding Background}"
-                                KeyboardNavigation.DirectionalNavigation="Contained"
-                                KeyboardNavigation.TabIndex="2"
-                                KeyboardNavigation.TabNavigation="Local">
-                                <ScrollViewer
-                                    x:Name="PART_Container"
-
-                                    Focusable="False"
-                                    HorizontalScrollBarVisibility="Disabled"
-                                    IsDeferredScrollingEnabled="False"
-                                    VerticalScrollBarVisibility="Auto">
-                                    <ItemsPresenter />
+                            <Rectangle Grid.Column="1"
+                                       Width="1"
+                                       Fill="{TemplateBinding BorderBrush}" />
+                            <Grid x:Name="ContentPanel"
+                                  Grid.Column="2"
+                                  Background="{TemplateBinding Background}"
+                                  KeyboardNavigation.DirectionalNavigation="Contained"
+                                  KeyboardNavigation.TabIndex="2"
+                                  KeyboardNavigation.TabNavigation="Local">
+                                <ScrollViewer x:Name="PART_Container"
+                                              Focusable="False"
+                                              HorizontalScrollBarVisibility="Disabled"
+                                              IsDeferredScrollingEnabled="False"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <VirtualizingStackPanel x:Name="PART_ItemsPanel" VirtualizingPanel.VirtualizationMode="Recycling" />
                                 </ScrollViewer>
                             </Grid>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="FluidTabPlacement" Value="Right">
+                            <Setter TargetName="ContentPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="ItemHeaderContainer" Property="Grid.Column" Value="2" />
+                            <Setter TargetName="LeftColumn" Property="Width" Value="*" />
+                            <Setter TargetName="RightColumn" Property="Width" Value="Auto" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
