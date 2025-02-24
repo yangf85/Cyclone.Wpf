@@ -31,35 +31,55 @@ public class NumberCountdown : Control
             new FrameworkPropertyMetadata(typeof(NumberCountdown)));
     }
 
-    #region 依赖属性
+    #region Dependency Properties
 
     public static readonly DependencyProperty StartNumberProperty =
-        DependencyProperty.Register("StartNumber", typeof(int), typeof(NumberCountdown),
-            new PropertyMetadata(10, OnStartNumberChanged));
+        DependencyProperty.Register(
+            "StartNumber", typeof(int), typeof(NumberCountdown),
+            new PropertyMetadata(10, OnStartNumberChanged)
+        );
 
     public static readonly DependencyProperty CurrentNumberProperty =
-            DependencyProperty.Register("CurrentNumber", typeof(int), typeof(NumberCountdown),
-                new PropertyMetadata(0));
+        DependencyProperty.Register(
+            "CurrentNumber", typeof(int), typeof(NumberCountdown),
+            new FrameworkPropertyMetadata(
+                0,
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnCurrentNumberChanged
+            )
+        );
 
     public static readonly DependencyProperty AnimationDurationProperty =
-            DependencyProperty.Register("AnimationDuration", typeof(double), typeof(NumberCountdown),
-                new PropertyMetadata(0.5));
+        DependencyProperty.Register(
+            "AnimationDuration", typeof(double), typeof(NumberCountdown),
+            new PropertyMetadata(0.5)
+        );
 
     public static readonly DependencyProperty IsAnimatingProperty =
-            DependencyProperty.Register("IsAnimating", typeof(bool), typeof(NumberCountdown),
-                new FrameworkPropertyMetadata(false,
-                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                    OnIsAnimatingChanged));
+        DependencyProperty.Register(
+            "IsAnimating", typeof(bool), typeof(NumberCountdown),
+            new FrameworkPropertyMetadata(
+                false,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                OnIsAnimatingChanged
+            )
+        );
 
     public static readonly DependencyProperty NumberColorProperty =
-            DependencyProperty.Register("NumberColor", typeof(Brush), typeof(NumberCountdown),
-                new PropertyMetadata(Brushes.Blue));
+        DependencyProperty.Register(
+            "NumberColor", typeof(Brush), typeof(NumberCountdown),
+            new PropertyMetadata(Brushes.Blue)
+        );
 
     public static readonly DependencyProperty AnimationTypeProperty =
-            DependencyProperty.Register("AnimationType", typeof(AnimationType), typeof(NumberCountdown),
-                new FrameworkPropertyMetadata(AnimationType.Fade,
-                    FrameworkPropertyMetadataOptions.AffectsRender,
-                    OnAnimationTypeChanged));
+        DependencyProperty.Register(
+            "AnimationType", typeof(AnimationType), typeof(NumberCountdown),
+            new FrameworkPropertyMetadata(
+                AnimationType.Fade,
+                FrameworkPropertyMetadataOptions.AffectsRender,
+                OnAnimationTypeChanged
+            )
+        );
 
     public int StartNumber
     {
@@ -97,33 +117,28 @@ public class NumberCountdown : Control
         set => SetValue(AnimationTypeProperty, value);
     }
 
-    #endregion 依赖属性
+    #endregion Dependency Properties
 
-    #region 私有字段
-
-    private DispatcherTimer _timer;
+    #region Private Fields
 
     private Storyboard _animation;
 
-    #endregion 私有字段
+    private FrameworkElement _numberDisplay;
+
+    #endregion Private Fields
+
+    #region Overrides
 
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        InitializeTimer();
+        _numberDisplay = GetTemplateChild("PART_NumberDisplay") as FrameworkElement;
         SetupAnimation();
     }
 
-    #region 初始化方法
+    #endregion Overrides
 
-    private void InitializeTimer()
-    {
-        _timer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-        _timer.Tick += (s, e) => UpdateNumber();
-    }
+    #region Animation Logic
 
     private void SetupAnimation()
     {
@@ -152,42 +167,38 @@ public class NumberCountdown : Control
         }
     }
 
-    #endregion 初始化方法
-
-    #region 动画配置
-
     private void CreateFadeAnimation()
     {
-        var da = new DoubleAnimation
+        var fadeAnimation = new DoubleAnimation
         {
-            Duration = TimeSpan.FromSeconds(AnimationDuration),
             From = 0,
             To = 1,
+            Duration = TimeSpan.FromSeconds(AnimationDuration),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
         };
-        Storyboard.SetTargetProperty(da, new PropertyPath(OpacityProperty));
-        _animation.Children.Add(da);
+        Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath(OpacityProperty));
+        _animation.Children.Add(fadeAnimation);
     }
 
     private void CreateScaleAnimation()
     {
         var scaleX = new DoubleAnimation
         {
-            Duration = TimeSpan.FromSeconds(AnimationDuration),
             From = 1.5,
             To = 1,
+            Duration = TimeSpan.FromSeconds(AnimationDuration),
             EasingFunction = new ElasticEase { Oscillations = 1 }
         };
-        Storyboard.SetTargetProperty(scaleX, new PropertyPath("RenderTransform.ScaleX"));
+        Storyboard.SetTargetProperty(scaleX, new PropertyPath("RenderTransform.Children[0].ScaleX"));
 
         var scaleY = new DoubleAnimation
         {
-            Duration = TimeSpan.FromSeconds(AnimationDuration),
             From = 1.5,
             To = 1,
+            Duration = TimeSpan.FromSeconds(AnimationDuration),
             EasingFunction = new ElasticEase { Oscillations = 1 }
         };
-        Storyboard.SetTargetProperty(scaleY, new PropertyPath("RenderTransform.ScaleY"));
+        Storyboard.SetTargetProperty(scaleY, new PropertyPath("RenderTransform.Children[0].ScaleY"));
 
         _animation.Children.Add(scaleX);
         _animation.Children.Add(scaleY);
@@ -195,26 +206,82 @@ public class NumberCountdown : Control
 
     private void CreateFlipAnimation()
     {
-        var rotate = new DoubleAnimation
+        var flipAnimation = new DoubleAnimation
         {
-            Duration = TimeSpan.FromSeconds(AnimationDuration),
             From = 0,
             To = 360,
+            Duration = TimeSpan.FromSeconds(AnimationDuration),
             EasingFunction = new BounceEase { Bounces = 2 }
         };
-        Storyboard.SetTargetProperty(rotate, new PropertyPath("RenderTransform.Angle"));
-
-        _animation.Children.Add(rotate);
+        Storyboard.SetTargetProperty(flipAnimation, new PropertyPath("RenderTransform.Children[1].Angle"));
+        _animation.Children.Add(flipAnimation);
     }
 
-    #endregion 动画配置
+    private void BeginAnimation()
+    {
+        if (_numberDisplay == null || _animation == null) return;
 
-    #region 事件处理
+        PrepareTransform();
+        ClearPreviousAnimations();
+
+        Storyboard.SetTarget(_animation, _numberDisplay);
+        _animation.Begin(_numberDisplay, true);
+    }
+
+    private void PrepareTransform()
+    {
+        // 强制创建新的 TransformGroup 避免属性被锁定
+        var group = new TransformGroup();
+        group.Children.Add(new ScaleTransform());
+        group.Children.Add(new RotateTransform());
+        _numberDisplay.RenderTransform = group;
+        _numberDisplay.RenderTransformOrigin = new Point(0.5, 0.5);
+    }
+
+    private void ClearPreviousAnimations()
+    {
+        _numberDisplay.BeginAnimation(OpacityProperty, null);
+
+        if (_numberDisplay.RenderTransform is TransformGroup group)
+        {
+            foreach (var transform in group.Children)
+            {
+                if (transform is ScaleTransform scale)
+                {
+                    scale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                    scale.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+                }
+                else if (transform is RotateTransform rotate)
+                {
+                    rotate.BeginAnimation(RotateTransform.AngleProperty, null);
+                }
+            }
+        }
+    }
+
+    private void StopAnimation()
+    {
+        if (_numberDisplay == null)
+        {
+            return;
+        }
+        _animation?.Stop(_numberDisplay);
+    }
+
+    #endregion Animation Logic
+
+    #region Event Handlers
 
     private static void OnStartNumberChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (NumberCountdown)d;
         control.Reset();
+    }
+
+    private static void OnCurrentNumberChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = (NumberCountdown)d;
+        control.IsAnimating = true; // 数字变化时触发动画
     }
 
     private static void OnIsAnimatingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -232,104 +299,36 @@ public class NumberCountdown : Control
 
     private static void OnAnimationTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is NumberCountdown control && control.IsInitialized)
-        {
-            control.SetupAnimation();
-        }
+        var control = (NumberCountdown)d;
+        control.SetupAnimation();
     }
 
-    #endregion 事件处理
+    #endregion Event Handlers
 
-    #region 公共方法
+    #region Public Methods
 
     public void Start()
     {
         CurrentNumber = StartNumber;
-        _timer?.Start();
     }
 
     public void Reset()
     {
-        _timer?.Stop();
         CurrentNumber = StartNumber;
         IsAnimating = false;
     }
 
-    #endregion 公共方法
+    #endregion Public Methods
 
-    #region 私有方法
-
-    private void UpdateNumber()
-    {
-        if (CurrentNumber > 0)
-        {
-            IsAnimating = true;
-            CurrentNumber--;
-        }
-        else
-        {
-            _timer.Stop();
-            RaiseCompletedEvent();
-            IsAnimating = false;
-        }
-    }
-
-    private void BeginAnimation()
-    {
-        var target = GetTemplateChild("PART_NumberDisplay") as FrameworkElement;
-        if (target == null || _animation == null) return;
-
-        PrepareTargetTransform(target);
-        ClearPreviousAnimations(target);
-
-        Storyboard.SetTarget(_animation, target);
-        _animation.Begin(target, true);
-    }
-
-    private void PrepareTargetTransform(FrameworkElement target)
-    {
-        switch (AnimationType)
-        {
-            case AnimationType.Scale:
-                target.RenderTransform = new ScaleTransform();
-                break;
-
-            case AnimationType.Flip:
-                target.RenderTransform = new RotateTransform();
-                break;
-
-            default:
-                target.RenderTransform = null;
-                break;
-        }
-    }
-
-    private void ClearPreviousAnimations(FrameworkElement target)
-    {
-        target.BeginAnimation(OpacityProperty, null);
-        if (target.RenderTransform != null)
-        {
-            target.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-            target.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, null);
-            target.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, null);
-        }
-    }
-
-    private void StopAnimation()
-    {
-        var target = GetTemplateChild("PART_NumberDisplay") as FrameworkElement;
-        _animation?.Stop(target);
-    }
-
-    #endregion 私有方法
-
-    #region 完成事件
+    #region Completed Event
 
     public static readonly RoutedEvent CompletedEvent =
-        EventManager.RegisterRoutedEvent("Completed",
+        EventManager.RegisterRoutedEvent(
+            "Completed",
             RoutingStrategy.Bubble,
             typeof(RoutedEventHandler),
-            typeof(NumberCountdown));
+            typeof(NumberCountdown)
+        );
 
     private void RaiseCompletedEvent()
     {
@@ -342,5 +341,5 @@ public class NumberCountdown : Control
         remove => RemoveHandler(CompletedEvent, value);
     }
 
-    #endregion 完成事件
+    #endregion Completed Event
 }

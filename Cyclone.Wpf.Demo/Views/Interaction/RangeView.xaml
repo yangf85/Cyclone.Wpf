@@ -30,14 +30,12 @@
             <cy:SpacingStackPanel>
                 <cy:NumberCountdown
                     x:Name="CountdownControl"
-                    Width="120"
-                    Height="120"
-                    AnimationDuration="0.5"
+                    Width="200"
+                    Height="200"
                     AnimationType="Scale"
-                    Completed="CountdownControl_Completed"
-                    IsAnimating="{Binding Path=IsChecked, ElementName=AAA}"
+                    IsAnimating="{Binding ElementName=AAA, Path=IsChecked}"
                     NumberColor="Red"
-                    StartNumber="10" />
+                    StartNumber="5" />
                 <ToggleButton
                     x:Name="AAA"
                     Margin="10"

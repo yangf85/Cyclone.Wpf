@@ -11,7 +11,6 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Controls;
 
-[StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(MultiComboBoxItem))]
 [TemplatePart(Name = PART_SelectedItemsControl, Type = (typeof(ItemsControl)))]
 [TemplatePart(Name = PART_OpenButton, Type = (typeof(ToggleButton)))]
 [TemplatePart(Name = PART_Popup, Type = (typeof(Popup)))]
