@@ -10,7 +10,7 @@
              mc:Ignorable="d">
     <Grid Margin="15">
         <cy:FluidTabControl AnimationDuration="0:0:1"
-                            FluidTabPlacement="Right"
+                            FluidTabPlacement="Left"
                             HeaderWidth="120">
             <!--  社交媒体动态  -->
             <cy:FluidTabItem Header="社交动态">
@@ -72,8 +72,6 @@
                         </ComboBox>
                         <DatePicker Width="150" Margin="10,0" />
                     </StackPanel>
-
-
                 </Grid>
             </cy:FluidTabItem>
 
@@ -174,7 +172,6 @@
             <!--  多媒体中心  -->
             <cy:FluidTabItem Header="多媒体">
                 <Grid Height="350" Background="LightCyan">
-
 
                     <!--  播放控制  -->
                     <StackPanel Margin="10"
