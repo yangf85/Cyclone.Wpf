@@ -38,6 +38,7 @@ public partial class MainViewModel : ObservableObject
             "ComboBox" => new ComboBoxView(),
             "ListView" => new CollectionView(),
             "ListBox" => new ListBoxView(),
+            "Notification" => new NotificationView(),
             _ => new object(),
         };
     }
@@ -143,6 +144,11 @@ public partial class SideMenuViewModel : ObservableObject
         {
             Header = "Loading",
             Icon = "\xe891",
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header = "Notification",
+            Icon = "\xe7a3",
         });
     }
 }

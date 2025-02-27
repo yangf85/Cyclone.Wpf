@@ -8,7 +8,7 @@
     d:DesignWidth="250"
     mc:Ignorable="d">
     <core:NotificationDisplayPart.Resources>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Controls/Notifications/NotificationResource.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Controls/Notifications/Notification.xaml" />
     </core:NotificationDisplayPart.Resources>
     <Border
         x:Name="ContentWrapper"

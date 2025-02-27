@@ -1,5 +1,4 @@
-﻿using Cyclone.Wpf.Controls.Notifications;
-using System.Windows;
+﻿using System.Windows;
 using ToastNotifications.Core;
 
 namespace Cyclone.Wpf.Controls.Notifications;

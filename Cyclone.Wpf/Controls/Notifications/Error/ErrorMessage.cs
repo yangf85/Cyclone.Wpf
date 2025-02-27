@@ -1,7 +1,8 @@
-﻿using System.Windows;
+﻿using Cyclone.Wpf.Controls.Notifications;
+using System.Windows;
 using ToastNotifications.Core;
 
-namespace Cyclone.Wpf.Controls.Notifications;
+namespace Cyclone.Wpf.Controls;
 
 public class ErrorMessage : MessageBase<ErrorDisplayPart>
 {

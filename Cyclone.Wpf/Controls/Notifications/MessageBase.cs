@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using ToastNotifications.Core;
 
-namespace Cyclone.Wpf.Controls.Notifications;
+namespace Cyclone.Wpf.Controls;
 
 public abstract class MessageBase<TDisplayPart> : NotificationBase where TDisplayPart : NotificationDisplayPart
 {

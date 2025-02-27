@@ -47,6 +47,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ToolTip.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ValidationControl.xaml" />
 
+
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/AdvancedWindow.xaml" />
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RadioButtonGroup.xaml" />-->
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/MenuStyle.xaml" />-->

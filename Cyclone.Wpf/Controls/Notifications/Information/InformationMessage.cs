@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using ToastNotifications.Core;
 
-namespace Cyclone.Wpf.Controls.Notifications;
+namespace Cyclone.Wpf.Controls;
 
 public class InformationMessage : MessageBase<InformationDisplayPart>
 {

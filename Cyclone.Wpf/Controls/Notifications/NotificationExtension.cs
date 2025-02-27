@@ -1,5 +1,4 @@
-﻿using Cyclone.Wpf.Controls.Notifications;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 using ToastNotifications;
 using ToastNotifications.Core;
 
-namespace Cyclone.Wpf.Controls.Notifications;
+namespace Cyclone.Wpf.Controls;
 
 public static class NotificationExtension
 {
