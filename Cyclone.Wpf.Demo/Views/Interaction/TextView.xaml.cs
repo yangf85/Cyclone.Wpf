@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,17 @@ namespace Cyclone.Wpf.Demo.Views
         public TextView()
         {
             InitializeComponent();
+
+            DataContext= new TextViewModel();
         }
+    }
+
+    public partial class TextViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial string Text { get; set; } = "Hello World";
+
+        [ObservableProperty]
+        public partial double Number { get; set; } = 1800d;
     }
 }

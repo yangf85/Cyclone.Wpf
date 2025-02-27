@@ -5,14 +5,16 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.25.2.0</AssemblyVersion>
-    <FileVersion>1.25.2.0</FileVersion>
+    <AssemblyVersion>1.25.2.1</AssemblyVersion>
+    <FileVersion>1.25.2.1</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
     <Copyright>CopyRight@Cyclone.Com</Copyright>
     <RepositoryUrl>https://github.com/yangf85/Cyclone.Wpf</RepositoryUrl>
     <Description>Cyclone.Wpf</Description>
 	  <PackageOutputPath>E:\YangF\Code\Nugets</PackageOutputPath>
+
+	  <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
