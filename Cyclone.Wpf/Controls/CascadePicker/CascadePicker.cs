@@ -51,7 +51,7 @@ public class CascadePicker : Selector
         if (e.OriginalSource is CascadePickerItem item)
         {
             SetValue(DisplayedNodePathProperty, GetSelectedPath(item));
-            SetCurrentValue(SelectedItemProperty, item);
+            SetCurrentValue(SelectedItemProperty, item.DataContext);
             RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
             if (!item.HasItems)
             {
@@ -171,6 +171,11 @@ public class CascadePicker : Selector
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
+
+        if (element is CascadePickerItem container)
+        {
+            container.DataContext = item; 
+        }
     }
 
     public override void OnApplyTemplate()

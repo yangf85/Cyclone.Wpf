@@ -30,22 +30,11 @@ public partial class SelectorView : UserControl
         DataContext = new SelectorViewModel();
     }
 
-    private void CascadePicker_SelectedChanged(object sender, RoutedEventArgs e)
-    {
-        var t = (CascadePicker)sender;
-        var t1 = t.SelectedItem;
-    }
+   
 
-    private void CascadePicker_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        var t = (CascadePicker)sender;
-        var t1 = t.SelectedItem;
-    }
+ 
 
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-    }
-
+   
     private void OnChangeContent(object sender, RoutedEventArgs e)
     {
         // 切换内容
@@ -58,15 +47,7 @@ public partial class SelectorView : UserControl
         };
     }
 
-    private void CascadePicker_Loaded(object sender, RoutedEventArgs e)
-    {
-        var t = (CascadePicker)sender;
-        var t1 = t.SelectedItem;
-    }
-
-    private void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-    }
+  
 }
 
 public partial class SelectorViewModel : ObservableObject

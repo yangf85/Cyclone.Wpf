@@ -65,8 +65,8 @@
     <SolidColorBrush x:Key="Warning.Foreground" Color="#FF000000" />
 
     <!--  错误  -->
-    <SolidColorBrush x:Key="Error.Background" Color="#FFDDE4EA" />
-    <SolidColorBrush x:Key="Error.Foreground" Color="#FFB71C1C" />
+    <SolidColorBrush x:Key="Error.Background" Color="#FFB71C1C" />
+    <SolidColorBrush x:Key="Error.Foreground" Color="#FFDDE4EA" />
     <SolidColorBrush x:Key="Error.Border" Color="#FFB71C1C" />
 
     <!--  成功  -->

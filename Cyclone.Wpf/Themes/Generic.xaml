@@ -45,7 +45,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/MultiComboBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ToolTip.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ValidationControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ValidationTemplate.xaml" />
 
 
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/AdvancedWindow.xaml" />

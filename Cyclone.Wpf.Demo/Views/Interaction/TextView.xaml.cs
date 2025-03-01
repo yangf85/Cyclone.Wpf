@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,12 +30,26 @@ namespace Cyclone.Wpf.Demo.Views
         }
     }
 
-    public partial class TextViewModel : ObservableObject
+    public partial class TextViewModel : ObservableValidator
     {
+        [Required]
+        [NotifyDataErrorInfo]
         [ObservableProperty]
-        public partial string Text { get; set; } = "Hello World";
+        public partial string Text { get; set; }
 
         [ObservableProperty]
         public partial double Number { get; set; } = 1800d;
+
+        public TextViewModel()
+        {
+
+            this.ErrorsChanged += TextViewModel_ErrorsChanged;
+        }
+
+        private void TextViewModel_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
+        {
+            var tt = HasErrors;
+            var t = 1;
+        }
     }
 }

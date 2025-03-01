@@ -12,7 +12,7 @@
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="TextBox">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <TextBox Text="One" />
+                <TextBox Text="{Binding Text,  ValidatesOnNotifyDataErrors=True}" />
                 <TextBox Text="Two" />
                 <TextBox Text="Three" />
                 <TextBox Text="Four" />
