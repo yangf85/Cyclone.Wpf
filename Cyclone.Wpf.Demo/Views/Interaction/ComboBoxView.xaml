@@ -4,34 +4,45 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cy="https://www.cyclone/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:ComboBoxViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
         <cy:SpacingStackPanel Spacing="20">
             <HeaderedContentControl Header="ComboBox">
-                <cy:SpacingUniformGrid
-                    HorizontalSpacing="5"
-                    Rows="1">
+                <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                     <ComboBox>
-                        <ComboBoxItem>Item 1</ComboBoxItem>
+                        <ComboBoxItem Content="Item 1">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Selected">
+                                    <i:InvokeCommandAction Command="{Binding ItemSelectedCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBoxItem>
                         <ComboBoxItem>Item 2</ComboBoxItem>
                         <ComboBoxItem>Item 3</ComboBoxItem>
                         <ComboBoxItem>Item 4</ComboBoxItem>
                     </ComboBox>
-                    <ComboBox />
+                    <ComboBox
+                        x:Name="SafeComboBox"
+                        DisplayMemberPath="FirstName"
+                        ItemsSource="{Binding Data}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SwitchItemCommand}" CommandParameter="{Binding ElementName=SafeComboBox, Path=SelectedItem}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
                     <ComboBox />
                 </cy:SpacingUniformGrid>
             </HeaderedContentControl>
             <HeaderedContentControl Header="MultiComboBox">
-                <cy:SpacingUniformGrid
-                    HorizontalSpacing="5"
-                    Rows="1">
-                    <cy:MultiComboBox
-                        MaxColumns="5"
-                        MaxRows="1">
+                <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                    <cy:MultiComboBox MaxColumns="5" MaxRows="1">
                         <cy:MultiComboBox>Item 1</cy:MultiComboBox>
                         <cy:MultiComboBox>Item 2</cy:MultiComboBox>
                         <cy:MultiComboBox>Item 3</cy:MultiComboBox>

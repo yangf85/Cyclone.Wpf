@@ -1,5 +1,9 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Demo.Helper;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +27,33 @@ namespace Cyclone.Wpf.Demo.Views
         public ComboBoxView()
         {
             InitializeComponent();
+            DataContext = new ComboBoxViewModel();
+        }
+    }
+
+    public partial class ComboBoxViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> Data { get; set; }
+
+        public ComboBoxViewModel()
+        {
+            Data = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(10));
+        }
+
+        [RelayCommand]
+        void SwitchItem(FakerData item)
+        {
+            if (item != null)
+            {
+                MessageBox.Show($"{item.FirstName} {item.LastName}");
+            }
+        }
+
+        [RelayCommand]
+        void ItemSelected()
+        {
+            MessageBox.Show("Item Selected");
         }
     }
 }

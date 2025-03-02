@@ -14,7 +14,6 @@ using System.Windows.Media;
 
 namespace Cyclone.Wpf.Helpers;
 
-
 public static class WindowHelper
 {
     #region IsDragEnabled
@@ -25,16 +24,6 @@ public static class WindowHelper
             typeof(bool),
             typeof(WindowHelper),
             new PropertyMetadata(false, OnIsDragEnabledChanged));
-
-    public static bool GetIsDragEnabled(UIElement element)
-    {
-        return (bool)element.GetValue(IsDragEnabledProperty);
-    }
-
-    public static void SetIsDragEnabled(UIElement element, bool value)
-    {
-        element.SetValue(IsDragEnabledProperty, value);
-    }
 
     private static void OnIsDragEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -60,6 +49,16 @@ public static class WindowHelper
         }
     }
 
+    public static bool GetIsDragEnabled(UIElement element)
+    {
+        return (bool)element.GetValue(IsDragEnabledProperty);
+    }
+
+    public static void SetIsDragEnabled(UIElement element, bool value)
+    {
+        element.SetValue(IsDragEnabledProperty, value);
+    }
+
     #endregion IsDragEnabled
 
     #region IsDoubleClickMaximizeEnabled
@@ -70,16 +69,6 @@ public static class WindowHelper
             typeof(bool),
             typeof(WindowHelper),
             new PropertyMetadata(false, OnIsDoubleClickMaximizeEnabledChanged));
-
-    public static bool GetIsDoubleClickMaximizeEnabled(UIElement element)
-    {
-        return (bool)element.GetValue(IsDoubleClickMaximizeEnabledProperty);
-    }
-
-    public static void SetIsDoubleClickMaximizeEnabled(UIElement element, bool value)
-    {
-        element.SetValue(IsDoubleClickMaximizeEnabledProperty, value);
-    }
 
     private static void OnIsDoubleClickMaximizeEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -115,6 +104,16 @@ public static class WindowHelper
         }
     }
 
+    public static bool GetIsDoubleClickMaximizeEnabled(UIElement element)
+    {
+        return (bool)element.GetValue(IsDoubleClickMaximizeEnabledProperty);
+    }
+
+    public static void SetIsDoubleClickMaximizeEnabled(UIElement element, bool value)
+    {
+        element.SetValue(IsDoubleClickMaximizeEnabledProperty, value);
+    }
+
     #endregion IsDoubleClickMaximizeEnabled
 
     #region IsShowSystemMenuOnRightClick
@@ -125,16 +124,6 @@ public static class WindowHelper
             typeof(bool),
             typeof(WindowHelper),
             new PropertyMetadata(false, OnIsShowSystemMenuOnRightClickChanged));
-
-    public static bool GetIsShowSystemMenuOnRightClick(UIElement element)
-    {
-        return (bool)element.GetValue(IsShowSystemMenuOnRightClickProperty);
-    }
-
-    public static void SetIsShowSystemMenuOnRightClick(UIElement element, bool value)
-    {
-        element.SetValue(IsShowSystemMenuOnRightClickProperty, value);
-    }
 
     private static void OnIsShowSystemMenuOnRightClickChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -186,6 +175,16 @@ public static class WindowHelper
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+    public static bool GetIsShowSystemMenuOnRightClick(UIElement element)
+    {
+        return (bool)element.GetValue(IsShowSystemMenuOnRightClickProperty);
+    }
+
+    public static void SetIsShowSystemMenuOnRightClick(UIElement element, bool value)
+    {
+        element.SetValue(IsShowSystemMenuOnRightClickProperty, value);
+    }
 
     #endregion IsShowSystemMenuOnRightClick
 }
