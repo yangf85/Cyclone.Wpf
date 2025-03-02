@@ -24,9 +24,10 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ProgressBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberCountdown.xaml" />
 
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/GridView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListBox.xaml" />
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListView.xaml" />-->
+
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/GridView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListView.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TabControl.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/FluidTabControl.xaml" />
