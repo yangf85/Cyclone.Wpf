@@ -39,6 +39,7 @@ public partial class MainViewModel : ObservableObject
             "ListView" => new CollectionView(),
             "ListBox" => new ListBoxView(),
             "Notification" => new NotificationView(),
+            "TransferBox"=> new TransferBoxView(),
             _ => new object(),
         };
     }
@@ -75,6 +76,11 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="ComboBox",
+                    Icon= "\xe605",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="TransferBox",
                     Icon= "\xe605",
                 },
             ]

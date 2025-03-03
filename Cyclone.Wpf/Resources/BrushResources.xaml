@@ -3,6 +3,10 @@
     <!--  全局背景  -->
     <SolidColorBrush x:Key="Global.Background" Color="#FFFFFF" />
 
+    <!--  标题  -->
+    <SolidColorBrush x:Key="Header.Background" Color="#FF0D47A1" />
+    <SolidColorBrush x:Key="Header.Foreground" Color="#FFFFFF" />
+
     <!--  基础  -->
     <SolidColorBrush x:Key="Default.Border" Color="#757575" />
     <SolidColorBrush x:Key="Default.Background" Color="#E0E0E0" />
