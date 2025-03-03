@@ -10,31 +10,45 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <cy:SpacingStackPanel Spacing="10">
-        <StackPanel>
-            <Label Background="{DynamicResource WarningBackgroundBrush}" Content="Normal" />
-            <DataGrid
-                Height="300"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                ItemsSource="{Binding DataGridData}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
-                    <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
-                    <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
-                    <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
-                    <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding City}"
-                        Header="City" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <cy:Pagination
-                Margin="0,5,0,0"
-                ItemCount="{Binding Total, Mode=TwoWay}"
-                PerpageCount="{Binding PerPageCount, Mode=TwoWay}"
-                PageIndex="{Binding PageIndex, Mode=TwoWay}" />
-        </StackPanel>
-    </cy:SpacingStackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <cy:SpacingStackPanel Grid.Column="0" Spacing="10">
+            <StackPanel>
+                <DataGrid
+                    Height="300"
+                    cy:DataGridHelper.SelectedItems="{Binding SelectedItems}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ItemsSource="{Binding DataGridData}"
+                    SelectionMode="Extended">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
+                        <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
+                        <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
+                        <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
+                        <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding City}"
+                            Header="City" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <cy:Pagination
+                    Margin="0,5,0,0"
+                    ItemCount="{Binding Total, Mode=TwoWay}"
+                    PerpageCount="{Binding PerPageCount, Mode=TwoWay}"
+                    PageIndex="{Binding PageIndex, Mode=TwoWay}" />
+            </StackPanel>
+        </cy:SpacingStackPanel>
+        <GroupBox
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Header="Tips">
+            <Button Command="{Binding ShowSelectedItemsCommand}" Content="SelectedItems" />
+        </GroupBox>
+    </Grid>
 </UserControl>

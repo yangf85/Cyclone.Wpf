@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
 using System;
@@ -28,27 +29,52 @@ public partial class DataGridView : UserControl
     public DataGridView()
     {
         InitializeComponent();
-        DataContext= new DataGridViewModel();
+        DataContext = new DataGridViewModel();
     }
 }
 
 public partial class DataGridViewModel : ObservableObject, IPagination
 {
+    List<FakerData> _source;
+
     [ObservableProperty]
     public partial int PageIndex { get; set; } = 5;
+
     [ObservableProperty]
     public partial int PerPageCount { get; set; } = 10;
+
     [ObservableProperty]
     public partial int Total { get; set; } = 100;
+
     [ObservableProperty]
     public partial ObservableCollection<FakerData> DataGridData { get; set; } = [];
 
-    List<FakerData> _source;
+    [ObservableProperty]
+    public partial ObservableCollection<FakerData> SelectedItems { get; set; } = [];
+
     public DataGridViewModel()
     {
         _source = FakerDataHelper.GenerateFakerDataCollection(100);
         DataGridData = [.. _source.Take(50)];
         Update();
+    }
+
+    void Update()
+    {
+        DataGridData = [.. _source.Skip((PageIndex - 1) * PerPageCount).Take(PerPageCount)];
+    }
+
+    [RelayCommand]
+    void ShowSelectedItems()
+    {
+        if (SelectedItems == null || SelectedItems.Count == 0)
+        {
+            MessageBox.Show("No selected items");
+        }
+        else
+        {
+            MessageBox.Show($"{string.Join("\n", SelectedItems)}");
+        }
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -64,12 +90,8 @@ public partial class DataGridViewModel : ObservableObject, IPagination
             case nameof(Total):
                 Update();
                 break;
+
             default: return;
         }
-    }
-
-    void Update()
-    {
-        DataGridData = [.. _source.Skip((PageIndex - 1) * PerPageCount).Take(PerPageCount)];
     }
 }

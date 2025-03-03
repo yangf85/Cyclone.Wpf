@@ -7,41 +7,50 @@
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GroupBox}">
                     <Border
                         x:Name="RootBorder"
+                        Margin="{TemplateBinding Padding}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid Margin="{TemplateBinding Margin}" SnapsToDevicePixels="true">
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <Grid>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border
+                            <Grid
                                 x:Name="Header"
                                 Grid.Row="0"
                                 Height="{DynamicResource Height.Horizontal.Header}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0,0,0,1">
+                                Background="{TemplateBinding Background}">
                                 <ContentPresenter
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    ContentSource="Header"
-                                    RecognizesAccessKey="True"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                    TextElement.FontWeight="Medium"
-                                    TextElement.Foreground="{TemplateBinding Foreground}" />
-                            </Border>
-                            <ContentPresenter
+                                    ContentSource="Header" />
+                            </Grid>
+                            <Rectangle
                                 Grid.Row="1"
-                                Margin="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                Height="1"
+                                Fill="{TemplateBinding BorderBrush}" />
+                            <ContentPresenter
+                                Grid.Row="2"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 TextElement.Foreground="{DynamicResource Default.Foreground}" />
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="Header" Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
