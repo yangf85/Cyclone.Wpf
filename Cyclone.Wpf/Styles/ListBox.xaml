@@ -1,12 +1,13 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="DefaultListBoxItemStyle" TargetType="ListBoxItem">
+    <Style x:Key="ListBoxItem.Style.Default" TargetType="ListBoxItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -14,34 +15,38 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Root"
-                            Height="{TemplateBinding Height}"
-                            Background="{TemplateBinding Background}"
-                            SnapsToDevicePixels="True"
-                            UseLayoutRounding="True">
+                    <Border
+                        x:Name="RootBorder"
+                        Height="{TemplateBinding Height}"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True"
+                        UseLayoutRounding="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="ListBoxItem" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="SelectedCheckBox"
-                                      Grid.Column="0"
-                                      VerticalAlignment="Center"
-                                      VerticalContentAlignment="Center"
-                                      IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
-                                      Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-                            <ContentPresenter Grid.Column="1"
-                                              Margin="5,0,0,0"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <CheckBox
+                                x:Name="SelectedCheckBox"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
+                                Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Selected.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Selected.Background}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Invert.Foreground}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Root" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -49,34 +54,37 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="ListBoxItem" />
+    <Style BasedOn="{StaticResource ListBoxItem.Style.Default}" TargetType="ListBoxItem" />
 
     <Style x:Key="ListBox.Style.Basic" TargetType="ListBox">
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource DefaultListBoxItemStyle}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItem.Style.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <Border x:Name="Root"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="Root"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <CheckBox x:Name="SelectAllCheckBox"
-                                          Grid.Row="0"
-                                          HorizontalAlignment="Left"
-                                          Content="选择全部"
-                                          IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
-                                          Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-                                <ItemsPresenter Grid.Row="1"
-                                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                                <CheckBox
+                                    x:Name="SelectAllCheckBox"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    Content="选择全部"
+                                    IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
+                                    Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                                <ItemsPresenter
+                                    Grid.Row="1"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             </Grid>
                         </ScrollViewer>
                     </Border>

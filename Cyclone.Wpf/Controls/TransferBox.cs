@@ -48,61 +48,16 @@ public class TransferBox : Control
 
     #region Command
 
+    #region ToSourceCommand
+
     public static RoutedCommand ToSourceCommand { get; private set; } = new RoutedCommand("ToSource", typeof(TransferBox));
 
-    public static RoutedCommand ToTargetCommand { get; private set; } = new RoutedCommand("ToTarget", typeof(TransferBox));
-
-    private static void MoveItem(TransferBox shuttleBox, bool moveFlag)
+    private static void OnToSourceCommand(object sender, ExecutedRoutedEventArgs e)
     {
-        if (shuttleBox.ItemsSource == null || shuttleBox.ItemsTarget == null) { return; }
-        var ItemSourceListBox = shuttleBox.GetTemplateChild(PART_SourceListBox) as ListBox;
-        var targetListBox = shuttleBox.GetTemplateChild(PART_TargetListBox) as ListBox;
-        if (ItemSourceListBox == null || targetListBox == null) { return; }
-
-        //对所有选择项进行移动，如果选择项为空，从第1项开始移动
-        if (moveFlag)
+        if (sender is TransferBox shuttleBox)
         {
-            if (ItemSourceListBox.SelectedItems != null && ItemSourceListBox.SelectedItems.Count != 0)
-            {
-                for (int i = ItemSourceListBox.SelectedItems.Count - 1; i >= 0; i--)
-                {
-                    shuttleBox.ItemsTarget.Add(ItemSourceListBox.SelectedItems[0]);
-                    shuttleBox.ItemsSource.Remove(ItemSourceListBox.SelectedItems[0]);
-                }
-            }
-            else
-            {
-                if (shuttleBox.ItemsSource.Count > 0)
-                {
-                    var last = shuttleBox.ItemsSource[0];
-                    shuttleBox.ItemsTarget.Add(last);
-                    shuttleBox.ItemsSource.Remove(last);
-                }
-            }
+            MoveItem(shuttleBox, false);
         }
-        else
-        {
-            if (targetListBox.SelectedItems != null && targetListBox.SelectedItems.Count != 0)
-            {
-                for (int i = targetListBox.SelectedItems.Count - 1; i >= 0; i--)
-                {
-                    shuttleBox.ItemsSource.Add(targetListBox.SelectedItems[0]);
-                    shuttleBox.ItemsTarget.Remove(targetListBox.SelectedItems[0]);
-                }
-            }
-            else
-            {
-                if (shuttleBox.ItemsTarget.Count > 0)
-                {
-                    var last = shuttleBox.ItemsTarget[0];
-                    shuttleBox.ItemsSource.Add(last);
-                    shuttleBox.ItemsTarget.Remove(last);
-                }
-            }
-        }
-
-        shuttleBox.RaiseEvent(new RoutedEventArgs(ItemsSourceChangedEvent, shuttleBox));
-        shuttleBox.RaiseEvent(new RoutedEventArgs(ItemsTargetChangedEvent, shuttleBox));
     }
 
     private static void OnCanToSourceCommand(object sender, CanExecuteRoutedEventArgs e)
@@ -114,20 +69,71 @@ public class TransferBox : Control
         }
     }
 
+    #endregion ToSourceCommand
+
+    #region ToTargetCommand
+
+    public static RoutedCommand ToTargetCommand { get; private set; } = new RoutedCommand("ToTarget", typeof(TransferBox));
+
+    private static void MoveItem(TransferBox transferBox, bool moveFlag)
+    {
+        if (transferBox.ItemsSource == null || transferBox.ItemsTarget == null) { return; }
+        var ItemSourceListBox = transferBox.GetTemplateChild(PART_SourceListBox) as ListBox;
+        var targetListBox = transferBox.GetTemplateChild(PART_TargetListBox) as ListBox;
+        if (ItemSourceListBox == null || targetListBox == null) { return; }
+
+        //对所有选择项进行移动，如果选择项为空，从第1项开始移动
+        if (moveFlag)
+        {
+            if (ItemSourceListBox.SelectedItems != null && ItemSourceListBox.SelectedItems.Count != 0)
+            {
+                for (int i = ItemSourceListBox.SelectedItems.Count - 1; i >= 0; i--)
+                {
+                    transferBox.ItemsTarget.Add(ItemSourceListBox.SelectedItems[0]);
+                    transferBox.ItemsSource.Remove(ItemSourceListBox.SelectedItems[0]);
+                }
+            }
+            else
+            {
+                if (transferBox.ItemsSource.Count > 0)
+                {
+                    var last = transferBox.ItemsSource[0];
+                    transferBox.ItemsTarget.Add(last);
+                    transferBox.ItemsSource.Remove(last);
+                }
+            }
+        }
+        else
+        {
+            if (targetListBox.SelectedItems != null && targetListBox.SelectedItems.Count != 0)
+            {
+                for (int i = targetListBox.SelectedItems.Count - 1; i >= 0; i--)
+                {
+                    transferBox.ItemsSource.Add(targetListBox.SelectedItems[0]);
+                    transferBox.ItemsTarget.Remove(targetListBox.SelectedItems[0]);
+                }
+            }
+            else
+            {
+                if (transferBox.ItemsTarget.Count > 0)
+                {
+                    var last = transferBox.ItemsTarget[0];
+                    transferBox.ItemsSource.Add(last);
+                    transferBox.ItemsTarget.Remove(last);
+                }
+            }
+        }
+
+        transferBox.RaiseEvent(new RoutedEventArgs(ItemsSourceChangedEvent, transferBox));
+        transferBox.RaiseEvent(new RoutedEventArgs(ItemsTargetChangedEvent, transferBox));
+    }
+
     private static void OnCanToTargetCommand(object sender, CanExecuteRoutedEventArgs e)
     {
         var shuttleBox = sender as TransferBox;
         if (shuttleBox != null)
         {
             e.CanExecute = shuttleBox.ItemsSource != null && shuttleBox.ItemsSource.Count > 0;
-        }
-    }
-
-    private static void OnToSourceCommand(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (sender is TransferBox shuttleBox)
-        {
-            MoveItem(shuttleBox, false);
         }
     }
 
@@ -139,12 +145,66 @@ public class TransferBox : Control
         }
     }
 
+    #endregion ToTargetCommand
+
     #endregion Command
 
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
     }
+
+    #region SourceHeader
+
+    public static readonly DependencyProperty SourceHeaderProperty =
+        DependencyProperty.Register(nameof(SourceHeader), typeof(object), typeof(TransferBox), new PropertyMetadata(default(object)));
+
+    public object SourceHeader
+    {
+        get => (object)GetValue(SourceHeaderProperty);
+        set => SetValue(SourceHeaderProperty, value);
+    }
+
+    #endregion SourceHeader
+
+    #region TargetHeader
+
+    public static readonly DependencyProperty TargetHeaderProperty =
+        DependencyProperty.Register(nameof(TargetHeader), typeof(object), typeof(TransferBox), new PropertyMetadata(default(object)));
+
+    public object TargetHeader
+    {
+        get => (object)GetValue(TargetHeaderProperty);
+        set => SetValue(TargetHeaderProperty, value);
+    }
+
+    #endregion TargetHeader
+
+    #region SourceDismemberPath
+
+    public static readonly DependencyProperty SourceDismemberPathProperty =
+        DependencyProperty.Register(nameof(SourceDismemberPath), typeof(string), typeof(TransferBox), new PropertyMetadata(default(string)));
+
+    public string SourceDismemberPath
+    {
+        get => (string)GetValue(SourceDismemberPathProperty);
+        set => SetValue(SourceDismemberPathProperty, value);
+    }
+
+    #endregion SourceDismemberPath
+
+    #region TargetDismemberPath
+
+    public static readonly DependencyProperty TargetDismemberPathProperty =
+        DependencyProperty.Register(nameof(TargetDismemberPath), typeof(string), typeof(TransferBox), new PropertyMetadata(default(string)));
+
+    public string TargetDismemberPath
+    {
+        get => (string)GetValue(TargetDismemberPathProperty);
+        set => SetValue(TargetDismemberPathProperty, value);
+    }
+
+    #endregion TargetDismemberPath
 
     #region ItemsSource
 
@@ -195,32 +255,6 @@ public class TransferBox : Control
     }
 
     #endregion TargetChanged
-
-    #region SelectionMode
-
-    public static readonly DependencyProperty SelectionModeProperty =
-        DependencyProperty.Register(nameof(SelectionMode), typeof(SelectionMode), typeof(TransferBox), new PropertyMetadata(default(SelectionMode)));
-
-    public SelectionMode SelectionMode
-    {
-        get => (SelectionMode)GetValue(SelectionModeProperty);
-        set => SetValue(SelectionModeProperty, value);
-    }
-
-    #endregion SelectionMode
-
-    #region Orientation
-
-    public static readonly DependencyProperty OrientationProperty =
-        DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(TransferBox), new PropertyMetadata(default(Orientation)));
-
-    public Orientation Orientation
-    {
-        get => (Orientation)GetValue(OrientationProperty);
-        set => SetValue(OrientationProperty, value);
-    }
-
-    #endregion Orientation
 
     #region ItemTemplate
 

@@ -4,8 +4,12 @@
     <SolidColorBrush x:Key="Global.Background" Color="#FFFFFF" />
 
     <!--  标题  -->
-    <SolidColorBrush x:Key="Header.Background" Color="#FF0D47A1" />
-    <SolidColorBrush x:Key="Header.Foreground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Header.Background" Color="#E1F5FE" />
+    <SolidColorBrush x:Key="Header.Foreground" Color="#212121" />
+
+    <!--  内容  -->
+    <SolidColorBrush x:Key="Container.Background" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Container.Foreground" Color="#212121" />
 
     <!--  基础  -->
     <SolidColorBrush x:Key="Default.Border" Color="#757575" />
@@ -109,7 +113,6 @@
     <!--  隔行换色  -->
     <SolidColorBrush x:Key="Alternation.Dark" Color="#E1F5FE" />
     <SolidColorBrush x:Key="Alternation.Light" Color="#FFFFFFFF" />
-
 
     <!--  动画和过渡  -->
     <SolidColorBrush x:Key="Transition.Background" Color="#80DDE4EA" />

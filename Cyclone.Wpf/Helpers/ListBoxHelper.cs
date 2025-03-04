@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace Cyclone.Wpf.Helpers;
 
@@ -21,10 +22,6 @@ public class ListBoxHelper
             typeof(bool),
             typeof(ListBoxHelper),
             new PropertyMetadata(false, OnIsSelectedAllChanged));
-
-    public static bool GetIsSelectedAll(ListBox obj) => (bool)obj.GetValue(IsSelectedAllProperty);
-
-    public static void SetIsSelectedAll(ListBox obj, bool value) => obj.SetValue(IsSelectedAllProperty, value);
 
     private static void OnIsSelectedAllChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -55,6 +52,10 @@ public class ListBoxHelper
         }
     }
 
+    public static bool GetIsSelectedAll(ListBox obj) => (bool)obj.GetValue(IsSelectedAllProperty);
+
+    public static void SetIsSelectedAll(ListBox obj, bool value) => obj.SetValue(IsSelectedAllProperty, value);
+
     #endregion IsSelectedAll
 
     #region IsSelectAllEnabled
@@ -80,10 +81,6 @@ public class ListBoxHelper
             typeof(IList),
             typeof(ListBoxHelper),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemsChanged));
-
-    public static IList GetSelectedItems(ListBox obj) => (IList)obj.GetValue(SelectedItemsProperty);
-
-    public static void SetSelectedItems(ListBox obj, IList value) => obj.SetValue(SelectedItemsProperty, value);
 
     private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -135,6 +132,10 @@ public class ListBoxHelper
             SetIsSelectedAll(listBox, GetIsSelectAllEnabled(listBox) && listBox.SelectedItems.Count == listBox.Items.Count);
         }
     }
+
+    public static IList GetSelectedItems(ListBox obj) => (IList)obj.GetValue(SelectedItemsProperty);
+
+    public static void SetSelectedItems(ListBox obj, IList value) => obj.SetValue(SelectedItemsProperty, value);
 
     #endregion SelectedItems
 }
