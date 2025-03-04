@@ -117,7 +117,7 @@ public class CascadePickerItem : HeaderedItemsControl, ICascadeNode
 
     public static readonly RoutedEvent ItemClickEvent = EventManager.RegisterRoutedEvent("ItemClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePickerItem));
 
-    private void OnItemClick(object sender, RoutedEventArgs e)
+    protected virtual void OnItemClick(object sender, RoutedEventArgs e)
     {
         RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
     }

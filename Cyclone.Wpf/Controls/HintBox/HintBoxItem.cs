@@ -14,29 +14,67 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Cyclone.UI.Controls
+namespace Cyclone.Wpf.Controls;
+
+public class HintBoxItem : ComboBoxItem,IHintText
 {
-    public class HintBoxItem : ComboBoxItem
+    private HintBox _ParentHintBox => ItemsControl.ItemsControlFromItemContainer(this) as HintBox;
+
+
+    #region Override
+
+  
+    protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
     {
-        private HintBox _ParentHintBox => ItemsControl.ItemsControlFromItemContainer(this) as HintBox;
-
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-            _ParentHintBox?.NotifyHintBoxItemMouseLeftButtonDown(this);
-            base.OnMouseLeftButtonDown(e);
-        }
-
-        protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            e.Handled = true;
-            _ParentHintBox?.NotifyHintBoxItemMouseEnter(this);
-            base.OnMouseEnter(e);
-        }
-
-        internal void SetHighlight(bool highlight)
-        {
-            IsHighlighted = highlight;
-        }
+        base.OnPreviewMouseLeftButtonDown(e);
+      
     }
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnMouseLeftButtonDown(e);
+        _ParentHintBox?.NotifyHintBoxItemMouseLeftButtonDown(this);
+        RaiseEvent(new RoutedEventArgs(ClickedEvent, this));
+        e.Handled = true;
+    }
+
+    protected override void OnMouseEnter(MouseEventArgs e)
+    {
+        base.OnMouseEnter(e);
+        _ParentHintBox?.NotifyHintBoxItemMouseEnter(this);
+        e.Handled = true;
+    }
+
+    internal void SetHighlight(bool highlight)
+    {
+        IsHighlighted = highlight;
+    }
+    #endregion
+
+    #region HintText
+    public string HintText
+    {
+        get => (string)GetValue(HintTextProperty);
+        set => SetValue(HintTextProperty, value);
+    }
+  
+
+    public static readonly DependencyProperty HintTextProperty =
+        DependencyProperty.Register(nameof(HintText), typeof(string), typeof(HintBoxItem), new PropertyMetadata(default(string)));
+
+    #endregion
+
+    #region Clicked
+    public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent("Clicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBoxItem));
+    public event RoutedEventHandler Clicked
+    {
+        add { AddHandler(ClickedEvent, value); }
+        remove { RemoveHandler(ClickedEvent, value); }
+    }
+
+    protected virtual void OnClicked(RoutedEventArgs e)
+    {
+        RaiseEvent(e);
+    }
+
+    #endregion
 }

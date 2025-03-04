@@ -1,0 +1,161 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
+                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <ControlTemplate x:Key="HintBoxItem.ControlTemplate.Basic" TargetType="ctl:HintBoxItem">
+        <Border x:Name="RootBorder"
+                Height="{TemplateBinding Height}"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                SnapsToDevicePixels="True"
+                UseLayoutRounding="True">
+            <ContentPresenter Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
+
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="HintBoxItem.Style.Basic" TargetType="ctl:HintBoxItem">
+        <Setter Property="Template" Value="{StaticResource HintBoxItem.ControlTemplate.Basic}" />
+        <Setter Property="Height" Value="{DynamicResource HorizontalControlHeight}" />
+        <Setter Property="Background" Value="{DynamicResource NormalTransparent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+
+    </Style>
+
+    <Style x:Key="HintBox.ButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </Grid>
+                    <ControlTemplate.Triggers />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="HintBox.InputTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="1,0" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="HintBox.ControlTemplate.Basic" TargetType="ctl:HintBox">
+        <Border Name="RootBorder"
+                Grid.Column="0"
+                Margin="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                SnapsToDevicePixels="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="PresenterGrid" Grid.Column="0">
+                    <Popup x:Name="PART_DisplayPopup"
+                           ctl:PopupBox.IsPositionUpdate="True"
+                           AllowsTransparency="true"
+                           IsOpen="{TemplateBinding IsOpenPopup}"
+                           Placement="Bottom"
+                           PlacementTarget="{Binding ElementName=RootBorder}"
+                           PopupAnimation="Slide"
+                           StaysOpen="True">
+                        <Border x:Name="ExpansionBorder"
+                                Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
+                                Background="{DynamicResource Container.Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="DropDownScrollViewer"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Continue" />
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                    <TextBox x:Name="PART_InputTextBox"
+                             Width="{Binding ActualWidth, ElementName=PresenterGrid}"
+                             Background="Transparent"
+                             Style="{StaticResource HintBox.InputTextBoxStyle}"
+                             Text="{Binding Path=InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                </Grid>
+                <Button x:Name="PART_ClearTextButton"
+                        Grid.Column="1"
+                        Margin="0,0,5,0"
+                        Command="{x:Static ctl:HintBox.ClearTextCommand}"
+                        Focusable="False"
+                        IsTabStop="False"
+                        Style="{StaticResource HintBox.ButtonStyle}" />
+                <Button x:Name="PART_HintButton"
+                        Grid.Column="2"
+                        Width="40"
+                        Margin="0,0,5,0"
+                        Command="{x:Static ctl:HintBox.HintCommand}"
+                        Focusable="False"
+                        IsTabStop="False" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="HasItems" Value="False">
+                <Setter TargetName="ExpansionBorder" Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
+            </Trigger>
+            <Trigger SourceName="PART_InputTextBox" Property="IsKeyboardFocusWithin" Value="True">
+                <Setter Property="IsOpenPopup" Value="True" />
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Editing.Border}" />
+            </Trigger>
+
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="HintBox.Style.Basic" TargetType="ctl:HintBox">
+        <Setter Property="Template" Value="{StaticResource HintBox.ControlTemplate.Basic}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource HintBoxItem.Style.Basic}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style BasedOn="{StaticResource HintBox.Style.Basic}" TargetType="ctl:HintBox" />
+</ResourceDictionary>

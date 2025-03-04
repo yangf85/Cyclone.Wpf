@@ -40,6 +40,7 @@ public partial class MainViewModel : ObservableObject
             "ListBox" => new ListBoxView(),
             "Notification" => new NotificationView(),
             "TransferBox"=> new TransferBoxView(),
+            "HintBox" => new HintBoxView(),
             _ => new object(),
         };
     }
@@ -81,6 +82,11 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="TransferBox",
+                    Icon= "\xe605",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="HintBox",
                     Icon= "\xe605",
                 },
             ]
