@@ -49,5 +49,60 @@
                 <TextBox x:Name="InputTextBox" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
+
+        <HeaderedContentControl Header="RunningBlock">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <cy:RunningText
+                    x:Name="rt"
+                    Margin="6"
+                    Padding="12,6"
+                    Background="{DynamicResource Active.Background}"
+                    Foreground="{DynamicResource Active.Foreground}"
+                    Text="WPF滚动轮播文字（走马灯效果）；可调节滚动速度、首尾间距...">
+                    <cy:RunningText.Style>
+                        <Style TargetType="{x:Type cy:RunningText}">
+                            <Setter Property="VerticalAlignment" Value="Top" />
+                            <Style.Triggers>
+                                <Trigger Property="Direction" Value="BottomToTop">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Trigger>
+                                <Trigger Property="Direction" Value="TopToBottom">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </cy:RunningText.Style>
+                </cy:RunningText>
+            </cy:SpacingUniformGrid>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="RunningBlock">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <cy:RunningBlock
+                    x:Name="rb"
+                    Margin="6" Content="12345"
+                    Padding="12,6"
+                    Background="{DynamicResource Default.Background}"
+                    Foreground="{DynamicResource Default.Foreground}">
+                    <cy:RunningBlock.Style>
+                        <Style TargetType="{x:Type cy:RunningBlock}">
+                            <Setter Property="VerticalAlignment" Value="Top" />
+                            <Style.Triggers>
+                                <Trigger Property="Direction" Value="BottomToTop">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Trigger>
+                                <Trigger Property="Direction" Value="TopToBottom">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </cy:RunningBlock.Style>
+                </cy:RunningBlock>
+            </cy:SpacingUniformGrid>
+        </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>
