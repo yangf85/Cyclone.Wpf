@@ -16,19 +16,17 @@ using System.Windows.Shapes;
 
 namespace Cyclone.Wpf.Controls;
 
-public class HintBoxItem : ComboBoxItem,IHintText
+public class HintBoxItem : ComboBoxItem, IHintable
 {
     private HintBox _ParentHintBox => ItemsControl.ItemsControlFromItemContainer(this) as HintBox;
 
-
     #region Override
 
-  
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnPreviewMouseLeftButtonDown(e);
-      
     }
+
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonDown(e);
@@ -48,33 +46,36 @@ public class HintBoxItem : ComboBoxItem,IHintText
     {
         IsHighlighted = highlight;
     }
-    #endregion
+
+    #endregion Override
 
     #region HintText
+
+    public static readonly DependencyProperty HintTextProperty =
+        DependencyProperty.Register(nameof(HintText), typeof(string), typeof(HintBoxItem), new PropertyMetadata(default(string)));
+
     public string HintText
     {
         get => (string)GetValue(HintTextProperty);
         set => SetValue(HintTextProperty, value);
     }
-  
 
-    public static readonly DependencyProperty HintTextProperty =
-        DependencyProperty.Register(nameof(HintText), typeof(string), typeof(HintBoxItem), new PropertyMetadata(default(string)));
-
-    #endregion
+    #endregion HintText
 
     #region Clicked
+
     public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent("Clicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBoxItem));
-    public event RoutedEventHandler Clicked
-    {
-        add { AddHandler(ClickedEvent, value); }
-        remove { RemoveHandler(ClickedEvent, value); }
-    }
 
     protected virtual void OnClicked(RoutedEventArgs e)
     {
         RaiseEvent(e);
     }
 
-    #endregion
+    public event RoutedEventHandler Clicked
+    {
+        add { AddHandler(ClickedEvent, value); }
+        remove { RemoveHandler(ClickedEvent, value); }
+    }
+
+    #endregion Clicked
 }

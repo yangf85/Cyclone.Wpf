@@ -64,7 +64,7 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
                         </Trigger>
                         <Trigger Property="IsActived" Value="True">
-                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource CheckedBackgroundBrush}" />
+                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Active.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

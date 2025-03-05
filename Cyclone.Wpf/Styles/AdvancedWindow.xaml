@@ -60,7 +60,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="Red" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Error.Background}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="RootGrid" Property="Opacity" Value="0.5" />
@@ -255,19 +255,18 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style TargetType="{x:Type ctl:AdvancedWindow}">
+    <Style x:Key="AdvacedWindow.Style.Basic" TargetType="{x:Type ctl:AdvancedWindow}">
         <Setter Property="Template" Value="{DynamicResource BasicWindowControlTemplate}" />
         <Setter Property="CaptionHeight" Value="32" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="CaptionBackground" Value="{StaticResource CheckedBorderBrush}" />
+        <Setter Property="CaptionBackground" Value="{DynamicResource Checked.Border}" />
         <Setter Property="TitleBrush" Value="White" />
-        <Setter Property="BorderBrush" Value="{StaticResource CheckedBorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Checked.Border}" />
         <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
-
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
@@ -278,4 +277,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource AdvacedWindow.Style.Basic}" TargetType="ctl:AdvancedWindow" />
 </ResourceDictionary>

@@ -1,0 +1,168 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="RangeSlider.ThumbStyle" TargetType="Thumb">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border x:Name="RootBorder" />
+                    <ControlTemplate.Triggers>
+                        <!--<Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{Binding Path=(at:RangeSliderAttacher.ThumbHoverBackground), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:RangeSlider}}" />
+                        </Trigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RangeSlider.HorizontalRepeatButtonStyle" TargetType="RepeatButton">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RangeSlider.VerticalRepeatButtonStyle" TargetType="RepeatButton">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="BasicHorizontalRangeSliderControlTemplate" TargetType="ctl:RangeSlider">
+        <Grid
+            x:Name="RootGrid"
+            SnapsToDevicePixels="True"
+            UseLayoutRounding="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<TickBar x:Name="TopTickBar"
+                         Grid.Row="0" />-->
+            <Grid x:Name="RangGrid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <RepeatButton
+                    x:Name="PART_StartRegion"
+                    Grid.Column="0"
+                    Background="{TemplateBinding Background}"
+                    Style="{StaticResource RangeSlider.HorizontalRepeatButtonStyle}" />
+                <Thumb
+                    x:Name="PART_StartThumb"
+                    Grid.Column="1"
+                    Panel.ZIndex="99"
+                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                <RepeatButton
+                    x:Name="PART_MiddleRegion"
+                    Grid.Column="2"
+                    Style="{StaticResource RangeSlider.HorizontalRepeatButtonStyle}" />
+                <Thumb
+                    x:Name="PART_EndThumb"
+                    Grid.Column="3"
+                    Panel.ZIndex="99"
+                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                <RepeatButton
+                    x:Name="PART_EndRegion"
+                    Grid.Column="4"
+                    Background="{TemplateBinding Background}"
+                    Style="{StaticResource RangeSlider.HorizontalRepeatButtonStyle}" />
+            </Grid>
+            <!--<TickBar x:Name="BottomTickBar"
+                         Grid.Row="2"
+                         Height="20"
+                         Fill="Black" />-->
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="BasicVerticalRangeSliderControlTemplate" TargetType="ctl:RangeSlider">
+        <Grid
+            x:Name="RootGrid"
+            SnapsToDevicePixels="True"
+            UseLayoutRounding="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!--<TickBar x:Name="TopTickBar"
+                     Grid.Column="0" />-->
+            <Grid x:Name="RangGrid" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <RepeatButton
+                    x:Name="PART_StartRegion"
+                    Grid.Row="0"
+                    Background="{TemplateBinding Background}"
+                    Style="{StaticResource RangeSlider.VerticalRepeatButtonStyle}" />
+                <Thumb
+                    x:Name="PART_StartThumb"
+                    Grid.Row="1"
+                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                <RepeatButton
+                    x:Name="PART_MiddleRegion"
+                    Grid.Row="2"
+                    Style="{StaticResource RangeSlider.VerticalRepeatButtonStyle}" />
+                <Thumb
+                    x:Name="PART_EndThumb"
+                    Grid.Row="3"
+                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                <RepeatButton
+                    x:Name="PART_EndRegion"
+                    Grid.Row="4"
+                    Background="{TemplateBinding Background}"
+                    Style="{StaticResource RangeSlider.VerticalRepeatButtonStyle}" />
+            </Grid>
+            <!--<TickBar x:Name="BottomTickBar"
+                     Grid.Column="2"
+                     Fill="Black" />-->
+        </Grid>
+    </ControlTemplate>
+
+    <Style
+        x:Key="{x:Static k:StyleKeys.RangeSlider}"
+        BasedOn="{StaticResource BasicControlStyle}"
+        TargetType="{x:Type ctl:RangeSlider}">
+        <Setter Property="Background" Value="{DynamicResource NormalBackground}" />
+        <Setter Property="Height" Value="Auto" />
+
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Template" Value="{StaticResource BasicHorizontalRangeSliderControlTemplate}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Template" Value="{StaticResource BasicVerticalRangeSliderControlTemplate}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

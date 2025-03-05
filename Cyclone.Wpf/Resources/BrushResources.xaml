@@ -2,6 +2,7 @@
 
     <!--  全局背景  -->
     <SolidColorBrush x:Key="Global.Background" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Mask.Background" Color="#0000001A" />
 
     <!--  标题  -->
     <SolidColorBrush x:Key="Header.Background" Color="#E1F5FE" />
@@ -133,99 +134,128 @@
     <SolidColorBrush x:Key="Icon.Warning.Foreground" Color="#FFF57C00" />
     <SolidColorBrush x:Key="Icon.Info.Foreground" Color="#FF1565C0" />
 
+    <!--  文字  -->
+    <SolidColorBrush x:Key="Text.Title" Color="#F0000000" />
+    <SolidColorBrush x:Key="Text.Header" Color="#FF212121" />
+    <SolidColorBrush x:Key="Text.Content" Color="#FF212121" />
+    <SolidColorBrush x:Key="Text.Prompty" Color="#FF707070" />
+    <SolidColorBrush x:Key="Text.Invert" Color="#FFFFFFFF" />
+
     <!--  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
 
     <!--  基础  -->
+    <!--
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#FF707070" />
     <SolidColorBrush x:Key="DefaultBackgroundBrush" Color="#FFF5F5F5" />
     <SolidColorBrush x:Key="DefaultForegroundBrush" Color="#FF333333" />
-    <SolidColorBrush x:Key="InvertForegroundBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="InvertForegroundBrush" Color="#FFFFFFFF" />-->
 
     <!--  悬停  -->
+    <!--
     <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#FFE3F2FD" />
     <SolidColorBrush x:Key="HoverBorderBrush" Color="#FF1976D2" />
-    <SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="HoverForegroundBrush" Color="#FF000000" />-->
 
     <!--  按压  -->
+    <!--
     <SolidColorBrush x:Key="PressedBackgroundBrush" Color="#FFBBDEFB" />
     <SolidColorBrush x:Key="PressedBorderBrush" Color="#FF0D47A1" />
-    <SolidColorBrush x:Key="PressedForegroundBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="PressedForegroundBrush" Color="#FF000000" />-->
 
-    <!--  布尔  -->
-    <SolidColorBrush x:Key="CheckedBackgroundBrush" Color="#FFBBDEFB" />
+    <!--布尔-->
+
+    <!--<SolidColorBrush x:Key="CheckedBackgroundBrush" Color="#FFBBDEFB" />
     <SolidColorBrush x:Key="CheckedBorderBrush" Color="#FF0D47A1" />
-    <SolidColorBrush x:Key="CheckedForegroundBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="CheckedForegroundBrush" Color="#FF000000" />-->
 
     <!--  编辑  -->
-    <SolidColorBrush x:Key="EditingBackgroundBrush" Color="#FFF5F5F5" />
+    <!--<SolidColorBrush x:Key="EditingBackgroundBrush" Color="#FFF5F5F5" />
     <SolidColorBrush x:Key="EditingBorderBrush" Color="#FF1E88E5" />
-    <SolidColorBrush x:Key="EditingForegroundBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="EditingForegroundBrush" Color="#FF000000" />-->
 
     <!--  聚焦  -->
-    <SolidColorBrush x:Key="FocusedBackgroundBrush" Color="#FFE3F2FD" />
+    <!--<SolidColorBrush x:Key="FocusedBackgroundBrush" Color="#FFE3F2FD" />
     <SolidColorBrush x:Key="FocusedBorderBrush" Color="#FF1E88E5" />
-    <SolidColorBrush x:Key="FocusedForegroundBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="FocusedForegroundBrush" Color="#FF000000" />-->
 
     <!--  高亮  -->
-    <SolidColorBrush x:Key="HighlightedSelectedBackgroundBrush" Color="#FFFF4081" />
+    <!--<SolidColorBrush x:Key="HighlightedSelectedBackgroundBrush" Color="#FFFF4081" />
     <SolidColorBrush x:Key="HighlightedSelectedForegroundBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="HighlightedSelectedBorderBrush" Color="#FFFF4081" />
+    <SolidColorBrush x:Key="HighlightedSelectedBorderBrush" Color="#FFFF4081" />-->
 
     <!--  加载  -->
-    <SolidColorBrush x:Key="LoadingBackgroundBrush" Color="#FFE0E0E0" />
+    <!--<SolidColorBrush x:Key="LoadingBackgroundBrush" Color="#FFE0E0E0" />
     <SolidColorBrush x:Key="LoadingForegroundBrush" Color="#FF333333" />
-    <SolidColorBrush x:Key="LoadingBorderBrush" Color="#FFBDBDBD" />
+    <SolidColorBrush x:Key="LoadingBorderBrush" Color="#FFBDBDBD" />-->
 
     <!--  拖拽  -->
-    <SolidColorBrush x:Key="DraggingBackgroundBrush" Color="#FF1E88E5" />
+    <!--<SolidColorBrush x:Key="DraggingBackgroundBrush" Color="#FF1E88E5" />
     <SolidColorBrush x:Key="DraggingForegroundBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="DraggingBorderBrush" Color="#FF1565C0" />
+    <SolidColorBrush x:Key="DraggingBorderBrush" Color="#FF1565C0" />-->
 
     <!--  输入错误  -->
+    <!--
     <SolidColorBrush x:Key="InputErrorBackgroundBrush" Color="#FFFFEBEE" />
     <SolidColorBrush x:Key="InputErrorForegroundBrush" Color="#FFD32F2F" />
     <SolidColorBrush x:Key="InputErrorBorderBrush" Color="#FFD32F2F" />
 
+    -->
     <!--  选中元素  -->
+    <!--
     <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#FF1E88E5" />
     <SolidColorBrush x:Key="SelectedBorderBrush" Color="#FF1565C0" />
     <SolidColorBrush x:Key="SelectedForegroundBrush" Color="#FFFFFFFF" />
 
+    -->
     <!--  警告  -->
+    <!--
     <SolidColorBrush x:Key="WarningBackgroundBrush" Color="#FFFFF8E1" />
     <SolidColorBrush x:Key="WarningBorderBrush" Color="#FFFB8C00" />
     <SolidColorBrush x:Key="WarningForegroundBrush" Color="#FF000000" />
 
+    -->
     <!--  错误  -->
+    <!--
     <SolidColorBrush x:Key="ErrorBackgroundBrush" Color="#FFFFEBEE" />
     <SolidColorBrush x:Key="ErrorBorderBrush" Color="#FFD32F2F" />
     <SolidColorBrush x:Key="ErrorForegroundBrush" Color="#FFFFFFFF" />
 
+    -->
     <!--  成功  -->
+    <!--
     <SolidColorBrush x:Key="SuccessBackgroundBrush" Color="#FF4CAF50" />
     <SolidColorBrush x:Key="SuccessBorderBrush" Color="#FFE8F5E9" />
     <SolidColorBrush x:Key="SuccessForegroundBrush" Color="#FFFFFFFF" />
 
+    -->
     <!--  信息  -->
+    <!--
     <SolidColorBrush x:Key="InfoBackgroundBrush" Color="#FF1E88E5" />
     <SolidColorBrush x:Key="InfoBorderBrush" Color="#FFE3F2FD" />
-    <SolidColorBrush x:Key="InfoForegroundBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="InfoForegroundBrush" Color="#FFFFFFFF" />-->
 
     <!--  禁用  -->
+    <!--
     <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#FFBDBDBD" />
     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#FFEEEEEE" />
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#FFBDBDBD" />
 
+    -->
     <!--  阴影和高光  -->
+    <!--
     <SolidColorBrush x:Key="ShadowBrush" Color="#40000000" />
     <SolidColorBrush x:Key="HighlightBrush" Color="#80FFFFFF" />
     <SolidColorBrush x:Key="HighlightInvertBrush" Color="#740315" />
 
+    -->
     <!--  强调颜色  -->
+    <!--
     <SolidColorBrush x:Key="AccentBrush" Color="#FFFF4081" />
 
+    -->
     <!--  图标  -->
+    <!--
     <SolidColorBrush x:Key="IconDefaultForegroundBrush" Color="#FF333333" />
     <SolidColorBrush x:Key="IconHoverForegroundBrush" Color="#FF1E88E5" />
-    <SolidColorBrush x:Key="IconSelectedForegroundBrush" Color="#FF1976D2" />
+    <SolidColorBrush x:Key="IconSelectedForegroundBrush" Color="#FF1976D2" />-->
 </ResourceDictionary>

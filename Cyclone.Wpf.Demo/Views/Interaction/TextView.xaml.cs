@@ -26,7 +26,7 @@ namespace Cyclone.Wpf.Demo.Views
         {
             InitializeComponent();
 
-            DataContext= new TextViewModel();
+            DataContext = new TextViewModel();
         }
     }
 
@@ -40,9 +40,11 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial double Number { get; set; } = 1800d;
 
+        [ObservableProperty]
+        public partial string SourceText { get; set; } = "ABCDEFGabcdefg一二三四五";
+
         public TextViewModel()
         {
-
             this.ErrorsChanged += TextViewModel_ErrorsChanged;
         }
 

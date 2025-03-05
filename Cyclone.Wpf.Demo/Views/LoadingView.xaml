@@ -28,10 +28,12 @@
                     <cy:LoadingAdorner.LoadingContent>
                         <ProgressBar
                             Width="150"
-                            Height="15" Value="75" Style="{DynamicResource ProgressBar.Animation}"
+                            Height="15"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            IsIndeterminate="True" />
+                            IsIndeterminate="True"
+                            Style="{DynamicResource ProgressBar.Animation}"
+                            Value="75" />
                     </cy:LoadingAdorner.LoadingContent>
                     <cy:LoadingAdorner.MaskBackground>
                         <LinearGradientBrush Opacity="0.7" StartPoint="0,0" EndPoint="0,1">
@@ -103,7 +105,7 @@
                 <Border cy:LoadingAdorner.IsLoading="{Binding LoadImageCommand.IsRunning}">
                     <ListBox ItemsSource="{Binding Images}">
                         <ListBox.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="ListBoxItem">
+                            <Style BasedOn="{StaticResource ListBoxItem.Style.Default}" TargetType="ListBoxItem">
                                 <Setter Property="Height" Value="Auto" />
                             </Style>
                         </ListBox.ItemContainerStyle>

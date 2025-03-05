@@ -31,7 +31,9 @@ public class VisibilityConverter
             };
         });
 
-    public static FuncValueConverter<string, Visibility> VisibleWhenNullOrWhiteSpace { get; } =
-        new(s => string.IsNullOrWhiteSpace(s) ? Visibility.Visible : Visibility.Collapsed);
+    public static FuncValueConverter<string, Visibility> VisibleWhenNullOrEmpty { get; } =
+        new(s => string.IsNullOrEmpty(s) ? Visibility.Visible : Visibility.Collapsed);
 
+    public static FuncValueConverter<string, Visibility> VisibleWhenNotNullOrEmpty { get; } =
+        new(s => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible);
 }

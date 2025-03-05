@@ -120,7 +120,7 @@
                                        Grid.Column="0"
                                        VerticalAlignment="Center"
                                        Text="{TemplateBinding Watermark}"
-                                       Visibility="{Binding Path=DisplayedNodePath, Mode=TwoWay, Converter={x:Static conv:VisibilityConverter.VisibleWhenNullOrWhiteSpace}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                       Visibility="{Binding Path=DisplayedNodePath, Mode=TwoWay, Converter={x:Static conv:VisibilityConverter.VisibleWhenNullOrEmpty}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <TextBox x:Name="PART_DisplayedTextBox"
                                      Grid.Column="0"
                                      HorizontalAlignment="Stretch"

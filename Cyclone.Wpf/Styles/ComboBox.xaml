@@ -7,15 +7,11 @@
     </ResourceDictionary.MergedDictionaries>
 
 
-    <Style
-        x:Key="ComboBox.OpenButtonStyle"
-        TargetType="ToggleButton">
+    <Style x:Key="ComboBox.OpenButtonStyle" TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="Transparent">
+                    <Grid x:Name="RootGrid" Background="Transparent">
                         <Path
                             x:Name="Indicator"
                             Width="18"
@@ -40,9 +36,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="ComboBox.TextBox"
-        TargetType="TextBox">
+    <ControlTemplate x:Key="ComboBox.TextBox" TargetType="TextBox">
         <Border
             x:Name="PART_ContentHost"
             Background="{TemplateBinding Background}"
@@ -134,9 +128,7 @@
                                         Background="Transparent"
                                         BorderBrush="{DynamicResource Default.Border}"
                                         BorderThickness="1">
-                                        <StackPanel
-                                            IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </Border>
                                 </Grid>
                             </Popup>

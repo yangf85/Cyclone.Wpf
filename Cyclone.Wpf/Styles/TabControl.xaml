@@ -9,7 +9,7 @@
     <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="Background" Value="{DynamicResource Default.Background}" />
-        <Setter Property="Foreground" Value="{DynamicResource DefaultForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -34,7 +34,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource FocusedBorderBrush}" />
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Selected.Foreground}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Bottom">
                             <Setter TargetName="Indicator" Property="VerticalAlignment" Value="Top" />

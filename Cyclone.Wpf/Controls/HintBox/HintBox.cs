@@ -15,9 +15,9 @@ using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
-public interface IHintText
+public interface IHintable
 {
-    string HintText { get; set; }
+    string HintText { get; }
 }
 
 [TemplatePart(Name = PART_ClearTextButton, Type = typeof(Button))]
@@ -31,6 +31,7 @@ public class HintBox : Selector
     private const string PART_DisplayPopup = nameof(PART_DisplayPopup);
 
     private const string PART_InputTextBox = nameof(PART_InputTextBox);
+
     private const string PART_HintTextButton = nameof(PART_HintTextButton);
 
     private Popup _displayPopup;
@@ -45,16 +46,17 @@ public class HintBox : Selector
     }
 
     #region InputText
+
+    public static readonly DependencyProperty InputTextProperty =
+        DependencyProperty.Register(nameof(InputText), typeof(string), typeof(HintBox), new PropertyMetadata(default(string)));
+
     public string InputText
     {
         get => (string)GetValue(InputTextProperty);
         set => SetValue(InputTextProperty, value);
     }
 
-    public static readonly DependencyProperty InputTextProperty =
-        DependencyProperty.Register(nameof(InputText), typeof(string), typeof(HintBox), new PropertyMetadata(default(string)));
-
-    #endregion
+    #endregion InputText
 
     #region IsIgnoreCase
 
@@ -88,7 +90,7 @@ public class HintBox : Selector
 
     #region ClearTextCommand
 
-    public static RoutedCommand ClearTextCommand { get; private set; }=
+    public static RoutedCommand ClearTextCommand { get; private set; } =
          new RoutedCommand("ClearText", typeof(HintBox));
 
     private static void OnCanClearTextCommand(object sender, CanExecuteRoutedEventArgs e)
@@ -115,7 +117,7 @@ public class HintBox : Selector
 
     #region HintCommand
 
-    public static RoutedCommand HintCommand { get; private set; }=
+    public static RoutedCommand HintCommand { get; private set; } =
         new RoutedCommand("Hint", typeof(HintBox));
 
     private static void OnCanHintCommand(object sender, CanExecuteRoutedEventArgs e)
@@ -127,24 +129,22 @@ public class HintBox : Selector
     private static void OnHintCommand(object sender, ExecutedRoutedEventArgs e)
     {
         var hintBox = (HintBox)sender;
-        if (hintBox._displayPopup!=null)
+        if (hintBox._displayPopup != null)
         {
             hintBox.IsOpenPopup = true;
-     
         }
     }
-    #endregion
+
+    #endregion HintCommand
 
     private static void InitializeCommands()
     {
         CommandManager.RegisterClassCommandBinding(typeof(HintBox),
-            new CommandBinding(HintCommand,OnHintCommand,OnCanHintCommand));
+            new CommandBinding(HintCommand, OnHintCommand, OnCanHintCommand));
 
         CommandManager.RegisterClassCommandBinding(typeof(HintBox),
            new CommandBinding(ClearTextCommand, OnClearTextCommand, OnCanClearTextCommand));
     }
-
- 
 
     private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -293,6 +293,16 @@ public class HintBox : Selector
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is HintBoxItem;
+    }
+
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        //if (element is HintBoxItem container)
+        //{
+        //    container.DataContext = item;
+        //}
     }
 
     public override void OnApplyTemplate()
