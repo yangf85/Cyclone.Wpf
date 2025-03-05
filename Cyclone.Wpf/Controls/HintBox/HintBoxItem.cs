@@ -18,6 +18,18 @@ namespace Cyclone.Wpf.Controls;
 
 public class HintBoxItem : ComboBoxItem, IHintable
 {
+    static HintBoxItem()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(HintBoxItem), new FrameworkPropertyMetadata(typeof(HintBoxItem)));
+        
+    }
+
+    public HintBoxItem()
+    {
+       
+    }
+
+    
     private HintBox _ParentHintBox => ItemsControl.ItemsControlFromItemContainer(this) as HintBox;
 
     #region Override
@@ -27,13 +39,7 @@ public class HintBoxItem : ComboBoxItem, IHintable
         base.OnPreviewMouseLeftButtonDown(e);
     }
 
-    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-    {
-        base.OnMouseLeftButtonDown(e);
-        _ParentHintBox?.NotifyHintBoxItemMouseLeftButtonDown(this);
-        RaiseEvent(new RoutedEventArgs(ClickedEvent, this));
-        e.Handled = true;
-    }
+   
 
     protected override void OnMouseEnter(MouseEventArgs e)
     {

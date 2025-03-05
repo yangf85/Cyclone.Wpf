@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using Faker;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ public partial class ContactInfo : ObservableObject
     public partial string LinkedInProfile { get; set; }
 }
 
-public partial class FakerData : ObservableValidator
+public partial class FakerData : ObservableValidator,IHintable
 {
     [NotifyDataErrorInfo]
     [ObservableProperty]
@@ -63,6 +64,14 @@ public partial class FakerData : ObservableValidator
 
     [ObservableProperty]
     public partial string Lorem { get; set; }
+
+    [ObservableProperty]
+    public partial string HintText { get; set;}
+
+    partial void OnFirstNameChanged(string value)
+    {
+        HintText = value;
+    }
 
     public FakerData()
     {

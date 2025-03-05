@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
 
-    <ControlTemplate x:Key="Template.Horizontal" TargetType="{x:Type ctl:RunningBlock}">
+    <ControlTemplate x:Key="RunningBlock.Template.Horizontal" TargetType="{x:Type ctl:RunningBlock}">
         <Border
             Padding="{TemplateBinding Padding}"
             Background="{TemplateBinding Background}"
@@ -32,7 +32,7 @@
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="Template.Vertical" TargetType="{x:Type ctl:RunningBlock}">
+    <ControlTemplate x:Key="RunningBlock.Template.Vertical" TargetType="{x:Type ctl:RunningBlock}">
         <Border
             Padding="{TemplateBinding Padding}"
             Background="{TemplateBinding Background}"
@@ -68,16 +68,16 @@
         <Setter Property="ClipToBounds" Value="True" />
         <Style.Triggers>
             <Trigger Property="Direction" Value="RightToLeft">
-                <Setter Property="Template" Value="{StaticResource Template.Horizontal}" />
+                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Horizontal}" />
             </Trigger>
             <Trigger Property="Direction" Value="LeftToRight">
-                <Setter Property="Template" Value="{StaticResource Template.Horizontal}" />
+                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Horizontal}" />
             </Trigger>
             <Trigger Property="Direction" Value="BottomToTop">
-                <Setter Property="Template" Value="{StaticResource Template.Vertical}" />
+                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Vertical}" />
             </Trigger>
             <Trigger Property="Direction" Value="TopToBottom">
-                <Setter Property="Template" Value="{StaticResource Template.Vertical}" />
+                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Vertical}" />
             </Trigger>
         </Style.Triggers>
     </Style>

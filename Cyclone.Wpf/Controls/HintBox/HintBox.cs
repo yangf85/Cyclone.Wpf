@@ -40,6 +40,31 @@ public class HintBox : Selector
 
     public Button _clearTextButton;
 
+    
+
+    public HintBox()
+    {
+        Loaded += HintBox_Loaded;
+        Unloaded+= HintBox_Unloaded;
+        
+    }
+
+    private void HintBox_Unloaded(object sender, RoutedEventArgs e)
+    {
+        RemoveHandler(HintBoxItem.MouseLeftButtonDownEvent,new RoutedEventHandler(OnItemMouseLeftButtonDown));
+        
+    }
+
+    private void HintBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        AddHandler(HintBoxItem.MouseLeftButtonDownEvent,new RoutedEventHandler(OnItemMouseLeftButtonDown), true);
+    }
+
+    private void OnItemMouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        
+    }
+
     static HintBox()
     {
         InitializeCommands();
@@ -71,22 +96,19 @@ public class HintBox : Selector
 
     #endregion IsIgnoreCase
 
-    #region IsOpenPopup
+    #region IsOpen
 
-    public static readonly DependencyProperty IsOpenPopupProperty =
-        DependencyProperty.Register(nameof(IsOpenPopup), typeof(bool), typeof(HintBox), new PropertyMetadata(default(bool), OnIsOpenPopupChanged));
+    public static readonly DependencyProperty IsOpenProperty =
+        DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(HintBox), new PropertyMetadata(default(bool)));
 
-    public bool IsOpenPopup
+    public bool IsOpen
     {
-        get => (bool)GetValue(IsOpenPopupProperty);
-        set => SetValue(IsOpenPopupProperty, value);
+        get => (bool)GetValue(IsOpenProperty);
+        set => SetValue(IsOpenProperty, value);
     }
 
-    private static void OnIsOpenPopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-    }
 
-    #endregion IsOpenPopup
+    #endregion IsOpen
 
     #region ClearTextCommand
 
@@ -131,11 +153,23 @@ public class HintBox : Selector
         var hintBox = (HintBox)sender;
         if (hintBox._displayPopup != null)
         {
-            hintBox.IsOpenPopup = true;
+            hintBox.IsOpen = true;
         }
     }
 
     #endregion HintCommand
+
+    #region MaxContainerHeight
+    public double MaxContainerHeight
+    {
+        get => (double)GetValue(MaxContainerHeightProperty);
+        set => SetValue(MaxContainerHeightProperty, value);
+    }
+
+    public static readonly DependencyProperty MaxContainerHeightProperty =
+        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(HintBox), new PropertyMetadata(300d));
+
+    #endregion
 
     private static void InitializeCommands()
     {
@@ -156,7 +190,7 @@ public class HintBox : Selector
                 Items.Filter = FilterPredicate;
             }
         }
-        IsOpenPopup = true;
+        IsOpen = true;
         _inputTextBox?.Focus();
         RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
     }
@@ -184,9 +218,8 @@ public class HintBox : Selector
 
     internal void NotifyHintBoxItemMouseLeftButtonDown(HintBoxItem hintBoxItem)
     {
-        SelectedItem = hintBoxItem.Content;
-        SetText(SelectedItem.ToString());
-        IsOpenPopup = false;
+        SetText(hintBoxItem.HintText);
+        IsOpen = false;
     }
 
     #region Override
@@ -217,13 +250,24 @@ public class HintBox : Selector
         {
             return true;
         }
-        if (IsIgnoreCase)
+
+        string text = string.Empty;
+        if (item is IHintable hintable)
         {
-            return item.ToString().ToUpper().Contains(InputText.ToUpper());
+            text = hintable.HintText;
         }
         else
         {
-            return item.ToString().Contains(InputText);
+            text = item.ToString();
+        }
+        if (IsIgnoreCase)
+        {
+
+            return text.ToUpper().Contains(InputText.ToUpper());
+        }
+        else
+        {
+            return text.Contains(InputText);
         }
     }
 
@@ -295,14 +339,16 @@ public class HintBox : Selector
         return item is HintBoxItem;
     }
 
+    
+
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
 
-        //if (element is HintBoxItem container)
-        //{
-        //    container.DataContext = item;
-        //}
+        if (element is HintBoxItem container)
+        {
+            container.DataContext = item;
+        }
     }
 
     public override void OnApplyTemplate()
