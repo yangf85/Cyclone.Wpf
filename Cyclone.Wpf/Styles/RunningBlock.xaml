@@ -3,81 +3,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
 
-    <ControlTemplate x:Key="RunningBlock.Template.Horizontal" TargetType="{x:Type ctl:RunningBlock}">
+    <ControlTemplate x:Key="HorizontalTemplate" TargetType="{x:Type ctl:RunningBlock}">
         <Border
-            Padding="{TemplateBinding Padding}"
+            x:Name="RootBorder"
+            Width="{TemplateBinding Width}"
+            Height="{TemplateBinding Height}"
             Background="{TemplateBinding Background}"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+            ClipToBounds="True">
             <Canvas
                 x:Name="PART_Canvas"
-                MinHeight="{Binding ActualHeight, ElementName=PART_Content}"
-                VerticalAlignment="Center"
-                ClipToBounds="{TemplateBinding ClipToBounds}">
+                Width="{Binding Path=ActualWidth, ElementName=RootBorder}"
+                Height="{Binding Path=ActualHeight, ElementName=RootBorder}">
                 <ContentPresenter
                     x:Name="PART_Content"
-                    Content="{TemplateBinding Content}"
-                    ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                <Rectangle
-                    x:Name="PART_Mirror"
-                    Width="{Binding ActualWidth, ElementName=PART_Content}"
-                    Height="{Binding ActualHeight, ElementName=PART_Content}">
-                    <Rectangle.Fill>
-                        <VisualBrush Stretch="None" Visual="{Binding ElementName=PART_Content}" />
-                    </Rectangle.Fill>
-                </Rectangle>
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Content="{TemplateBinding Content}" />
             </Canvas>
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="RunningBlock.Template.Vertical" TargetType="{x:Type ctl:RunningBlock}">
-        <Border
-            Padding="{TemplateBinding Padding}"
-            Background="{TemplateBinding Background}"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-            <Canvas
-                x:Name="PART_Canvas"
-                MinWidth="{Binding ActualWidth, ElementName=PART_Content}"
+    <ControlTemplate x:Key="VerticalTemplate" TargetType="{x:Type ctl:RunningBlock}">
+        <Canvas
+            x:Name="PART_Canvas"
+            Width="{Binding ActualWidth, ElementName=PART_Content}"
+            HorizontalAlignment="Center"
+            ClipToBounds="True">
+            <ContentPresenter
+                x:Name="PART_Content"
                 HorizontalAlignment="Center"
-                ClipToBounds="{TemplateBinding ClipToBounds}">
-                <ContentPresenter
-                    x:Name="PART_Content"
-                    Content="{TemplateBinding Content}"
-                    ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                <Rectangle
-                    x:Name="PART_Mirror"
-                    Width="{Binding ActualWidth, ElementName=PART_Content}"
-                    Height="{Binding ActualHeight, ElementName=PART_Content}">
-                    <Rectangle.Fill>
-                        <VisualBrush Stretch="None" Visual="{Binding ElementName=PART_Content}" />
-                    </Rectangle.Fill>
-                </Rectangle>
-            </Canvas>
-        </Border>
+                VerticalAlignment="Top" />
+        </Canvas>
     </ControlTemplate>
 
     <Style TargetType="{x:Type ctl:RunningBlock}">
-        <Setter Property="Padding" Value="6,3" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="IsHitTestVisible" Value="False" />
-        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Template" Value="{StaticResource HorizontalTemplate}" />
         <Style.Triggers>
-            <Trigger Property="Direction" Value="RightToLeft">
-                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Horizontal}" />
-            </Trigger>
-            <Trigger Property="Direction" Value="LeftToRight">
-                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Horizontal}" />
-            </Trigger>
-            <Trigger Property="Direction" Value="BottomToTop">
-                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Vertical}" />
-            </Trigger>
-            <Trigger Property="Direction" Value="TopToBottom">
-                <Setter Property="Template" Value="{StaticResource RunningBlock.Template.Vertical}" />
+            <Trigger Property="Direction" Value="Vertical">
+                <Setter Property="Template" Value="{StaticResource VerticalTemplate}" />
             </Trigger>
         </Style.Triggers>
     </Style>
