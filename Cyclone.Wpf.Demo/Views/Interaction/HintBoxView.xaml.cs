@@ -28,6 +28,11 @@ namespace Cyclone.Wpf.Demo.Views
             InitializeComponent();
             DataContext= new HintBoxViewModel();
         }
+
+        private void HintBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var s = e.AddedItems;
+        }
     }
 
     public partial class HintBoxViewModel : ObservableObject

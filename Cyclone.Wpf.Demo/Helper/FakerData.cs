@@ -68,7 +68,9 @@ public partial class FakerData : ObservableValidator,IHintable
     [ObservableProperty]
     public partial string HintText { get; set;}
 
-    partial void OnFirstNameChanged(string value)
+   
+
+    partial void OnCityChanged(string value)
     {
         HintText = value;
     }

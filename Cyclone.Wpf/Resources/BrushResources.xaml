@@ -138,8 +138,9 @@
     <SolidColorBrush x:Key="Text.Title" Color="#F0000000" />
     <SolidColorBrush x:Key="Text.Header" Color="#FF212121" />
     <SolidColorBrush x:Key="Text.Content" Color="#FF212121" />
-    <SolidColorBrush x:Key="Text.Prompty" Color="#FF707070" />
+    <SolidColorBrush x:Key="Text.Prompt" Color="#FF707070" />
     <SolidColorBrush x:Key="Text.Invert" Color="#FFFFFFFF" />
+
 
     <!--  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  -->
 

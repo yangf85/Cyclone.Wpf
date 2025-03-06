@@ -29,36 +29,16 @@ public class HintBoxItem : ComboBoxItem, IHintable
        
     }
 
-    
-    private HintBox _ParentHintBox => ItemsControl.ItemsControlFromItemContainer(this) as HintBox;
-
-    #region Override
-
-    protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
-    {
-        base.OnPreviewMouseLeftButtonDown(e);
-    }
-
-   
-
-    protected override void OnMouseEnter(MouseEventArgs e)
-    {
-        base.OnMouseEnter(e);
-        _ParentHintBox?.NotifyHintBoxItemMouseEnter(this);
-        e.Handled = true;
-    }
-
-    internal void SetHighlight(bool highlight)
-    {
-        IsHighlighted = highlight;
-    }
-
-    #endregion Override
-
     #region HintText
 
     public static readonly DependencyProperty HintTextProperty =
-        DependencyProperty.Register(nameof(HintText), typeof(string), typeof(HintBoxItem), new PropertyMetadata(default(string)));
+        DependencyProperty.Register(nameof(HintText), typeof(string), typeof(HintBoxItem), new PropertyMetadata(default(string), OnHintTextChanged));
+
+    private static void OnHintTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var item = (HintBoxItem)d;
+        item.Content ??= e.NewValue;
+    }
 
     public string HintText
     {
@@ -84,4 +64,23 @@ public class HintBoxItem : ComboBoxItem, IHintable
     }
 
     #endregion Clicked
+
+
+    #region Override
+
+
+
+
+
+
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+     
+        base.OnMouseLeftButtonDown(e);
+        OnClicked(new RoutedEventArgs(ClickedEvent));
+    }
+
+    
+
+    #endregion Override
 }

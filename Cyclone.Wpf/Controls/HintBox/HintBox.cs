@@ -40,30 +40,45 @@ public class HintBox : Selector
 
     public Button _clearTextButton;
 
-    
-
     public HintBox()
     {
         Loaded += HintBox_Loaded;
         Unloaded+= HintBox_Unloaded;
         
+        
     }
 
     private void HintBox_Unloaded(object sender, RoutedEventArgs e)
     {
-        RemoveHandler(HintBoxItem.MouseLeftButtonDownEvent,new RoutedEventHandler(OnItemMouseLeftButtonDown));
+        RemoveHandler(HintBoxItem.ClickedEvent,new RoutedEventHandler(OnItemClickedButtonDown));
         
     }
+
+    private void OnItemClickedButtonDown(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is HintBoxItem clickedItem)
+        {
+            var itemData = ItemContainerGenerator.ItemFromContainer(clickedItem);
+          
+            SelectedItem = itemData;
+
+            if (itemData is IHintable hintable)
+            {
+                InputText = hintable.HintText;
+            }
+                
+        }
+        IsOpen = false;
+    }
+
+   
 
     private void HintBox_Loaded(object sender, RoutedEventArgs e)
     {
-        AddHandler(HintBoxItem.MouseLeftButtonDownEvent,new RoutedEventHandler(OnItemMouseLeftButtonDown), true);
+        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClickedButtonDown), true);
     }
 
-    private void OnItemMouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        
-    }
+   
 
     static HintBox()
     {
@@ -110,54 +125,9 @@ public class HintBox : Selector
 
     #endregion IsOpen
 
-    #region ClearTextCommand
 
-    public static RoutedCommand ClearTextCommand { get; private set; } =
-         new RoutedCommand("ClearText", typeof(HintBox));
 
-    private static void OnCanClearTextCommand(object sender, CanExecuteRoutedEventArgs e)
-    {
-        var searchBox = (HintBox)sender;
 
-        if (searchBox._inputTextBox != null)
-        {
-            e.CanExecute = !string.IsNullOrEmpty(searchBox._inputTextBox.Text);
-        }
-    }
-
-    private static void OnClearTextCommand(object sender, ExecutedRoutedEventArgs e)
-    {
-        var searchBox = (HintBox)sender;
-        if (searchBox._inputTextBox != null)
-        {
-            searchBox._inputTextBox.Clear();
-            searchBox._inputTextBox.Focus();
-        }
-    }
-
-    #endregion ClearTextCommand
-
-    #region HintCommand
-
-    public static RoutedCommand HintCommand { get; private set; } =
-        new RoutedCommand("Hint", typeof(HintBox));
-
-    private static void OnCanHintCommand(object sender, CanExecuteRoutedEventArgs e)
-    {
-        var hintBox = (HintBox)sender;
-        e.CanExecute = !hintBox.HasItems;
-    }
-
-    private static void OnHintCommand(object sender, ExecutedRoutedEventArgs e)
-    {
-        var hintBox = (HintBox)sender;
-        if (hintBox._displayPopup != null)
-        {
-            hintBox.IsOpen = true;
-        }
-    }
-
-    #endregion HintCommand
 
     #region MaxContainerHeight
     public double MaxContainerHeight
@@ -173,16 +143,15 @@ public class HintBox : Selector
 
     private static void InitializeCommands()
     {
-        CommandManager.RegisterClassCommandBinding(typeof(HintBox),
-            new CommandBinding(HintCommand, OnHintCommand, OnCanHintCommand));
+       
 
-        CommandManager.RegisterClassCommandBinding(typeof(HintBox),
-           new CommandBinding(ClearTextCommand, OnClearTextCommand, OnCanClearTextCommand));
+    
     }
 
     private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        //过滤项目，当默认的过滤器为null时候，按照类型的ToString方法来过滤
+        RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
+     
         if (Items != null)
         {
             if (Items.Filter == null || Items.Filter == FilterPredicate)
@@ -192,7 +161,7 @@ public class HintBox : Selector
         }
         IsOpen = true;
         _inputTextBox?.Focus();
-        RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
+     
     }
 
     private void SetText(string text)
@@ -204,44 +173,40 @@ public class HintBox : Selector
         }
     }
 
-    internal void NotifyHintBoxItemMouseEnter(HintBoxItem hintBoxItem)
-    {
-        for (int i = 0; i < ItemContainerGenerator.Items.Count; i++)
-        {
-            if (ItemContainerGenerator.ContainerFromIndex(i) is HintBoxItem item)
-            {
-                item.SetHighlight(false);
-            }
-        }
-        hintBoxItem.SetHighlight(true);
-    }
 
-    internal void NotifyHintBoxItemMouseLeftButtonDown(HintBoxItem hintBoxItem)
-    {
-        SetText(hintBoxItem.HintText);
-        IsOpen = false;
-    }
+
+
+
 
     #region Override
 
-    private int _highlightIndex = -1;
-
-    private int _HighlightIndex
+    protected override void OnKeyDown(KeyEventArgs e)
     {
-        get => _highlightIndex;
+        base.OnKeyDown(e);
 
-        set
+        if (e.Key == Key.Enter)
         {
-            if (value <= 0)
+            for (int i = 0; i < Items.Count; i++)
             {
-                value = 0;
+                var item=ItemContainerGenerator.ContainerFromIndex(i);
+                if (item is HintBoxItem hintBoxItem)
+                {
+                    if (hintBoxItem.IsMouseOver)
+                    {
+                        SetText(hintBoxItem.HintText);
+                        IsOpen = false;
+                        break;
+                    }
+                }
             }
-            if (value >= Items.Count)
-            {
-                value = Items.Count - 1;
-            }
-            _highlightIndex = value;
+
         }
+    }
+    protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+    {
+        base.OnSelectionChanged(e);
+
+        var s = e.AddedItems;
     }
 
     private bool FilterPredicate(object item)
@@ -271,63 +236,10 @@ public class HintBox : Selector
         }
     }
 
-    private void InputTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        if (Items.Count == 0) return;
+    
 
-        switch (e.Key)
-        {
-            case Key.Down:
-            case Key.Tab:
-                _HighlightIndex += 1;
-                MoveSelectionTo(_HighlightIndex);
-                e.Handled = true;
-                break;
+  
 
-            case Key.Up:
-                _HighlightIndex -= 1;
-                MoveSelectionTo(_HighlightIndex);
-                e.Handled = true;
-                break;
-
-            case Key.Enter:
-                SelectHighlightedItem();
-                break;
-        }
-    }
-
-    private void MoveSelectionTo(int position)
-    {
-        for (int i = 0; i < ItemContainerGenerator.Items.Count; i++)
-        {
-            if (ItemContainerGenerator.ContainerFromIndex(i) is HintBoxItem item)
-            {
-                item.SetHighlight(false);
-            }
-        }
-
-        if (ItemContainerGenerator.ContainerFromIndex(position) is HintBoxItem current)
-        {
-            current.SetHighlight(true);
-        };
-    }
-
-    private void SelectHighlightedItem()
-    {
-        for (int i = 0; i < ItemContainerGenerator.Items.Count; i++)
-        {
-            if (ItemContainerGenerator.ContainerFromIndex(i) is HintBoxItem item)
-            {
-                item.IsSelected = false;
-                if (item.IsHighlighted)
-                {
-                    item.IsSelected = true;
-                    NotifyHintBoxItemMouseLeftButtonDown(item);
-                    return;
-                }
-            }
-        }
-    }
 
     protected override DependencyObject GetContainerForItemOverride()
     {
@@ -359,8 +271,7 @@ public class HintBox : Selector
         {
             _inputTextBox.TextChanged -= InputTextBox_TextChanged;
             _inputTextBox.TextChanged += InputTextBox_TextChanged;
-            _inputTextBox.PreviewKeyDown -= InputTextBox_PreviewKeyDown;
-            _inputTextBox.PreviewKeyDown += InputTextBox_PreviewKeyDown;
+          
         }
         _displayPopup = GetTemplateChild(PART_DisplayPopup) as Popup;
     }

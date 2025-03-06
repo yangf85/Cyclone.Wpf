@@ -129,20 +129,6 @@
                              Style="{StaticResource HintBox.InputTextBoxStyle}"
                              Text="{Binding Path=InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                 </Grid>
-                <Button x:Name="PART_ClearTextButton"
-                        Grid.Column="1"
-                        Margin="0,0,5,0"
-                        Command="{x:Static ctl:HintBox.ClearTextCommand}"
-                        Focusable="False"
-                        IsTabStop="False"
-                        Style="{StaticResource HintBox.ButtonStyle}" />
-                <Button x:Name="PART_HintButton"
-                        Grid.Column="2"
-                        Width="40"
-                        Margin="0,0,5,0"
-                        Command="{x:Static ctl:HintBox.HintCommand}"
-                        Focusable="False"
-                        IsTabStop="False" />
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
