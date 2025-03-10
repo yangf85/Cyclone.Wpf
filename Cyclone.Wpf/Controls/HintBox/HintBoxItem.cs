@@ -68,11 +68,6 @@ public class HintBoxItem : ComboBoxItem, IHintable
 
     #region Override
 
-
-
-
-
-
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
      
@@ -83,4 +78,11 @@ public class HintBoxItem : ComboBoxItem, IHintable
     
 
     #endregion Override
+
+    internal void ChangeHighlightState(bool isHighlight)
+    {
+        IsHighlighted = isHighlight;
+    }
+
+    
 }

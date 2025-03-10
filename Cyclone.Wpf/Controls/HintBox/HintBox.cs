@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -24,8 +27,11 @@ public interface IHintable
 [TemplatePart(Name = PART_HintTextButton, Type = typeof(Button))]
 [TemplatePart(Name = PART_InputTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = PART_DisplayPopup, Type = typeof(Popup))]
+[TemplatePart(Name = PART_ContainerScrollViewer, Type = typeof(ScrollViewer))]
+
 public class HintBox : Selector
 {
+    const string PART_ContainerScrollViewer= nameof(PART_ContainerScrollViewer);
     private const string PART_ClearTextButton = nameof(PART_ClearTextButton);
 
     private const string PART_DisplayPopup = nameof(PART_DisplayPopup);
@@ -40,6 +46,8 @@ public class HintBox : Selector
 
     public Button _clearTextButton;
 
+    ScrollViewer _scrollViewer;
+
     public HintBox()
     {
         Loaded += HintBox_Loaded;
@@ -50,23 +58,21 @@ public class HintBox : Selector
 
     private void HintBox_Unloaded(object sender, RoutedEventArgs e)
     {
-        RemoveHandler(HintBoxItem.ClickedEvent,new RoutedEventHandler(OnItemClickedButtonDown));
+        RemoveHandler(HintBoxItem.ClickedEvent,new RoutedEventHandler(OnItemClicked));
         
     }
 
-    private void OnItemClickedButtonDown(object sender, RoutedEventArgs e)
+    private void OnItemClicked(object sender, RoutedEventArgs e)
     {
         if (e.OriginalSource is HintBoxItem clickedItem)
         {
-            var itemData = ItemContainerGenerator.ItemFromContainer(clickedItem);
-          
-            SelectedItem = itemData;
+           var index= ItemContainerGenerator.IndexFromContainer(clickedItem);
 
-            if (itemData is IHintable hintable)
-            {
-                InputText = hintable.HintText;
-            }
-                
+
+            SelectedItem = Items[index];
+
+           
+        
         }
         IsOpen = false;
     }
@@ -75,7 +81,8 @@ public class HintBox : Selector
 
     private void HintBox_Loaded(object sender, RoutedEventArgs e)
     {
-        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClickedButtonDown), true);
+        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked), true);
+       
     }
 
    
@@ -157,6 +164,7 @@ public class HintBox : Selector
             if (Items.Filter == null || Items.Filter == FilterPredicate)
             {
                 Items.Filter = FilterPredicate;
+               
             }
         }
         IsOpen = true;
@@ -164,49 +172,134 @@ public class HintBox : Selector
      
     }
 
-    private void SetText(string text)
+    #region Override
+
+    protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
-        if (_inputTextBox != null)
+        base.OnPreviewKeyDown(e);
+        switch (e.Key)
         {
-            _inputTextBox.Text = text;
-            _inputTextBox.CaretIndex = _inputTextBox.Text.Length;
+            case Key.Enter:
+                HandleKeyEnter();
+                break;
+            case Key.Up:
+                HandleKeyUpDown(true);
+                break;
+            case Key.Down:
+                HandleKeyUpDown(false);
+                break;
+            case Key.Escape:
+                HandleKeyCancel();
+                break;
+            default:
+                break;
         }
     }
 
+   
 
-
-
-
-
-    #region Override
-
-    protected override void OnKeyDown(KeyEventArgs e)
+    private void HandleKeyCancel()
     {
-        base.OnKeyDown(e);
+        IsOpen = false;
+    }
 
-        if (e.Key == Key.Enter)
+    int GetHighlightedIndex()
+    {
+        for (int i = 0; i < Items.Count; i++)
         {
-            for (int i = 0; i < Items.Count; i++)
+            var item = ItemContainerGenerator.ContainerFromIndex(i);
+            if (item is HintBoxItem hintBoxItem)
             {
-                var item=ItemContainerGenerator.ContainerFromIndex(i);
-                if (item is HintBoxItem hintBoxItem)
+                if (hintBoxItem.IsHighlighted)
                 {
-                    if (hintBoxItem.IsMouseOver)
-                    {
-                        SetText(hintBoxItem.HintText);
-                        IsOpen = false;
-                        break;
-                    }
+                    return i;
                 }
             }
 
         }
+
+        return -1;
+    }
+
+    void HandleKeyUpDown(bool isUp)
+    {
+        int itemCount = Items.Count;
+        if (itemCount == 0)
+        {
+            return;
+        }
+
+        int currentIndex = GetHighlightedIndex();
+        currentIndex = currentIndex == -1 ? 0 : currentIndex;
+
+        // 计算新索引并处理循环
+        int newIndex = (currentIndex + (isUp ? -1 : 1) + itemCount) % itemCount;
+
+        // 取消当前高亮项
+        if (ItemContainerGenerator.ContainerFromIndex(currentIndex) is HintBoxItem currentItem)
+        {
+            currentItem.ChangeHighlightState(false);
+        }
+
+        // 设置新高亮项
+        if (ItemContainerGenerator.ContainerFromIndex(newIndex) is HintBoxItem newItem)
+        {
+            newItem.ChangeHighlightState(true);
+           ScrollToHighlightedItem(newItem);
+        }
+
+       
+    }
+
+    private void ScrollToHighlightedItem(HintBoxItem item)
+    {
+        if (_scrollViewer == null)
+            return;
+
+        // 确保元素已生成（禁用虚拟化时无需此步骤）
+        item.BringIntoView();
+
+        // 获取元素相对于ScrollViewer的坐标
+        var itemTransform = item.TransformToVisual(_scrollViewer);
+        var itemTopPosition = itemTransform.Transform(new Point(0, 0)).Y;
+        var itemBottomPosition = itemTopPosition + item.ActualHeight;
+
+        // 获取滚动视口的垂直范围
+        var viewportTop = _scrollViewer.VerticalOffset;
+        var viewportBottom = viewportTop + _scrollViewer.ViewportHeight;
+
+        // 检查元素是否完全在视口外
+        if (itemBottomPosition <= viewportTop || itemTopPosition >= viewportBottom)
+        {
+            // 元素完全不可见，滚动到可见位置
+            // 使用BringIntoView确保元素完全可见
+            item.BringIntoView();
+        }
+    }
+
+    void HandleKeyEnter()
+    {
+        var index=GetHighlightedIndex();
+
+        if (index == -1)
+        {
+            IsOpen = false;
+            return;
+        }
+        
+        SelectedItem = Items[index];
+        IsOpen = false;
+
     }
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
     {
         base.OnSelectionChanged(e);
 
-        var s = e.AddedItems;
+        if (SelectedItem is IHintable hintable)
+        {
+            InputText = hintable.HintText;
+            _inputTextBox.CaretIndex = InputText.Length;
+        }
     }
 
     private bool FilterPredicate(object item)
@@ -216,7 +309,7 @@ public class HintBox : Selector
             return true;
         }
 
-        string text = string.Empty;
+        string text;
         if (item is IHintable hintable)
         {
             text = hintable.HintText;
@@ -274,6 +367,7 @@ public class HintBox : Selector
           
         }
         _displayPopup = GetTemplateChild(PART_DisplayPopup) as Popup;
+         _scrollViewer= GetTemplateChild(PART_ContainerScrollViewer) as ScrollViewer;
     }
 
     #endregion Override

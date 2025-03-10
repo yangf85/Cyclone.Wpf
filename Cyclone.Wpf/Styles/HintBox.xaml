@@ -24,8 +24,9 @@
                               ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
         </Border>
         <ControlTemplate.Triggers>
-
-
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Highlighted.Background}" />
+            </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
 
@@ -112,14 +113,14 @@
                         <Border x:Name="ExpansionBorder"
                                 Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
                                 MinHeight="{Binding ActualHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                MaxHeight="{TemplateBinding MaxContainerHeight}"
                                 Background="{DynamicResource Container.Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="DropDownScrollViewer"
-                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            <ScrollViewer x:Name="PART_ContainerScrollViewer"
+                                          MaxHeight="{TemplateBinding MaxContainerHeight}"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Continue" />
+                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                             </ScrollViewer>
                         </Border>
                     </Popup>
