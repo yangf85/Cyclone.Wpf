@@ -47,6 +47,7 @@
     <SolidColorBrush x:Key="Foreground.Success" Color="#2E7D32" />
     <SolidColorBrush x:Key="Foreground.Info" Color="#1565C0" />
     <SolidColorBrush x:Key="Foreground.Active" Color="#FFFFFF" />
+
     <SolidColorBrush x:Key="Foreground.Inactive" Color="#9E9E9E" />
     <SolidColorBrush x:Key="Foreground.Disabled" Color="#BDBDBD" />
     <SolidColorBrush x:Key="Foreground.Link" Color="#1565C0" />
@@ -73,9 +74,7 @@
     <SolidColorBrush x:Key="Border.Active" Color="#1976D2" />
     <SolidColorBrush x:Key="Border.Inactive" Color="#BDBDBD" />
     <SolidColorBrush x:Key="Border.Disabled" Color="#E0E0E0" />
-    <SolidColorBrush x:Key="Border.FocusRing"
-                     Opacity="0.8"
-                     Color="#64B5F6" />
+    <SolidColorBrush x:Key="Border.FocusRing" Color="#64B5F6" />
 
     <!--  ==================== 功能颜色 ====================  -->
     <!--  主题色  -->

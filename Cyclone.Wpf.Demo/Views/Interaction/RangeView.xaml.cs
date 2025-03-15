@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,5 +40,11 @@ namespace Cyclone.Wpf.Demo.Views
         {
             MessageBox.Show("倒计时结束！");
         }
+    }
+
+    public partial class RangeViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial double Value { get; set; }
     }
 }

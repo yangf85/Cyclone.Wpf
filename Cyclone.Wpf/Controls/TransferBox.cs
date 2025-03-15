@@ -40,10 +40,13 @@ public class TransferBox : Control
 
     static TransferBox()
     {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(TransferBox), new FrameworkPropertyMetadata(typeof(TransferBox)));
+
         CommandManager.RegisterClassCommandBinding(typeof(TransferBox),
             new CommandBinding(ToSourceCommand, OnToSourceCommand, OnCanToSourceCommand));
         CommandManager.RegisterClassCommandBinding(typeof(TransferBox),
             new CommandBinding(ToTargetCommand, OnToTargetCommand, OnCanToTargetCommand));
+
     }
 
     #region Command
