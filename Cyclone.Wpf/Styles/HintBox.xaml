@@ -25,10 +25,10 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Highlighted.Background}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Highlighted}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
 
             </Trigger>
 
@@ -38,7 +38,7 @@
     <Style x:Key="HintBoxItem.Style.Basic" TargetType="ctl:HintBoxItem">
         <Setter Property="Template" Value="{StaticResource HintBoxItem.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Background" Value="{DynamicResource Container.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -67,7 +67,7 @@
 
     <Style x:Key="HintBox.InputTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="1,0" />
@@ -113,7 +113,7 @@
                         <Border x:Name="ExpansionBorder"
                                 Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
                                 MinHeight="{Binding ActualHeight, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                Background="{DynamicResource Container.Background}"
+                                Background="{DynamicResource Background.Container}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ScrollViewer x:Name="PART_ContainerScrollViewer"
@@ -138,7 +138,7 @@
             </Trigger>
             <Trigger SourceName="PART_InputTextBox" Property="IsKeyboardFocusWithin" Value="True">
                 <Setter Property="IsOpen" Value="True" />
-                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Editing.Border}" />
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
             </Trigger>
 
         </ControlTemplate.Triggers>
@@ -148,8 +148,8 @@
         <Setter Property="Template" Value="{StaticResource HintBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource HintBoxItem.Style.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

@@ -17,11 +17,11 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Pressed.Background}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Pressed.Foreground}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Pressed}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Foreground.Pressed}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -63,11 +63,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Selected.Background}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Invert.Foreground}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Selected}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Foreground.Invert}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -118,7 +118,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="5"
-                    Background="{DynamicResource Header.Background}" />
+                    Background="{DynamicResource Background.Header}" />
                 <ContentPresenter
                     Grid.Row="0"
                     Grid.Column="0"
@@ -162,7 +162,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.Column="2"
-                    Background="{DynamicResource Container.Background}">
+                    Background="{DynamicResource Background.Container}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
@@ -181,7 +181,7 @@
                                 Width="14"
                                 Height="14"
                                 Data="M516.266667 494.933333l-192 192-29.866667-29.866666 162.133333-162.133334-162.133333-162.133333 29.866667-29.866667 192 192z m256 0l-192 192-29.866667-29.866666 162.133333-162.133334-162.133333-162.133333 29.866667-29.866667 192 192z"
-                                Fill="{DynamicResource Icon.Default.Foreground}"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
@@ -202,7 +202,7 @@
                                 Width="14"
                                 Height="14"
                                 Data="M550.4 494.933333l192 192 29.866667-29.866666-162.133334-162.133334 162.133334-162.133333-29.866667-29.866667-192 192z m-256 0l192 192 29.866667-29.866666-162.133334-162.133334 162.133334-162.133333-29.866667-29.866667-192 192z"
-                                Fill="{DynamicResource Icon.Default.Foreground}"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
@@ -223,8 +223,8 @@
     </ControlTemplate>
 
     <Style x:Key="TransferBox.Style.Basic" TargetType="ctl:TransferBox">
-        <Setter Property="Background" Value="{DynamicResource Container.Background}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Container}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="Template" Value="{StaticResource TransferBox.ControlTemplate.Basic}" />

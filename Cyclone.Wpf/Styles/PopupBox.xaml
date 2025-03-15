@@ -80,13 +80,13 @@
                 <Setter Property="BorderBrush" Value="{StaticResource CheckedBorderBrush}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
-                <Setter Property="Foreground" Value="{DynamicResource Hover.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
+                <Setter Property="Foreground" Value="{DynamicResource Foreground.Hover}" />
             </Trigger>
             <Trigger SourceName="PART_ToggleButton" Property="IsPressed" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
-                <Setter Property="Background" Value="{DynamicResource Pressed.Background}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Border.Pressed}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Pressed}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -100,7 +100,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="PopupAnimation" Value="Scroll" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
     </Style>
 </ResourceDictionary>

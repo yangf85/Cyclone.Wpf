@@ -20,12 +20,12 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Data="M 0 0 L 6 6 L 12 0 Z"
-                            Fill="{DynamicResource Default.Foreground}"
+                            Fill="{DynamicResource Foreground.Default}"
                             Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Indicator" Property="Data" Value="M 0 6 L 6 0 L 12 6 Z" />
@@ -46,8 +46,8 @@
     <Style TargetType="ComboBoxItem">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
-        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Global}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -61,7 +61,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -74,7 +74,7 @@
     <Style TargetType="ComboBox">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -126,7 +126,7 @@
                                     <Border
                                         x:Name="DropDownBorder"
                                         Background="Transparent"
-                                        BorderBrush="{DynamicResource Default.Border}"
+                                        BorderBrush="{DynamicResource Border.Default}"
                                         BorderThickness="1">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </Border>

@@ -1,47 +1,37 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
 
-    <ControlTemplate x:Key="HorizontalTemplate" TargetType="{x:Type ctl:RunningBlock}">
-        <Border
-            x:Name="RootBorder"
-            Width="{TemplateBinding Width}"
-            Height="{TemplateBinding Height}"
-            Background="{TemplateBinding Background}"
-            ClipToBounds="True">
-            <Canvas
-                x:Name="PART_Canvas"
-                Width="{Binding Path=ActualWidth, ElementName=RootBorder}"
-                Height="{Binding Path=ActualHeight, ElementName=RootBorder}">
-                <ContentPresenter
-                    x:Name="PART_Content"
-                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                    Content="{TemplateBinding Content}" />
+    <ControlTemplate x:Key="RunningBlock.ControlTemplate.Basic" TargetType="{x:Type ctl:RunningBlock}">
+        <Border x:Name="RootBorder"
+                Width="{TemplateBinding Width}"
+                Height="{TemplateBinding Height}"
+                Background="{TemplateBinding Background}"
+                ClipToBounds="True">
+            <Canvas x:Name="PART_Canvas"
+                    Width="{Binding Path=ActualWidth, ElementName=RootBorder}"
+                    Height="{Binding Path=ActualHeight, ElementName=RootBorder}">
+                <ContentPresenter x:Name="PART_Content"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Content="{TemplateBinding Content}" />
             </Canvas>
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="VerticalTemplate" TargetType="{x:Type ctl:RunningBlock}">
-        <Canvas
-            x:Name="PART_Canvas"
-            Width="{Binding ActualWidth, ElementName=PART_Content}"
-            HorizontalAlignment="Center"
-            ClipToBounds="True">
-            <ContentPresenter
-                x:Name="PART_Content"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top" />
-        </Canvas>
-    </ControlTemplate>
-
     <Style TargetType="{x:Type ctl:RunningBlock}">
-        <Setter Property="Template" Value="{StaticResource HorizontalTemplate}" />
+        <Setter Property="Template" Value="{StaticResource RunningBlock.ControlTemplate.Basic}" />
         <Style.Triggers>
             <Trigger Property="Direction" Value="Vertical">
-                <Setter Property="Template" Value="{StaticResource VerticalTemplate}" />
+                <Setter Property="Width" Value="{DynamicResource Width.Vertical.Control}" />
+                <Setter Property="Height" Value="Auto" />
             </Trigger>
+            <Trigger Property="Direction" Value="Horizontal">
+                <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+                <Setter Property="Width" Value="Auto" />
+            </Trigger>
+
         </Style.Triggers>
+
     </Style>
 </ResourceDictionary>

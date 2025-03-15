@@ -5,7 +5,7 @@
 
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <!--<Setter Property="Background" Value="Transparent" />-->
         <Setter Property="Template">
             <Setter.Value>
@@ -25,7 +25,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Data="M1.857 11.900 c0.623 0.524 7.256 5.457 7.256 5.457 S18.562 7.228 20.709 4.640 c0 0 2.056-2.095-1.450 3.635 C15.756 14.008 9.100 24.645 9.100 24.645 S0.719 10.951 1.857 11.900 z"
-                                        Fill="{DynamicResource Icon.Checked.Foreground}"
+                                        Fill="{DynamicResource Icon.Foreground.Checked}"
                                         SnapsToDevicePixels="False"
                                         Stretch="Fill" />
                                     <Path
@@ -37,7 +37,7 @@
                                         Data="M 0 1 L 10 1"
                                         SnapsToDevicePixels="False"
                                         Stretch="Fill"
-                                        Stroke="{DynamicResource Icon.Checked.Foreground}"
+                                        Stroke="{DynamicResource Icon.Foreground.Checked}"
                                         StrokeThickness="1.5"
                                         Visibility="Collapsed" />
                                 </Grid>
@@ -51,7 +51,7 @@
                     </BulletDecorator>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="BoxBorder" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="BoxBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="BoxBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />

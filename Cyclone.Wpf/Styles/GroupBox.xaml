@@ -4,9 +4,9 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="GroupBox.Basic" TargetType="{x:Type GroupBox}">
-        <Setter Property="Background" Value="{DynamicResource Container.Background}" />
-        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Container}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="BorderThickness" Value="1" />
@@ -26,7 +26,7 @@
                             <Grid x:Name="Header"
                                   Grid.Row="0"
                                   Height="{DynamicResource Height.Horizontal.Header}"
-                                  Background="{DynamicResource Header.Background}">
+                                  Background="{DynamicResource Background.Header}">
                                 <ContentPresenter HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Center"
                                                   ContentSource="Header" />
@@ -38,12 +38,12 @@
                                               Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              TextElement.Foreground="{DynamicResource Default.Foreground}" />
+                                              TextElement.Foreground="{DynamicResource Foreground.Default}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="Header" Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

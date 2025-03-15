@@ -20,7 +20,7 @@
                     Height="18"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Stroke="{DynamicResource Default.Border}"
+                    Stroke="{DynamicResource Border.Default}"
                     StrokeThickness="1.5" />
                 <Ellipse
                     x:Name="InnerEllipse"
@@ -28,7 +28,7 @@
                     Height="15"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Fill="{DynamicResource Icon.Checked.Foreground}"
+                    Fill="{DynamicResource Icon.Foreground.Checked}"
                     Visibility="{Binding Path=IsChecked, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
             </Grid>
             <Grid
@@ -43,10 +43,10 @@
         </StackPanel>
         <ControlTemplate.Triggers>
             <Trigger SourceName="OuterEllipse" Property="IsMouseOver" Value="True">
-                <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource Hover.Background}" />
+                <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource Background.Hover}" />
             </Trigger>
             <Trigger SourceName="InnerEllipse" Property="IsMouseOver" Value="True">
-                <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource Icon.Hover.Foreground}" />
+                <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Trigger.EnterActions>

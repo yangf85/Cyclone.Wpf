@@ -21,7 +21,7 @@
                                 <Border
                                     x:Name="SwitchTrack"
                                     Background="Transparent"
-                                    BorderBrush="{DynamicResource Default.Border}"
+                                    BorderBrush="{DynamicResource Border.Default}"
                                     BorderThickness="1" />
                                 <Border
                                     x:Name="SwitchThumb"
@@ -30,8 +30,8 @@
                                     Margin="2.5"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="{DynamicResource Default.Border}"
-                                    BorderBrush="{DynamicResource Default.Border}"
+                                    Background="{DynamicResource Border.Default}"
+                                    BorderBrush="{DynamicResource Border.Default}"
                                     BorderThickness="1" />
                             </Grid>
                         </BulletDecorator.Bullet>
@@ -44,11 +44,11 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="SwitchThumb" Property="Background" Value="{DynamicResource Icon.Checked.Foreground}" />
+                            <Setter TargetName="SwitchThumb" Property="Background" Value="{DynamicResource Icon.Foreground.Checked}" />
                             <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right" />
                         </Trigger>
                         <Trigger SourceName="SwitchThumb" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="SwitchThumb" Property="Background" Value="{DynamicResource Icon.Hover.Foreground}" />
+                            <Setter TargetName="SwitchThumb" Property="Background" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

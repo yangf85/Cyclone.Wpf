@@ -37,12 +37,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Pressed.Border}" />
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Pressed}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -165,9 +165,9 @@
         <ControlTemplate.Triggers>
             <Trigger SourceName="PART_InputTextBox" Property="IsFocused" Value="True">
                 <Setter TargetName="PART_ValueSliderPopup" Property="IsOpen" Value="True" />
-                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Editing.Border}" />
-                <Setter TargetName="VerticalSeperater" Property="Fill" Value="{DynamicResource Editing.Border}" />
-                <Setter TargetName="SpinButtonSeperater" Property="Fill" Value="{DynamicResource Editing.Border}" />
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
+                <Setter TargetName="VerticalSeperater" Property="Fill" Value="{DynamicResource Border.Editing}" />
+                <Setter TargetName="SpinButtonSeperater" Property="Fill" Value="{DynamicResource Border.Editing}" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -183,7 +183,7 @@
         <Setter Property="Template" Value="{StaticResource BasicNumberBoxControlTemplate}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>

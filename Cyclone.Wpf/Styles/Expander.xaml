@@ -11,7 +11,7 @@
                         <Rectangle
                             Margin="0"
                             SnapsToDevicePixels="true"
-                            Stroke="{DynamicResource Default.Border}"
+                            Stroke="{DynamicResource Border.Default}"
                             StrokeDashArray="1 2"
                             StrokeThickness="1" />
                     </Border>
@@ -46,7 +46,7 @@
                                     VerticalAlignment="Center"
                                     Data="M 1,1.5 L 4.5,5 L 8,1.5"
                                     SnapsToDevicePixels="false"
-                                    Stroke="{DynamicResource Default.Foreground}"
+                                    Stroke="{DynamicResource Foreground.Default}"
                                     StrokeThickness="2" />
                             </Grid>
                             <ContentPresenter
@@ -63,10 +63,10 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Hover.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Pressed.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -100,7 +100,7 @@
                                     VerticalAlignment="Center"
                                     Data="M 1,1.5 L 4.5,5 L 8,1.5"
                                     SnapsToDevicePixels="false"
-                                    Stroke="{DynamicResource Default.Foreground}"
+                                    Stroke="{DynamicResource Foreground.Default}"
                                     StrokeThickness="2" />
                             </Grid>
                             <ContentPresenter
@@ -117,10 +117,10 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Hover.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Pressed.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -154,7 +154,7 @@
                                     VerticalAlignment="Center"
                                     Data="M 1,1.5 L 4.5,5 L 8,1.5"
                                     SnapsToDevicePixels="false"
-                                    Stroke="{DynamicResource Default.Foreground}"
+                                    Stroke="{DynamicResource Foreground.Default}"
                                     StrokeThickness="2" />
                             </Grid>
                             <ContentPresenter
@@ -171,10 +171,10 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Hover.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Pressed.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -198,7 +198,7 @@
                                 VerticalAlignment="Center"
                                 Data="M 1,1.5 L 4.5,5 L 8,1.5"
                                 SnapsToDevicePixels="false"
-                                Stroke="{DynamicResource Default.Foreground}"
+                                Stroke="{DynamicResource Foreground.Default}"
                                 StrokeThickness="2" />
                             <ContentPresenter
                                 Grid.Column="1"
@@ -214,10 +214,10 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Hover.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Pressed.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Foreground.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -226,9 +226,9 @@
     </Style>
 
     <Style TargetType="{x:Type Expander}">
-        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
-        <Setter Property="Background" Value="{DynamicResource Default.Background}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="BorderThickness" Value="1" />

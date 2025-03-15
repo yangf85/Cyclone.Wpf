@@ -57,14 +57,14 @@
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger SourceName="HeaderRoot" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
                         </Trigger>
                         <Trigger Property="IsActived" Value="True">
-                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Active.Background}" />
+                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Background.Active}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -73,8 +73,8 @@
     </Style>
 
     <Style TargetType="ctl:SideMenu">
-        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Global}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
 
         <!--<Setter Property="ItemContainerStyle" Value="{StaticResource BasicSideMenuItemStyle}" />-->

@@ -23,12 +23,12 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Data="M 0 0 L 6 6 L 12 0 Z"
-                            Fill="{DynamicResource Default.Foreground}"
+                            Fill="{DynamicResource Foreground.Default}"
                             Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Indicator" Property="Data" Value="M 0 6 L 6 0 L 12 6 Z" />
@@ -74,10 +74,10 @@
                 <Setter TargetName="SelectedCheckBox" Property="Visibility" Value="Visible" />
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Selected.Background}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Selected}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Hover.Background}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -94,12 +94,12 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
-                            Fill="{DynamicResource Default.Foreground}"
+                            Fill="{DynamicResource Foreground.Default}"
                             Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Hover.Foreground}" />
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -137,7 +137,7 @@
     <Style x:Key="MultiComboBoxItem.Style.Basic" TargetType="ctl:MultiComboBoxItem">
         <Setter Property="Template" Value="{StaticResource MultiComboBoxItem.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{StaticResource Height.Horizontal.Item}" />
-        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
@@ -221,7 +221,7 @@
         <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Template" Value="{StaticResource MultiComboBox.ControlTemplate.Basic}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource MultiComboBoxItem.Style.Basic}" />
         <Setter Property="PresenteItemStyle" Value="{StaticResource MultiComboBox.PresentItemStyle}" />

@@ -8,7 +8,7 @@
 
     <Style TargetType="ctl:CascadePickerItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Background" Value="{DynamicResource Global.Background}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -40,9 +40,9 @@
                                    PlacementTarget="{Binding ElementName=RootBoder}"
                                    VerticalOffset="-4">
                                 <Border MinWidth="150"
-                                        BorderBrush="{DynamicResource Default.Border}"
+                                        BorderBrush="{DynamicResource Border.Default}"
                                         BorderThickness="1">
-                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource Global.Background}">
+                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource Background.Global}">
                                         <ItemsPresenter />
                                     </Grid>
                                 </Border>
@@ -51,10 +51,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Pressed.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Pressed}" />
                         </Trigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Hover.Background}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
@@ -82,7 +82,7 @@
                               Height="20"
                               Data="M20 20 L50 50 L80 20"
                               Stretch="Uniform"
-                              Stroke="{DynamicResource Default.Border}"
+                              Stroke="{DynamicResource Border.Default}"
                               StrokeThickness="1.5" />
                     </Grid>
 
@@ -91,7 +91,7 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M20 80 L50 50 L80 80" />
                         </Trigger>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Hover.Border}" />
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{DynamicResource Border.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -102,7 +102,7 @@
     <Style TargetType="ctl:CascadePicker">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Default.Border}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
@@ -144,9 +144,9 @@
                                    PopupAnimation="Slide"
                                    VerticalOffset="0">
                                 <Border MinWidth="150"
-                                        BorderBrush="{DynamicResource Default.Border}"
+                                        BorderBrush="{DynamicResource Border.Default}"
                                         BorderThickness="1">
-                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource Global.Background}">
+                                    <Grid x:Name="ItemPresenterBoder" Background="{DynamicResource Background.Global}">
                                         <ItemsPresenter />
                                     </Grid>
                                 </Border>
@@ -156,10 +156,10 @@
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="PART_DisplayedTextBox" Property="IsKeyboardFocusWithin" Value="True">
                             <Setter TargetName="WatermarkTextBlock" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Editing.Border}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Hover.Border}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
