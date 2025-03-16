@@ -46,7 +46,7 @@
                 <cy:CircularGauge x:Name="CircularGauge"
                                   EndAngle="30"
                                   FontSize="14"
-                                  IsLabelInside="True"
+                                  IsLabelInside="False"
                                   LongTickRatio="2.5"
                                   Maximum="120"
                                   Minimum="0"

@@ -373,7 +373,7 @@ public class CircularGauge : RangeBase
 
                 // 旋转标签使其水平
                 drawingContext.PushTransform(new RotateTransform(
-                    currentAngle + (IsLabelInside ? -90 : 90),
+                    currentAngle + (IsLabelInside ? -270 : 90),
                     labelCenter.X,
                     labelCenter.Y
                 ));
