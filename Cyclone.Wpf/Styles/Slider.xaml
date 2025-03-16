@@ -7,13 +7,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border
-                        x:Name="RootBorder"
-                        Width="20"
-                        Height="20"
-                        Background="{DynamicResource Background.Default}"
-                        BorderBrush="{DynamicResource Border.Default}"
-                        BorderThickness="1" />
+                    <Border x:Name="RootBorder"
+                            Width="20"
+                            Height="20"
+                            Background="{DynamicResource Background.Default}"
+                            BorderBrush="{DynamicResource Border.Default}"
+                            BorderThickness="1" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
@@ -33,11 +32,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border
-                        x:Name="RootBorder"
-                        Height="5"
-                        Background="{TemplateBinding Background}"
-                        BorderThickness="0" />
+                    <Border x:Name="RootBorder"
+                            Height="5"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -49,58 +47,52 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border
-                        x:Name="RootBorder"
-                        Width="5"
-                        Background="{DynamicResource FocusedBorderBrush}"
-                        BorderThickness="0" />
+                    <Border x:Name="RootBorder"
+                            Width="5"
+                            Background="{DynamicResource Border.Focused}"
+                            BorderThickness="0" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <ControlTemplate x:Key="Slider.ControlTemplate.Basic.Horizontal" TargetType="{x:Type Slider}">
-        <Grid
-            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+        <Grid VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+              SnapsToDevicePixels="True"
+              UseLayoutRounding="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TickBar
-                x:Name="TopTick"
-                Height="4"
-                Fill="{DynamicResource DefaultForegroundBrush}"
-                Placement="Top"
-                Visibility="Collapsed" />
+            <TickBar x:Name="TopTick"
+                     Height="4"
+                     Fill="{DynamicResource Tick.Primary}"
+                     Placement="Top"
+                     Visibility="Collapsed" />
             <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton
-                        x:Name="PassedTrack"
-                        Background="{DynamicResource Border.Focused}"
-                        Command="{x:Static Slider.DecreaseLarge}"
-                        Style="{StaticResource Slider.HorizontalRepeatButtonStyle}" />
+                    <RepeatButton x:Name="PassedTrack"
+                                  Background="{DynamicResource Border.Active}"
+                                  Command="{x:Static Slider.DecreaseLarge}"
+                                  Style="{StaticResource Slider.HorizontalRepeatButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb Panel.ZIndex="99" Style="{StaticResource Slider.ThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton
-                        x:Name="UnpassedTrack"
-                        Background="{DynamicResource Background.Default}"
-                        Command="{x:Static Slider.IncreaseLarge}"
-                        Style="{StaticResource Slider.HorizontalRepeatButtonStyle}" />
+                    <RepeatButton x:Name="UnpassedTrack"
+                                  Background="{DynamicResource Background.Inactive}"
+                                  Command="{x:Static Slider.IncreaseLarge}"
+                                  Style="{StaticResource Slider.HorizontalRepeatButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
-            <TickBar
-                x:Name="BottomTick"
-                Grid.Row="2"
-                Height="4"
-                Fill="{DynamicResource AccentBrush}"
-                Placement="Bottom"
-                Visibility="Collapsed" />
+            <TickBar x:Name="BottomTick"
+                     Grid.Row="2"
+                     Height="4"
+                     Fill="{DynamicResource Tick.Primary}"
+                     Placement="Bottom"
+                     Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="TickPlacement" Value="TopLeft">
@@ -123,40 +115,36 @@
                 <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TickBar
-                x:Name="TopTick"
-                Width="4"
-                Fill="{DynamicResource AccentBrush}"
-                Placement="Left"
-                SnapsToDevicePixels="True"
-                Visibility="Collapsed" />
+            <TickBar x:Name="TopTick"
+                     Width="4"
+                     Fill="{DynamicResource Tick.Primary}"
+                     Placement="Left"
+                     SnapsToDevicePixels="True"
+                     Visibility="Collapsed" />
             <Track x:Name="PART_Track" Grid.Column="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton
-                        x:Name="PassedTrack"
-                        Background="{DynamicResource Background.Pressed}"
-                        Command="{x:Static Slider.DecreaseLarge}"
-                        Style="{StaticResource Slider.VerticalRepeatButtonStyle}" />
+                    <RepeatButton x:Name="PassedTrack"
+                                  Background="{DynamicResource Background.Pressed}"
+                                  Command="{x:Static Slider.DecreaseLarge}"
+                                  Style="{StaticResource Slider.VerticalRepeatButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb Style="{StaticResource Slider.ThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton
-                        x:Name="UnpassedTrack"
-                        Background="{DynamicResource Background.Default}"
-                        Command="{x:Static Slider.IncreaseLarge}"
-                        Style="{StaticResource Slider.VerticalRepeatButtonStyle}" />
+                    <RepeatButton x:Name="UnpassedTrack"
+                                  Background="{DynamicResource Background.Default}"
+                                  Command="{x:Static Slider.IncreaseLarge}"
+                                  Style="{StaticResource Slider.VerticalRepeatButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
-            <TickBar
-                x:Name="BottomTick"
-                Grid.Column="2"
-                Width="4"
-                Fill="{DynamicResource TextContentBrush}"
-                Placement="Right"
-                SnapsToDevicePixels="True"
-                Visibility="Collapsed" />
+            <TickBar x:Name="BottomTick"
+                     Grid.Column="2"
+                     Width="4"
+                     Fill="{DynamicResource Tick.Primary}"
+                     Placement="Right"
+                     SnapsToDevicePixels="True"
+                     Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="TickPlacement" Value="TopLeft">
@@ -175,7 +163,6 @@
     <Style x:Key="Slider.Style.Basic" TargetType="Slider">
         <Setter Property="AutoToolTipPlacement" Value="TopLeft" />
         <Setter Property="AutoToolTipPrecision" Value="2" />
-
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Template" Value="{StaticResource Slider.ControlTemplate.Basic.Horizontal}" />

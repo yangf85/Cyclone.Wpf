@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -48,12 +49,50 @@ public class RangeSlider : Control
         UpperValueChanged += RangeSlider_UpperValueChanged;
     }
 
+
+
     private enum ThumbKind
     {
         Start,
 
         End,
     }
+
+    #region TrackThickness
+    public double TrackThickness
+    {
+        get => (double)GetValue(TrackThicknessProperty);
+        set => SetValue(TrackThicknessProperty, value);
+    }
+
+    public static readonly DependencyProperty TrackThicknessProperty =
+        DependencyProperty.Register(nameof(TrackThickness), typeof(double), typeof(RangeSlider), new PropertyMetadata(default(double)));
+
+    #endregion
+
+    #region InactiveTrackColor
+    public Brush InactiveTrackColor
+    {
+        get => (Brush)GetValue(InactiveTrackColorProperty);
+        set => SetValue(InactiveTrackColorProperty, value);
+    }
+
+    public static readonly DependencyProperty InactiveTrackColorProperty =
+        DependencyProperty.Register(nameof(InactiveTrackColor), typeof(Brush), typeof(RangeSlider), new PropertyMetadata(default(Brush)));
+
+    #endregion
+
+    #region ActiveTrackColor
+    public Brush ActiveTrackColor
+    {
+        get => (Brush)GetValue(ActiveTrackColorProperty);
+        set => SetValue(ActiveTrackColorProperty, value);
+    }
+
+    public static readonly DependencyProperty ActiveTrackColorProperty =
+        DependencyProperty.Register(nameof(ActiveTrackColor), typeof(Brush), typeof(RangeSlider), new PropertyMetadata(default(Brush)));
+
+    #endregion
 
     #region Delay
 
@@ -258,6 +297,30 @@ public class RangeSlider : Control
 
     #endregion LowerValue
 
+    #region AutoToolTipPlacement
+    public AutoToolTipPlacement AutoToolTipPlacement
+    {
+        get => (AutoToolTipPlacement)GetValue(AutoToolTipPlacementProperty);
+        set => SetValue(AutoToolTipPlacementProperty, value);
+    }
+
+    public static readonly DependencyProperty AutoToolTipPlacementProperty =
+        DependencyProperty.Register(nameof(AutoToolTipPlacement), typeof(AutoToolTipPlacement), typeof(RangeSlider), new PropertyMetadata(default(AutoToolTipPlacement)));
+
+    #endregion
+
+    #region AutoToolTipPrecision
+    public int AutoToolTipPrecision
+    {
+        get => (int)GetValue(AutoToolTipPrecisionProperty);
+        set => SetValue(AutoToolTipPrecisionProperty, value);
+    }
+
+    public static readonly DependencyProperty AutoToolTipPrecisionProperty =
+        DependencyProperty.Register(nameof(AutoToolTipPrecision), typeof(int), typeof(RangeSlider), new PropertyMetadata(default(int)));
+
+    #endregion
+
     #region UpperValue
 
     public static readonly DependencyProperty UpperValueProperty =
@@ -269,6 +332,8 @@ public class RangeSlider : Control
         get => (double)GetValue(UpperValueProperty);
         set => SetValue(UpperValueProperty, value);
     }
+
+    
 
     private static object OnCoerceUpperValue(DependencyObject d, object baseValue)
     {
@@ -335,7 +400,7 @@ public class RangeSlider : Control
     #region IsSnapToStep
 
     public static readonly DependencyProperty IsSnapToStepProperty =
-        DependencyProperty.Register(nameof(IsSnapToStep), typeof(bool), typeof(RangeSlider), new PropertyMetadata(OnIsSnapToStep));
+        DependencyProperty.Register(nameof(IsSnapToStep), typeof(bool), typeof(RangeSlider), new PropertyMetadata(true,OnIsSnapToStep));
 
     public bool IsSnapToStep
     {
@@ -350,7 +415,8 @@ public class RangeSlider : Control
     #endregion IsSnapToStep
 
     #region Override
-
+    private ToolTip _startThumbToolTip;
+    private ToolTip _endThumbToolTip;
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
@@ -359,6 +425,24 @@ public class RangeSlider : Control
         _StartRegion = GetTemplateChild(PART_StartRegion) as RepeatButton;
         _MiddleRegion = GetTemplateChild(PART_MiddleRegion) as RepeatButton;
         _EndRegion = GetTemplateChild(PART_EndRegion) as RepeatButton;
+
+        _startThumbToolTip = _StartThumb?.ToolTip as ToolTip;
+        _endThumbToolTip = _EndThumb?.ToolTip as ToolTip;
+
+        
+        if (_StartThumb != null)
+        {
+            ToolTipService.SetInitialShowDelay(_StartThumb, 0);
+            ToolTipService.SetBetweenShowDelay(_StartThumb, 0);
+        }
+
+        if (_EndThumb != null)
+        {
+            
+            ToolTipService.SetInitialShowDelay(_EndThumb, 0);
+            ToolTipService.SetBetweenShowDelay(_EndThumb, 0);
+        }
+
         if (_StartRegion != null)
         {
             _StartRegion.Click -= StartRegion_Click;
@@ -377,6 +461,8 @@ public class RangeSlider : Control
             _EndRegion.Click += EndRegion_Click;
         }
     }
+
+   
 
     #endregion Override
 
@@ -434,6 +520,15 @@ public class RangeSlider : Control
 
     private void OnDragStartedEvent(DragStartedEventArgs e)
     {
+        var thumb = e.OriginalSource as Thumb;
+        if (thumb == _StartThumb && _startThumbToolTip != null)
+        {
+            _startThumbToolTip.IsOpen = true;
+        }
+        else if (thumb == _EndThumb && _endThumbToolTip != null)
+        {
+            _endThumbToolTip.IsOpen = true;
+        }
     }
 
     private void OnThumbDragDelta(DragDeltaEventArgs e)
@@ -457,20 +552,91 @@ public class RangeSlider : Control
 
         if (thumb == _StartThumb)
         {
-            LowerValue = Math.Max(Minimum, Math.Min(LowerValue + offset, UpperValue));
+            var newLowerValue = LowerValue + offset;
+            // 关键修复：在赋值前应用Step对齐
+            if (IsSnapToStep)
+            {
+                newLowerValue = RoundToNearest(newLowerValue, Step);
+            }
+            LowerValue = Math.Max(Minimum, Math.Min(newLowerValue, UpperValue));
 
             UpdateThumbPosition(ThumbKind.Start);
+            UpdateToolTip(_startThumbToolTip, LowerValue, thumb);
         }
         else if (thumb == _EndThumb)
         {
-            UpperValue = Math.Min(Maximum, Math.Max(UpperValue + offset, LowerValue));
+            var newUpperValue = UpperValue + offset;
+            // 关键修复：在赋值前应用Step对齐
+            if (IsSnapToStep)
+            {
+                newUpperValue = RoundToNearest(newUpperValue, Step);
+            }
+            UpperValue = Math.Min(Maximum, Math.Max(newUpperValue, LowerValue));
 
             UpdateThumbPosition(ThumbKind.End);
+            UpdateToolTip(_endThumbToolTip, UpperValue, thumb);
+        }
+    }
+
+
+    private void UpdateToolTip(ToolTip toolTip, double value, Thumb thumb)
+    {
+        if (toolTip == null || thumb == null) return;
+
+        // 格式化数值精度
+        toolTip.Content = value.ToString($"F{AutoToolTipPrecision}");
+
+        // 设置工具提示位置
+        toolTip.Placement = GetToolTipPlacement();
+        toolTip.PlacementTarget = thumb;
+
+        // 强制更新ToolTip位置（新增的关键代码）
+        if (Orientation == Orientation.Horizontal)
+        {
+            toolTip.VerticalOffset += 0.001;
+            toolTip.VerticalOffset -= 0.001;
+        }
+        else
+        {
+            toolTip.HorizontalOffset += 0.001;
+            toolTip.HorizontalOffset -= 0.001;
+        }
+    }
+
+
+    private PlacementMode GetToolTipPlacement()
+    {
+        if (Orientation == Orientation.Horizontal)
+        {
+            return AutoToolTipPlacement switch
+            {
+                AutoToolTipPlacement.TopLeft => PlacementMode.Top,
+                AutoToolTipPlacement.BottomRight => PlacementMode.Bottom,
+                _ => PlacementMode.Top
+            };
+        }
+        else
+        {
+            return AutoToolTipPlacement switch
+            {
+                AutoToolTipPlacement.TopLeft => PlacementMode.Left,
+                AutoToolTipPlacement.BottomRight => PlacementMode.Right,
+                _ => PlacementMode.Left
+            };
         }
     }
 
     private void OnDragCompletedEvent(DragCompletedEventArgs e)
     {
+        var thumb = e.OriginalSource as Thumb;
+        if (thumb == _StartThumb && _startThumbToolTip != null)
+        {
+            _startThumbToolTip.IsOpen = false;
+        }
+        else if (thumb == _EndThumb && _endThumbToolTip != null)
+        {
+            _endThumbToolTip.IsOpen = false;
+        }
     }
 
     #endregion HandleDragEvent

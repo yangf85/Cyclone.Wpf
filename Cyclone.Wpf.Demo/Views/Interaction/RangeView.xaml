@@ -41,9 +41,29 @@
             </cy:SpacingStackPanel>
         </HeaderedContentControl>
 
+        <HeaderedContentControl Header="RangeSlider">
+            <DockPanel>
+                <cy:RangeSlider x:Name="RangeSlider"
+                                Width="500"
+                                Maximum="200"
+                                Minimum="0"
+                                Step="1" />
+                <TextBlock Margin="5,0,0,0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center">
+                    <Run Text="{Binding LowerValue, ElementName=RangeSlider, StringFormat={}{0:0.0}}" />
+                    <Run Text="---" />
+                    <Run Text="{Binding UpperValue, ElementName=RangeSlider, StringFormat={}{0:0.0}}" />
+                </TextBlock>
+
+            </DockPanel>
+
+        </HeaderedContentControl>
+
         <HeaderedContentControl Header="CircularGauge">
             <StackPanel Orientation="Horizontal">
                 <cy:CircularGauge x:Name="CircularGauge"
+                                  Margin="25"
                                   EndAngle="30"
                                   FontSize="14"
                                   IsLabelInside="False"
@@ -57,5 +77,7 @@
             </StackPanel>
 
         </HeaderedContentControl>
+
+
     </cy:SpacingStackPanel>
 </UserControl>

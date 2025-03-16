@@ -107,7 +107,7 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty PointerWidthProperty =
-        DependencyProperty.Register(nameof(PointerWidth), typeof(double), typeof(CircularGauge), new PropertyMetadata(5d));
+        DependencyProperty.Register(nameof(PointerWidth), typeof(double), typeof(CircularGauge), new PropertyMetadata(10d));
 
     #endregion
 

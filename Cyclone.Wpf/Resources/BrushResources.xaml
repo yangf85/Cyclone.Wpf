@@ -88,6 +88,9 @@
     <SolidColorBrush x:Key="Overlay.Light" Color="#40FFFFFF" />
     <SolidColorBrush x:Key="Overlay.Dark" Color="#80000000" />
 
+    <SolidColorBrush x:Key="Tick.Primary" Color="#2196F3" />
+    <SolidColorBrush x:Key="Tick.Secondary" Color="#00BCD4" />
+
     <!--  ==================== 渐变方案 ====================  -->
     <LinearGradientBrush x:Key="Gradient.Horizontal" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="#2196F3" />
