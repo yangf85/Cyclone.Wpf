@@ -42,15 +42,20 @@
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="CircularGauge">
-            <cy:CircularGauge EndAngle="30"
-                              FontSize="14"
-                              IsLabelInside="True"
-                              LongTickRatio="2.5"
-                              Maximum="120"
-                              Minimum="0"
-                              StartAngle="150"
-                              TickLengthRatio="0.05"
-                              Value="{Binding Value, StringFormat={}{0:F1}}" />
+            <StackPanel Orientation="Horizontal">
+                <cy:CircularGauge x:Name="CircularGauge"
+                                  EndAngle="30"
+                                  FontSize="14"
+                                  IsLabelInside="True"
+                                  LongTickRatio="2.5"
+                                  Maximum="120"
+                                  Minimum="0"
+                                  StartAngle="150"
+                                  TickLengthRatio="0.05"
+                                  Value="{Binding Value, StringFormat={}{0:0.0}}" />
+                <Button Width="300" Command="{Binding ShowValueCommand}" />
+            </StackPanel>
+
         </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>
