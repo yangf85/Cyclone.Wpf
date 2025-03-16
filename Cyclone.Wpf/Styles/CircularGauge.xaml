@@ -10,11 +10,11 @@
     <Style x:Key="CircularGauge.Style.Basic" TargetType="{x:Type ctl:CircularGauge}">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="TickColor" Value="{DynamicResource Border.Hover}" />
-        <Setter Property="PointerColor" Value="{DynamicResource Border.Checked}" />
-        <Setter Property="PointerThickness" Value="4" />
+        <Setter Property="PointerColor" Value="{DynamicResource Icon.Foreground.Error}" />
         <Setter Property="InnerRingBackground" Value="{DynamicResource Background.Active}" />
         <Setter Property="InnerRingBorderBrush" Value="{DynamicResource Border.Active}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Invert}" />
+        
 
 
     </Style>

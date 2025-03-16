@@ -41,17 +41,14 @@
             </cy:SpacingStackPanel>
         </HeaderedContentControl>
 
-        <HeaderedContentControl Header="CountDown">
-            <cy:CircularGauge Width="200"
-                              Height="200"
-                              EndAngle="0"
-                              FontSize="32"
-                              LargeChange="10"
+        <HeaderedContentControl Header="CircularGauge">
+            <cy:CircularGauge EndAngle="30"
+                              FontSize="14"
+                              IsLabelInside="True"
                               LongTickRatio="2.5"
-                              Maximum="100"
+                              Maximum="120"
                               Minimum="0"
-                              SmallChange="1"
-                              StartAngle="180"
+                              StartAngle="150"
                               TickLengthRatio="0.05"
                               Value="{Binding Value, StringFormat={}{0:F1}}" />
         </HeaderedContentControl>

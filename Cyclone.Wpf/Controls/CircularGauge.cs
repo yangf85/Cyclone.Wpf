@@ -9,17 +9,25 @@ using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
 
 namespace Cyclone.Wpf.Controls;
+
+
 public class CircularGauge : RangeBase
 {
     static CircularGauge()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(typeof(CircularGauge)));
+    
+        WidthProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d));
+        HeightProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d));
+        LargeChangeProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(10d));
+        SmallChangeProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(1d));
+
+
     }
 
     #region TickColor
     public static readonly DependencyProperty TickColorProperty =
-       DependencyProperty.Register("TickColor", typeof(Brush), typeof(CircularGauge),
-           new PropertyMetadata(Brushes.White));
+       DependencyProperty.Register("TickColor", typeof(Brush), typeof(CircularGauge), new PropertyMetadata(Brushes.White));
 
     public Brush TickColor
     {
@@ -39,15 +47,35 @@ public class CircularGauge : RangeBase
     public static readonly DependencyProperty LabelFontSizeProperty =
         DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(CircularGauge), new PropertyMetadata(10d));
 
+
+
     #endregion
 
-    
+    #region IsLabelInside
+    public bool IsLabelInside
+    {
+        get => (bool)GetValue(IsLabelInsideProperty);
+        set => SetValue(IsLabelInsideProperty, value);
+    }
+
+    public static readonly DependencyProperty IsLabelInsideProperty =
+        DependencyProperty.Register(nameof(IsLabelInside), typeof(bool), typeof(CircularGauge), new PropertyMetadata(default(bool),OnIsLabelInside));
+
+    private static void OnIsLabelInside(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var gauge = (CircularGauge)d;
+        gauge.InvalidateVisual();
+        
+    }
+
+    #endregion
+
 
     #region TickLengthRatio
     // 刻度线长度比例（相对于半径）
     public static readonly DependencyProperty TickLengthRatioProperty =
-        DependencyProperty.Register("TickLengthRatio", typeof(double), typeof(CircularGauge),
-            new PropertyMetadata(0.04));
+        DependencyProperty.Register("TickLengthRatio", typeof(double), typeof(CircularGauge), new PropertyMetadata(0.04));
+
 
     public double TickLengthRatio
     {
@@ -55,11 +83,12 @@ public class CircularGauge : RangeBase
         set => SetValue(TickLengthRatioProperty, value);
     }
     #endregion
+
     #region LongTickRatio
     // 长刻度线比例（相对于短刻度线）
     public static readonly DependencyProperty LongTickRatioProperty =
-        DependencyProperty.Register("LongTickRatio", typeof(double), typeof(CircularGauge),
-            new PropertyMetadata(2.0));
+        DependencyProperty.Register("LongTickRatio", typeof(double), typeof(CircularGauge), new PropertyMetadata(2.0));
+
 
     public double LongTickRatio
     {
@@ -69,17 +98,19 @@ public class CircularGauge : RangeBase
 
     #endregion
 
-    #region PointerThickness
-    public double PointerThickness
+
+    #region PointerWidth
+    public double PointerWidth
     {
-        get => (double)GetValue(PointerThicknessProperty);
-        set => SetValue(PointerThicknessProperty, value);
+        get => (double)GetValue(PointerWidthProperty);
+        set => SetValue(PointerWidthProperty, value);
     }
 
-    public static readonly DependencyProperty PointerThicknessProperty =
-        DependencyProperty.Register(nameof(PointerThickness), typeof(double), typeof(CircularGauge), new PropertyMetadata(3d));
+    public static readonly DependencyProperty PointerWidthProperty =
+        DependencyProperty.Register(nameof(PointerWidth), typeof(double), typeof(CircularGauge), new PropertyMetadata(5d));
 
     #endregion
+
 
     #region PointerColor
     public Brush PointerColor
@@ -100,8 +131,8 @@ public class CircularGauge : RangeBase
 
 
     public static readonly DependencyProperty StartAngleProperty =
-        DependencyProperty.Register("StartAngle", typeof(double), typeof(CircularGauge),
-            new PropertyMetadata(135.0));
+        DependencyProperty.Register("StartAngle", typeof(double), typeof(CircularGauge), new PropertyMetadata(135.0));
+
 
     public double StartAngle
     {
@@ -118,7 +149,7 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty InnerRingBackgroundProperty =
-        DependencyProperty.Register(nameof(InnerRingBackground), typeof(Brush), typeof(CircularGauge), new UIPropertyMetadata(default(Brush)));
+        DependencyProperty.Register(nameof(InnerRingBackground), typeof(Brush), typeof(CircularGauge), new PropertyMetadata(default(Brush)));
 
     #endregion
 
@@ -130,7 +161,7 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty InnerRingBorderBrushProperty =
-        DependencyProperty.Register(nameof(InnerRingBorderBrush), typeof(Brush), typeof(CircularGauge), new UIPropertyMetadata(default(Brush)));
+        DependencyProperty.Register(nameof(InnerRingBorderBrush), typeof(Brush), typeof(CircularGauge), new PropertyMetadata(default(Brush)));
 
    #endregion
 
@@ -138,8 +169,8 @@ public class CircularGauge : RangeBase
     #region
 
     public static readonly DependencyProperty EndAngleProperty =
-       DependencyProperty.Register("EndAngle", typeof(double), typeof(CircularGauge),
-           new PropertyMetadata(45.0));
+       DependencyProperty.Register("EndAngle", typeof(double), typeof(CircularGauge), new PropertyMetadata(45.0));
+
 
     public double EndAngle
     {
@@ -160,7 +191,7 @@ public class CircularGauge : RangeBase
     private static void OnIsDraggableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var gauge = (CircularGauge)d;
-        gauge.isDragging = false; // 禁用时强制结束拖动
+        gauge._isDragging = false; // 禁用时强制结束拖动
     }
     #endregion
 
@@ -174,16 +205,16 @@ public class CircularGauge : RangeBase
     }
 
     #region 鼠标事件处理
-    private bool isDragging = false;
-    private Point lastMousePosition;
+    private bool _isDragging = false;
+    private Point _lastMousePosition;
     private void CircularGauge_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (!IsDraggable) return;
 
         if (e.ChangedButton == MouseButton.Left)
         {
-            isDragging = true;
-            lastMousePosition = e.GetPosition(this);
+            _isDragging = true;
+            _lastMousePosition = e.GetPosition(this);
         }
     }
 
@@ -191,7 +222,7 @@ public class CircularGauge : RangeBase
     {
         if (!IsDraggable) return;
 
-        if (isDragging && e.LeftButton == MouseButtonState.Pressed)
+        if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
         {
             UpdateValueFromMousePosition(e.GetPosition(this));
         }
@@ -203,7 +234,7 @@ public class CircularGauge : RangeBase
 
         if (e.ChangedButton == MouseButton.Left)
         {
-            isDragging = false;
+            _isDragging = false;
         }
     }
     #endregion
@@ -246,7 +277,7 @@ public class CircularGauge : RangeBase
         // 设置 Value 属性触发更新
         Value = value;
 
-        lastMousePosition = position;
+        _lastMousePosition = position;
     }
     #endregion
 
@@ -261,105 +292,178 @@ public class CircularGauge : RangeBase
     {
         base.OnRender(drawingContext);
 
-        // 获取控件尺寸
+        // 基础参数计算
         double width = ActualWidth;
         double height = ActualHeight;
         double radius = Math.Min(width, height) * 0.5;
         double centerX = width / 2;
         double centerY = height / 2;
 
-        // 绘制背景
-        drawingContext.DrawEllipse(Background, null, new Point(centerX, centerY), radius, radius);
-        
+        // 绘制背景圆
+        drawingContext.DrawEllipse(
+            Background,
+            new Pen(BorderBrush, 1),
+            new Point(centerX, centerY),
+            radius,
+            radius
+        );
 
-        // 计算角度范围
+        // 角度范围计算
         double startAngle = StartAngle;
         double endAngle = EndAngle;
-        double range = (endAngle + 360 - startAngle) % 360;
+        double range = (endAngle >= startAngle) ? (endAngle - startAngle) : (360 - startAngle + endAngle);
         double totalSteps = Maximum - Minimum;
         double stepAngle = range / totalSteps;
 
-        // 刻度线长度
+        // 刻度参数
         double tickLength = radius * TickLengthRatio;
         double longTickLength = tickLength * LongTickRatio;
 
-        // 绘制刻度和标签
+        // 主绘制循环（刻度和标签）
         for (double i = Minimum; i <= Maximum; i += SmallChange)
         {
-            double angle = startAngle + i * stepAngle;
-            double x = centerX + radius * Math.Cos(angle * Math.PI / 180);
-            double y = centerY + radius * Math.Sin(angle * Math.PI / 180);
+            // 计算当前刻度的角度
+            double currentAngle = startAngle + (i - Minimum) * stepAngle;
+            currentAngle = (currentAngle % 360 + 360) % 360;
+            double radian = currentAngle * Math.PI / 180;
+
+            // 判断是否为长刻度
+            bool isLongTick = i % LargeChange == 0;
+            double currentTickLength = isLongTick ? longTickLength : tickLength;
+
+            // 刻度线方向（内外）
+            double tickDirection = IsLabelInside ? -1 : 1;
+            Point tickEnd = new Point(
+                centerX + (radius + tickDirection * currentTickLength) * Math.Cos(radian),
+                centerY + (radius + tickDirection * currentTickLength) * Math.Sin(radian)
+            );
 
             // 绘制刻度线
-            if (i % LargeChange == 0)
-            {
-                // 长刻度线和标签
-                double textX = centerX + (radius - longTickLength) * Math.Cos(angle * Math.PI / 180);
-                double textY = centerY + (radius - longTickLength) * Math.Sin(angle * Math.PI / 180);
-                drawingContext.DrawLine(new Pen(TickColor, 2), new Point(x, y), new Point(textX, textY));
+            drawingContext.DrawLine(
+                new Pen(TickColor, isLongTick ? 2 : 1),
+                new Point(
+                    centerX + radius * Math.Cos(radian),
+                    centerY + radius * Math.Sin(radian)
+                ),
+                tickEnd
+            );
 
-                // 标签文本
+            // 绘制标签（仅长刻度）
+            if (isLongTick)
+            {
+                // 格式化文本
                 FormattedText text = new FormattedText(
                     i.ToString(),
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
-                    new Typeface(FontFamily,FontStyle,FontWeight,FontStretch),
+                    new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
                     LabelFontSize,
                     TickColor,
-                    1.0
+                    VisualTreeHelper.GetDpi(this).PixelsPerDip
                 );
 
-                // 应用旋转变换
+                // 标签偏移位置
+                double labelOffset = IsLabelInside ? -(longTickLength * 1.75) : longTickLength * 1.75;
+               
+
+                Point labelCenter = new Point(
+                    centerX + (radius + labelOffset) * Math.Cos(radian),
+                    centerY + (radius + labelOffset) * Math.Sin(radian)
+                );
+
+                // 旋转标签使其水平
                 drawingContext.PushTransform(new RotateTransform(
-                    angle + 90,
-                    textX + text.Width / 2,
-                    textY + text.Height / 2
+                    currentAngle + (IsLabelInside ? -90 : 90),
+                    labelCenter.X,
+                    labelCenter.Y
                 ));
-
-                drawingContext.DrawText(text, new Point(textX, textY));
-
-                // 恢复变换
+                drawingContext.DrawText(text, new Point(
+                    labelCenter.X - text.Width / 2,
+                    labelCenter.Y - text.Height / 2
+                ));
                 drawingContext.Pop();
-            }
-            else
-            {
-                // 短刻度线
-                drawingContext.DrawLine(new Pen(TickColor, 1), new Point(x, y), new Point(
-                    centerX + (radius - tickLength) * Math.Cos(angle * Math.PI / 180),
-                    centerY + (radius - tickLength) * Math.Sin(angle * Math.PI / 180)
-                ));
             }
         }
 
-        // 绘制指针
-        double pointerAngle = startAngle + Value * stepAngle;
-        double pointerLength = radius * 0.8;
-        double pointerX = centerX + (radius - tickLength - 5) * Math.Cos(pointerAngle * Math.PI / 180);
-        double pointerY = centerY + (radius - tickLength - 5) * Math.Sin(pointerAngle * Math.PI / 180);
-        drawingContext.DrawLine(new Pen(PointerColor, PointerThickness), new Point(centerX, centerY), new Point(pointerX, pointerY));
+        // --- 指针绘制（整个指针为狭长三角形）---
+        // 指针角度计算
+        double pointerAngle = startAngle + (Value - Minimum) * stepAngle;
+        pointerAngle = (pointerAngle % 360 + 360) % 360;
+        double pointerRadian = pointerAngle * Math.PI / 180;
 
-        // 绘制内环
-        drawingContext.DrawEllipse(InnerRingBackground, new Pen(InnerRingBorderBrush,1), new Point(centerX, centerY), FontSize , FontSize);//绘制遮罩
+        // 指针参数
+        double pointerLength =IsLabelInside? radius * 0.65:radius*0.85; // 指针总长度
+        double triangleBaseWidth = PointerWidth;        // 三角形底边宽度
 
+        // 计算方向向量
+        Vector direction = new Vector(
+            Math.Cos(pointerRadian),
+            Math.Sin(pointerRadian)
+        );
 
+        // 垂直方向向量（用于左右偏移）
+        Vector perpendicular = new Vector(-direction.Y, direction.X); // 逆时针旋转90度
+
+        // 三角形顶点：
+        // 1. 尖端指向末端
+        // 2. 底边两端点位于中心附近
+        Point tipPoint = new Point(
+            centerX + pointerLength * Math.Cos(pointerRadian),
+            centerY + pointerLength * Math.Sin(pointerRadian)
+        );
+
+        // 底边顶点坐标计算
+        Point baseLeft = new Point(
+            centerX - perpendicular.X * (triangleBaseWidth / 2),
+            centerY - perpendicular.Y * (triangleBaseWidth / 2)
+        );
+
+        Point baseRight = new Point(
+            centerX + perpendicular.X * (triangleBaseWidth / 2),
+            centerY + perpendicular.Y * (triangleBaseWidth / 2)
+        );
+
+        // 创建三角形路径
+        PathGeometry pointerGeometry = new PathGeometry();
+        PathFigure figure = new PathFigure();
+
+        // 路径路径：尖端 → 左底 → 右底 → 闭合
+        figure.StartPoint = tipPoint;
+        figure.Segments.Add(new LineSegment(baseLeft, true));
+        figure.Segments.Add(new LineSegment(baseRight, true));
+        figure.Segments.Add(new LineSegment(tipPoint, true));
+        figure.IsClosed = true;
+
+        pointerGeometry.Figures.Add(figure);
+
+        // 绘制三角形指针（填充）
+        drawingContext.DrawGeometry(PointerColor, null, pointerGeometry);
+
+        // 绘制中心内环
+        double innerRadius = FontSize * 1.2;
+        drawingContext.DrawEllipse(
+            InnerRingBackground,
+            new Pen(InnerRingBorderBrush, 1),
+            new Point(centerX, centerY),
+            innerRadius,
+            innerRadius
+        );
 
         // 绘制当前值文本
-
-        string format = GetBindingStringFormat(ValueProperty);
-        var formattedValue= string.IsNullOrEmpty(format) ? Value.ToString() : string.Format(CultureInfo.CurrentCulture, format, Value);
-
-        FormattedText currentValueText = new FormattedText(
-            formattedValue, 
+        var format = GetBindingStringFormat(ValueProperty);
+        string formattedValue = string.IsNullOrEmpty(format) ? Value.ToString() : string.Format(CultureInfo.CurrentCulture, format,  Value);
+        FormattedText valueText = new FormattedText(
+            formattedValue,
             CultureInfo.CurrentCulture,
             FlowDirection.LeftToRight,
             new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
             FontSize,
             Foreground,
-            1.0
+            VisualTreeHelper.GetDpi(this).PixelsPerDip
         );
-        drawingContext.DrawText(currentValueText, new Point(
-            centerX - currentValueText.Width / 2,
-            centerY - currentValueText.Height / 2
+        drawingContext.DrawText(valueText, new Point(
+            centerX - valueText.Width / 2,
+            centerY - valueText.Height / 2
         ));
     }
 
