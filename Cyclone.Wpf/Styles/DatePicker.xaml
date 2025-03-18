@@ -60,7 +60,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="DatePickerStyle" TargetType="{x:Type DatePicker}">
+    <Style x:Key="DatePicker.Style.Basic" TargetType="{x:Type DatePicker}">
         <Setter Property="IsTodayHighlighted" Value="True" />
         <Setter Property="CalendarStyle" Value="{DynamicResource Calendar.Basic}" />
         <Setter Property="SelectedDateFormat" Value="Short" />
@@ -113,5 +113,5 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource DatePickerStyle}" TargetType="{x:Type DatePicker}" />
+    <Style BasedOn="{StaticResource DatePicker.Style.Basic}" TargetType="{x:Type DatePicker}" />
 </ResourceDictionary>

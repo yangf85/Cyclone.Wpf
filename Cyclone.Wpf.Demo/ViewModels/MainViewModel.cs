@@ -41,6 +41,8 @@ public partial class MainViewModel : ObservableObject
             "Notification" => new NotificationView(),
             "TransferBox"=> new TransferBoxView(),
             "HintBox" => new HintBoxView(),
+            "Panel" => new PanelView(),
+
             _ => new object(),
         };
     }
@@ -161,6 +163,20 @@ public partial class SideMenuViewModel : ObservableObject
         {
             Header = "Notification",
             Icon = "\xe7a3",
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header = "Other",
+            Icon = "\xe7a3",
+            Items = 
+            [
+                new SideMenuItemViewModel()
+                {
+                    Header="Panel",
+                    Icon= "\xe7a3",
+                },
+
+            ]
         });
     }
 }

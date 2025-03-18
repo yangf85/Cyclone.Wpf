@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Controls\Card\" />
+    <Folder Include="Controls\Panel\" />
   </ItemGroup>
 
 </Project>
