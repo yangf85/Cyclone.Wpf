@@ -4,13 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Cyclone.Wpf;
-
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
+namespace Cyclone.Wpf.Controls;
 
 public class CircularPanel : Panel
 {
@@ -187,19 +181,19 @@ public class CircularPanel : Panel
 
     #region 辅助方法
 
-    private double CalculateSafeDiameter(Size availableSize)
-    {
-        double maxWidth = double.IsInfinity(availableSize.Width) ? 1000 : availableSize.Width;
-        double maxHeight = double.IsInfinity(availableSize.Height) ? 1000 : availableSize.Height;
-        return Math.Min(maxWidth, maxHeight);
-    }
-
     private static Point CalculatePosition(Point center, double radius, double angle)
     {
         double radians = (angle - 90) * Math.PI / 180; // 转换为数学坐标系
         return new Point(
             center.X + radius * Math.Cos(radians),
             center.Y + radius * Math.Sin(radians));
+    }
+
+    private double CalculateSafeDiameter(Size availableSize)
+    {
+        double maxWidth = double.IsInfinity(availableSize.Width) ? 1000 : availableSize.Width;
+        double maxHeight = double.IsInfinity(availableSize.Height) ? 1000 : availableSize.Height;
+        return Math.Min(maxWidth, maxHeight);
     }
 
     #endregion 辅助方法

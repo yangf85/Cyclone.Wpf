@@ -113,7 +113,7 @@
     <SolidColorBrush x:Key="Icon.Foreground.Hover" Color="#42A5F5" />
     <SolidColorBrush x:Key="Icon.Foreground.Checked" Color="#1976D2" />
     <SolidColorBrush x:Key="Icon.Foreground.Focused" Color="#42A5F5" />
-    <SolidColorBrush x:Key="Icon.Foreground.Selected" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Icon.Foreground.Selected" Color="#1976D2" />
     <SolidColorBrush x:Key="Icon.Foreground.Pressed" Color="#0D47A1" />
     <SolidColorBrush x:Key="Icon.Foreground.Editing" Color="#42A5F5" />
     <SolidColorBrush x:Key="Icon.Foreground.Dragging" Color="#0D47A1" />
@@ -123,6 +123,7 @@
     <SolidColorBrush x:Key="Icon.Foreground.Info" Color="#0288D1" />
     <SolidColorBrush x:Key="Icon.Foreground.Disabled" Color="#BDBDBD" />
     <SolidColorBrush x:Key="Icon.Foreground.Link" Color="#1565C0" />
+    <SolidColorBrush x:Key="Icon.Foreground.Invert" Color="#FFFFFF" />
 
     <!--  ==================== 阴影/高光 ====================  -->
     <SolidColorBrush x:Key="Shadow.Default" Color="#40000000" />

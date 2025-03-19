@@ -21,7 +21,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Stroke="{DynamicResource Border.Default}"
-                    StrokeThickness="1.5" />
+                    StrokeThickness="1" />
                 <Ellipse
                     x:Name="InnerEllipse"
                     Width="15"

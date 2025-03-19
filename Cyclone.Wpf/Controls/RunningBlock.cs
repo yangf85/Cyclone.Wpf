@@ -6,8 +6,6 @@ using System.Windows.Media.Animation;
 
 namespace Cyclone.Wpf.Controls;
 
-
-
 public enum RunningDirection
 {
     Horizontal,
@@ -26,30 +24,36 @@ public enum RunningLoopMode
 [TemplatePart(Name = "PART_Content", Type = typeof(ContentPresenter))]
 public class RunningBlock : ContentControl
 {
-
     #region IsRunning
+
     public static readonly DependencyProperty IsRunningProperty =
         DependencyProperty.Register(nameof(IsRunning), typeof(bool), typeof(RunningBlock),
             new FrameworkPropertyMetadata(true, OnIsRunningChanged));
+
     public bool IsRunning
     {
         get => (bool)GetValue(IsRunningProperty);
         set => SetValue(IsRunningProperty, value);
     }
-    #endregion
+
+    #endregion IsRunning
 
     #region Duration
+
     public static readonly DependencyProperty DurationProperty =
       DependencyProperty.Register(nameof(Duration), typeof(Duration), typeof(RunningBlock),
           new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(5)), OnDurationChanged));
+
     public Duration Duration
     {
         get => (Duration)GetValue(DurationProperty);
         set => SetValue(DurationProperty, value);
     }
-    #endregion
+
+    #endregion Duration
 
     #region LoopMode
+
     public static readonly DependencyProperty LoopModeProperty =
        DependencyProperty.Register(nameof(LoopMode), typeof(RunningLoopMode), typeof(RunningBlock),
            new FrameworkPropertyMetadata(RunningLoopMode.Repeat, OnLoopModeChanged));
@@ -59,21 +63,22 @@ public class RunningBlock : ContentControl
         get => (RunningLoopMode)GetValue(LoopModeProperty);
         set => SetValue(LoopModeProperty, value);
     }
-    #endregion
 
+    #endregion LoopMode
 
     #region Direction
 
     public static readonly DependencyProperty DirectionProperty =
         DependencyProperty.Register(nameof(Direction), typeof(RunningDirection), typeof(RunningBlock),
             new FrameworkPropertyMetadata(RunningDirection.Horizontal, OnDirectionChanged));
+
     public RunningDirection Direction
     {
         get => (RunningDirection)GetValue(DirectionProperty);
         set => SetValue(DirectionProperty, value);
     }
 
-    #endregion
+    #endregion Direction
 
     #region Private Fields
 
@@ -130,16 +135,6 @@ public class RunningBlock : ContentControl
     #endregion Event Handlers
 
     #region Animation Control
-
-    private void StartAnimation()
-    {
-        _storyboard?.Begin(this, true);
-    }
-
-    private void StopAnimation()
-    {
-        _storyboard?.Pause(this);
-    }
 
     private void UpdateAnimation()
     {

@@ -10,7 +10,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <BulletDecorator VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Background="{TemplateBinding Background}">
+                    <BulletDecorator
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
                         <BulletDecorator.Bullet>
                             <Border
                                 x:Name="BoxBorder"
@@ -18,7 +21,7 @@
                                 Height="18"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="1.5">
+                                BorderThickness="1">
                                 <Grid Margin="1">
                                     <Path
                                         x:Name="CheckMark"

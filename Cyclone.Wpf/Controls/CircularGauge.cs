@@ -10,24 +10,31 @@ using System.Windows.Media.TextFormatting;
 
 namespace Cyclone.Wpf.Controls;
 
-
 public class CircularGauge : RangeBase
 {
+    private bool _isDragging = false;
+
+    private Point _lastMousePosition;
+
+    public CircularGauge()
+    {
+        PreviewMouseDown += CircularGauge_PreviewMouseDown;
+        PreviewMouseMove += CircularGauge_PreviewMouseMove;
+        PreviewMouseUp += CircularGauge_PreviewMouseUp;
+    }
+
     static CircularGauge()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(typeof(CircularGauge)));
-    
-        WidthProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d));
-        HeightProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d));
+
+        ValueProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(0d, FrameworkPropertyMetadataOptions.AffectsRender));
+        WidthProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d, FrameworkPropertyMetadataOptions.AffectsRender));
+        HeightProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(150d, FrameworkPropertyMetadataOptions.AffectsRender));
         LargeChangeProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(10d));
         SmallChangeProperty.OverrideMetadata(typeof(CircularGauge), new FrameworkPropertyMetadata(1d));
-
-
     }
 
     #region TickColor
-    public static readonly DependencyProperty TickColorProperty =
-       DependencyProperty.Register("TickColor", typeof(Brush), typeof(CircularGauge), new PropertyMetadata(Brushes.White));
 
     public Brush TickColor
     {
@@ -35,23 +42,28 @@ public class CircularGauge : RangeBase
         set => SetValue(TickColorProperty, value);
     }
 
-    #endregion
+    public static readonly DependencyProperty TickColorProperty =
+       DependencyProperty.Register("TickColor", typeof(Brush), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(Brushes.White, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    #endregion TickColor
+
     #region LabelFontSize
+
     public double LabelFontSize
     {
         get => (double)GetValue(LabelFontSizeProperty);
         set => SetValue(LabelFontSizeProperty, value);
     }
 
-
     public static readonly DependencyProperty LabelFontSizeProperty =
-        DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(CircularGauge), new PropertyMetadata(10d));
+        DependencyProperty.Register(nameof(LabelFontSize), typeof(double), typeof(CircularGauge),
+            new FrameworkPropertyMetadata(10d, FrameworkPropertyMetadataOptions.AffectsRender));
 
-
-
-    #endregion
+    #endregion LabelFontSize
 
     #region IsLabelInside
+
     public bool IsLabelInside
     {
         get => (bool)GetValue(IsLabelInsideProperty);
@@ -59,47 +71,43 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty IsLabelInsideProperty =
-        DependencyProperty.Register(nameof(IsLabelInside), typeof(bool), typeof(CircularGauge), new PropertyMetadata(default(bool),OnIsLabelInside));
+        DependencyProperty.Register(nameof(IsLabelInside), typeof(bool), typeof(CircularGauge),
+            new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.AffectsRender));
 
-    private static void OnIsLabelInside(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var gauge = (CircularGauge)d;
-        gauge.InvalidateVisual();
-        
-    }
-
-    #endregion
-
+    #endregion IsLabelInside
 
     #region TickLengthRatio
-    // 刻度线长度比例（相对于半径）
-    public static readonly DependencyProperty TickLengthRatioProperty =
-        DependencyProperty.Register("TickLengthRatio", typeof(double), typeof(CircularGauge), new PropertyMetadata(0.04));
 
-
+    // 刻度线长度比例(相对于半径)
     public double TickLengthRatio
     {
         get => (double)GetValue(TickLengthRatioProperty);
         set => SetValue(TickLengthRatioProperty, value);
     }
-    #endregion
+
+    public static readonly DependencyProperty TickLengthRatioProperty =
+        DependencyProperty.Register("TickLengthRatio", typeof(double), typeof(CircularGauge),
+            new FrameworkPropertyMetadata(0.04, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    #endregion TickLengthRatio
 
     #region LongTickRatio
-    // 长刻度线比例（相对于短刻度线）
-    public static readonly DependencyProperty LongTickRatioProperty =
-        DependencyProperty.Register("LongTickRatio", typeof(double), typeof(CircularGauge), new PropertyMetadata(2.0));
 
-
+    //长刻度线比例(相对于短刻度线)
     public double LongTickRatio
     {
         get => (double)GetValue(LongTickRatioProperty);
         set => SetValue(LongTickRatioProperty, value);
     }
 
-    #endregion
+    public static readonly DependencyProperty LongTickRatioProperty =
+        DependencyProperty.Register("LongTickRatio", typeof(double), typeof(CircularGauge),
+            new FrameworkPropertyMetadata(2.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
+    #endregion LongTickRatio
 
     #region PointerWidth
+
     public double PointerWidth
     {
         get => (double)GetValue(PointerWidthProperty);
@@ -107,12 +115,13 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty PointerWidthProperty =
-        DependencyProperty.Register(nameof(PointerWidth), typeof(double), typeof(CircularGauge), new PropertyMetadata(10d));
+       DependencyProperty.Register(nameof(PointerWidth), typeof(double), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(10d, FrameworkPropertyMetadataOptions.AffectsRender));
 
-    #endregion
-
+    #endregion PointerWidth
 
     #region PointerColor
+
     public Brush PointerColor
     {
         get => (Brush)GetValue(PointerColorProperty);
@@ -120,28 +129,41 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty PointerColorProperty =
-        DependencyProperty.Register(nameof(PointerColor), typeof(Brush), typeof(CircularGauge), new PropertyMetadata(Brushes.DarkRed));
+        DependencyProperty.Register(nameof(PointerColor), typeof(Brush), typeof(CircularGauge),
+            new FrameworkPropertyMetadata(Brushes.DarkRed, FrameworkPropertyMetadataOptions.AffectsRender));
 
-    #endregion
-
-
-
+    #endregion PointerColor
 
     #region StartAngle
-
-
-    public static readonly DependencyProperty StartAngleProperty =
-        DependencyProperty.Register("StartAngle", typeof(double), typeof(CircularGauge), new PropertyMetadata(135.0));
-
 
     public double StartAngle
     {
         get => (double)GetValue(StartAngleProperty);
         set => SetValue(StartAngleProperty, value);
     }
-    #endregion
+
+    public static readonly DependencyProperty StartAngleProperty =
+       DependencyProperty.Register("StartAngle", typeof(double), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(135.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    #endregion StartAngle
+
+    #region EndAngle
+
+    public double EndAngle
+    {
+        get => (double)GetValue(EndAngleProperty);
+        set => SetValue(EndAngleProperty, value);
+    }
+
+    public static readonly DependencyProperty EndAngleProperty =
+       DependencyProperty.Register("EndAngle", typeof(double), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(45.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    #endregion EndAngle
 
     #region InnerRingBackground
+
     public Brush InnerRingBackground
     {
         get => (Brush)GetValue(InnerRingBackgroundProperty);
@@ -149,11 +171,13 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty InnerRingBackgroundProperty =
-        DependencyProperty.Register(nameof(InnerRingBackground), typeof(Brush), typeof(CircularGauge), new PropertyMetadata(default(Brush)));
+       DependencyProperty.Register(nameof(InnerRingBackground), typeof(Brush), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(default(Brush), FrameworkPropertyMetadataOptions.AffectsRender));
 
-    #endregion
+    #endregion InnerRingBackground
 
     #region InnerRingBorderBrush
+
     public Brush InnerRingBorderBrush
     {
         get => (Brush)GetValue(InnerRingBorderBrushProperty);
@@ -161,52 +185,33 @@ public class CircularGauge : RangeBase
     }
 
     public static readonly DependencyProperty InnerRingBorderBrushProperty =
-        DependencyProperty.Register(nameof(InnerRingBorderBrush), typeof(Brush), typeof(CircularGauge), new PropertyMetadata(default(Brush)));
+      DependencyProperty.Register(nameof(InnerRingBorderBrush), typeof(Brush), typeof(CircularGauge),
+          new FrameworkPropertyMetadata(default(Brush), FrameworkPropertyMetadataOptions.AffectsRender));
 
-   #endregion
+    #endregion InnerRingBorderBrush
 
-
-    #region
-
-    public static readonly DependencyProperty EndAngleProperty =
-       DependencyProperty.Register("EndAngle", typeof(double), typeof(CircularGauge), new PropertyMetadata(45.0));
-
-
-    public double EndAngle
-    {
-        get => (double)GetValue(EndAngleProperty);
-        set => SetValue(EndAngleProperty, value);
-    }
-    #endregion
     #region IsDraggable
-  
-    public static readonly DependencyProperty IsDraggableProperty =
-        DependencyProperty.Register("IsDraggable", typeof(bool), typeof(CircularGauge), new PropertyMetadata(true, OnIsDraggableChanged));
+
     public bool IsDraggable
     {
         get => (bool)GetValue(IsDraggableProperty);
         set => SetValue(IsDraggableProperty, value);
     }
 
+    public static readonly DependencyProperty IsDraggableProperty =
+       DependencyProperty.Register("IsDraggable", typeof(bool), typeof(CircularGauge),
+           new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender, OnIsDraggableChanged));
+
     private static void OnIsDraggableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var gauge = (CircularGauge)d;
         gauge._isDragging = false; // 禁用时强制结束拖动
     }
-    #endregion
 
-    public CircularGauge()
-    {
-        // 订阅鼠标事件
-        this.PreviewMouseDown += CircularGauge_PreviewMouseDown;
-        this.PreviewMouseMove += CircularGauge_PreviewMouseMove;
-        this.PreviewMouseUp += CircularGauge_PreviewMouseUp;
-        this.IsHitTestVisible = true; // 确保控件接收鼠标事件
-    }
+    #endregion IsDraggable
 
     #region 鼠标事件处理
-    private bool _isDragging = false;
-    private Point _lastMousePosition;
+
     private void CircularGauge_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (!IsDraggable) return;
@@ -237,9 +242,11 @@ public class CircularGauge : RangeBase
             _isDragging = false;
         }
     }
-    #endregion
+
+    #endregion 鼠标事件处理
 
     #region 坐标到值的转换
+
     private void UpdateValueFromMousePosition(Point position)
     {
         double centerX = ActualWidth / 2;
@@ -279,14 +286,37 @@ public class CircularGauge : RangeBase
 
         _lastMousePosition = position;
     }
-    #endregion
+
+    #endregion 坐标到值的转换
 
     #region 绘制逻辑
-    protected override void OnValueChanged(double oldValue, double newValue)
+
+    private string GetBindingStringFormat(DependencyProperty property)
     {
-        base.OnValueChanged(oldValue, newValue);
-        InvalidateVisual();
+        // 获取绑定表达式
+        var bindingExpression = BindingOperations.GetBindingExpression(this, property);
+
+        // 检查是否为有效绑定且包含StringFormat
+        if (bindingExpression?.ParentBinding?.StringFormat != null)
+        {
+            return bindingExpression.ParentBinding.StringFormat;
+        }
+
+        // 处理其他场景（如MultiBinding）
+        var multiBindingExpression = BindingOperations.GetMultiBindingExpression(this, property);
+        if (multiBindingExpression?.ParentMultiBinding?.StringFormat != null)
+        {
+            return multiBindingExpression.ParentMultiBinding.StringFormat;
+        }
+
+        return null; // 未找到格式
     }
+
+    //protected override void OnValueChanged(double oldValue, double newValue)
+    //{
+    //    base.OnValueChanged(oldValue, newValue);
+    //    InvalidateVisual();
+    //}
 
     protected override void OnRender(DrawingContext drawingContext)
     {
@@ -364,7 +394,6 @@ public class CircularGauge : RangeBase
 
                 // 标签偏移位置
                 double labelOffset = IsLabelInside ? -(longTickLength * 1.75) : longTickLength * 1.75;
-               
 
                 Point labelCenter = new Point(
                     centerX + (radius + labelOffset) * Math.Cos(radian),
@@ -392,7 +421,7 @@ public class CircularGauge : RangeBase
         double pointerRadian = pointerAngle * Math.PI / 180;
 
         // 指针参数
-        double pointerLength =IsLabelInside? radius * 0.65:radius*0.85; // 指针总长度
+        double pointerLength = IsLabelInside ? radius * 0.65 : radius * 0.85; // 指针总长度
         double triangleBaseWidth = PointerWidth;        // 三角形底边宽度
 
         // 计算方向向量
@@ -451,7 +480,7 @@ public class CircularGauge : RangeBase
 
         // 绘制当前值文本
         var format = GetBindingStringFormat(ValueProperty);
-        string formattedValue = string.IsNullOrEmpty(format) ? Value.ToString() : string.Format(CultureInfo.CurrentCulture, format,  Value);
+        string formattedValue = string.IsNullOrEmpty(format) ? Value.ToString() : string.Format(CultureInfo.CurrentCulture, format, Value);
         FormattedText valueText = new FormattedText(
             formattedValue,
             CultureInfo.CurrentCulture,
@@ -467,27 +496,5 @@ public class CircularGauge : RangeBase
         ));
     }
 
-
-    private string GetBindingStringFormat(DependencyProperty property)
-    {
-        // 获取绑定表达式
-        var bindingExpression = BindingOperations.GetBindingExpression(this, property);
-
-        // 检查是否为有效绑定且包含StringFormat
-        if (bindingExpression?.ParentBinding?.StringFormat != null)
-        {
-            return bindingExpression.ParentBinding.StringFormat;
-        }
-
-        // 处理其他场景（如MultiBinding）
-        var multiBindingExpression = BindingOperations.GetMultiBindingExpression(this, property);
-        if (multiBindingExpression?.ParentMultiBinding?.StringFormat != null)
-        {
-            return multiBindingExpression.ParentMultiBinding.StringFormat;
-        }
-
-        return null; // 未找到格式
-    }
-
-    #endregion
+    #endregion 绘制逻辑
 }

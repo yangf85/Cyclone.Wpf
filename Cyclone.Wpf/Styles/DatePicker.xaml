@@ -21,13 +21,13 @@
                             Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
-                        </Trigger>
                         <DataTrigger Binding="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DatePicker}}" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Selected}" />
                             <Setter TargetName="IconPath" Property="Data" Value="M384 256h256V213.333333h85.333333v42.666667h128v554.666667H170.666667V256h128V213.333333h85.333333v42.666667zM256 341.333333v384h512V341.333333H256z m170.666667 42.666667v85.333333H298.666667V384h128z" />
                         </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
