@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -45,16 +46,20 @@ public class DateRangePicker : Control
     }
 
     public static readonly DependencyProperty StartProperty =
-        DependencyProperty.Register(nameof(Start), typeof(DateTime?), typeof(DateRangePicker), new PropertyMetadata(default(DateTime?), OnStartChanged));
+        DependencyProperty.Register(nameof(Start), typeof(DateTime?), typeof(DateRangePicker),
+            new FrameworkPropertyMetadata(default(DateTime?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnStartChanged));
 
     private static void OnStartChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var picker = (DateRangePicker)d;
-        if (e.NewValue != null && picker._calendar != null)
+        picker.Dispatcher.BeginInvoke(new Action(() =>
         {
-            var date = (DateTime)e.NewValue;
-            picker._calendar.SelectedDates.Add(date);
-        }
+            if (e.NewValue != null && picker._calendar != null)
+            {
+                var date = (DateTime)e.NewValue;
+                picker._calendar.SelectedDates.Add(date);
+            }
+        }), DispatcherPriority.Loaded);
     }
 
     #endregion Start
@@ -68,7 +73,21 @@ public class DateRangePicker : Control
     }
 
     public static readonly DependencyProperty EndProperty =
-        DependencyProperty.Register(nameof(End), typeof(DateTime?), typeof(DateRangePicker), new PropertyMetadata(default(DateTime?)));
+        DependencyProperty.Register(nameof(End), typeof(DateTime?), typeof(DateRangePicker),
+            new FrameworkPropertyMetadata(default(DateTime?), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnEndChanged));
+
+    private static void OnEndChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var picker = (DateRangePicker)d;
+        picker.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            if (e.NewValue != null && picker._calendar != null)
+            {
+                var date = (DateTime)e.NewValue;
+                picker._calendar.SelectedDates.Add(date);
+            }
+        }), DispatcherPriority.Loaded);
+    }
 
     #endregion End
 
@@ -199,6 +218,7 @@ public class DateRangePicker : Control
 
         var dates = _calendar.SelectedDates;
         var order = dates.Order();
+
         Start = order.FirstOrDefault();
         End = order.LastOrDefault();
         if (_start != null)
