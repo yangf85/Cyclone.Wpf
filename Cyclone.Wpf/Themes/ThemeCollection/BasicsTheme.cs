@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Cyclone.Wpf.Themes;
+using System.ComponentModel;
 
-namespace Cyclone.UI.Themes
+namespace Cyclone.Wpf.Themes
 {
     /// <summary>
     /// 基础主题

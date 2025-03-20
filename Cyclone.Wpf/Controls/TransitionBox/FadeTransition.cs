@@ -16,6 +16,9 @@ public class FadeTransition : TransitionBase
     {
         try
         {
+            // 显式设置起始值
+            element.Opacity = FromOpacity;
+
             var animation = new DoubleAnimation
             {
                 From = FromOpacity,
@@ -35,8 +38,9 @@ public class FadeTransition : TransitionBase
 
     public override void Stop(FrameworkElement element)
     {
-        // 使用 HandoffBehavior.SnapshotAndReplace 停止当前动画
-        element.BeginAnimation(UIElement.OpacityProperty, null, HandoffBehavior.SnapshotAndReplace);
+        // 停止动画并恢复最终值
+        element.BeginAnimation(UIElement.OpacityProperty, null);
+        element.Opacity = ToOpacity; // 确保最终状态正确
     }
 
     public event EventHandler Completed;

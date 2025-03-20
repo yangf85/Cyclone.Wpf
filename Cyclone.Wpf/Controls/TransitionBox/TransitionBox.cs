@@ -16,7 +16,7 @@ public class TransitionBox : ContentControl
             nameof(Transition),
             typeof(ITransition),
             typeof(TransitionBox),
-            new PropertyMetadata(new FadeTransition())); // 默认动画
+            new PropertyMetadata(new SlideTransition())); // 默认动画
 
     public ITransition Transition
     {
@@ -39,10 +39,13 @@ public class TransitionBox : ContentControl
 
         base.OnContentChanged(oldContent, newContent);
 
-        // 启动新内容的动画
+        // 延迟启动新动画，直到元素被加载
         if (Transition != null && newContent is FrameworkElement newElement)
         {
-            Transition.Start(newElement);
+            newElement.Loaded += (s, e) =>
+            {
+                Transition.Start(newElement);
+            };
         }
     }
 

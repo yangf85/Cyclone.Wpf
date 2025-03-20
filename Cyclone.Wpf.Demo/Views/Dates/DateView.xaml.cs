@@ -26,11 +26,11 @@ public partial class DateView : UserControl
     public DateView()
     {
         InitializeComponent();
-        DataContext = new DateViewModel();
+        DataContext = new DateModel();
     }
 }
 
-public partial class DateViewModel : ObservableObject
+public partial class DateModel : ObservableObject
 {
     [ObservableProperty]
     public partial DateTime? Date { get; set; } = DateTime.Now;
@@ -44,7 +44,7 @@ public partial class DateViewModel : ObservableObject
     [ObservableProperty]
     public partial DateTime End { get; set; } = DateTime.Now.AddDays(5);
 
-    public DateViewModel()
+    public DateModel()
     {
         BlockoutDates.Add(DateTime.Now.AddDays(1));
         BlockoutDates.Add(DateTime.Now.AddDays(2));

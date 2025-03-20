@@ -22,41 +22,22 @@ namespace Cyclone.Wpf.Demo.Views;
 /// <summary>
 /// SelectorView.xaml 的交互逻辑
 /// </summary>
-public partial class SelectorView : UserControl
+public partial class CascadePickerView : UserControl
 {
-    public SelectorView()
+    public CascadePickerView()
     {
         InitializeComponent();
-        DataContext = new SelectorViewModel();
+        DataContext = new CascadePickerViewModel();
     }
-
-   
-
- 
-
-   
-    private void OnChangeContent(object sender, RoutedEventArgs e)
-    {
-        // 切换内容
-        transitionBox.Content = new TextBlock
-        {
-            Text = "New Content",
-            VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            FontSize = 20
-        };
-    }
-
-  
-}
-
-public partial class SelectorViewModel : ObservableObject
-{
-    [ObservableProperty]
-    public partial CascadePickerViewModel CascadePicker { get; set; } = new CascadePickerViewModel();
 }
 
 public partial class CascadePickerViewModel : ObservableObject
+{
+    [ObservableProperty]
+    public partial CascadeItemViewModel CascadePicker { get; set; } = new CascadeItemViewModel();
+}
+
+public partial class CascadeItemViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial City City { get; set; }
@@ -64,7 +45,7 @@ public partial class CascadePickerViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<City> Cities { get; set; }
 
-    public CascadePickerViewModel()
+    public CascadeItemViewModel()
     {
         Cities =
         [

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Demo.Views;
+using Cyclone.Wpf.Demo.Views.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ public partial class MainViewModel : ObservableObject
     public partial object CurrentView { get; set; } = new object();
 
     [RelayCommand]
-    void SwitchView(SideMenuItemViewModel item)
+    private void SwitchView(SideMenuItemViewModel item)
     {
         if (item == null) { return; }
 
@@ -28,7 +29,7 @@ public partial class MainViewModel : ObservableObject
             "Button" => new ButtonView(),
             "Text" => new TextView(),
             "Nesting" => new NestingView(),
-            "Selector" => new SelectorView(),
+            "CascadePicker" => new CascadePickerView(),
             "Loading" => new LoadingView(),
             "DataGrid" => new DataGridView(),
             "Date" => new DateView(),
@@ -39,10 +40,10 @@ public partial class MainViewModel : ObservableObject
             "ListView" => new CollectionView(),
             "ListBox" => new ListBoxView(),
             "Notification" => new NotificationView(),
-            "TransferBox"=> new TransferBoxView(),
+            "TransferBox" => new TransferBoxView(),
             "HintBox" => new HintBoxView(),
             "Panel" => new PanelView(),
-
+            "TransitionBox" => new TransitionBoxView(),
             _ => new object(),
         };
     }
@@ -79,17 +80,23 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="ComboBox",
-                    Icon= "\xe605",
+                    Icon= "\xe665",
                 },
-                new SideMenuItemViewModel()
-                {
-                    Header="TransferBox",
-                    Icon= "\xe605",
-                },
+
                 new SideMenuItemViewModel()
                 {
                     Header="HintBox",
-                    Icon= "\xe605",
+                    Icon= "\xe606",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="Date",
+                    Icon= "\xe604",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="CascadePicker",
+                    Icon= "\xe78a",
                 },
             ]
         });
@@ -103,17 +110,17 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="ListBox",
-                    Icon= "\xe6d5",
+                    Icon= "\xe627",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="ListView",
-                    Icon= "\xe6d5",
+                    Icon= "\xe6a6",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="DataGrid",
-                    Icon= "\xe6d5",
+                    Icon= "\xe751",
                 },
             ]
         });
@@ -126,13 +133,24 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="TabControl",
-                    Icon= "\xe81a",
+                    Icon= "\xe602",
                 },
                  new SideMenuItemViewModel()
                 {
                     Header="FluidTabControl",
-                    Icon= "\xe81a",
+                    Icon= "\xe6c1",
                 },
+                new SideMenuItemViewModel()
+                {
+                    Header="TransitionBox",
+                    Icon= "\xe600",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="TransferBox",
+                    Icon= "\xe642",
+                },
+
             ]
         });
 
@@ -141,19 +159,7 @@ public partial class SideMenuViewModel : ObservableObject
             Header = "Nesting",
             Icon = "\xe7a3",
         });
-        Items.Add(new SideMenuItemViewModel()
-        {
-            Header = "Selector",
-            Icon = "\xe78a",
-            Items =
-            [
-                new SideMenuItemViewModel()
-                {
-                    Header="Date",
-                    Icon= "\xe78a",
-                },
-            ]
-        });
+
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Loading",
@@ -162,18 +168,18 @@ public partial class SideMenuViewModel : ObservableObject
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Notification",
-            Icon = "\xe7a3",
+            Icon = "\xe60e",
         });
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Other",
-            Icon = "\xe7a3",
-            Items = 
+            Icon = "\xe61a",
+            Items =
             [
                 new SideMenuItemViewModel()
                 {
                     Header="Panel",
-                    Icon= "\xe7a3",
+                    Icon= "\xe614",
                 },
 
             ]

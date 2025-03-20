@@ -1,11 +1,9 @@
-﻿using Cyclone.Wpf.Controls;
-using Cyclone.Wpf.Helpers;
+﻿using Cyclone.Wpf.Helpers;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Cyclone.UI.Controls;
-
+namespace Cyclone.Wpf.Controls;
 
 [TypeConverter(typeof(EnumAttributeTypeConverter<DescriptionAttribute>))]
 public enum StringOperator
@@ -31,6 +29,7 @@ public enum StringOperator
     [Description("Regex")]
     Regex
 }
+
 /// <summary>
 /// 一个用于文本过滤的控件 ，比如包含，不包含等等
 /// </summary>
@@ -46,11 +45,11 @@ public class StringFilterBox : Control
     #region Label
 
     public static readonly DependencyProperty LabelProperty =
-               FormItem.LabelProperty.AddOwner(typeof(StringFilterBox), new PropertyMetadata(default(object), OnLabelChanged));
+               FormItem.LabelProperty.AddOwner(typeof(StringFilterBox), new PropertyMetadata(default, OnLabelChanged));
 
     public object Label
     {
-        get => (object)GetValue(LabelProperty);
+        get => GetValue(LabelProperty);
         set => SetValue(LabelProperty, value);
     }
 
@@ -144,7 +143,7 @@ public class StringFilterBox : Control
 
     public object ExtendObject
     {
-        get => (object)GetValue(ExtendObjectProperty);
+        get => GetValue(ExtendObjectProperty);
         set => SetValue(ExtendObjectProperty, value);
     }
 
