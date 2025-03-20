@@ -257,6 +257,7 @@ public class DateRangePicker : Control
         }
         if (_calendar != null)
         {
+            _calendar.SelectedDatesChanged -= Calendar_SelectedDatesChanged;
             _calendar.SelectedDatesChanged += Calendar_SelectedDatesChanged;
         }
         if (_container != null)
@@ -291,11 +292,13 @@ public class DateRangePicker : Control
 
             // 清除现有选中的日期并添加新的日期范围
             _calendar.SelectedDates.Clear();
-            if (predefineDate.Start.HasValue && predefineDate.End.HasValue)
+            if (predefineDate.Start.HasValue)
             {
-                DateTime start = predefineDate.Start.Value;
-                DateTime end = predefineDate.End.Value;
-                _calendar.SelectedDates.AddRange(start, end);
+                _calendar.SelectedDates.Add(predefineDate.Start.Value);
+            }
+            if (predefineDate.End.HasValue)
+            {
+                _calendar.SelectedDates.Add(predefineDate.End.Value);
             }
 
             // 关闭日期选择弹出框
@@ -313,6 +316,11 @@ public class DateRangePicker : Control
         if (_calendar == null) { return; }
 
         var dates = _calendar.SelectedDates;
+        if (dates == null || dates.Count == 0)
+        {
+            return;
+        }
+
         var order = dates.Order();
 
         Start = order.FirstOrDefault();
@@ -334,56 +342,67 @@ public class DateRangePicker : Control
     // 预定义范围集合
     private List<IPredefineDate> GeneratePredefineDates()
     {
-        DateTime today = DateTime.Today;
-        DateTime yesterday = today.AddDays(-1);
+        var today = DateTime.Today;
 
-        return new List<IPredefineDate>
+        // 辅助方法：获取指定日期的月份第一天
+        DateTime GetFirstDayOfMonth(DateTime date) => new DateTime(date.Year, date.Month, 1);
+
+        // 辅助方法：获取指定日期的月份最后一天
+        DateTime GetLastDayOfMonth(DateTime date) => GetFirstDayOfMonth(date).AddMonths(1).AddDays(-1);
+
+        // 辅助方法：获取当前周的周一（中国习惯周一到周日）
+        DateTime GetStartOfWeek(DateTime date)
         {
+            DateTime startOfWeek = date;
+            while (startOfWeek.DayOfWeek != DayOfWeek.Monday)
+            {
+                startOfWeek = startOfWeek.AddDays(-1);
+            }
+            return startOfWeek;
+        }
+
+        // 获取当前周的周日
+        DateTime GetEndOfWeek(DateTime date) => GetStartOfWeek(date).AddDays(6);
+
+        // 获取上周的周一和周日
+        DateTime GetStartOfPreviousWeek(DateTime date) => GetStartOfWeek(date).AddDays(-7);
+        DateTime GetEndOfPreviousWeek(DateTime date) => GetEndOfWeek(date).AddDays(-7);
+
+        // 获取下周的周一和周日
+        DateTime GetStartOfNextWeek(DateTime date) => GetStartOfWeek(date).AddDays(7);
+        DateTime GetEndOfNextWeek(DateTime date) => GetEndOfWeek(date).AddDays(7);
+
+        return
+        [
             // 当天范围
-            new PredefineDate("今日", today, today),
+            new PredefineDate("今天", today, today),
 
             // 近期范围
-            new PredefineDate("昨日", yesterday, yesterday),
-            new PredefineDate("近3天", today.AddDays(-2), today), // 含今天共3天
+            new PredefineDate("昨天", today.AddDays(-1), today.AddDays(-1)),
+            new PredefineDate("近3天", today.AddDays(-2), today),
             new PredefineDate("近7天", today.AddDays(-6), today),
             new PredefineDate("近15天", today.AddDays(-14), today),
 
+            // 周范围（周一到周日）
+            new PredefineDate("本周", GetStartOfWeek(today), GetEndOfWeek(today)),
+            new PredefineDate("上周", GetStartOfPreviousWeek(today), GetEndOfPreviousWeek(today)),
+            new PredefineDate("下周", GetStartOfNextWeek(today), GetEndOfNextWeek(today)),
+
             // 月范围
-            new PredefineDate("本月", FirstDayOfMonth(today), today),
-            new PredefineDate("上月",
-                FirstDayOfMonth(today.AddMonths(-1)),
-                LastDayOfMonth(today.AddMonths(-1))),
-            new PredefineDate("近3个月", FirstDayOfMonth(today.AddMonths(-2)), today),
+            new PredefineDate("本月", GetFirstDayOfMonth(today), today),
+            new PredefineDate("上月", GetFirstDayOfMonth(today.AddMonths(-1)), GetLastDayOfMonth(today.AddMonths(-1))),
+            new PredefineDate("下月", GetFirstDayOfMonth(today.AddMonths(1)), GetLastDayOfMonth(today.AddMonths(1))),
+
+            // 近期月范围
+            new PredefineDate("近3个月", GetFirstDayOfMonth(today.AddMonths(-3)), today),
+            new PredefineDate("前3个月", GetFirstDayOfMonth(today.AddMonths(-3)), GetLastDayOfMonth(today.AddMonths(-3))),
+            new PredefineDate("前6个月", GetFirstDayOfMonth(today.AddMonths(-6)), GetLastDayOfMonth(today.AddMonths(-6))),
 
             // 年范围
             new PredefineDate("本年", new DateTime(today.Year, 1, 1), today),
-            new PredefineDate("去年",
-                new DateTime(today.Year - 1, 1, 1),
-                new DateTime(today.Year - 1, 12, 31)),
-
-            // 周范围（按中国习惯周一到周日）
-            new PredefineDate("本周",
-                today.AddDays(-(today.DayOfWeek == DayOfWeek.Sunday ? 6 : (int)today.DayOfWeek - 1)),
-                today),
-
-            // 特殊范围
-            new PredefineDate("过去三年", today.AddYears(-3).Date, today)
-        };
-
-        // 计算月份首日
-    }
-
-    private static DateTime FirstDayOfMonth(DateTime date)
-    {
-        return new DateTime(date.Year, date.Month, 1);
-    }
-
-    // 计算月份最后一日
-    private static DateTime LastDayOfMonth(DateTime date)
-    {
-        return new DateTime(date.Year, date.Month, 1)
-            .AddMonths(1)
-            .AddDays(-1);
+            new PredefineDate("去年", new DateTime(today.Year - 1, 1, 1), new DateTime(today.Year - 1, 12, 31)),
+            new PredefineDate("前年", new DateTime(today.Year - 2, 1, 1), new DateTime(today.Year - 2, 12, 31)),
+        ];
     }
 
     #endregion Private

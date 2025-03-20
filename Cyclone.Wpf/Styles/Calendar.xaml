@@ -34,7 +34,7 @@
                 Stretch="Fill" />
             <Grid>
                 <Path
-                    x:Name="path"
+                    x:Name="IndicatorPath"
                     Width="15"
                     Height="15"
                     Margin="20,0,0,0"
@@ -50,7 +50,7 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimation
-                                Storyboard.TargetName="path"
+                                Storyboard.TargetName="IndictorPath"
                                 Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
                                 To="#FF73A9D8"
                                 Duration="0" />
@@ -59,7 +59,7 @@
                     <VisualState x:Name="Disabled">
                         <Storyboard>
                             <DoubleAnimation
-                                Storyboard.TargetName="path"
+                                Storyboard.TargetName="IndicatorPath"
                                 Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
                                 To=".5"
                                 Duration="0" />
@@ -78,7 +78,7 @@
                 Stretch="Fill" />
             <Grid>
                 <Path
-                    x:Name="path"
+                    x:Name="IndicatorPath"
                     Width="15"
                     Height="15"
                     Margin="0,0,20,0"
@@ -94,7 +94,7 @@
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
                             <ColorAnimation
-                                Storyboard.TargetName="path"
+                                Storyboard.TargetName="IndicatorPath"
                                 Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
                                 To="#FF73A9D8"
                                 Duration="0" />
@@ -103,7 +103,7 @@
                     <VisualState x:Name="Disabled">
                         <Storyboard>
                             <DoubleAnimation
-                                Storyboard.TargetName="path"
+                                Storyboard.TargetName="IndicatorPath"
                                 Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
                                 To=".5"
                                 Duration="0" />
@@ -332,10 +332,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsInactive" Value="True">
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="Opacity" Value="0.6" />
                         </Trigger>
                         <Trigger Property="IsBlackedOut" Value="True">
                             <Setter TargetName="BlockoutIndicator" Property="Visibility" Value="Visible" />
+                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="IsHitTestVisible" Value="False" />
                         </Trigger>
                         <Trigger Property="IsToday" Value="True">
                             <Setter TargetName="TodayIndicator" Property="Visibility" Value="Visible" />
