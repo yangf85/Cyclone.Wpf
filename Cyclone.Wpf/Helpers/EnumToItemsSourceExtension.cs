@@ -13,10 +13,35 @@ using System.Windows.Markup;
 namespace Cyclone.Wpf.Helpers;
 
 /// <summary>
-/// 自定义的标记扩展类，用于转换枚举类型到绑定数据源，继承自MarkupExtension
-/// 如果枚举对象未实现TypeConverter,那么会显示枚举的DescriptionAttribute,对应的类型将变为字符串
-/// </summary>
-public class EnumBindingSourceExtension : MarkupExtension
+/// 【枚举类型数据源转换扩展】
+/// 功能：将枚举类型转换为可直接绑定到ItemsControl的可观察集合
+/// 特性：
+///   - 支持常规枚举类型和Nullable<Enum>类型
+///   - 自动处理可空枚举类型，首项添加null值
+///   - 内置类型验证确保输入为合法枚举类型
+///
+/// 使用示例：
+/// <code>
+/// <!-- XAML中使用 -->
+/// xmlns:ext="clr-namespace:YourNamespace"
+///
+/// <ComboBox ItemsSource="{ext:EnumToItemsSource EnumType={x:Type local:WeekDays}}"/>
+///
+/// <!-- 支持可空枚举 -->
+/// <ComboBox ItemsSource="{ext:EnumToItemsSource EnumType={x:Type local:Status?}}"/>
+/// </code>
+///
+/// 典型应用场景：
+/// 1. 动态生成枚举选项的下拉菜单
+/// 2. 创建可空枚举类型的选项集合
+/// 3. 需要数据绑定的枚举类型选择器
+///
+/// 注意事项：
+/// - 必须通过EnumType属性指定合法枚举类型
+/// - 可空枚举会自动生成包含null的集合
+/// - 结果集合适用于ItemsControl及其派生控件
+/// </remarks
+public class EnumToItemsSourceExtension : MarkupExtension
 {
     private Type _enumType;
 
@@ -41,11 +66,11 @@ public class EnumBindingSourceExtension : MarkupExtension
         }
     }
 
-    public EnumBindingSourceExtension()
+    public EnumToItemsSourceExtension()
     {
     }
 
-    public EnumBindingSourceExtension(Type enumType)
+    public EnumToItemsSourceExtension(Type enumType)
     {
         EnumType = enumType;
     }
@@ -54,7 +79,7 @@ public class EnumBindingSourceExtension : MarkupExtension
     {
         if (null == _enumType)
         {
-            throw new InvalidOperationException("The EnumTYpe must be specified.");
+            throw new InvalidOperationException("The EnumType must be specified.");
         }
 
         var actualEnumType = Nullable.GetUnderlyingType(_enumType) ?? _enumType;
