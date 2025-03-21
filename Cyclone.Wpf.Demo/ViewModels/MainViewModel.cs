@@ -27,7 +27,7 @@ public partial class MainViewModel : ObservableObject
         CurrentView = item.Header switch
         {
             "Button" => new ButtonView(),
-            "Text" => new TextView(),
+            "Input" => new InputView(),
             "Nesting" => new NestingView(),
             "CascadePicker" => new CascadePickerView(),
             "Loading" => new LoadingView(),
@@ -69,7 +69,7 @@ public partial class SideMenuViewModel : ObservableObject
                 },
                 new SideMenuItemViewModel()
                 {
-                    Header="Text",
+                    Header="Input",
                     Icon= "\xe603",
                 },
                 new SideMenuItemViewModel()

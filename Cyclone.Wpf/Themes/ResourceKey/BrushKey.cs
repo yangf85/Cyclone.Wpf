@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Cyclone.Wpf.Resources;
+namespace Cyclone.Wpf.Themes;
 
 using System.Windows;
 

@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyclone.Wpf.Themes
-{
-    public class DarkTheme : Theme
-    {
-        public DarkTheme() : base(nameof(DarkTheme), @"pack://application:,,,/Cyclone.UI;component/Styles/Resources/Themes/DarkTheme.xaml")
-        {
-        }
+namespace Cyclone.Wpf.Themes;
 
-        public override string Name { get; set; } = nameof(DarkTheme);
+public class DarkTheme : Theme
+{
+    public DarkTheme()
+    {
+        base.Source = new Uri(@"pack://application:,,,/Cyclone.Wpf;component/Themes/DarkTheme.xaml", UriKind.Absolute);
     }
+
+    public override string Name => nameof(DarkTheme);
 }

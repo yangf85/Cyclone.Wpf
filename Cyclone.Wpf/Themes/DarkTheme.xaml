@@ -1,0 +1,177 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--  核心颜色  -->
+    <!--  背景色  -->
+    <SolidColorBrush x:Key="Background.Global" Color="#212121" />
+    <SolidColorBrush x:Key="Background.Mask" Color="#80FFFFFF" />
+    <SolidColorBrush x:Key="Background.Container" Color="#212121" />
+    <SolidColorBrush x:Key="Background.Header" Color="#37474F" />
+    <SolidColorBrush x:Key="Background.Caption" Color="#B0BEC5" />
+    <SolidColorBrush x:Key="Background.Default" Color="#303030" />
+    <SolidColorBrush x:Key="Background.Hover" Color="#3A4C5E" />
+    <SolidColorBrush x:Key="Background.Pressed" Color="#1976D2" />
+    <SolidColorBrush x:Key="Background.Checked" Color="#64B5F6" />
+    <SolidColorBrush x:Key="Background.Focused" Color="#BBDEFB" />
+    <SolidColorBrush x:Key="Background.Loading" Color="#424242" />
+    <SolidColorBrush x:Key="Background.Editing" Color="#212121" />
+    <SolidColorBrush x:Key="Background.Highlighted" Color="#2196F3" />
+    <SolidColorBrush x:Key="Background.Dragging" Color="#1565C0" />
+    <SolidColorBrush x:Key="Background.InputError" Color="#FFEBEE" />
+    <SolidColorBrush x:Key="Background.Selected" Color="#2196F3" />
+    <SolidColorBrush x:Key="Background.Warning" Color="#FFF3E0" />
+    <SolidColorBrush x:Key="Background.Error" Color="#FFEBEE" />
+    <SolidColorBrush x:Key="Background.Success" Color="#E8F5E9" />
+    <SolidColorBrush x:Key="Background.Info" Color="#E3F2FD" />
+    <SolidColorBrush x:Key="Background.Disabled" Color="#424242" />
+    <SolidColorBrush x:Key="Background.Active" Color="#1976D2" />
+    <SolidColorBrush x:Key="Background.Inactive" Color="#424242" />
+    <SolidColorBrush x:Key="Background.Transition" Color="#80BBDEFB" />
+
+    <!--  前景色  -->
+    <SolidColorBrush x:Key="Foreground.Header" Color="#FAFAFA" />
+    <SolidColorBrush x:Key="Foreground.Container" Color="#FAFAFA" />
+    <SolidColorBrush x:Key="Foreground.Default" Color="#FAFAFA" />
+    <SolidColorBrush x:Key="Foreground.Invert" Color="#212121" />
+    <SolidColorBrush x:Key="Foreground.Hover" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Foreground.Pressed" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Foreground.Checked" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Foreground.Editing" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Foreground.Focused" Color="#1976D2" />
+    <SolidColorBrush x:Key="Foreground.Highlighted" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Foreground.Loading" Color="#BDBDBD" />
+    <SolidColorBrush x:Key="Foreground.Dragging" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Foreground.InputError" Color="#C62828" />
+    <SolidColorBrush x:Key="Foreground.Selected" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Foreground.Warning" Color="#EF6C00" />
+    <SolidColorBrush x:Key="Foreground.Error" Color="#C62828" />
+    <SolidColorBrush x:Key="Foreground.Success" Color="#2E7D32" />
+    <SolidColorBrush x:Key="Foreground.Info" Color="#1565C0" />
+    <SolidColorBrush x:Key="Foreground.Active" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Foreground.Inactive" Color="#9E9E9E" />
+    <SolidColorBrush x:Key="Foreground.Disabled" Color="#BDBDBD" />
+    <SolidColorBrush x:Key="Foreground.Link" Color="#1565C0" />
+    <SolidColorBrush x:Key="Foreground.Placeholder" Color="#9E9E9E" />
+
+    <!--  边框色  -->
+    <SolidColorBrush x:Key="Border.Default" Color="#424242" />
+    <SolidColorBrush x:Key="Border.Caption" Color="#616161" />
+    <SolidColorBrush x:Key="Border.Hover" Color="#64B5F6" />
+    <SolidColorBrush x:Key="Border.Pressed" Color="#1976D2" />
+    <SolidColorBrush x:Key="Border.Checked" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Border.Editing" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Border.Focused" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Border.Highlighted" Color="#1976D2" />
+    <SolidColorBrush x:Key="Border.Loading" Color="#424242" />
+    <SolidColorBrush x:Key="Border.Dragging" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Border.InputError" Color="#EF5350" />
+    <SolidColorBrush x:Key="Border.Selected" Color="#1976D2" />
+    <SolidColorBrush x:Key="Border.Warning" Color="#FFA726" />
+    <SolidColorBrush x:Key="Border.Error" Color="#EF5350" />
+    <SolidColorBrush x:Key="Border.Success" Color="#66BB6A" />
+    <SolidColorBrush x:Key="Border.Info" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Border.Active" Color="#1976D2" />
+    <SolidColorBrush x:Key="Border.Inactive" Color="#424242" />
+    <SolidColorBrush x:Key="Border.Disabled" Color="#424242" />
+    <SolidColorBrush x:Key="Border.FocusRing" Color="#64B5F6" />
+
+    <!--  功能颜色  -->
+    <SolidColorBrush x:Key="Theme.Primary" Color="#2196F3" />
+    <SolidColorBrush x:Key="Theme.Secondary" Color="#00BCD4" />
+    <SolidColorBrush x:Key="Link.Default" Color="#1565C0" />
+    <SolidColorBrush x:Key="Link.Hover" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Divider.Default" Color="#424242" />
+    <SolidColorBrush x:Key="Overlay.Light" Color="#40000000" />
+    <SolidColorBrush x:Key="Overlay.Dark" Color="#80FFFFFF" />
+    <SolidColorBrush x:Key="Tick.Primary" Color="#2196F3" />
+    <SolidColorBrush x:Key="Tick.Secondary" Color="#00BCD4" />
+
+    <!--  文本颜色  -->
+    <SolidColorBrush x:Key="Text.Title" Color="#FAFAFA" />
+    <SolidColorBrush x:Key="Text.Subtitle" Color="#BDBDBD" />
+    <SolidColorBrush x:Key="Text.Header" Color="#1565C0" />
+    <SolidColorBrush x:Key="Text.Content" Color="#BDBDBD" />
+    <SolidColorBrush x:Key="Text.Caption" Color="#9E9E9E" />
+    <SolidColorBrush x:Key="Text.Prompt" Color="#9E9E9E" />
+    <SolidColorBrush x:Key="Text.Invert" Color="#212121" />
+    <SolidColorBrush x:Key="Text.Success" Color="#2E7D32" />
+
+    <!--  图标颜色  -->
+    <SolidColorBrush x:Key="Icon.Foreground.Default" Color="#BDBDBD" />
+    <SolidColorBrush x:Key="Icon.Foreground.Hover" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Icon.Foreground.Checked" Color="#1976D2" />
+    <SolidColorBrush x:Key="Icon.Foreground.Focused" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Icon.Foreground.Selected" Color="#1976D2" />
+    <SolidColorBrush x:Key="Icon.Foreground.Pressed" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Icon.Foreground.Editing" Color="#42A5F5" />
+    <SolidColorBrush x:Key="Icon.Foreground.Dragging" Color="#0D47A1" />
+    <SolidColorBrush x:Key="Icon.Foreground.Success" Color="#388E3C" />
+    <SolidColorBrush x:Key="Icon.Foreground.Error" Color="#D32F2F" />
+    <SolidColorBrush x:Key="Icon.Foreground.Warning" Color="#F57C00" />
+    <SolidColorBrush x:Key="Icon.Foreground.Info" Color="#0288D1" />
+    <SolidColorBrush x:Key="Icon.Foreground.Disabled" Color="#616161" />
+    <SolidColorBrush x:Key="Icon.Foreground.Link" Color="#1565C0" />
+    <SolidColorBrush x:Key="Icon.Foreground.Invert" Color="#212121" />
+
+    <!--  阴影/高光  -->
+    <SolidColorBrush x:Key="Shadow.Default" Color="#40FFFFFF" />
+    <SolidColorBrush x:Key="Highlight.Default" Color="#20000000" />
+    <SolidColorBrush x:Key="Highlight.Invert" Color="#20FFFFFF" />
+
+    <!--  交替颜色  -->
+    <SolidColorBrush x:Key="Alternation.Dark" Color="#303030" />
+    <SolidColorBrush x:Key="Alternation.Light" Color="#424242" />
+
+    <!--  ==================== 尺寸 ====================  -->
+    <sys:Double x:Key="Height.Horizontal.Caption">36</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Header">32</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Control">28</sys:Double>
+    <sys:Double x:Key="Height.Horizontal.Item">26</sys:Double>
+
+    <sys:Double x:Key="Width.Vertical.Caption">40</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Header">36</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Control">32</sys:Double>
+    <sys:Double x:Key="Width.Vertical.Item">30</sys:Double>
+
+    <sys:Double x:Key="Font.Title">24</sys:Double>
+    <sys:Double x:Key="Font.Subtitle">20</sys:Double>
+    <sys:Double x:Key="Font.Header">18</sys:Double>
+    <sys:Double x:Key="Font.Body">14</sys:Double>
+    <sys:Double x:Key="Font.Input">14</sys:Double>
+    <sys:Double x:Key="Font.Prompt">13</sys:Double>
+
+    <Thickness x:Key="Margin.Left">5,0,0,0</Thickness>
+    <Thickness x:Key="Margin.Right">0,0,5,0</Thickness>
+    <Thickness x:Key="Margin.Top">0,5,0,0</Thickness>
+    <Thickness x:Key="Margin.Bottom">0,0,0,5</Thickness>
+    <Thickness x:Key="Margin.Horizontal">5,0</Thickness>
+    <Thickness x:Key="Margin.Vertical">0,5</Thickness>
+    <Thickness x:Key="Margin.All">5</Thickness>
+
+    <Thickness x:Key="Padding.Left">5,0,0,0</Thickness>
+    <Thickness x:Key="Padding.Right">0,0,5,0</Thickness>
+    <Thickness x:Key="Padding.Top">0,5,0,0</Thickness>
+    <Thickness x:Key="Padding.Bottom">0,0,0,5</Thickness>
+    <Thickness x:Key="Padding.Horizontal">5,0</Thickness>
+    <Thickness x:Key="Padding.Vertical">0,5</Thickness>
+    <Thickness x:Key="Padding.All">5</Thickness>
+
+    <Thickness x:Key="BorderThickness.None">0</Thickness>
+    <Thickness x:Key="BorderThickness.Thin">1</Thickness>
+    <Thickness x:Key="BorderThickness.Medium">2</Thickness>
+    <Thickness x:Key="BorderThickness.Thick">3</Thickness>
+
+    <CornerRadius x:Key="CornerRadius.None">0</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Small">1</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Medium">3</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Large">5</CornerRadius>
+
+    <sys:Double x:Key="Spacing.Horizontal">5</sys:Double>
+    <sys:Double x:Key="Spacing.Vertical">5</sys:Double>
+
+    <sys:Double x:Key="Icon.Small">14</sys:Double>
+    <sys:Double x:Key="Icon.Medium">18</sys:Double>
+    <sys:Double x:Key="Icon.Large">22</sys:Double>
+</ResourceDictionary>

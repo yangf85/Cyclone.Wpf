@@ -9,46 +9,47 @@ namespace Cyclone.Wpf.Themes;
 /// <summary>
 /// 主题管理 在xaml中使用，要在资源的最后加载，否则无效
 /// </summary>
-public class ThemeManager : ResourceDictionary
+public static class ThemeManager
 {
-    public ThemeManager()
+    private static readonly List<Theme> _themes = [];
+    private static Theme _currentTheme;
+
+    public static event EventHandler ThemeChanged;
+
+    public static IReadOnlyList<Theme> AvailableThemes => _themes;
+
+    public static Theme CurrentTheme
     {
-        Initial();
-    }
-
-    private static ThemeManager _instance;
-
-    private Theme _theme;
-
-    public static ThemeManager Instance
-    {
-        get
+        get => _currentTheme;
+        set
         {
-            if (_instance == null)
+            if (_currentTheme == value) return;
+
+            // 移除旧主题
+            if (_currentTheme != null)
             {
-                throw new InvalidOperationException("The Resource is not loaded!");
+                Application.Current.Resources.MergedDictionaries.Remove(_currentTheme);
             }
-            return _instance;
+
+            // 添加新主题
+            _currentTheme = value;
+            Application.Current.Resources.MergedDictionaries.Add(_currentTheme);
+
+            ThemeChanged?.Invoke(null, EventArgs.Empty);
         }
     }
 
-    public Theme Theme
+    static ThemeManager()
     {
-        get => _theme;
-        set => Switch(value);
+        // 注册默认主题
+        RegisterTheme(new BasicTheme());
+        RegisterTheme(new LightTheme());
+        RegisterTheme(new DarkTheme());
+        CurrentTheme = AvailableThemes[0];
     }
 
-    private void Initial()
+    public static void RegisterTheme(Theme theme)
     {
-        _instance = this;
-        _theme = new BasicsTheme();
-
-        MergedDictionaries.Add(_theme);
-    }
-
-    private void Switch(Theme theme)
-    {
-        _theme = theme;
-        MergedDictionaries[0] = _theme;
+        _themes.Add(theme);
     }
 }

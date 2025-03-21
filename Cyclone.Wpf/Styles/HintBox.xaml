@@ -4,7 +4,7 @@
                     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
                     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="HintBoxItem.ControlTemplate.Basic" TargetType="ctl:HintBoxItem">
@@ -29,9 +29,7 @@
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
-
             </Trigger>
-
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -62,8 +60,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
     <Style x:Key="HintBox.InputTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="Transparent" />
@@ -140,7 +136,6 @@
                 <Setter Property="IsOpen" Value="True" />
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
             </Trigger>
-
         </ControlTemplate.Triggers>
     </ControlTemplate>
 

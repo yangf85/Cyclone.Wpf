@@ -17,6 +17,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/HintBox.xaml" />
 
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberFilterBox.xaml" />
+
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CircularGauge.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Calendar.xaml" />

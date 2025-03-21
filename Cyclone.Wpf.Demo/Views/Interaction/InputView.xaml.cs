@@ -20,17 +20,17 @@ namespace Cyclone.Wpf.Demo.Views
     /// <summary>
     /// TextView.xaml 的交互逻辑
     /// </summary>
-    public partial class TextView : UserControl
+    public partial class InputView : UserControl
     {
-        public TextView()
+        public InputView()
         {
             InitializeComponent();
 
-            DataContext = new TextViewModel();
+            DataContext = new InputViewModel();
         }
     }
 
-    public partial class TextViewModel : ObservableValidator
+    public partial class InputViewModel : ObservableValidator
     {
         [Required]
         [NotifyDataErrorInfo]
@@ -43,7 +43,7 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial string SourceText { get; set; } = "ABCDEFGabcdefg一二三四五";
 
-        public TextViewModel()
+        public InputViewModel()
         {
             this.ErrorsChanged += TextViewModel_ErrorsChanged;
         }

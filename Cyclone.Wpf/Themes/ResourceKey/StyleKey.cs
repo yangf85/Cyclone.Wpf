@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cyclone.Wpf.Resources;
+namespace Cyclone.Wpf.Themes;
 
 public static class StyleKey
 {

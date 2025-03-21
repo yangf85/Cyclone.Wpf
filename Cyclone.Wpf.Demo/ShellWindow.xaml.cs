@@ -1,4 +1,5 @@
 ﻿using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,8 +21,6 @@ public partial class ShellWindow : AdvancedWindow
     public ShellWindow()
     {
         InitializeComponent();
-       
+        DataContext = new ShellWindowViewModel();
     }
-
-   
 }
