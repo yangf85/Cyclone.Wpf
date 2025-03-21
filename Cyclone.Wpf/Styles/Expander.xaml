@@ -8,11 +8,12 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Border>
-                        <Rectangle Margin="0"
-                                   SnapsToDevicePixels="true"
-                                   Stroke="{DynamicResource Border.Default}"
-                                   StrokeDashArray="1 2"
-                                   StrokeThickness="1" />
+                        <Rectangle
+                            Margin="0"
+                            SnapsToDevicePixels="true"
+                            Stroke="{DynamicResource Border.Default}"
+                            StrokeDashArray="1 2"
+                            StrokeThickness="1" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -39,20 +40,22 @@
                                         </TransformGroup.Children>
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
-                                <Path x:Name="Arrow"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Data="M 1,1.5 L 4.5,5 L 8,1.5"
-                                      SnapsToDevicePixels="false"
-                                      Stroke="{DynamicResource Foreground.Default}"
-                                      StrokeThickness="2" />
+                                <Path
+                                    x:Name="Arrow"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                                    SnapsToDevicePixels="false"
+                                    Stroke="{DynamicResource Foreground.Default}"
+                                    StrokeThickness="2" />
                             </Grid>
-                            <ContentPresenter Grid.Row="1"
-                                              Margin="0,4,0,0"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="True" />
+                            <ContentPresenter
+                                Grid.Row="1"
+                                Margin="0,4,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="True" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -91,20 +94,22 @@
                                         </TransformGroup.Children>
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
-                                <Path x:Name="Arrow"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Data="M 1,1.5 L 4.5,5 L 8,1.5"
-                                      SnapsToDevicePixels="false"
-                                      Stroke="{DynamicResource Foreground.Default}"
-                                      StrokeThickness="2" />
+                                <Path
+                                    x:Name="Arrow"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                                    SnapsToDevicePixels="false"
+                                    Stroke="{DynamicResource Foreground.Default}"
+                                    StrokeThickness="2" />
                             </Grid>
-                            <ContentPresenter Grid.Column="1"
-                                              Margin="4,0,0,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="True" />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Margin="4,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="True" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -143,20 +148,22 @@
                                         </TransformGroup.Children>
                                     </TransformGroup>
                                 </Grid.LayoutTransform>
-                                <Path x:Name="Arrow"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Data="M 1,1.5 L 4.5,5 L 8,1.5"
-                                      SnapsToDevicePixels="false"
-                                      Stroke="{DynamicResource Foreground.Default}"
-                                      StrokeThickness="2" />
+                                <Path
+                                    x:Name="Arrow"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                                    SnapsToDevicePixels="false"
+                                    Stroke="{DynamicResource Foreground.Default}"
+                                    StrokeThickness="2" />
                             </Grid>
-                            <ContentPresenter Grid.Row="1"
-                                              Margin="0,4,0,0"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="True" />
+                            <ContentPresenter
+                                Grid.Row="1"
+                                Margin="0,4,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="True" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -185,19 +192,21 @@
                                 <ColumnDefinition Width="19" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Path x:Name="Arrow"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Data="M 1,1.5 L 4.5,5 L 8,1.5"
-                                  SnapsToDevicePixels="false"
-                                  Stroke="{DynamicResource Foreground.Default}"
-                                  StrokeThickness="2" />
-                            <ContentPresenter Grid.Column="1"
-                                              Margin="4,0,0,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="True" />
+                            <Path
+                                x:Name="Arrow"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                                SnapsToDevicePixels="false"
+                                Stroke="{DynamicResource Foreground.Default}"
+                                StrokeThickness="2" />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Margin="4,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="True" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -228,40 +237,43 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border Margin="{TemplateBinding Margin}"
-                            Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="true">
+                    <Border
+                        Margin="{TemplateBinding Margin}"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
                         <DockPanel>
-                            <ToggleButton x:Name="HeaderSite"
-                                          MinWidth="0"
-                                          MinHeight="0"
-                                          Margin="1"
-                                          Padding="{TemplateBinding Padding}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Header}"
-                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                          DockPanel.Dock="Top"
-                                          FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}"
-                                          FontFamily="{TemplateBinding FontFamily}"
-                                          FontSize="{TemplateBinding FontSize}"
-                                          FontStretch="{TemplateBinding FontStretch}"
-                                          FontStyle="{TemplateBinding FontStyle}"
-                                          FontWeight="{TemplateBinding FontWeight}"
-                                          Foreground="{TemplateBinding Foreground}"
-                                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          Style="{StaticResource ExpanderDownHeaderStyle}" />
-                            <ContentPresenter x:Name="ExpandSite"
-                                              Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              DockPanel.Dock="Bottom"
-                                              Focusable="false"
-                                              Visibility="Collapsed" />
+                            <ToggleButton
+                                x:Name="HeaderSite"
+                                MinWidth="0"
+                                MinHeight="0"
+                                Margin="1"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                DockPanel.Dock="Top"
+                                FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontStretch="{TemplateBinding FontStretch}"
+                                FontStyle="{TemplateBinding FontStyle}"
+                                FontWeight="{TemplateBinding FontWeight}"
+                                Foreground="{TemplateBinding Foreground}"
+                                IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                Style="{StaticResource ExpanderDownHeaderStyle}" />
+                            <ContentPresenter
+                                x:Name="ExpandSite"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                DockPanel.Dock="Bottom"
+                                Focusable="false"
+                                Visibility="Collapsed" />
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>

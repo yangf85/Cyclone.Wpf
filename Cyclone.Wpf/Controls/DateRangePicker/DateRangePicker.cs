@@ -321,7 +321,7 @@ public class DateRangePicker : Control
             return;
         }
 
-        var order = dates.Order();
+        var order = dates.OrderBy(i => i);
 
         Start = order.FirstOrDefault();
         End = order.LastOrDefault();

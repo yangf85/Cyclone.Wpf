@@ -14,7 +14,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -28,10 +27,9 @@ public interface IHintable
 [TemplatePart(Name = PART_InputTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = PART_DisplayPopup, Type = typeof(Popup))]
 [TemplatePart(Name = PART_ContainerScrollViewer, Type = typeof(ScrollViewer))]
-
 public class HintBox : Selector
 {
-    const string PART_ContainerScrollViewer= nameof(PART_ContainerScrollViewer);
+    private const string PART_ContainerScrollViewer = nameof(PART_ContainerScrollViewer);
     private const string PART_ClearTextButton = nameof(PART_ClearTextButton);
 
     private const string PART_DisplayPopup = nameof(PART_DisplayPopup);
@@ -46,46 +44,34 @@ public class HintBox : Selector
 
     public Button _clearTextButton;
 
-    ScrollViewer _scrollViewer;
+    private ScrollViewer _scrollViewer;
 
     public HintBox()
     {
         Loaded += HintBox_Loaded;
-        Unloaded+= HintBox_Unloaded;
-        
-        
+        Unloaded += HintBox_Unloaded;
     }
 
     private void HintBox_Unloaded(object sender, RoutedEventArgs e)
     {
-        RemoveHandler(HintBoxItem.ClickedEvent,new RoutedEventHandler(OnItemClicked));
-        
+        RemoveHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked));
     }
 
     private void OnItemClicked(object sender, RoutedEventArgs e)
     {
         if (e.OriginalSource is HintBoxItem clickedItem)
         {
-           var index= ItemContainerGenerator.IndexFromContainer(clickedItem);
-
+            var index = ItemContainerGenerator.IndexFromContainer(clickedItem);
 
             SelectedItem = Items[index];
-
-           
-        
         }
         IsOpen = false;
     }
 
-   
-
     private void HintBox_Loaded(object sender, RoutedEventArgs e)
     {
         AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked), true);
-       
     }
-
-   
 
     static HintBox()
     {
@@ -129,14 +115,10 @@ public class HintBox : Selector
         set => SetValue(IsOpenProperty, value);
     }
 
-
     #endregion IsOpen
 
-
-
-
-
     #region MaxContainerHeight
+
     public double MaxContainerHeight
     {
         get => (double)GetValue(MaxContainerHeightProperty);
@@ -146,30 +128,25 @@ public class HintBox : Selector
     public static readonly DependencyProperty MaxContainerHeightProperty =
         DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(HintBox), new PropertyMetadata(300d));
 
-    #endregion
+    #endregion MaxContainerHeight
 
     private static void InitializeCommands()
     {
-       
-
-    
     }
 
     private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
-     
+
         if (Items != null)
         {
             if (Items.Filter == null || Items.Filter == FilterPredicate)
             {
                 Items.Filter = FilterPredicate;
-               
             }
         }
         IsOpen = true;
         _inputTextBox?.Focus();
-     
     }
 
     #region Override
@@ -182,28 +159,30 @@ public class HintBox : Selector
             case Key.Enter:
                 HandleKeyEnter();
                 break;
+
             case Key.Up:
                 HandleKeyUpDown(true);
                 break;
+
             case Key.Down:
                 HandleKeyUpDown(false);
                 break;
+
             case Key.Escape:
                 HandleKeyCancel();
                 break;
+
             default:
                 break;
         }
     }
-
-   
 
     private void HandleKeyCancel()
     {
         IsOpen = false;
     }
 
-    int GetHighlightedIndex()
+    private int GetHighlightedIndex()
     {
         for (int i = 0; i < Items.Count; i++)
         {
@@ -215,13 +194,12 @@ public class HintBox : Selector
                     return i;
                 }
             }
-
         }
 
         return -1;
     }
 
-    void HandleKeyUpDown(bool isUp)
+    private void HandleKeyUpDown(bool isUp)
     {
         int itemCount = Items.Count;
         if (itemCount == 0)
@@ -245,10 +223,8 @@ public class HintBox : Selector
         if (ItemContainerGenerator.ContainerFromIndex(newIndex) is HintBoxItem newItem)
         {
             newItem.ChangeHighlightState(true);
-           ScrollToHighlightedItem(newItem);
+            ScrollToHighlightedItem(newItem);
         }
-
-       
     }
 
     private void ScrollToHighlightedItem(HintBoxItem item)
@@ -277,20 +253,20 @@ public class HintBox : Selector
         }
     }
 
-    void HandleKeyEnter()
+    private void HandleKeyEnter()
     {
-        var index=GetHighlightedIndex();
+        var index = GetHighlightedIndex();
 
         if (index == -1)
         {
             IsOpen = false;
             return;
         }
-        
+
         SelectedItem = Items[index];
         IsOpen = false;
-
     }
+
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
     {
         base.OnSelectionChanged(e);
@@ -320,7 +296,6 @@ public class HintBox : Selector
         }
         if (IsIgnoreCase)
         {
-
             return text.ToUpper().Contains(InputText.ToUpper());
         }
         else
@@ -328,11 +303,6 @@ public class HintBox : Selector
             return text.Contains(InputText);
         }
     }
-
-    
-
-  
-
 
     protected override DependencyObject GetContainerForItemOverride()
     {
@@ -343,8 +313,6 @@ public class HintBox : Selector
     {
         return item is HintBoxItem;
     }
-
-    
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
@@ -364,10 +332,9 @@ public class HintBox : Selector
         {
             _inputTextBox.TextChanged -= InputTextBox_TextChanged;
             _inputTextBox.TextChanged += InputTextBox_TextChanged;
-          
         }
         _displayPopup = GetTemplateChild(PART_DisplayPopup) as Popup;
-         _scrollViewer= GetTemplateChild(PART_ContainerScrollViewer) as ScrollViewer;
+        _scrollViewer = GetTemplateChild(PART_ContainerScrollViewer) as ScrollViewer;
     }
 
     #endregion Override

@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8.0-windows</TargetFrameworks>
+	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	  <LangVersion>13.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.25.3.6</AssemblyVersion>
-    <FileVersion>1.25.3.6</FileVersion>
+    <AssemblyVersion>1.25.3.7</AssemblyVersion>
+    <FileVersion>1.25.3.7</FileVersion>
+	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
     <Copyright>CopyRight@Cyclone.Com</Copyright>
@@ -18,12 +20,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ToastNotifications.Net5" Version="3.0.0" />
+    <Folder Include="Controls\Card\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\Card\" />
-    <Folder Include="Resources\" />
+    <PackageReference Include="ToastNotifications.Net" Version="2.6.0" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
@@ -9,19 +10,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="RootBorder"
-                            Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="PART_ButtonContent"
-                                          Grid.Column="1"
-                                          Margin="5,0,0,0"
-                                          HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:PopupBox}}"
-                                          VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:PopupBox}}"
-                                          Content="{TemplateBinding Content}"
-                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter
+                            x:Name="PART_ButtonContent"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:PopupBox}}"
+                            VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:PopupBox}}"
+                            Content="{TemplateBinding Content}"
+                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -30,38 +33,41 @@
 
     <ControlTemplate x:Key="BasicPopupBoxControlTemplate" TargetType="ctl:PopupBox">
         <Grid>
-            <ToggleButton x:Name="PART_ToggleButton"
-                          Width="{TemplateBinding Width}"
-                          Height="{TemplateBinding Height}"
-                          Padding="{TemplateBinding Padding}"
-                          Background="{TemplateBinding Background}"
-                          BorderBrush="{TemplateBinding BorderBrush}"
-                          BorderThickness="{TemplateBinding BorderThickness}"
-                          Content="{TemplateBinding Content}"
-                          IsChecked="{Binding Path=IsOpened, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                          SnapsToDevicePixels="True"
-                          Style="{StaticResource PopupBox.ToggleButtonStyle}"
-                          UseLayoutRounding="True" />
-            <Popup x:Name="PART_Popup"
-                   ctl:PopupBox.IsPositionUpdate="True"
-                   ctl:PopupBox.IsTopmost="False"
-                   AllowsTransparency="True"
-                   HorizontalOffset="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HorizontalOffset}"
-                   IsOpen="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsOpened}"
-                   Placement="{Binding Path=Placement, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                   PlacementTarget="{Binding ElementName=PART_ToggleButton}"
-                   PopupAnimation="{Binding Path=PopupAnimation, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                   StaysOpen="{Binding Path=StaysOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                   VerticalOffset="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=VerticalOffset}">
+            <ToggleButton
+                x:Name="PART_ToggleButton"
+                Width="{TemplateBinding Width}"
+                Height="{TemplateBinding Height}"
+                Padding="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Content="{TemplateBinding Content}"
+                IsChecked="{Binding Path=IsOpened, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                SnapsToDevicePixels="True"
+                Style="{StaticResource PopupBox.ToggleButtonStyle}"
+                UseLayoutRounding="True" />
+            <Popup
+                x:Name="PART_Popup"
+                ctl:PopupBox.IsPositionUpdate="True"
+                ctl:PopupBox.IsTopmost="False"
+                AllowsTransparency="True"
+                HorizontalOffset="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HorizontalOffset}"
+                IsOpen="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsOpened}"
+                Placement="{Binding Path=Placement, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                PlacementTarget="{Binding ElementName=PART_ToggleButton}"
+                PopupAnimation="{Binding Path=PopupAnimation, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                StaysOpen="{Binding Path=StaysOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                VerticalOffset="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=VerticalOffset}">
                 <Grid x:Name="PopupContentBorder">
                     <Border Padding="5">
                         <Grid Background="{Binding Path=PopupContentBackground, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                             <Grid.Effect>
-                                <DropShadowEffect BlurRadius="5"
-                                                  Direction="0"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="1"
-                                                  Color="Black" />
+                                <DropShadowEffect
+                                    BlurRadius="5"
+                                    Direction="0"
+                                    Opacity="0.5"
+                                    ShadowDepth="1"
+                                    Color="Black" />
                             </Grid.Effect>
                         </Grid>
                     </Border>
