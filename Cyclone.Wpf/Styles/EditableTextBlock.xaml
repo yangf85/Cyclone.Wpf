@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type ctl:EditableTextBlock}">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />

@@ -5,7 +5,7 @@
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ScorllViewer.xaml" />
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
     <Geometry x:Key="ArrowTop">M 3 0 L 6 3 0 3z</Geometry>

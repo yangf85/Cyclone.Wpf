@@ -94,5 +94,18 @@
                 <cy:HyperlinkButton DisplayText="百度" NavigateUri="http://www.baidu.com" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
+
+        <HeaderedContentControl Header="RadioButtonGroup">
+            <cy:SpacingUniformGrid Rows="1">
+                <cy:RadioButtonGroup x:Name="RadioButtonGroup">
+                    <RadioButton Content="First" />
+                    <RadioButton Content="Second" />
+                    <RadioButton Content="Three" />
+                    <RadioButton Content="Four" />
+                </cy:RadioButtonGroup>
+                <cy:RadioButtonGroup ItemsSource="{cy:EnumItemsSource EnumType=local:RadioButtonGroupEnum}" SelectedItem="{Binding RadioButtonGroupEnum}" />
+                <Button Command="{Binding ShowSelectedRadioButtonCommand}" Content="Show" />
+            </cy:SpacingUniformGrid>
+        </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>

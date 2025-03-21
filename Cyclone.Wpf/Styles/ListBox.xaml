@@ -4,7 +4,7 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ListBoxItem.Style.Default" TargetType="ListBoxItem">
@@ -19,8 +19,7 @@
                         x:Name="RootBorder"
                         Height="{TemplateBinding Height}"
                         Background="{TemplateBinding Background}"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="ListBoxItem" />
@@ -42,11 +41,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Selected}" />
+                            <Setter Property="Background" Value="{DynamicResource Background.Selected}" />
                             <Setter Property="Foreground" Value="{DynamicResource Foreground.Selected}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
                             <Setter Property="Foreground" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

@@ -2,7 +2,24 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
-    <Style TargetType="ctl:RadioButtonGroup">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RadioButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <ControlTemplate x:Key="RadioButtonGroup.ControlTemplate.Basic" TargetType="ctl:RadioButtonGroup">
+        <Border
+            x:Name="RootBorder"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}">
+            <ItemsPresenter />
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="RadioButtonGroup.Style.Basic" TargetType="ctl:RadioButtonGroup">
+        <Setter Property="Template" Value="{StaticResource RadioButtonGroup.ControlTemplate.Basic}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource RadioButton.Style.Basic }" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -11,4 +28,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource RadioButtonGroup.Style.Basic}" TargetType="ctl:RadioButtonGroup" />
 </ResourceDictionary>

@@ -4,7 +4,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Resources/CommonResources.xaml" />-->
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TransferBox.TransferButtonStyle" TargetType="RepeatButton">

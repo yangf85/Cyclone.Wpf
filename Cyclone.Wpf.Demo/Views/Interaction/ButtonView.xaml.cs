@@ -36,6 +36,15 @@ namespace Cyclone.Wpf.Demo.Views
     {
         [ObservableProperty]
         public partial SplitButtonViewModel SplitButton { get; set; } = new SplitButtonViewModel();
+
+        [ObservableProperty]
+        public partial RadioButtonGroupEnum RadioButtonGroupEnum { get; set; } = RadioButtonGroupEnum.C;
+
+        [RelayCommand]
+        private void ShowSelectedRadioButton()
+        {
+            MessageBox.Show($"{RadioButtonGroupEnum}");
+        }
     }
 
     public partial class SplitButtonViewModel : ObservableObject
@@ -52,7 +61,7 @@ namespace Cyclone.Wpf.Demo.Views
         }
 
         [RelayCommand]
-        void ShowData(FakerData data)
+        private void ShowData(FakerData data)
         {
             if (data != null)
             {
@@ -61,9 +70,17 @@ namespace Cyclone.Wpf.Demo.Views
         }
 
         [RelayCommand]
-        void Test(object item)
+        private void Test(object item)
         {
             MessageBox.Show($"{item}----{Index}");
         }
+    }
+
+    public enum RadioButtonGroupEnum
+    {
+        A,
+        B,
+        C,
+        D
     }
 }

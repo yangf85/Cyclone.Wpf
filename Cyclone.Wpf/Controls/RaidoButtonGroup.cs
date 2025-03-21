@@ -10,8 +10,72 @@ using System.Windows.Data;
 
 namespace Cyclone.Wpf.Controls;
 
-public class RadioButtonGroup : Selector
+public class RadioButtonGroup : ItemsControl
 {
+    static RadioButtonGroup()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(RadioButtonGroup), new FrameworkPropertyMetadata(typeof(RadioButtonGroup)));
+    }
+
+    public RadioButtonGroup()
+    {
+        Loaded += RadioButtonGroup_Loaded;
+        Unloaded += RadioButtonGroup_Unloaded;
+    }
+
+    #region Private
+
+    private void RadioButtonGroup_Unloaded(object sender, RoutedEventArgs e)
+    {
+        RemoveHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButton_Clicked));
+    }
+
+    private void RadioButtonGroup_Loaded(object sender, RoutedEventArgs e)
+    {
+        AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButton_Clicked));
+    }
+
+    private void RadioButton_Clicked(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is RadioButton radioButton)
+        {
+            SelectedItem = radioButton.DataContext ?? radioButton.Content;
+        }
+    }
+
+    #endregion Private
+
+    #region SelectedItem
+
+    public object SelectedItem
+    {
+        get => (object)GetValue(SelectedItemProperty);
+        set => SetValue(SelectedItemProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectedItemProperty =
+        DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(RadioButtonGroup),
+            new FrameworkPropertyMetadata(default(object), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
+
+    private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+    }
+
+    #endregion SelectedItem
+
+    #region GroupName
+
+    public string GroupName
+    {
+        get => (string)GetValue(GroupNameProperty);
+        set => SetValue(GroupNameProperty, value);
+    }
+
+    public static readonly DependencyProperty GroupNameProperty =
+        DependencyProperty.Register(nameof(GroupName), typeof(string), typeof(RadioButtonGroup), new PropertyMetadata(nameof(RadioButtonGroup)));
+
+    #endregion GroupName
+
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is RadioButton;
@@ -19,53 +83,11 @@ public class RadioButtonGroup : Selector
 
     protected override DependencyObject GetContainerForItemOverride()
     {
-        return new RadioButton() { GroupName = nameof(RadioButtonGroup) };
+        return new RadioButton() { GroupName = GroupName };
     }
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
-
-        if (element is RadioButton radioButton)
-        {
-            if (ItemsSource == null)
-            {
-                //当没有设置数据源的时候RadioButton的的DataContext就是Content,
-                //但是按钮无法使用这个SelectedItem作为命令参数
-                radioButton.DataContext = radioButton.Content;
-            }
-            else
-            {
-                radioButton.DataContext = item;
-            }
-        }
     }
-
-    protected override void OnSelectionChanged(SelectionChangedEventArgs e)
-    {
-        base.OnSelectionChanged(e);
-
-        if (e.AddedItems.Count > 0)
-        {
-            var item = e.AddedItems[0];
-            if (item is RadioButton radioButton)
-            {
-                radioButton.IsChecked = true;
-            }
-            else
-            {
-                if (ItemContainerGenerator.ContainerFromItem(item) is RadioButton container)
-                {
-                    container.IsChecked = true;
-                }
-            }
-
-           
-        }
-        
-    }
-
-  
-
-
 }
