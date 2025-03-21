@@ -6,27 +6,27 @@ using System.Windows.Controls;
 namespace Cyclone.Wpf.Controls;
 
 [TypeConverter(typeof(EnumAttributeTypeConverter<DescriptionAttribute>))]
-public enum StringOperator
+public enum TextOperator
 {
-    [Description("Equal")]
+    [Description("=")]           // Equal
     Equal,
 
-    [Description("NotEqual")]
+    [Description("≠")]           // NotEqual
     NotEqual,
 
-    [Description("Contains")]
+    [Description("~")]           // Contains
     Contains,
 
-    [Description("NotContains")]
+    [Description("!~")]          // NotContains
     NotContains,
 
-    [Description("StartsWith")]
+    [Description("^")]           // StartsWith
     StartsWith,
 
-    [Description("EndsWith")]
+    [Description("$")]           // EndsWith
     EndsWith,
 
-    [Description("Regex")]
+    [Description("R")]      // Regex（无法用单符号，但可缩短为"R"）
     Regex
 }
 
@@ -36,7 +36,7 @@ public enum StringOperator
 [TemplatePart(Name = PART_ActivedCheckBox, Type = typeof(CheckBox))]
 [TemplatePart(Name = PART_OperatorComboBox, Type = typeof(ComboBox))]
 [TemplatePart(Name = PART_InputTextBox, Type = typeof(TextBox))]
-public class StringFilterBox : Control
+public class TextFilterBox : Control
 {
     private const string PART_ActivedCheckBox = nameof(PART_ActivedCheckBox);
     private const string PART_InputTextBox = nameof(PART_InputTextBox);
@@ -45,7 +45,7 @@ public class StringFilterBox : Control
     #region Label
 
     public static readonly DependencyProperty LabelProperty =
-               FormItem.LabelProperty.AddOwner(typeof(StringFilterBox), new PropertyMetadata(default, OnLabelChanged));
+               FormItem.LabelProperty.AddOwner(typeof(TextFilterBox), new PropertyMetadata(default, OnLabelChanged));
 
     public object Label
     {
@@ -62,7 +62,7 @@ public class StringFilterBox : Control
     #region IsActived
 
     public static readonly DependencyProperty IsActivedProperty =
-        DependencyProperty.Register(nameof(IsActived), typeof(bool), typeof(StringFilterBox), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        DependencyProperty.Register(nameof(IsActived), typeof(bool), typeof(TextFilterBox), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public bool IsActived
     {
@@ -75,7 +75,7 @@ public class StringFilterBox : Control
     #region Text
 
     public static readonly DependencyProperty TextProperty =
-        DependencyProperty.Register(nameof(Text), typeof(string), typeof(StringFilterBox), new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextFilterBox), new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public string Text
     {
@@ -88,7 +88,7 @@ public class StringFilterBox : Control
     #region SharedName
 
     public static readonly DependencyProperty SharedNameProperty =
-                       FormItem.SharedNameProperty.AddOwner(typeof(StringFilterBox), new PropertyMetadata(default(string), OnSharedNameChanged));
+                       FormItem.SharedNameProperty.AddOwner(typeof(TextFilterBox), new PropertyMetadata(default(string), OnSharedNameChanged));
 
     public string SharedName
     {
@@ -98,23 +98,23 @@ public class StringFilterBox : Control
 
     private static void OnSharedNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var filterBox = d as StringFilterBox;
+        var filterBox = d as TextFilterBox;
         if (filterBox != null)
         {
             if (!string.IsNullOrEmpty(e.NewValue?.ToString()))
             {
-                filterBox.Loaded += StringFilterBox_Loaded;
+                filterBox.Loaded += TextFilterBox_Loaded;
             }
             else
             {
-                filterBox.Loaded -= StringFilterBox_Loaded;
+                filterBox.Loaded -= TextFilterBox_Loaded;
             }
         }
     }
 
-    private static void StringFilterBox_Loaded(object sender, RoutedEventArgs e)
+    private static void TextFilterBox_Loaded(object sender, RoutedEventArgs e)
     {
-        var filterBox = sender as StringFilterBox;
+        var filterBox = sender as TextFilterBox;
         if (filterBox != null && filterBox.Parent is Panel panel)
         {
             panel.SetValue(Grid.IsSharedSizeScopeProperty, true);
@@ -126,11 +126,11 @@ public class StringFilterBox : Control
     #region Operator
 
     public static readonly DependencyProperty OperatorProperty =
-                        DependencyProperty.Register(nameof(Operator), typeof(StringOperator), typeof(StringFilterBox), new FrameworkPropertyMetadata(default(StringOperator), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                        DependencyProperty.Register(nameof(Operator), typeof(TextOperator), typeof(TextFilterBox), new FrameworkPropertyMetadata(default(TextOperator), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-    public StringOperator Operator
+    public TextOperator Operator
     {
-        get => (StringOperator)GetValue(OperatorProperty);
+        get => (TextOperator)GetValue(OperatorProperty);
         set => SetValue(OperatorProperty, value);
     }
 
@@ -139,7 +139,7 @@ public class StringFilterBox : Control
     #region ExtendObject
 
     public static readonly DependencyProperty ExtendObjectProperty =
-        DependencyProperty.Register(nameof(ExtendObject), typeof(object), typeof(StringFilterBox), new PropertyMetadata(default(object)));
+        DependencyProperty.Register(nameof(ExtendObject), typeof(object), typeof(TextFilterBox), new PropertyMetadata(default(object)));
 
     public object ExtendObject
     {

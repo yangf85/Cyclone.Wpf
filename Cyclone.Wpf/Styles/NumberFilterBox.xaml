@@ -5,24 +5,31 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="/Cyclone.UI;component/Styles/Resources/StyleResourceCollection.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/ControlStyle.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/NumberBoxStyle.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/ComboBoxStyle.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/CheckBoxStyle.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="NumberFilterBox.UsedCheckBoxStyle" TargetType="CheckBox">
+    <Style
+        x:Key="NumberFilterBox.ActiveCheckBoxStyle"
+        BasedOn="{StaticResource CheckBox.Style.Basic}"
+        TargetType="CheckBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style x:Key="NumberFilterBox.OperatorComboBox" TargetType="ComboBox">
+    <Style
+        x:Key="NumberFilterBox.OperatorComboBox"
+        BasedOn="{StaticResource ComboBox.Style.Basic}"
+        TargetType="ComboBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style x:Key="NumberFilterBox.ValueNumberBox" TargetType="ctl:NumberBox">
+    <Style
+        x:Key="NumberFilterBox.ValueNumberBox"
+        BasedOn="{StaticResource NumberBox.Style.Basic}"
+        TargetType="ctl:NumberBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
@@ -48,22 +55,18 @@
                     Content="{TemplateBinding Label}"
                     Focusable="False"
                     IsChecked="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                    IsTabStop="False"
-                    IsThreeState="False" />
+                    Style="{StaticResource NumberFilterBox.ActiveCheckBoxStyle}" />
                 <ComboBox
                     x:Name="PART_OperatorComboBox"
                     Grid.Column="1"
-                    MinWidth="65"
                     Margin="5,0"
-                    Focusable="False"
                     IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                    IsTabStop="False"
-                    ItemsSource="{Binding Source={hp:EnumItemsSource EnumType=enum:NumberOperator}}"
-                    SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}" />
+                    ItemsSource="{Binding Source={hp:EnumItemsSource EnumType=ctl:NumberOperator}}"
+                    SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}"
+                    Style="{StaticResource NumberFilterBox.OperatorComboBox}" />
                 <ctl:NumberBox
                     x:Name="PART_ValueNumberBox"
                     Grid.Column="2"
-                    MinWidth="90"
                     DecimalPlaces="{Binding DecimalPlaces, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                     IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                     IsVisibleButton="False"
@@ -77,18 +80,19 @@
         <ControlTemplate.Triggers />
     </ControlTemplate>
 
-    <Style
-        x:Key="NumberFilterBox.Style.Basic"
-
-        TargetType="ctl:NumberFilterBox">
+    <Style x:Key="NumberFilterBox.Style.Basic" TargetType="ctl:NumberFilterBox">
         <Setter Property="Template" Value="{StaticResource NumberFilterBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
 
-        <Style.Triggers />
+        <Style.Triggers>
+            <Trigger Property="IsActived" Value="False">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
-    <Style TargetType="ctl:NumberFilterBox" BasedOn="{StaticResource NumberFilterBox.Style.Basic}" />
+    <Style BasedOn="{StaticResource NumberFilterBox.Style.Basic}" TargetType="ctl:NumberFilterBox" />
 </ResourceDictionary>

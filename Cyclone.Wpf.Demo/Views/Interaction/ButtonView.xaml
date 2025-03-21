@@ -46,10 +46,10 @@
         </HeaderedContentControl>
         <HeaderedContentControl Header="Switch">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:Switch Content="One" />
-                <cy:Switch Content="Two" />
-                <cy:Switch Content="Three" />
-                <cy:Switch Content="Four" />
+                <cy:SwitchButton Content="One" />
+                <cy:SwitchButton Content="Two" />
+                <cy:SwitchButton Content="Three" />
+                <cy:SwitchButton Content="Four" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="SplitButton">

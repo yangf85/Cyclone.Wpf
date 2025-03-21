@@ -31,7 +31,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TextBox.Style.Default" TargetType="{x:Type TextBox}">
+    <Style x:Key="TextBox.Style.Basic" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -98,5 +98,5 @@
         </Style.Triggers>
     </Style>
 
-    <Style BasedOn="{StaticResource TextBox.Style.Default}" TargetType="TextBox" />
+    <Style BasedOn="{StaticResource TextBox.Style.Basic}" TargetType="TextBox" />
 </ResourceDictionary>

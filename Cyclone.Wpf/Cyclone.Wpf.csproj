@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.25.3.3</AssemblyVersion>
-    <FileVersion>1.25.3.3</FileVersion>
+    <AssemblyVersion>1.25.3.6</AssemblyVersion>
+    <FileVersion>1.25.3.6</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
     <Copyright>CopyRight@Cyclone.Com</Copyright>

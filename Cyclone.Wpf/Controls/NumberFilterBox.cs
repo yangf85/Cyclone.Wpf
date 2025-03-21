@@ -19,28 +19,28 @@ using System.Windows.Shapes;
 
 namespace Cyclone.Wpf.Controls;
 
-
 [TypeConverter(typeof(EnumAttributeTypeConverter<DescriptionAttribute>))]
 public enum NumberOperator
 {
-    [Description("=")]
+    [Description("=")]               // Equal
     Equal,
 
-    [Description("!=")]
+    [Description("≠")]               // NotEqual（数学符号“不等于”）
     NotEqual,
 
-    [Description("<")]
+    [Description("<")]               // LessThan
     LessThan,
 
-    [Description("<=")]
+    [Description("≤")]               // LessThanOrEqual（数学符号“小于等于”）
     LessThanOrEqual,
 
-    [Description(">")]
+    [Description(">")]               // GreaterThan
     GreaterThan,
 
-    [Description(">=")]
+    [Description("≥")]               // GreaterThanOrEqual（数学符号“大于等于”）
     GreaterThanOrEqual
 }
+
 /// <summary>
 /// 一个用于数字过滤的控件 ，比如>=,<,=等等
 /// </summary>

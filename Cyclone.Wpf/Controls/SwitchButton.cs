@@ -8,11 +8,11 @@ using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
-public class Switch:ToggleButton
+public class SwitchButton:ToggleButton
 {
-    static Switch()
+    static SwitchButton()
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(Switch), new FrameworkPropertyMetadata(typeof(Switch)));
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(SwitchButton), new FrameworkPropertyMetadata(typeof(SwitchButton)));
     }
 
 
@@ -24,7 +24,7 @@ public class Switch:ToggleButton
     }
 
     public static readonly DependencyProperty TrackWidthProperty =
-        DependencyProperty.Register(nameof(TrackWidth), typeof(double), typeof(Switch), new PropertyMetadata(50d));
+        DependencyProperty.Register(nameof(TrackWidth), typeof(double), typeof(SwitchButton), new PropertyMetadata(50d));
 
     #endregion
 }
