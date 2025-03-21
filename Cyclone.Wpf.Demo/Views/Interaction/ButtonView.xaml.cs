@@ -2,9 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
+using Cyclone.Wpf.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,11 +78,19 @@ namespace Cyclone.Wpf.Demo.Views
         }
     }
 
+    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum RadioButtonGroupEnum
     {
+        [Description("One")]
         A,
+
+        [Description("Two")]
         B,
+
+        [Description("Three")]
         C,
+
+        [Description("Four")]
         D
     }
 }

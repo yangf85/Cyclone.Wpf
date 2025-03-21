@@ -20,8 +20,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+    <Page Remove="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controls\Card\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>

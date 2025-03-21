@@ -19,7 +19,7 @@ using System.Windows.Shapes;
 
 namespace Cyclone.Wpf.Controls;
 
-[TypeConverter(typeof(EnumAttributeTypeConverter<DescriptionAttribute>))]
+[TypeConverter(typeof(EnumDescriptionTypeConverter))]
 public enum NumberOperator
 {
     [Description("=")]               // Equal

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Cyclone.Wpf.Controls;
 
-[TypeConverter(typeof(EnumAttributeTypeConverter<DescriptionAttribute>))]
+[TypeConverter(typeof(EnumDescriptionTypeConverter))]
 public enum TextOperator
 {
     [Description("=")]           // Equal

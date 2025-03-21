@@ -16,33 +16,23 @@ namespace Cyclone.Wpf.Helpers;
 /// 自定义的标记扩展类，用于转换枚举类型到绑定数据源，继承自MarkupExtension
 /// 如果枚举对象未实现TypeConverter,那么会显示枚举的DescriptionAttribute,对应的类型将变为字符串
 /// </summary>
-[MarkupExtensionReturnType(typeof(IEnumerable))]
-public class EnumItemsSourceExtension : MarkupExtension
+public class EnumBindingSourceExtension : MarkupExtension
 {
-    public EnumItemsSourceExtension()
-    {
-    }
-
     private Type _enumType;
 
-    /// <summary>
-    /// 枚举类型
-    /// </summary>
     public Type EnumType
     {
         get { return _enumType; }
-
         set
         {
             if (value != _enumType)
             {
                 if (null != value)
                 {
-                    // 获取传入值的基础类型，如果是可空类型则获取其基础类型，否则返回传入值本身
                     var enumType = Nullable.GetUnderlyingType(value) ?? value;
                     if (!enumType.IsEnum)
                     {
-                        throw new ArgumentException("Type must be for an Enum");
+                        throw new ArgumentException("Type must bu for an Enum");
                     }
                 }
 
@@ -51,52 +41,33 @@ public class EnumItemsSourceExtension : MarkupExtension
         }
     }
 
-    /// <summary>
-    /// 查看枚举类型是否定义有类型转换器
-    /// </summary>
-    /// <param name="enumType"></param>
-    /// <returns></returns>
-    private bool HasEnumAttributeTypeConverter(Type enumType)
+    public EnumBindingSourceExtension()
     {
-        var typeConverterAttr = enumType.GetCustomAttribute<TypeConverterAttribute>();
-        if (typeConverterAttr == null)
-        {
-            return false;
-        }
-
-        var baseType = typeof(EnumAttributeTypeConverter<>);
-
-        var converterType = Type.GetType(typeConverterAttr.ConverterTypeName).GetGenericTypeDefinition();
-
-        return baseType == converterType;
     }
 
-    private IEnumerable GetEnumDescriptionAttribute(Type enumType)
+    public EnumBindingSourceExtension(Type enumType)
     {
-        var values = Enum.GetValues(enumType);
-
-        foreach (var value in values)
-        {
-            var attr = value.GetType().GetField(value.ToString()).GetCustomAttribute<DescriptionAttribute>();
-            yield return attr?.Description ?? value;
-        }
+        EnumType = enumType;
     }
 
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        //如果枚举类型为空，则抛出异常
         if (null == _enumType)
         {
-            throw new InvalidOperationException("The EnumType must be specified.");
+            throw new InvalidOperationException("The EnumTYpe must be specified.");
         }
 
-        if (HasEnumAttributeTypeConverter(EnumType))
+        var actualEnumType = Nullable.GetUnderlyingType(_enumType) ?? _enumType;
+        var enumValues = Enum.GetValues(actualEnumType);
+
+        if (actualEnumType == _enumType)
         {
-            return Enum.GetValues(EnumType);
+            return enumValues;
         }
-        else
-        {
-            return GetEnumDescriptionAttribute(EnumType);
-        }
+
+        var tempArray = Array.CreateInstance(actualEnumType, enumValues.Length + 1);
+        enumValues.CopyTo(tempArray, 1);
+
+        return tempArray;
     }
 }

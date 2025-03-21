@@ -59,6 +59,35 @@ public class RadioButtonGroup : ItemsControl
 
     private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
+        var group = (RadioButtonGroup)d;
+        if (e.NewValue == null) return;
+
+        if (group.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+        {
+            UpdateContainer();
+        }
+        else
+        {
+            group.ItemContainerGenerator.StatusChanged += OnStatusChanged;
+
+            void OnStatusChanged(object sender, EventArgs args)
+            {
+                if (group.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+                {
+                    group.ItemContainerGenerator.StatusChanged -= OnStatusChanged;
+                    UpdateContainer();
+                }
+            }
+        }
+
+        void UpdateContainer()
+        {
+            var container = group.ItemContainerGenerator.ContainerFromItem(e.NewValue);
+            if (container is RadioButton radioButton)
+            {
+                radioButton.IsChecked = true;
+            }
+        }
     }
 
     #endregion SelectedItem
@@ -89,5 +118,11 @@ public class RadioButtonGroup : ItemsControl
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
+        if (element is RadioButton radioButton)
+        {
+            // 确保 DataContext 或 Content 绑定到数据项
+            radioButton.DataContext = item; // 或 radioButton.Content = item;
+            radioButton.GroupName = GroupName;
+        }
     }
 }
