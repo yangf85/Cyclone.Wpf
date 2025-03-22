@@ -10,39 +10,27 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
-        <Setter Property="MinWidth" Value="25" />
+        <Setter Property="Width" Value="Auto" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="Foreground" Value="{Binding Path=BorderBrush, RelativeSource={RelativeSource AncestorType=ctl:NumberBox}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
-                        <StackPanel
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Orientation="Horizontal">
-                            <ContentPresenter
-                                x:Name="ContentContainer"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}" />
-                        </StackPanel>
-                    </Border>
+                    <Grid x:Name="RootGrid" Background="Transparent">
+                        <ContentPresenter
+                            x:Name="ContentContainer"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
+                    </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
+                        <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Pressed}" />
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Pressed}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Pressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -57,7 +45,7 @@
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <ControlTemplate x:Key="BasicNumberBoxControlTemplate" TargetType="ctl:NumberBox">
+    <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic" TargetType="ctl:NumberBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -69,7 +57,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" MinWidth="24" />
                 </Grid.ColumnDefinitions>
                 <TextBox
                     x:Name="PART_InputTextBox"
@@ -124,16 +112,14 @@
                     <RepeatButton
                         x:Name="PART_IncreaseRepeatButton"
                         Grid.Row="0"
-                        Padding="2"
-                        BorderThickness="0"
                         Command="{x:Static ctl:NumberBox.IncreaseCommand}"
                         Style="{StaticResource NumberBox.SpinButtonStyle}">
                         <RepeatButton.Content>
                             <Path
-                                Width="11"
-                                Height="11"
-                                Data="M40.448 727.04 512 256 983.552 727.04Z"
-                                Fill="{TemplateBinding Foreground}"
+                                Width="10"
+                                Height="10"
+                                Data="M533.333333 384L341.333333 576l29.866667 29.866667 162.133333-162.133334 162.133334 162.133334 29.866666-29.866667L533.333333 384z"
+                                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
@@ -145,16 +131,14 @@
                     <RepeatButton
                         x:Name="PART_DecreaseRepeatButton"
                         Grid.Row="2"
-                        Padding="2"
-                        BorderThickness="0"
                         Command="{x:Static ctl:NumberBox.DecreaseCommand}"
                         Style="{StaticResource NumberBox.SpinButtonStyle}">
                         <RepeatButton.Content>
                             <Path
-                                Width="11"
-                                Height="11"
-                                Data="M983.552 296.96L512 767.99999999 40.448 296.96Z"
-                                Fill="{TemplateBinding Foreground}"
+                                Width="10"
+                                Height="10"
+                                Data="M533.333333 605.866667L341.333333 413.866667l29.866667-29.866667 162.133333 162.133333L695.466667 384l29.866666 29.866667-192 192z"
+                                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
                                 Stretch="Uniform"
                                 UseLayoutRounding="True" />
                         </RepeatButton.Content>
@@ -180,7 +164,7 @@
     </ControlTemplate>
 
     <Style x:Key="NumberBox.Style.Basic" TargetType="ctl:NumberBox">
-        <Setter Property="Template" Value="{StaticResource BasicNumberBoxControlTemplate}" />
+        <Setter Property="Template" Value="{StaticResource NumberBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />

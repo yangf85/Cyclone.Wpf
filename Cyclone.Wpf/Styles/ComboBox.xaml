@@ -14,12 +14,11 @@
                     <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                         <Path
                             x:Name="Indicator"
-                            Width="12"
-                            Height="12"
-                            Margin="5,0"
+                            Width="15"
+                            Height="15"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Data="M 0 0 L 6 6 L 12 0 Z"
+                            Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
                             Fill="{DynamicResource Icon.Foreground.Default}"
                             Stretch="Uniform" />
                     </Grid>
@@ -28,7 +27,7 @@
                             <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Indicator" Property="Data" Value="M 0 6 L 6 0 L 12 6 Z" />
+                            <Setter TargetName="Indicator" Property="Data" Value="M533.333333 358.4l-332.8 332.8-29.866666-29.866667L533.333333 298.666667l362.666667 362.666666-29.866667 29.866667-332.8-332.8z" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -113,6 +112,7 @@
                             <ToggleButton
                                 x:Name="OpenButton"
                                 Grid.Column="1"
+                                Margin="0,0,5,0"
                                 ClickMode="Press"
                                 Focusable="False"
                                 IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"

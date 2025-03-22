@@ -14,8 +14,8 @@
                     <Grid x:Name="RootGrid" Background="Transparent">
                         <Path
                             x:Name="IconPath"
-                            Width="14"
-                            Height="14"
+                            Width="12"
+                            Height="12"
                             Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
                             Fill="{DynamicResource Icon.Foreground.Default}"
                             Stretch="Uniform" />

@@ -15,23 +15,24 @@
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid
                         x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
+                        Background="Transparent"
                         SnapsToDevicePixels="True">
                         <Path
                             x:Name="Indicator"
-                            Width="14"
-                            Height="14"
-                            Margin="{TemplateBinding Padding}"
-                            Data="M 0 0 L 6 6 L 12 0 Z"
+                            Width="15"
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
                             Fill="{TemplateBinding Foreground}"
                             Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Background.Checked}" />
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Icon.Foreground.Checked}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -91,8 +92,7 @@
                         Background="Transparent"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True"
-                        UseLayoutRounding="True">
+                        SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -113,6 +113,7 @@
                             <ToggleButton
                                 x:Name="PART_OpenButton"
                                 Grid.Column="2"
+                                Margin="5,0"
                                 IsChecked="{Binding Path=IsOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                 Style="{StaticResource SplitButton.OpenButtonStyle}" />
                             <Popup

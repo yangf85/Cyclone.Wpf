@@ -11,6 +11,11 @@ namespace Cyclone.Wpf.Controls;
 
 public class FormItem : ContentControl
 {
+    static FormItem()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(FormItem), new FrameworkPropertyMetadata(typeof(FormItem)));
+    }
+
     #region Label
 
     public static readonly DependencyProperty LabelProperty =
@@ -27,7 +32,8 @@ public class FormItem : ContentControl
     #region SharedName
 
     public static readonly DependencyProperty SharedNameProperty =
-                        DependencyProperty.Register(nameof(SharedName), typeof(string), typeof(FormItem), new PropertyMetadata(default(string), OnSharedNameChanged));
+        DependencyProperty.Register(nameof(SharedName), typeof(string), typeof(FormItem),
+            new FrameworkPropertyMetadata(default(string), OnSharedNameChanged));
 
     public string SharedName
     {

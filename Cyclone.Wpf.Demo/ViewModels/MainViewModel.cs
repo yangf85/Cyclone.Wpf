@@ -44,6 +44,7 @@ public partial class MainViewModel : ObservableObject
             "HintBox" => new HintBoxView(),
             "Panel" => new PanelView(),
             "TransitionBox" => new TransitionBoxView(),
+            "Form" => new FormView(),
             _ => new object(),
         };
     }
@@ -97,6 +98,11 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header="CascadePicker",
                     Icon= "\xe78a",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="Form",
+                    Icon= "\xe60b",
                 },
             ]
         });

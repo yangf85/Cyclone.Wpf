@@ -5,7 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
-    <ControlTemplate x:Key="FormItemControlTemplate" TargetType="{x:Type ctl:FormItem}">
+
+    <ControlTemplate x:Key="FormItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FormItem}">
         <Grid HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
@@ -27,11 +28,12 @@
                 Content="{TemplateBinding AttachedObject}" />
         </Grid>
     </ControlTemplate>
-    <Style TargetType="{x:Type ctl:FormItem}">
-        <Setter Property="Template" Value="{StaticResource FormItemControlTemplate}" />
+    <Style x:Key="FormItem.Style.Basic" TargetType="{x:Type ctl:FormItem}">
+        <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
     </Style>
+    <Style BasedOn="{StaticResource FormItem.Style.Basic}" TargetType="ctl:FormItem" />
 </ResourceDictionary>

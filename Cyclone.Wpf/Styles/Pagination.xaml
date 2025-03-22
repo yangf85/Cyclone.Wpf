@@ -4,7 +4,7 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
@@ -60,11 +60,11 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
                 <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
-                <Setter Property="Foreground" Value="{DynamicResource HoverForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource Foreground.Hover}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource SelectedBackgroundBrush}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource SelectedForegroundBrush}" />
+                <Setter Property="Background" Value="{DynamicResource Background.Selected}" />
+                <Setter Property="Foreground" Value="{DynamicResource Foreground.Selected}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -127,7 +127,7 @@
                     <TextBlock VerticalAlignment="Center" Text="每页 " />
                     <ComboBox
                         x:Name="PART_PerpageCountComboBox"
-                        MinWidth="75"
+                        MinWidth="80"
                         SelectedValue="{Binding Path=PerpageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                     <TextBlock VerticalAlignment="Center" Text=" 条" />
                 </StackPanel>
@@ -147,8 +147,8 @@
                                 x:Name="PrevPath"
                                 Width="15"
                                 Height="15"
-                                Data="M100,0 L100,100 L13.4,50 Z"
-                                Fill="{DynamicResource DefaultForegroundBrush}"
+                                Data="M477.866667 533.333333L768 243.2l-29.866667-29.866667-320 320 320 320 29.866667-29.866666-290.133333-290.133334zM298.666667 213.333333H256v640h42.666667V213.333333z"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
@@ -177,8 +177,8 @@
                                 x:Name="NextPath"
                                 Width="15"
                                 Height="15"
-                                Data="M0,0 L0,100 L86.6,50 Z"
-                                Fill="{DynamicResource DefaultForegroundBrush}"
+                                Data="M546.133333 533.333333L256 243.2l29.866667-29.866667 320 320L285.866667 853.333333l-29.866667-29.866666 290.133333-290.133334zM725.333333 213.333333h42.666667v640h-42.666667V213.333333z"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
                                 Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
@@ -194,7 +194,7 @@
                         Text="前往" />
                     <ctl:NumberBox
                         x:Name="PART_GotoPageNumberBox"
-                        MinWidth="50"
+                        MinWidth="75"
                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                         IsVisibleButton="False"
                         IsVisibleSlider="False"
@@ -217,7 +217,7 @@
                                 Width="16"
                                 Height="16"
                                 Data="M779.00800001 576L0 576 0 448 779.00800001 448 435.712 104.704 526.208 14.208 1024 512l-497.792 497.792-90.496-90.496z"
-                                Fill="{DynamicResource DefaultForegroundBrush}"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
                                 Stretch="Uniform" />
                         </Button.Content>
                     </Button>
