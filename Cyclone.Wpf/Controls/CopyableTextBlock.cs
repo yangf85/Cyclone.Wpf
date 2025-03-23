@@ -38,6 +38,19 @@ public class CopyableTextBlock : Control
 
     #endregion Text
 
+    #region TextWrapping
+
+    public TextWrapping TextWrapping
+    {
+        get => (TextWrapping)GetValue(TextWrappingProperty);
+        set => SetValue(TextWrappingProperty, value);
+    }
+
+    public static readonly DependencyProperty TextWrappingProperty =
+        DependencyProperty.Register(nameof(TextWrapping), typeof(TextWrapping), typeof(CopyableTextBlock), new PropertyMetadata(default(TextWrapping)));
+
+    #endregion TextWrapping
+
     #region IsCopyed
 
     public bool IsCopyed

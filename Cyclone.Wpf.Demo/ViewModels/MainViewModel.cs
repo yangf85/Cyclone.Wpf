@@ -45,6 +45,7 @@ public partial class MainViewModel : ObservableObject
             "Panel" => new PanelView(),
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
+            "Expander" => new ExpanderView(),
             _ => new object(),
         };
     }
@@ -155,6 +156,11 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header="TransferBox",
                     Icon= "\xe642",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="Expander",
+                    Icon= "\xe6dd",
                 },
 
             ]

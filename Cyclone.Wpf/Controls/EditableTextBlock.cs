@@ -34,7 +34,8 @@ namespace Cyclone.Wpf.Controls
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(nameof(Text), typeof(string), typeof(EditableTextBlock), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        #endregion
+        #endregion Text
+
         #region IsEditing
 
         public bool IsEditing
@@ -46,10 +47,23 @@ namespace Cyclone.Wpf.Controls
         public static readonly DependencyProperty IsEditingProperty =
             DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(EditableTextBlock), new FrameworkPropertyMetadata(false));
 
-        #endregion
+        #endregion IsEditing
 
+        #region TextWrapping
+
+        public TextWrapping TextWrapping
+        {
+            get => (TextWrapping)GetValue(TextWrappingProperty);
+            set => SetValue(TextWrappingProperty, value);
+        }
+
+        public static readonly DependencyProperty TextWrappingProperty =
+            DependencyProperty.Register(nameof(TextWrapping), typeof(TextWrapping), typeof(EditableTextBlock), new PropertyMetadata(default(TextWrapping)));
+
+        #endregion TextWrapping
 
         #region IsReadOnly
+
         public bool IsReadOnly
         {
             get => (bool)GetValue(IsReadOnlyProperty);
@@ -59,7 +73,8 @@ namespace Cyclone.Wpf.Controls
         public static readonly DependencyProperty IsReadOnlyProperty =
             DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(EditableTextBlock), new PropertyMetadata(default(bool)));
 
-        #endregion
+        #endregion IsReadOnly
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -144,9 +159,5 @@ namespace Cyclone.Wpf.Controls
                 }
             }
         }
-
-
     }
 }
-
-

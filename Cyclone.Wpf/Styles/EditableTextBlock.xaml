@@ -24,6 +24,7 @@
                                 x:Name="PART_TextBlock"
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                 Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                TextWrapping="{TemplateBinding TextWrapping}"
                                 Visibility="Visible" />
                             <TextBox
                                 x:Name="PART_TextBox"
@@ -31,6 +32,7 @@
                                 FocusVisualStyle="{x:Null}"
                                 IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                 Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                TextWrapping="{TemplateBinding TextWrapping}"
                                 Visibility="Collapsed" />
                         </Grid>
                     </Border>
