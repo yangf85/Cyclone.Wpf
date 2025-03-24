@@ -67,8 +67,17 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="Watermark"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                FontSize="{TemplateBinding FontSize}"
+                                Foreground="{DynamicResource Text.Prompt}"
+                                Text="{Binding Path=(hp:TextBoxHelper.Watermark), RelativeSource={RelativeSource AncestorType=TextBox}}"
+                                Visibility="Collapsed" />
                             <ScrollViewer
                                 x:Name="PART_ContentHost"
+                                Grid.Column="0"
                                 Background="{TemplateBinding Background}"
                                 Focusable="false"
                                 HorizontalScrollBarVisibility="Hidden"
@@ -76,6 +85,7 @@
                             <Button
                                 x:Name="ClearButton"
                                 Grid.Column="1"
+                                Margin="0,0,3,0"
                                 Command="{x:Static hp:TextBoxHelper.ClearCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}"
                                 Style="{StaticResource TextBox.ClearButtonStyle}"
@@ -83,6 +93,15 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value="" />
+                                <Condition Property="IsKeyboardFocused" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="RootBorder" Property="Opacity" Value="0.5" />
                         </Trigger>
@@ -91,6 +110,11 @@
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
+                            <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
