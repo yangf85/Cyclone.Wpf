@@ -149,18 +149,8 @@
                         </EventTrigger>
 
                         <Trigger Property="ExpandDirection" Value="Up">
-                            <Setter TargetName="ContentContainer" Property="DockPanel.Dock" Value="Top" />
-                            <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Bottom" />
-                        </Trigger>
-
-                        <Trigger Property="ExpandDirection" Value="Right">
-                            <Setter TargetName="ContentContainer" Property="DockPanel.Dock" Value="Right" />
-                            <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Left" />
-                        </Trigger>
-
-                        <Trigger Property="ExpandDirection" Value="Left">
-                            <Setter TargetName="ContentContainer" Property="DockPanel.Dock" Value="Left" />
-                            <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Right" />
+                            <Setter TargetName="ContentContainer" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="HeaderContainer" Property="Grid.Row" Value="1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
