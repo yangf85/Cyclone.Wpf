@@ -24,8 +24,8 @@
                         <ContentPresenter
                             x:Name="ContentSite"
                             HorizontalAlignment="Left"
-                            Content="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=Expander}}"
-                            ContentTemplate="{Binding Path=ContentTemplate, RelativeSource={RelativeSource AncestorType=Expander}}" />
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -51,13 +51,6 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
-                        <!--<DataTrigger Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}}" Value="Up">
-                            <Setter TargetName="Arrow" Property="Data" Value="M533.333333 358.4l-332.8 332.8-29.866666-29.866667L533.333333 298.666667l362.666667 362.666666-29.866667 29.866667-332.8-332.8z" />
-                        </DataTrigger>-->
-
-                        <!--<DataTrigger Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}}" Value="Up">
-                            <Setter TargetName="Arrow" Property="Data" Value="M533.333333 358.4l-332.8 332.8-29.866666-29.866667L533.333333 298.666667l362.666667 362.666666-29.866667 29.866667-332.8-332.8z" />
-                        </DataTrigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -103,12 +96,7 @@
                                 Grid.Row="1"
                                 Height="0"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                RenderTransformOrigin="0.5,0">
-                                <ContentPresenter.RenderTransform>
-                                    <ScaleTransform ScaleY="0" />
-                                </ContentPresenter.RenderTransform>
-                            </ContentPresenter>
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -119,35 +107,6 @@
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ContentContainer" Property="Height" Value="Auto" />
                         </Trigger>
-
-                        <!--  展开动画  -->
-                        <EventTrigger RoutedEvent="Expander.Expanded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="ContentContainer"
-                                        Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
-                                        From="0"
-                                        To="1"
-                                        Duration="0:0:0.25" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-
-                        <!--  折叠动画  -->
-                        <EventTrigger RoutedEvent="Expander.Collapsed">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="ContentContainer"
-                                        Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
-                                        From="1"
-                                        To="0"
-                                        Duration="0:0:0.25" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-
                         <Trigger Property="ExpandDirection" Value="Up">
                             <Setter TargetName="ContentContainer" Property="Grid.Row" Value="0" />
                             <Setter TargetName="HeaderContainer" Property="Grid.Row" Value="1" />
