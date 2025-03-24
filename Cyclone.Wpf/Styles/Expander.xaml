@@ -22,7 +22,7 @@
                             Fill="{DynamicResource Icon.Foreground.Default}"
                             Stretch="Uniform" />
                         <ContentPresenter
-                            x:Name="ContentContainer"
+                            x:Name="ContentSite"
                             HorizontalAlignment="Left"
                             Content="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=Expander}}"
                             ContentTemplate="{Binding Path=ContentTemplate, RelativeSource={RelativeSource AncestorType=Expander}}" />
@@ -71,7 +71,6 @@
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Height" Value="Auto" />
-
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
