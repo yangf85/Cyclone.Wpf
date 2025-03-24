@@ -21,10 +21,10 @@
     <SolidColorBrush x:Key="Background.Dragging" Color="#1565C0" />
     <SolidColorBrush x:Key="Background.InputError" Color="#FFEBEE" />
     <SolidColorBrush x:Key="Background.Selected" Color="#2196F3" />
-    <SolidColorBrush x:Key="Background.Warning" Color="#FFF3E0" />
-    <SolidColorBrush x:Key="Background.Error" Color="#FFEBEE" />
-    <SolidColorBrush x:Key="Background.Success" Color="#E8F5E9" />
-    <SolidColorBrush x:Key="Background.Info" Color="#E3F2FD" />
+    <SolidColorBrush x:Key="Background.Warning" Color="#EF6C00" />
+    <SolidColorBrush x:Key="Background.Error" Color="#C62828" />
+    <SolidColorBrush x:Key="Background.Success" Color="#2E7D32" />
+    <SolidColorBrush x:Key="Background.Info" Color="#1565C0" />
     <SolidColorBrush x:Key="Background.Disabled" Color="#EEEEEE" />
     <SolidColorBrush x:Key="Background.Active" Color="#1976D2" />
     <SolidColorBrush x:Key="Background.Inactive" Color="#E0E0E0" />
