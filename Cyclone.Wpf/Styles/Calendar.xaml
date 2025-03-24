@@ -5,6 +5,7 @@
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="CalendarItem.PreviousNextButtonStyle" TargetType="{x:Type Button}">
@@ -397,7 +398,10 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Calendar.Basic" TargetType="{x:Type Calendar}">
+    <Style
+        x:Key="Calendar.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type Calendar}">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="CalendarItemStyle" Value="{StaticResource CalendarItem.Style.Basic}" />
         <Setter Property="CalendarDayButtonStyle" Value="{StaticResource CalendarDayButton.Style.Basic}" />

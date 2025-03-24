@@ -4,6 +4,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="SplitButton.OpenButtonStyle" TargetType="{x:Type ToggleButton}">
@@ -78,7 +79,10 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ctl:SplitButton}">
+    <Style
+        x:Key="SplitButton.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:SplitButton}">
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -152,4 +156,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource SplitButton.Style.Basic}" TargetType="ctl:SplitButton" />
 </ResourceDictionary>

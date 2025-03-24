@@ -2,7 +2,7 @@
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type GridViewColumnHeader}">
+    <Style x:Key="GridViewColumnHeader.Style.Basic" TargetType="{x:Type GridViewColumnHeader}">
         <Setter Property="Background" Value="{DynamicResource Background.Header}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -74,4 +74,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource GridViewColumnHeader.Style.Basic}" TargetType="GridViewColumnHeader" />
 </ResourceDictionary>

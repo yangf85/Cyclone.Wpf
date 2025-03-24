@@ -3,10 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ProgressBar.Style.Stripe" TargetType="{x:Type ProgressBar}">
+    <Style
+        x:Key="ProgressBar.Style.Stripe"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ProgressBar}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -92,11 +96,14 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ProgressBar.Style.Basic" TargetType="{x:Type ProgressBar}">
+    <Style
+        x:Key="ProgressBar.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ProgressBar}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Height" Value="15" />
-        <Setter Property="Background" Value="{DynamicResource DraggingBackgroundBrush}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Dragging}" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Padding" Value="5,0" />
         <Setter Property="Template">
@@ -140,7 +147,7 @@
                                                 <TextBlock
                                                     VerticalAlignment="Center"
                                                     FontSize="{TemplateBinding FontSize}"
-                                                    Foreground="{DynamicResource InvertForegroundBrush}"
+                                                    Foreground="{DynamicResource Foreground.Invert}"
                                                     RenderTransformOrigin="0.5,0.5"
                                                     SnapsToDevicePixels="True"
                                                     Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, StringFormat={}{0}%}">
@@ -179,7 +186,7 @@
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsIndeterminate" Value="true">
+                        <Trigger Property="IsIndeterminate" Value="True">
                             <Setter TargetName="Width1" Property="Width" Value="0.25*" />
                             <Setter TargetName="Width2" Property="Width" Value="0.725*" />
                         </Trigger>

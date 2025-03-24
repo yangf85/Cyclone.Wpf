@@ -4,7 +4,8 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ListBoxItem.Style.Default" TargetType="ListBoxItem">
@@ -56,7 +57,10 @@
 
     <Style BasedOn="{StaticResource ListBoxItem.Style.Default}" TargetType="ListBoxItem" />
 
-    <Style x:Key="ListBox.Style.Basic" TargetType="ListBox">
+    <Style
+        x:Key="ListBox.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ListBox">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItem.Style.Default}" />
         <Setter Property="BorderThickness" Value="1" />

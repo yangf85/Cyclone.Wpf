@@ -31,7 +31,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="BasicPopupBoxControlTemplate" TargetType="ctl:PopupBox">
+    <ControlTemplate x:Key="PopupBox.ControlTemplate.Basic" TargetType="ctl:PopupBox">
         <Grid>
             <ToggleButton
                 x:Name="PART_ToggleButton"
@@ -93,7 +93,7 @@
 
     <Style TargetType="ctl:PopupBox">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Template" Value="{StaticResource BasicPopupBoxControlTemplate}" />
+        <Setter Property="Template" Value="{StaticResource PopupBox.ControlTemplate.Basic}" />
         <Setter Property="Placement" Value="Bottom" />
         <Setter Property="StaysOpen" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />

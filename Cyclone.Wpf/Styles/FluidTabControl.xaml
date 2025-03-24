@@ -4,6 +4,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="FluidTabItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FluidTabItem}">
@@ -67,7 +68,10 @@
 
     <Style BasedOn="{StaticResource FluidTabItem.Style.Basic}" TargetType="{x:Type ctl:FluidTabItem}" />
 
-    <Style x:Key="FluidTabControl.Style.Basic" TargetType="{x:Type ctl:FluidTabControl}">
+    <Style
+        x:Key="FluidTabControl.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:FluidTabControl}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />

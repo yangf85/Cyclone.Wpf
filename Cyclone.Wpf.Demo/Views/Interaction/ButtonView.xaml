@@ -14,7 +14,7 @@
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="Button">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <Button Content="One" />
+                <Button Content="One" IsEnabled="False" />
                 <Button Content="Two" />
                 <Button Content="Three" />
                 <Button Content="Four" />
@@ -98,7 +98,7 @@
         <HeaderedContentControl Header="RadioButtonGroup">
             <HeaderedContentControl.Resources />
             <cy:SpacingUniformGrid Rows="1">
-                <cy:RadioButtonGroup x:Name="RadioButtonGroup">
+                <cy:RadioButtonGroup x:Name="RadioButtonGroup" IsEnabled="False">
                     <RadioButton Content="First" />
                     <RadioButton Content="Second" />
                     <RadioButton Content="Three" />

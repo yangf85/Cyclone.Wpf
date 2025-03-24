@@ -4,31 +4,44 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="BasicHyperlinkButtonControlTemplate" TargetType="ctl:HyperlinkButton">
+    <ControlTemplate x:Key="HyperlinkButton.ControlTemplate.Basic" TargetType="ctl:HyperlinkButton">
         <Button x:Name="PART_NavigationButton" Command="{x:Static ctl:HyperlinkButton.OpenUrlCommand}">
-            <TextBlock x:Name="PART_DisplayTextBlock" Text="{TemplateBinding DisplayText}" />
+            <TextBlock
+                x:Name="PART_DisplayTextBlock"
+                Text="{TemplateBinding DisplayText}"
+                TextDecorations="Underline" />
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <ContentPresenter
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}" />
+                    <Grid x:Name="RootGrid">
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}" />
+                    </Grid>
                 </ControlTemplate>
             </Button.Template>
         </Button>
         <ControlTemplate.Triggers>
-            <Trigger SourceName="PART_DisplayTextBlock" Property="IsMouseOver" Value="True">
-                <Setter TargetName="PART_DisplayTextBlock" Property="TextBlock.TextDecorations" Value="Underline" />
-                <Setter TargetName="PART_DisplayTextBlock" Property="Cursor" Value="Hand" />
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_DisplayTextBlock" Property="Foreground" Value="{DynamicResource Foreground.Hover}" />
+            </Trigger>
+            <Trigger Property="Button.IsPressed" Value="True">
+                <Setter TargetName="PART_DisplayTextBlock" Property="Foreground" Value="{DynamicResource Foreground.Pressed}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style TargetType="{x:Type ctl:HyperlinkButton}">
-        <Setter Property="Template" Value="{StaticResource BasicHyperlinkButtonControlTemplate}" />
+    <Style
+        x:Key="HyperlinkButton.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:HyperlinkButton}">
+        <Setter Property="Template" Value="{StaticResource HyperlinkButton.ControlTemplate.Basic}" />
         <Setter Property="ToolTip" Value="{Binding Path=NavigateUri.AbsoluteUri, RelativeSource={RelativeSource Mode=Self}}" />
         <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
     </Style>
+
+    <Style BasedOn="{StaticResource HyperlinkButton.Style.Basic}" TargetType="ctl:HyperlinkButton" />
 </ResourceDictionary>

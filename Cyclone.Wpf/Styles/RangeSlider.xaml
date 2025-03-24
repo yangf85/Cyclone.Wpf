@@ -4,6 +4,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="RangeSlider.ThumbStyle" TargetType="Thumb">
@@ -178,7 +179,10 @@
         </Grid>
     </ControlTemplate>
 
-    <Style x:Key="RangeSlider.Style.Basic" TargetType="{x:Type ctl:RangeSlider}">
+    <Style
+        x:Key="RangeSlider.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:RangeSlider}">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="TrackThickness" Value="5" />

@@ -5,6 +5,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="RadioButton.ControlTemplate.Basic" TargetType="RadioButton">
@@ -71,10 +72,13 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="RadioButton.Style.Basic" TargetType="RadioButton">
+    <Style
+        x:Key="RadioButton.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="RadioButton">
         <Setter Property="Template" Value="{StaticResource RadioButton.ControlTemplate.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
-    <Style TargetType="RadioButton" BasedOn="{StaticResource RadioButton.Style.Basic}" />
+    <Style BasedOn="{StaticResource RadioButton.Style.Basic}" TargetType="RadioButton" />
 </ResourceDictionary>

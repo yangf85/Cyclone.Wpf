@@ -5,6 +5,7 @@
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
@@ -109,7 +110,10 @@
         </Grid>
     </ControlTemplate>
 
-    <Style TargetType="TabControl">
+    <Style
+        x:Key="TabControl.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="TabControl">
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Style.Triggers>
@@ -122,4 +126,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style BasedOn="{StaticResource TabControl.Style.Basic}" TargetType="TabControl" />
 </ResourceDictionary>

@@ -5,6 +5,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="ctl:SideMenuItem">
@@ -72,7 +73,10 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ctl:SideMenu">
+    <Style
+        x:Key="SideMenu.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:SideMenu">
         <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -103,4 +107,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style BasedOn="{StaticResource SideMenu.Style.Basic}" TargetType="ctl:SideMenu" />
 </ResourceDictionary>

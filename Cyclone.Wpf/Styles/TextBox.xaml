@@ -5,6 +5,7 @@
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TextBox.ClearButtonStyle" TargetType="Button">
@@ -33,7 +34,10 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TextBox.Style.Basic" TargetType="{x:Type TextBox}">
+    <Style
+        x:Key="TextBox.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />

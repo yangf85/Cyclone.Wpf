@@ -4,9 +4,13 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="CircularGauge.Style.Basic" TargetType="{x:Type ctl:CircularGauge}">
+    <Style
+        x:Key="CircularGauge.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:CircularGauge}">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="TickColor" Value="{DynamicResource Border.Hover}" />
         <Setter Property="PointerColor" Value="{DynamicResource Icon.Foreground.Error}" />

@@ -4,6 +4,7 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z" />
@@ -126,7 +127,10 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type TreeView}">
+    <Style
+        x:Key="TreeView.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type TreeView}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -178,4 +182,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style BasedOn="{StaticResource TreeView.Style.Basic}" TargetType="TreeView" />
 </ResourceDictionary>

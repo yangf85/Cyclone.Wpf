@@ -5,6 +5,7 @@
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="TransferBox.TransferButtonStyle" TargetType="RepeatButton">
@@ -223,7 +224,10 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TransferBox.Style.Basic" TargetType="ctl:TransferBox">
+    <Style
+        x:Key="TransferBox.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:TransferBox">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />

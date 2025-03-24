@@ -4,6 +4,7 @@
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ComboBox.OpenButtonStyle" TargetType="ToggleButton">
@@ -68,7 +69,10 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ComboBox.Style.Basic" TargetType="ComboBox">
+    <Style
+        x:Key="ComboBox.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ComboBox">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
