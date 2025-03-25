@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Cyclone.Wpf.Demo.Views
 {
     /// <summary>
-    /// NestingView.xaml 的交互逻辑
+    /// MenuView.xaml 的交互逻辑
     /// </summary>
-    public partial class NestingView : UserControl
+    public partial class MenuView : UserControl
     {
-        public NestingView()
+        public MenuView()
         {
             InitializeComponent();
         }

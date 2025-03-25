@@ -5,10 +5,7 @@
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="/Cyclone.UI;component/Styles/Resources/StyleResourceCollection.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/ControlStyle.xaml" />
-        <ResourceDictionary Source="/Cyclone.UI;component/Styles/TextBlockStyle.xaml" />-->
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="Window.CaptionButtonStyle" TargetType="Button">
@@ -60,7 +57,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Error}" />
+                            <Setter TargetName="RootGrid" Property="Background" Value="{DynamicResource Background.Close}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="RootGrid" Property="Opacity" Value="0.5" />

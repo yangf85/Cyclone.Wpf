@@ -28,7 +28,8 @@ public partial class MainViewModel : ObservableObject
         {
             "Button" => new ButtonView(),
             "Input" => new InputView(),
-            "Nesting" => new NestingView(),
+            "Menu" => new MenuView(),
+            "TreeView" => new TreeControlView(),
             "CascadePicker" => new CascadePickerView(),
             "Loading" => new LoadingView(),
             "DataGrid" => new DataGridView(),
@@ -168,8 +169,21 @@ public partial class SideMenuViewModel : ObservableObject
 
         Items.Add(new SideMenuItemViewModel()
         {
-            Header = "Nesting",
+            Header = "Hierarchy",
             Icon = "\xe7a3",
+            Items =
+            [
+                new SideMenuItemViewModel()
+                {
+                    Header="Menu",
+                    Icon= "\xe6d5",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="TreeView",
+                    Icon= "\xe6d5",
+                },
+            ]
         });
 
         Items.Add(new SideMenuItemViewModel()

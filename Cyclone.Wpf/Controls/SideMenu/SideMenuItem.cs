@@ -9,19 +9,17 @@ using System.Windows.Media;
 namespace Cyclone.Wpf.Controls;
 
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(SideMenuItem))]
-public class SideMenuItem : HeaderedItemsControl,ICommandSource
+public class SideMenuItem : HeaderedItemsControl, ICommandSource
 {
     static SideMenuItem()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(SideMenuItem), new FrameworkPropertyMetadata(typeof(SideMenuItem)));
     }
 
-    SideMenu _root;
-   
-
-
+    private SideMenu _root;
 
     #region RowHeight
+
     public double RowHeight
     {
         get => (double)GetValue(RowHeightProperty);
@@ -31,9 +29,10 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty RowHeightProperty =
         DependencyProperty.Register(nameof(RowHeight), typeof(double), typeof(SideMenuItem), new PropertyMetadata(32d));
 
-    #endregion
+    #endregion RowHeight
 
     #region IsExpanded
+
     public bool IsExpanded
     {
         get => (bool)GetValue(IsExpandedProperty);
@@ -43,11 +42,9 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty IsExpandedProperty =
         DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(SideMenuItem), new PropertyMetadata(default(bool)));
 
-    #endregion
+    #endregion IsExpanded
 
-
-
-    #region IsActived 
+    #region IsActived
 
     private static readonly DependencyPropertyKey IsActivedPropertyKey =
         DependencyProperty.RegisterReadOnly(
@@ -62,37 +59,27 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     {
         get => (bool)GetValue(IsActivedProperty);
     }
-    
 
-    #endregion
-
-
-
-
-
-
+    #endregion IsActived
 
     #region Indent
 
     private void SideMenuItem_Unloaded(object sender, RoutedEventArgs e)
     {
-        
         if (_root != null)
         {
             var descriptor = DependencyPropertyDescriptor.FromProperty(SideMenu.IndentProperty, typeof(SideMenu));
             descriptor.RemoveValueChanged(_root, OnIndentChanged);
         }
-
     }
 
     private void SideMenuItem_Loaded(object sender, RoutedEventArgs e)
     {
-
         if (_root != null)
         {
             var descriptor = DependencyPropertyDescriptor.FromProperty(SideMenu.IndentProperty, typeof(SideMenu));
             descriptor.AddValueChanged(_root, OnIndentChanged);
-            SetValue(IndentPropertyKey, GetDepth()* _root.Indent);
+            SetValue(IndentPropertyKey, GetDepth() * _root.Indent);
         }
     }
 
@@ -100,11 +87,10 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     {
         if (_root != null)
         {
-            var indent=GetDepth()*_root.Indent;
+            var indent = GetDepth() * _root.Indent;
             SetValue(IndentPropertyKey, indent);
         }
     }
-
 
     /// <summary>
     /// 在视觉树中查找当前元素的上一级（最近的） SideMenuItem 父元素，跳过其他非 SideMenuItem 的容器
@@ -137,37 +123,33 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
         return depth;
     }
 
-
-
     public double Indent
     {
         get => (double)GetValue(IndentProperty);
-        
     }
 
-    private static readonly DependencyPropertyKey IndentPropertyKey=
+    private static readonly DependencyPropertyKey IndentPropertyKey =
         DependencyProperty.RegisterReadOnly(nameof(Indent), typeof(double), typeof(SideMenuItem), new PropertyMetadata(default(double)));
-    public static readonly DependencyProperty IndentProperty =IndentPropertyKey.DependencyProperty;
-       
 
-    #endregion
+    public static readonly DependencyProperty IndentProperty = IndentPropertyKey.DependencyProperty;
 
+    #endregion Indent
 
     #region Icon
+
     public object Icon
     {
         get => (object)GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-
     public static readonly DependencyProperty IconProperty =
         DependencyProperty.Register(nameof(Icon), typeof(object), typeof(SideMenuItem), new PropertyMetadata(default(object)));
 
-    #endregion
-
+    #endregion Icon
 
     #region IconTemplate
+
     public DataTemplate IconTemplate
     {
         get => (DataTemplate)GetValue(IconTemplateProperty);
@@ -177,14 +159,12 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty IconTemplateProperty =
         DependencyProperty.Register(nameof(IconTemplate), typeof(DataTemplate), typeof(SideMenuItem), new PropertyMetadata(default(DataTemplate)));
 
-    #endregion
-
-
+    #endregion IconTemplate
 
     #region Impl CommandSource
 
-
     #region Command
+
     public ICommand Command
     {
         get => (ICommand)GetValue(CommandProperty);
@@ -194,10 +174,10 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty CommandProperty =
         DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(SideMenuItem), new PropertyMetadata(default(ICommand)));
 
-    #endregion
-
+    #endregion Command
 
     #region CommandParameter
+
     public object CommandParameter
     {
         get => (object)GetValue(CommandParameterProperty);
@@ -207,11 +187,10 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty CommandParameterProperty =
         DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(SideMenuItem), new PropertyMetadata(default(object)));
 
-    #endregion
-
-
+    #endregion CommandParameter
 
     #region CommandTarget
+
     public IInputElement CommandTarget
     {
         get => (IInputElement)GetValue(CommandTargetProperty);
@@ -221,20 +200,17 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
     public static readonly DependencyProperty CommandTargetProperty =
         DependencyProperty.Register(nameof(CommandTarget), typeof(IInputElement), typeof(SideMenuItem), new PropertyMetadata(default(IInputElement)));
 
-    #endregion
+    #endregion CommandTarget
 
-
-    #endregion
-
+    #endregion Impl CommandSource
 
     #region Override
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
-
-        
     }
+
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonUp(e);
@@ -258,17 +234,14 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
                 _root?.DeactivateItems();
                 SetValue(IsActivedPropertyKey, !flag);
             }
-          
         }
-        
     }
-
-   
 
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is SideMenuItem;
     }
+
     protected override DependencyObject GetContainerForItemOverride()
     {
         return new SideMenuItem();
@@ -276,22 +249,17 @@ public class SideMenuItem : HeaderedItemsControl,ICommandSource
 
     public override void OnApplyTemplate()
     {
-    
         base.OnApplyTemplate();
         _root = VisualTreeHelperExtension.TryFindVisualParent<SideMenu>(this);
 
         Loaded += SideMenuItem_Loaded;
         Unloaded += SideMenuItem_Unloaded;
-
-        
     }
 
-    #endregion
+    #endregion Override
 
     internal void SetInactive()
     {
         SetValue(IsActivedPropertyKey, false);
     }
-
-
 }

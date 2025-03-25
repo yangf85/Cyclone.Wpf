@@ -4,11 +4,11 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="ctl:SideMenuItem">
+    <Style x:Key="SideMenuItem.Style.Basic" TargetType="ctl:SideMenuItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SideMenuItem}">
@@ -33,6 +33,7 @@
                                     Content="{TemplateBinding Icon}"
                                     ContentTemplate="{TemplateBinding IconTemplate}" />
                                 <ContentPresenter
+                                    x:Name="HeaderContainer"
                                     Grid.Column="2"
                                     Content="{TemplateBinding Header}"
                                     ContentTemplate="{TemplateBinding HeaderTemplate}"
@@ -45,7 +46,7 @@
                                     Margin="0,0,5,0"
                                     VerticalAlignment="Center"
                                     Data="M512 606.29333299L790.698667 341.333333 853.333333 400.853333 512 725.333333l-341.333333-324.48L233.301333 341.333333z"
-                                    Fill="Black"
+                                    Fill="{DynamicResource Icon.Foreground.Default}"
                                     Stretch="Uniform"
                                     StrokeThickness="0"
                                     Visibility="{Binding Path=IsCompact, Converter={x:Static conv:VisibilityConverter.VisibleWhenFalse}, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" />
@@ -57,15 +58,18 @@
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+                        <Trigger Property="IsActived" Value="True">
+                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Background.Active}" />
+                            <Setter TargetName="HeaderRoot" Property="TextElement.Foreground" Value="{DynamicResource Foreground.Invert}" />
+                        </Trigger>
                         <Trigger SourceName="HeaderRoot" Property="IsMouseOver" Value="True">
                             <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter TargetName="HeaderRoot" Property="TextElement.Foreground" Value="{DynamicResource Foreground.Hover}" />
+                            <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
-                        </Trigger>
-                        <Trigger Property="IsActived" Value="True">
-                            <Setter TargetName="HeaderRoot" Property="Background" Value="{DynamicResource Background.Active}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -73,15 +77,13 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="SideMenu.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="ctl:SideMenu">
+    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}" TargetType="ctl:SideMenuItem" />
+
+    <Style x:Key="SideMenu.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:SideMenu">
         <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
-
-        <!--<Setter Property="ItemContainerStyle" Value="{StaticResource BasicSideMenuItemStyle}" />-->
+        <Setter Property="ItemContainerStyle" Value="{StaticResource SideMenuItem.Style.Basic}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:SideMenu">
