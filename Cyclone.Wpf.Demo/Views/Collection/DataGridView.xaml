@@ -23,7 +23,7 @@
                     cy:DataGridHelper.SelectedItems="{Binding SelectedItems}"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
-                    ItemsSource="{Binding DataGridData}"
+                    ItemsSource="{Binding Pagination.Data}"
                     SelectionMode="Extended">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
@@ -31,10 +31,7 @@
                         <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
                         <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
                         <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding City}"
-                            Header="City" />
+                        <DataGridTextColumn Width="*" Binding="{Binding City}" Header="City" />
                     </DataGrid.Columns>
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
@@ -47,15 +44,12 @@
                 </DataGrid>
                 <cy:Pagination
                     Margin="0,5,0,0"
-                    ItemCount="{Binding Total, Mode=TwoWay}"
-                    PerpageCount="{Binding PerPageCount, Mode=TwoWay}"
-                    PageIndex="{Binding PageIndex, Mode=TwoWay}" />
+                    ItemCount="{Binding Pagination.Total}"
+                    PerpageCount="{Binding Pagination.PerPageCount}"
+                    PageIndex="{Binding Pagination.PageIndex}" />
             </StackPanel>
         </cy:SpacingStackPanel>
-        <GroupBox
-            Grid.Column="1"
-            Margin="10,0,0,0"
-            Header="Tips">
+        <GroupBox Grid.Column="1" Margin="10,0,0,0" Header="Tips">
             <Button Command="{Binding ShowSelectedItemsCommand}" Content="SelectedItems" />
         </GroupBox>
     </Grid>

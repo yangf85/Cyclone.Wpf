@@ -66,7 +66,8 @@ public class Pagination : Control
     #region PageCount
 
     private static readonly DependencyPropertyKey PageCountPropertyKey =
-              DependencyProperty.RegisterReadOnly("PageCount", typeof(int), typeof(Pagination), new PropertyMetadata(1, OnPageCountPropertyChanged));
+              DependencyProperty.RegisterReadOnly("PageCount", typeof(int), typeof(Pagination),
+                  new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPageCountPropertyChanged));
 
     public static readonly DependencyProperty PageCountProperty = PageCountPropertyKey.DependencyProperty;
 
@@ -83,8 +84,8 @@ public class Pagination : Control
 
     #region ItemCount
 
-    public static readonly DependencyProperty ItemCountProperty = DependencyProperty.Register(nameof(ItemCount), typeof(int),
-        typeof(Pagination), new PropertyMetadata(0, OnItemCountPropertyChanged, CoerceItemCount));
+    public static readonly DependencyProperty ItemCountProperty = DependencyProperty.Register(nameof(ItemCount), typeof(int), typeof(Pagination),
+         new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnItemCountPropertyChanged, CoerceItemCount));
 
     /// <summary>
     /// 总数
@@ -114,8 +115,8 @@ public class Pagination : Control
 
     #region PerPageCount
 
-    public static readonly DependencyProperty PerpageCountProperty = DependencyProperty.Register(nameof(PerpageCount),
-        typeof(int), typeof(Pagination), new PropertyMetadata(50, OnPerpageCountPropertyChanged, CoercePerpageCount));
+    public static readonly DependencyProperty PerpageCountProperty = DependencyProperty.Register(nameof(PerpageCount), typeof(int),
+        typeof(Pagination), new FrameworkPropertyMetadata(50, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPerpageCountPropertyChanged, CoercePerpageCount));
 
     /// <summary>
     /// 每页数量
@@ -134,18 +135,17 @@ public class Pagination : Control
 
     private static void OnPerpageCountPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if(d is not Pagination pagination)
+        if (d is not Pagination pagination)
         {
             return;
         }
-       
+
         var countPerpage = (int)e.NewValue;
 
-        if ( pagination._perPageCountTextBox != null)
+        if (pagination._perPageCountTextBox != null)
         {
             pagination._perPageCountTextBox.Text = countPerpage.ToString();
         }
-           
 
         pagination.SetValue(PageCountPropertyKey, (int)Math.Ceiling(pagination.ItemCount * 1.0 / countPerpage));
 
@@ -157,15 +157,14 @@ public class Pagination : Control
         {
             pagination.UpdatePages();
         }
-           
     }
 
     #endregion PerPageCount
 
     #region PageIndex
 
-    public static readonly DependencyProperty PageIndexProperty = DependencyProperty.Register(nameof(PageIndex), typeof(int),
-        typeof(Pagination), new PropertyMetadata(1, OnPageIndexPropertyChanged, CoercePageIndex));
+    public static readonly DependencyProperty PageIndexProperty = DependencyProperty.Register(nameof(PageIndex), typeof(int), typeof(Pagination),
+         new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnPageIndexPropertyChanged, CoercePageIndex));
 
     /// <summary>
     /// 当前页面位置
@@ -207,9 +206,6 @@ public class Pagination : Control
 
     public static readonly DependencyProperty PagesProperty = PagesPropertyKey.DependencyProperty;
 
-    /// <summary>
-    /// 总页数
-    /// </summary>
     public IEnumerable<string> Pages => (IEnumerable<string>)GetValue(PagesProperty);
 
     #endregion Pages
@@ -316,25 +312,25 @@ public class Pagination : Control
             return Enumerable.Range(1, PageCount).Select(p => p.ToString()).ToArray();
 
         if (current <= 4)
-            return new[] { "1", "2", "3", "4", "5", Ellipsis, PageCount.ToString() };
+            return ["1", "2", "3", "4", "5", Ellipsis, PageCount.ToString()];
 
         if (current >= PageCount - 3)
-            return new[]
-            {
+            return
+            [
                 "1", Ellipsis, (PageCount - 4).ToString(), (PageCount - 3).ToString(), (PageCount - 2).ToString(),
                 (PageCount - 1).ToString(), PageCount.ToString()
-            };
+            ];
 
-        return new[]
-        {
+        return
+        [
             "1", Ellipsis, (current - 1).ToString(), current.ToString(), (current + 1).ToString(), Ellipsis,
             PageCount.ToString()
-        };
+        ];
     }
 
     private IEnumerable<int> GeneratePerpageCount()
     {
-        return new int[] { 10, 20, 30, 40, 50 };
+        return [10, 20, 30, 40, 50, 100];
     }
 
     private void UpdatePages()
@@ -342,7 +338,9 @@ public class Pagination : Control
         SetValue(PagesPropertyKey, GeneratePageNumber(ItemCount, PageIndex));
 
         if (_selectListBox != null && _selectListBox.SelectedItem == null)
+        {
             _selectListBox.SelectedItem = PageIndex.ToString();
+        }
     }
 
     #endregion Private

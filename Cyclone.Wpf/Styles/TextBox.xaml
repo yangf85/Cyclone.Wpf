@@ -34,10 +34,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="TextBox.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="{x:Type TextBox}">
+    <Style x:Key="TextBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />

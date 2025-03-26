@@ -61,10 +61,7 @@
     </Style>
 
     <ControlTemplate x:Key="Slider.ControlTemplate.Basic.Horizontal" TargetType="{x:Type Slider}">
-        <Grid
-            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+        <Grid VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="True" UseLayoutRounding="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -173,10 +170,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style
-        x:Key="Slider.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="Slider">
+    <Style x:Key="Slider.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="Slider">
         <Setter Property="AutoToolTipPlacement" Value="TopLeft" />
         <Setter Property="AutoToolTipPrecision" Value="2" />
         <Style.Triggers>

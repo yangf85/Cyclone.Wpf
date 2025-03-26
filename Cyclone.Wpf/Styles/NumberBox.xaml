@@ -96,10 +96,7 @@
                                 TickFrequency="{TemplateBinding Step}"
                                 Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="5"
-                                    Opacity="0.5"
-                                    ShadowDepth="0" />
+                                <DropShadowEffect BlurRadius="5" Opacity="0.5" ShadowDepth="0" />
                             </Border.Effect>
                         </Border>
                     </Grid>
@@ -164,10 +161,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style
-        x:Key="NumberBox.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="ctl:NumberBox">
+    <Style x:Key="NumberBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:NumberBox">
         <Setter Property="Template" Value="{StaticResource NumberBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />

@@ -221,10 +221,7 @@
                                         Fill="{DynamicResource Foreground.Default}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
-                                <Track
-                                    x:Name="PART_Track"
-                                    Grid.Column="1"
-                                    IsEnabled="{TemplateBinding IsMouseOver}">
+                                <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
                                     <Track.DecreaseRepeatButton>
                                         <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource ScrollBar.PagingRepeatButtonStyle}" />
                                     </Track.DecreaseRepeatButton>
@@ -356,10 +353,7 @@
                                         Fill="{DynamicResource Foreground.Default}"
                                         Stretch="Uniform" />
                                 </RepeatButton>
-                                <Track
-                                    x:Name="PART_Track"
-                                    Grid.Column="1"
-                                    IsEnabled="{TemplateBinding IsMouseOver}">
+                                <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
                                     <Track.DecreaseRepeatButton>
                                         <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource ScrollBar.PagingRepeatButtonStyle}" />
                                     </Track.DecreaseRepeatButton>
@@ -391,10 +385,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style
-        x:Key="ScrollViewer.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="{x:Type ScrollViewer}">
+    <Style x:Key="ScrollViewer.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ScrollViewer}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
