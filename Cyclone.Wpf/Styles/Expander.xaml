@@ -8,24 +8,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Margin="{TemplateBinding Padding}"
-                        VerticalAlignment="Center"
-                        Background="Transparent">
-                        <Path
-                            x:Name="Arrow"
-                            Width="14"
-                            Height="14"
-                            HorizontalAlignment="Right"
-                            Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
-                            Fill="{DynamicResource Icon.Foreground.Default}"
-                            Stretch="Uniform" />
-                        <ContentPresenter
-                            x:Name="ContentSite"
-                            HorizontalAlignment="Left"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    <Grid x:Name="RootGrid"
+                          Margin="{TemplateBinding Padding}"
+                          VerticalAlignment="Center"
+                          Background="Transparent">
+                        <Path x:Name="Arrow"
+                              Width="14"
+                              Height="14"
+                              HorizontalAlignment="Right"
+                              Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
+                              Fill="{DynamicResource Icon.Foreground.Default}"
+                              Stretch="Uniform" />
+                        <ContentPresenter x:Name="ContentSite"
+                                          HorizontalAlignment="Left"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -57,10 +54,9 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="Expander.Style.Basic"
-        BasedOn="{StaticResource Control.Style.Basic}"
-        TargetType="{x:Type Expander}">
+    <Style x:Key="Expander.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="{x:Type Expander}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Height" Value="Auto" />
@@ -68,35 +64,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ToggleButton
-                                x:Name="HeaderContainer"
-                                Grid.Row="0"
-                                Height="{DynamicResource Height.Horizontal.Control}"
-                                Padding="3"
-                                Content="{TemplateBinding Header}"
-                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                Cursor="Hand"
-                                Foreground="{TemplateBinding Foreground}"
-                                IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                Style="{StaticResource Expander.OpenButtonStyle}" />
-                            <ContentPresenter
-                                x:Name="ContentContainer"
-                                Grid.Row="1"
-                                Height="0"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <ToggleButton x:Name="HeaderContainer"
+                                          Grid.Row="0"
+                                          Height="{DynamicResource Height.Horizontal.Control}"
+                                          Padding="3"
+                                          Content="{TemplateBinding Header}"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                          Cursor="Hand"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{StaticResource Expander.OpenButtonStyle}" />
+                            <ContentPresenter x:Name="ContentContainer"
+                                              Grid.Row="1"
+                                              Height="0"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

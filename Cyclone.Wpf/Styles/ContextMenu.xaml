@@ -2,7 +2,9 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style x:Key="ContextMenu.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ContextMenu}">
+    <Style x:Key="ContextMenu.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="{x:Type ContextMenu}">
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
@@ -14,11 +16,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <ItemsPresenter />
                     </Border>
                 </ControlTemplate>

@@ -45,6 +45,9 @@ public partial class CascadeItemViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<City> Cities { get; set; }
 
+    [ObservableProperty]
+    public partial string Text { get; set; } = "NewYork";
+
     public CascadeItemViewModel()
     {
         Cities =

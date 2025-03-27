@@ -50,7 +50,7 @@ public class CascadePicker : Selector
     {
         if (e.OriginalSource is CascadePickerItem item)
         {
-            SetValue(DisplayedNodePathProperty, GetSelectedPath(item));
+            SetValue(TextProperty, GetSelectedPath(item));
             SetCurrentValue(SelectedItemProperty, item.DataContext);
             RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
             if (!item.HasItems)
@@ -64,17 +64,23 @@ public class CascadePicker : Selector
     {
         if (item == null) { return string.Empty; }
 
-        var pathList = new List<string>();
-        var currentItem = item;
-
-        while (currentItem != null)
+        if (IsShowFullPath)
         {
-            pathList.Insert(0, currentItem.NodePath);
-            var parentContainer = ItemsControl.ItemsControlFromItemContainer(currentItem) as CascadePickerItem;
-            currentItem = parentContainer;
-        }
+            var pathList = new List<string>();
+            var currentItem = item;
 
-        return string.Join(Separator, pathList);
+            while (currentItem != null)
+            {
+                pathList.Insert(0, currentItem.NodePath);
+                var parentContainer = ItemsControl.ItemsControlFromItemContainer(currentItem) as CascadePickerItem;
+                currentItem = parentContainer;
+            }
+            return string.Join(Separator, pathList);
+        }
+        else
+        {
+            return item.NodePath;
+        }
     }
 
     #endregion Item_Click
@@ -92,18 +98,18 @@ public class CascadePicker : Selector
 
     #endregion Watermark
 
-    #region DisplayedNodePath
+    #region Text
 
-    public static readonly DependencyProperty DisplayedNodePathProperty =
-        DependencyProperty.Register(nameof(DisplayedNodePath), typeof(string), typeof(CascadePicker), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public static readonly DependencyProperty TextProperty =
+        DependencyProperty.Register(nameof(Text), typeof(string), typeof(CascadePicker), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-    public string DisplayedNodePath
+    public string Text
     {
-        get => (string)GetValue(DisplayedNodePathProperty);
-        set => SetValue(DisplayedNodePathProperty, value);
+        get => (string)GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
     }
 
-    #endregion DisplayedNodePath
+    #endregion Text
 
     #region SelectedChanged
 
@@ -174,7 +180,7 @@ public class CascadePicker : Selector
 
         if (element is CascadePickerItem container)
         {
-            container.DataContext = item; 
+            container.DataContext = item;
         }
     }
 

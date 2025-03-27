@@ -12,7 +12,9 @@
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="CascadePicker">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:CascadePicker Separator="/" Watermark="Normal">
+                <cy:CascadePicker IsShowFullPath="True"
+                                  Separator="/"
+                                  Watermark="Normal">
                     <cy:CascadePickerItem Header="A">
                         <cy:CascadePickerItem Header="A1">
                             <cy:CascadePickerItem Header="A1-1" />
@@ -31,9 +33,11 @@
                     <cy:CascadePickerItem Header="A" />
                 </cy:CascadePicker>
                 <cy:CascadePicker x:Name="CascadePicker"
+                                  IsShowFullPath="True"
                                   ItemsSource="{Binding CascadePicker.Cities}"
                                   SelectedItem="{Binding CascadePicker.City}"
                                   Separator="-"
+                                  Text="{Binding CascadePicker.Text}"
                                   Watermark="DataTemplate">
                     <cy:CascadePicker.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Cyties}">
