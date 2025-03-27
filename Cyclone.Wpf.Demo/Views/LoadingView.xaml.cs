@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,32 @@ namespace Cyclone.Wpf.Demo.Views
             WebBrowser wb = (WebBrowser)sender;
             wb.InvokeScript("execScript", new Object[] { script, "JavaScript" });
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            CountdownControl.Start();
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            CountdownControl.Reset();
+        }
+
+        private void AnimationTypeCombo_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (CountdownControl != null)
+            {
+                CountdownControl.AnimationType = (AnimationType)AnimationTypeCombo.SelectedIndex;
+            }
+        }
+
+        private void DurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (CountdownControl != null)
+            {
+                CountdownControl.AnimationDuration = DurationSlider.Value;
+            }
+        }
     }
 
     public partial class ImageViewModel : ObservableObject
@@ -49,7 +76,7 @@ namespace Cyclone.Wpf.Demo.Views
 
     public partial class LoadingViewModel : ObservableObject
     {
-        List<string> _urls =
+        private List<string> _urls =
         [
             "http://img11.360buyimg.com//n3/g2/M00/06/1D/rBEGEVAkffUIAAAAAAB54F55qh8AABWrQLxLr0AAHn4106.jpg",
             "http://img12.360buyimg.com//n3/g1/M00/06/1D/rBEGDVAkffQIAAAAAAB0mDavAccAABWrQMCUdwAAHSw197.jpg",
