@@ -29,5 +29,22 @@
                 </Menu>
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
+
+        <HeaderedContentControl Header="ContextMenu">
+            <Rectangle Width="300" Height="100" Fill="OldLace">
+                <Rectangle.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="New Project" />
+                        <MenuItem Header="New Project">
+                            <MenuItem Header="New Project" />
+                            <MenuItem Header="New Project" />
+                            <MenuItem Header="New Project" />
+                        </MenuItem>
+                        <MenuItem Header="New Project" />
+                        <MenuItem Header="New Project" />
+                    </ContextMenu>
+                </Rectangle.ContextMenu>
+            </Rectangle>
+        </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>

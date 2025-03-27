@@ -14,7 +14,7 @@ public class DataGridHelper
     #region SelectedItems
 
     public static readonly DependencyProperty SelectedItemsProperty =
-                DependencyProperty.RegisterAttached("SelectedItems", typeof(IList), typeof(DataGridHelper), new FrameworkPropertyMetadata(default(IList), OnSelectedItemChanged));
+                DependencyProperty.RegisterAttached("SelectedItems", typeof(IList), typeof(DataGridHelper), new FrameworkPropertyMetadata(default(IList), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
 
     private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
