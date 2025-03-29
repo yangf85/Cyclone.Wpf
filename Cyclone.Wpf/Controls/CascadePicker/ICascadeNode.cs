@@ -2,5 +2,5 @@
 
 public interface ICascadeNode
 {
-   public string NodePath { get; }
+    public string NodePath { get; }
 }

@@ -33,7 +33,7 @@
                     <cy:CascadePickerItem Header="A" />
                 </cy:CascadePicker>
                 <cy:CascadePicker x:Name="CascadePicker"
-                                  IsShowFullPath="True"
+                                  IsShowFullPath="False"
                                   ItemsSource="{Binding CascadePicker.Cities}"
                                   SelectedItem="{Binding CascadePicker.City}"
                                   Separator="-"

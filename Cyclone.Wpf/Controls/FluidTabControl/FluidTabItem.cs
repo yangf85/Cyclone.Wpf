@@ -14,58 +14,72 @@ namespace Cyclone.Wpf.Controls;
 [ContentProperty("Content")]//不能继承ContentControl 会导致视觉元素连接错误
 public class FluidTabItem : Control
 {
-    internal static readonly DependencyProperty ContentOwnerProperty;
-
-    public static readonly DependencyProperty HeaderProperty;
-
-    public static readonly DependencyProperty ContentProperty;
-
-    public static readonly DependencyProperty IsSelectedProperty;
-
-    public object Header
+    static FluidTabItem()
     {
-        get
-        {
-            return GetValue(HeaderProperty);
-        }
-        set
-        {
-            SetValue(HeaderProperty, value);
-        }
+        FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(FluidTabItem), new FrameworkPropertyMetadata(typeof(FluidTabItem)));
     }
+
+    #region Content
+
+    public static readonly DependencyProperty ContentProperty =
+        DependencyProperty.Register("Content", typeof(object), typeof(FluidTabItem), new PropertyMetadata(ContentPropertyChangedCallback));
 
     public object Content
     {
-        get
-        {
-            return GetValue(ContentProperty);
-        }
-        set
-        {
-            SetValue(ContentProperty, value);
-        }
+        get => GetValue(ContentProperty);
+
+        set => SetValue(ContentProperty, value);
     }
+
+    public static void ContentPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        SetContentOwner(e.NewValue as DependencyObject, d as FluidTabItem);
+    }
+
+    #endregion Content
+
+    #region Header
+
+    public static readonly DependencyProperty HeaderProperty =
+        DependencyProperty.Register("Header", typeof(object), typeof(FluidTabItem), new PropertyMetadata(default));
+
+    public object Header
+    {
+        get => GetValue(HeaderProperty);
+
+        set => SetValue(HeaderProperty, value);
+    }
+
+    #endregion Header
+
+    #region ContentOwner
+
+    internal static readonly DependencyProperty ContentOwnerProperty =
+        DependencyProperty.RegisterAttached("ContentOwner", typeof(FluidTabItem), typeof(FluidTabItem));
+
+    internal static FluidTabItem GetContentOwner(DependencyObject obj)
+    {
+        return (FluidTabItem)obj.GetValue(ContentOwnerProperty);
+    }
+
+    internal static void SetContentOwner(DependencyObject obj, FluidTabItem value)
+    {
+        obj.SetValue(ContentOwnerProperty, value);
+    }
+
+    #endregion ContentOwner
+
+    #region IsSelected
 
     public bool IsSelected
     {
-        get
-        {
-            return (bool)GetValue(IsSelectedProperty);
-        }
-        set
-        {
-            SetValue(IsSelectedProperty, value);
-        }
+        get => (bool)GetValue(IsSelectedProperty);
+
+        set => SetValue(IsSelectedProperty, value);
     }
 
-    static FluidTabItem()
-    {
-        HeaderProperty = DependencyProperty.Register("Header", typeof(object), typeof(FluidTabItem), new PropertyMetadata(default));
-        ContentProperty = DependencyProperty.Register("Content", typeof(object), typeof(FluidTabItem), new PropertyMetadata(ContentPropertyChangedCallback));
-        ContentOwnerProperty = DependencyProperty.RegisterAttached("ContentOwner", typeof(FluidTabItem), typeof(FluidTabItem));
-        FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(FluidTabItem), new FrameworkPropertyMetadata(typeof(FluidTabItem)));
-        IsSelectedProperty = Selector.IsSelectedProperty.AddOwner(typeof(FluidTabItem), new FrameworkPropertyMetadata(OnIsSelectedChanged));
-    }
+    public static readonly DependencyProperty IsSelectedProperty =
+        Selector.IsSelectedProperty.AddOwner(typeof(FluidTabItem), new FrameworkPropertyMetadata(OnIsSelectedChanged));
 
     private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -95,6 +109,10 @@ public class FluidTabItem : Control
         HandleIsSelectedChanged(newValue: false, e);
     }
 
+    #endregion IsSelected
+
+    #region Override
+
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonDown(e);
@@ -104,18 +122,5 @@ public class FluidTabItem : Control
         }
     }
 
-    internal static FluidTabItem GetContentOwner(DependencyObject obj)
-    {
-        return (FluidTabItem)obj.GetValue(ContentOwnerProperty);
-    }
-
-    internal static void SetContentOwner(DependencyObject obj, FluidTabItem value)
-    {
-        obj.SetValue(ContentOwnerProperty, value);
-    }
-
-    public static void ContentPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        SetContentOwner(e.NewValue as DependencyObject, d as FluidTabItem);
-    }
+    #endregion Override
 }

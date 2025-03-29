@@ -10,8 +10,8 @@
              mc:Ignorable="d">
     <Grid Margin="15">
         <cy:FluidTabControl AnimationDuration="0:0:1"
-                            FluidTabPlacement="Left"
-                            HeaderWidth="120">
+                            FluidTabPlacement="Right"
+                            ItemHeaderHorizontal="Left">
             <!--  社交媒体动态  -->
             <cy:FluidTabItem Header="社交动态">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

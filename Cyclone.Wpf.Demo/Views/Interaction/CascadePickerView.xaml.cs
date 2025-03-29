@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,6 +42,11 @@ public partial class CascadeItemViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial City City { get; set; }
+
+    partial void OnCityChanged(City value)
+    {
+        NotificationService.Instance.ShowInfo($"选择的城市为：{value}");
+    }
 
     [ObservableProperty]
     public partial ObservableCollection<City> Cities { get; set; }

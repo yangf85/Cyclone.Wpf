@@ -21,13 +21,10 @@ public enum FluidTabPlacement
     Right,
 }
 
-
 [TemplatePart(Name = "PART_ItemsPanel", Type = typeof(Panel))]
 [TemplatePart(Name = "PART_Container", Type = typeof(ScrollViewer))]
 public class FluidTabControl : Selector
 {
-
-
     private ScrollViewer _container;
     private Panel _itemsPanel;
     private bool _isSelecting;
@@ -35,6 +32,7 @@ public class FluidTabControl : Selector
     private Storyboard _currentStoryboard;
 
     #region AnimationDuration
+
     public static readonly DependencyProperty AnimationDurationProperty =
     DependencyProperty.Register("AnimationDuration", typeof(TimeSpan), typeof(FluidTabControl),
         new FrameworkPropertyMetadata(TimeSpan.FromSeconds(1d)));
@@ -44,21 +42,11 @@ public class FluidTabControl : Selector
         get => (TimeSpan)GetValue(AnimationDurationProperty);
         set => SetValue(AnimationDurationProperty, value);
     }
-    #endregion
 
-    #region HeaderWidth
-    public double HeaderWidth
-    {
-        get => (double)GetValue(HeaderWidthProperty);
-        set => SetValue(HeaderWidthProperty, value);
-    }
-
-    public static readonly DependencyProperty HeaderWidthProperty =
-        DependencyProperty.Register(nameof(HeaderWidth), typeof(double), typeof(FluidTabControl), new PropertyMetadata(150d));
-
-    #endregion
+    #endregion AnimationDuration
 
     #region FluidTabPlacement
+
     public FluidTabPlacement FluidTabPlacement
     {
         get => (FluidTabPlacement)GetValue(FluidTabPlacementProperty);
@@ -68,7 +56,20 @@ public class FluidTabControl : Selector
     public static readonly DependencyProperty FluidTabPlacementProperty =
         DependencyProperty.Register(nameof(FluidTabPlacement), typeof(FluidTabPlacement), typeof(FluidTabControl), new PropertyMetadata(default(FluidTabPlacement)));
 
-    #endregion
+    #endregion FluidTabPlacement
+
+    #region ItemHeaderHorizontal
+
+    public HorizontalAlignment ItemHeaderHorizontal
+    {
+        get => (HorizontalAlignment)GetValue(ItemHeaderHorizontalProperty);
+        set => SetValue(ItemHeaderHorizontalProperty, value);
+    }
+
+    public static readonly DependencyProperty ItemHeaderHorizontalProperty =
+        DependencyProperty.Register(nameof(ItemHeaderHorizontal), typeof(HorizontalAlignment), typeof(FluidTabControl), new PropertyMetadata(default(HorizontalAlignment)));
+
+    #endregion ItemHeaderHorizontal
 
     static FluidTabControl()
     {
@@ -77,6 +78,7 @@ public class FluidTabControl : Selector
     }
 
     #region Private
+
     private static FluidTabItem FindContentOwner(DependencyObject element)
     {
         while (element != null)
@@ -95,6 +97,7 @@ public class FluidTabControl : Selector
         }
         return null;
     }
+
     private void UpdateItemsContent()
     {
         if (_container == null || _itemsPanel == null) return;
@@ -179,7 +182,7 @@ public class FluidTabControl : Selector
                 return ItemContainerGenerator.ContainerFromIndex(index) as FluidTabItem;
             }
         }
-        return null;
+        return default;
     }
 
     private void ScrollToOffset(double targetOffset)
@@ -227,11 +230,10 @@ public class FluidTabControl : Selector
         }
     }
 
-    #endregion
-
-
+    #endregion Private
 
     #region Override
+
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
@@ -275,12 +277,9 @@ public class FluidTabControl : Selector
 
         UpdateItemsContent();
     }
-    #endregion
 
+    #endregion Override
 
-   
-
-    
     private static class ScrollViewerBehavior
     {
         public static readonly DependencyProperty VerticalOffsetProperty =
@@ -299,7 +298,4 @@ public class FluidTabControl : Selector
             }
         }
     }
-
 }
-
-

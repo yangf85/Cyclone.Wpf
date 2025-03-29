@@ -41,8 +41,38 @@ public class CascadePicker : Selector
 
     public CascadePicker()
     {
+        Loaded += CascadePicker_Loaded;
+        Unloaded += CascadePicker_Unloaded;
+        LostFocus += CascadePicker_LostFocus;
+    }
+
+    private void CascadePicker_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SetValue(IsOpenedProperty, false);
+    }
+
+    private void CascadePicker_Unloaded(object sender, RoutedEventArgs e)
+    {
+        RemoveHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
+    }
+
+    private void CascadePicker_Loaded(object sender, RoutedEventArgs e)
+    {
         AddHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
     }
+
+    #region IsReadOnly
+
+    public bool IsReadOnly
+    {
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
+    }
+
+    public static readonly DependencyProperty IsReadOnlyProperty =
+        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
+
+    #endregion IsReadOnly
 
     #region Item_Click
 
@@ -188,6 +218,7 @@ public class CascadePicker : Selector
     {
         base.OnApplyTemplate();
         _textBox = GetTemplateChild(PART_DisplayedTextBox) as TextBox;
+
         _popup = GetTemplateChild(PART_ItemsPopup) as Popup;
     }
 

@@ -117,17 +117,20 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="WatermarkTextBlock"
+                            <TextBlock x:Name="Watermark"
                                        Grid.Column="0"
+                                       Margin="3,0,0,0"
                                        VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Text.Prompt}"
                                        Text="{TemplateBinding Watermark}"
-                                       Visibility="{Binding Path=Text, Mode=TwoWay, Converter={x:Static conv:VisibilityConverter.VisibleWhenNullOrEmpty}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                       Visibility="Collapsed" />
                             <TextBox x:Name="PART_DisplayedTextBox"
                                      Grid.Column="0"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
                                      Background="Transparent"
                                      BorderThickness="0"
+                                     IsReadOnly="{TemplateBinding IsReadOnly}"
                                      Text="{TemplateBinding Text}" />
                             <ToggleButton x:Name="PART_OpenToggleButton"
                                           Grid.Column="1"
@@ -154,8 +157,15 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition SourceName="PART_DisplayedTextBox" Property="Text" Value="" />
+                                <Condition SourceName="PART_DisplayedTextBox" Property="IsKeyboardFocused" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
                         <Trigger SourceName="PART_DisplayedTextBox" Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter TargetName="WatermarkTextBlock" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">

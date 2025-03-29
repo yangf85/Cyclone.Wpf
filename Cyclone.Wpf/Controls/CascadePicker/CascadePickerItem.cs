@@ -20,7 +20,7 @@ public class CascadePickerItem : HeaderedItemsControl, ICascadeNode
 
     private Popup _popup;
 
-    CascadePicker _root;
+    private CascadePicker _root;
 
     static CascadePickerItem()
     {
