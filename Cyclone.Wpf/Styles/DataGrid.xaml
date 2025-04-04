@@ -133,8 +133,10 @@
                                   Visibility="Hidden" />
                         </Grid>
                     </Border>
-
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="False">
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Hidden" />
+                        </Trigger>
                         <Trigger Property="SortDirection" Value="Ascending">
                             <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Arrow" Property="Data" Value="M533.333333 384L341.333333 576l29.866667 29.866667 162.133333-162.133334 162.133334 162.133334 29.866666-29.866667L533.333333 384z" />
@@ -143,6 +145,7 @@
                             <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Arrow" Property="Data" Value="M533.333333 605.866667L341.333333 413.866667l29.866667-29.866667 162.133333 162.133333L695.466667 384l29.866666 29.866667-192 192z" />
                         </Trigger>
+
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" Value="{DynamicResource Background.Pressed}" />
                         </Trigger>
