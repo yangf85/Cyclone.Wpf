@@ -8,15 +8,76 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <cy:FadeTransition x:Key="FadeTransition" />
+        <cy:SlideTransition x:Key="SlideTransition" Direction="RightToLeft" />
+
+        <DataTemplate x:Key="RedContent">
+            <Border Background="Red" CornerRadius="10" MinWidth="200" MinHeight="200">
+                <TextBlock Text="红色内容" FontSize="24" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BlueContent">
+            <Border Background="Blue" CornerRadius="10" MinWidth="200" MinHeight="200">
+                <TextBlock Text="蓝色内容" FontSize="24" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GreenContent">
+            <Border Background="Green" CornerRadius="10" MinWidth="200" MinHeight="200">
+                <TextBlock Text="绿色内容" FontSize="24" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </DataTemplate>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="10,5" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-        <cy:TransitionBox x:Name="transitionBox">
-            <!--<cy:TransitionBox.Transition>
-         <cy:SlideTransition />
-     </cy:TransitionBox.Transition>-->
-            <Button Command="{Binding CascadePicker.GetCityCommand}" Content="Click Me" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- TransitionBox控件 -->
+        <cy:TransitionBox x:Name="transitionBox"
+                               Transition="{StaticResource FadeTransition}"
+                               Margin="20"
+                               Background="LightGray">
+            <ContentControl ContentTemplate="{StaticResource RedContent}" />
         </cy:TransitionBox>
-        <Button Margin="0,150,0,0"
-                Click="OnChangeContent"
-                Content="Change Content" />
+
+        <!-- 调试信息 -->
+        <TextBlock x:Name="debugText" Grid.Column="1" Margin="10" Width="200"
+                  TextWrapping="Wrap" VerticalAlignment="Top" />
+
+        <!-- 控制按钮 -->
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+            <Button Content="红色内容" Click="ShowRedContent_Click" />
+            <Button Content="蓝色内容" Click="ShowBlueContent_Click" />
+            <Button Content="绿色内容" Click="ShowGreenContent_Click" />
+            <Button Content="文本内容" Click="ShowTextContent_Click" />
+
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10,0" />
+
+            <Button Content="淡入淡出" Click="UseFadeTransition_Click" />
+            <Button Content="向左滑动" Click="UseSlideLeftTransition_Click" />
+            <Button Content="向右滑动" Click="UseSlideRightTransition_Click" />
+
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10,0" />
+
+            <Button Content="刷新控件" Click="RefreshControl_Click" />
+        </StackPanel>
     </Grid>
 </UserControl>

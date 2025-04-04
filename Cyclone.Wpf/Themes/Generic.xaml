@@ -29,6 +29,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Expander.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/GroupBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ScorllViewer.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TransitionBox.xaml" />
 
         <!--  日期时间组件  -->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Calendar.xaml" />
