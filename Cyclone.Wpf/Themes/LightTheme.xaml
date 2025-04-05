@@ -5,103 +5,89 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/Color.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--  ==================== 核心颜色 - 背景色 ====================  -->
+    <!-- Light Theme -->
     <SolidColorBrush x:Key="Background.Global" Color="{StaticResource White}" />
-    <SolidColorBrush x:Key="Background.Default" Color="{StaticResource GrayLighten4}" />
-    <SolidColorBrush x:Key="Background.Active" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Background.Inactive" Color="{StaticResource GrayLighten2}" />
+    <SolidColorBrush x:Key="Background.Default" Color="{StaticResource GrayLighten5}" />
+    <SolidColorBrush x:Key="Background.Active" Color="{StaticResource BlueDarken2}" />
+    <SolidColorBrush x:Key="Background.Inactive" Color="{StaticResource GrayLighten4}" />
     <SolidColorBrush x:Key="Background.Disabled" Color="{StaticResource GrayLighten3}" />
-    <SolidColorBrush x:Key="Background.Hover" Color="{StaticResource BlueLighten5}" />
-    <SolidColorBrush x:Key="Background.Pressed" Color="{StaticResource BlueLighten3}" />
+    <SolidColorBrush x:Key="Background.Hover" Color="{StaticResource BlueLighten4}" />
+    <SolidColorBrush x:Key="Background.Pressed" Color="{StaticResource GrayLighten2}" />
     <SolidColorBrush x:Key="Background.Checked" Color="{StaticResource BlueLighten2}" />
     <SolidColorBrush x:Key="Background.Focused" Color="{StaticResource BlueLighten3}" />
-    <SolidColorBrush x:Key="Background.Highlighted" Color="{StaticResource BlueLighten1}" />
+    <SolidColorBrush x:Key="Background.Highlighted" Color="{StaticResource BlueDefault}" />
     <SolidColorBrush x:Key="Background.Editing" Color="{StaticResource GrayLighten5}" />
     <SolidColorBrush x:Key="Background.Loading" Color="{StaticResource GrayLighten2}" />
-    <SolidColorBrush x:Key="Background.Dragging" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Background.Selected" Color="{StaticResource BlueLighten1}" />
+    <SolidColorBrush x:Key="Background.Dragging" Color="{StaticResource BlueDarken3}" />
+    <SolidColorBrush x:Key="Background.Selected" Color="{StaticResource BlueDefault}" />
     <SolidColorBrush x:Key="Background.InputError" Color="{StaticResource RedLighten5}" />
-    <SolidColorBrush x:Key="Background.Warning" Color="{StaticResource OrangeLighten3}" />
-    <SolidColorBrush x:Key="Background.Error" Color="{StaticResource RedLighten3}" />
+    <SolidColorBrush x:Key="Background.Warning" Color="{StaticResource OrangeDarken3}" />
+    <SolidColorBrush x:Key="Background.Error" Color="{StaticResource RedDarken3}" />
     <SolidColorBrush x:Key="Background.Success" Color="{StaticResource GreenLighten1}" />
-    <SolidColorBrush x:Key="Background.Info" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Background.Close" Color="{StaticResource RedLighten2}" />
+    <SolidColorBrush x:Key="Background.Info" Color="{StaticResource BlueDarken3}" />
+    <SolidColorBrush x:Key="Background.Close" Color="{StaticResource RedDefault}" />
     <SolidColorBrush x:Key="Background.Mask" Color="{StaticResource TransparentColor}" />
     <SolidColorBrush x:Key="Background.Container" Color="{StaticResource White}" />
-    <SolidColorBrush x:Key="Background.Header" Color="{StaticResource BlueLighten3}" />
-    <SolidColorBrush x:Key="Background.Caption" Color="{StaticResource BlueLighten4}" />
+    <SolidColorBrush x:Key="Background.Header" Color="{StaticResource GrayLighten4}" />
+    <SolidColorBrush x:Key="Background.Caption" Color="{StaticResource BlueDarken4}" />
     <SolidColorBrush x:Key="Background.Transition" Color="{StaticResource GrayLighten5}" />
 
-    <!--  ==================== 核心颜色 - 前景色 ====================  -->
     <SolidColorBrush x:Key="Foreground.Global" Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Foreground.Default" Color="{StaticResource GrayDarken4}" />
-    <SolidColorBrush x:Key="Foreground.Active" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Active" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Foreground.Inactive" Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Foreground.Disabled" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Foreground.Hover" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Foreground.Pressed" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Foreground.Checked" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Foreground.Focused" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Foreground.Highlighted" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Pressed" Color="{StaticResource BlueDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Checked" Color="{StaticResource BlueDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Focused" Color="{StaticResource BlueDarken2}" />
+    <SolidColorBrush x:Key="Foreground.Highlighted" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Foreground.Editing" Color="{StaticResource BlueDarken3}" />
     <SolidColorBrush x:Key="Foreground.Loading" Color="{StaticResource GrayDarken1}" />
-    <SolidColorBrush x:Key="Foreground.Dragging" Color="{StaticResource GrayDarken4}" />
-    <SolidColorBrush x:Key="Foreground.Selected" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Dragging" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="Foreground.Selected" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Foreground.InputError" Color="{StaticResource RedDarken3}" />
     <SolidColorBrush x:Key="Foreground.Warning" Color="{StaticResource OrangeDarken3}" />
     <SolidColorBrush x:Key="Foreground.Error" Color="{StaticResource RedDarken3}" />
     <SolidColorBrush x:Key="Foreground.Success" Color="{StaticResource GreenDarken3}" />
     <SolidColorBrush x:Key="Foreground.Info" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Foreground.Close" Color="{StaticResource RedDarken3}" />
+    <SolidColorBrush x:Key="Foreground.Close" Color="{StaticResource RedDefault}" />
     <SolidColorBrush x:Key="Foreground.Invert" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Foreground.Container" Color="{StaticResource GrayDarken3}" />
     <SolidColorBrush x:Key="Foreground.Header" Color="{StaticResource GrayDarken4}" />
-    <SolidColorBrush x:Key="Foreground.Caption" Color="{StaticResource GrayDarken4}" />
-    <SolidColorBrush x:Key="Foreground.Mask" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Caption" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="Foreground.Mask" Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Foreground.Link" Color="{StaticResource BlueDarken3}" />
     <SolidColorBrush x:Key="Foreground.Placeholder" Color="{StaticResource GrayDefault}" />
-    <SolidColorBrush x:Key="Foreground.Transition" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Foreground.Transition" Color="{StaticResource White}" />
 
-    <!--  ==================== 核心颜色 - 边框色 ====================  -->
     <SolidColorBrush x:Key="Border.Global" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Border.Default" Color="{StaticResource GrayLighten1}" />
-    <SolidColorBrush x:Key="Border.Active" Color="{StaticResource BlueLighten2}" />
+    <SolidColorBrush x:Key="Border.Active" Color="{StaticResource BlueDarken2}" />
     <SolidColorBrush x:Key="Border.Inactive" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Border.Disabled" Color="{StaticResource GrayLighten2}" />
     <SolidColorBrush x:Key="Border.Hover" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Pressed" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Checked" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Focused" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Highlighted" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Editing" Color="{StaticResource BlueLighten2}" />
+    <SolidColorBrush x:Key="Border.Pressed" Color="{StaticResource BlueDarken2}" />
+    <SolidColorBrush x:Key="Border.Checked" Color="{StaticResource BlueLighten1}" />
+    <SolidColorBrush x:Key="Border.Focused" Color="{StaticResource BlueLighten1}" />
+    <SolidColorBrush x:Key="Border.Highlighted" Color="{StaticResource BlueDarken2}" />
+    <SolidColorBrush x:Key="Border.Editing" Color="{StaticResource BlueLighten1}" />
     <SolidColorBrush x:Key="Border.Loading" Color="{StaticResource GrayLighten2}" />
-    <SolidColorBrush x:Key="Border.Dragging" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Selected" Color="{StaticResource BlueLighten2}" />
+    <SolidColorBrush x:Key="Border.Dragging" Color="{StaticResource BlueDarken4}" />
+    <SolidColorBrush x:Key="Border.Selected" Color="{StaticResource BlueDarken2}" />
     <SolidColorBrush x:Key="Border.InputError" Color="{StaticResource RedLighten1}" />
     <SolidColorBrush x:Key="Border.Warning" Color="{StaticResource OrangeLighten1}" />
     <SolidColorBrush x:Key="Border.Error" Color="{StaticResource RedLighten1}" />
     <SolidColorBrush x:Key="Border.Success" Color="{StaticResource GreenLighten1}" />
-    <SolidColorBrush x:Key="Border.Info" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Border.Close" Color="{StaticResource RedLighten2}" />
+    <SolidColorBrush x:Key="Border.Info" Color="{StaticResource BlueLighten1}" />
+    <SolidColorBrush x:Key="Border.Close" Color="{StaticResource RedDefault}" />
     <SolidColorBrush x:Key="Border.Container" Color="{StaticResource GrayLighten1}" />
-    <SolidColorBrush x:Key="Border.Header" Color="{StaticResource BlueLighten2}" />
+    <SolidColorBrush x:Key="Border.Header" Color="{StaticResource BlueLighten1}" />
     <SolidColorBrush x:Key="Border.Caption" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Border.Mask" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Border.Transition" Color="{StaticResource GrayLighten5}" />
     <SolidColorBrush x:Key="Border.FocusRing" Color="{StaticResource BlueLighten2}" />
 
-    <!--  ==================== 功能颜色 ====================  -->
-    <SolidColorBrush x:Key="Divider.Default" Color="{StaticResource GrayLighten2}" />
-    <SolidColorBrush x:Key="Overlay.Light" Color="{StaticResource GrayLighten5}" />
-    <SolidColorBrush x:Key="Overlay.Dark" Color="{StaticResource TransparentColor}" />
-    <SolidColorBrush x:Key="Link.Default" Color="{StaticResource BlueDarken3}" />
-    <SolidColorBrush x:Key="Link.Hover" Color="{StaticResource BlueDarken4}" />
-    <SolidColorBrush x:Key="Tick.Primary" Color="{StaticResource BlueLighten3}" />
-    <SolidColorBrush x:Key="Tick.Secondary" Color="{StaticResource BlueLighten2}" />
-    <SolidColorBrush x:Key="Alternation.Dark" Color="{StaticResource GrayLighten4}" />
-    <SolidColorBrush x:Key="Alternation.Light" Color="{StaticResource White}" />
-
-    <!--  ==================== 文本颜色 ====================  -->
     <SolidColorBrush x:Key="Text.Title" Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Text.Subtitle" Color="{StaticResource GrayDarken3}" />
     <SolidColorBrush x:Key="Text.Header" Color="{StaticResource GrayDarken1}" />
@@ -110,7 +96,6 @@
     <SolidColorBrush x:Key="Text.Prompt" Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Text.Invert" Color="{StaticResource White}" />
 
-    <!--  ==================== 图标颜色 ====================  -->
     <SolidColorBrush x:Key="Icon.Foreground.Default" Color="{StaticResource GrayDarken1}" />
     <SolidColorBrush x:Key="Icon.Foreground.Hover" Color="{StaticResource BlueLighten1}" />
     <SolidColorBrush x:Key="Icon.Foreground.Checked" Color="{StaticResource BlueDarken2}" />
@@ -127,10 +112,19 @@
     <SolidColorBrush x:Key="Icon.Foreground.Link" Color="{StaticResource BlueDarken3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Invert" Color="{StaticResource White}" />
 
-    <!--  ==================== 阴影/高光 ====================  -->
+    <SolidColorBrush x:Key="Divider.Default" Color="{StaticResource BlueDarken3}" />
+    <SolidColorBrush x:Key="Overlay.Light" Color="{StaticResource GrayLighten5}" />
+    <SolidColorBrush x:Key="Overlay.Dark" Color="{StaticResource TransparentColor}" />
+    <SolidColorBrush x:Key="Link.Default" Color="{StaticResource BlueDarken3}" />
+    <SolidColorBrush x:Key="Link.Hover" Color="{StaticResource BlueDarken4}" />
+    <SolidColorBrush x:Key="Tick.Primary" Color="{StaticResource BlueLighten3}" />
+    <SolidColorBrush x:Key="Tick.Secondary" Color="{StaticResource BlueLighten2}" />
+    <SolidColorBrush x:Key="Alternation.Dark" Color="{StaticResource GrayLighten4}" />
+    <SolidColorBrush x:Key="Alternation.Light" Color="{StaticResource White}" />
+
     <SolidColorBrush x:Key="Shadow.Default" Color="{StaticResource TransparentColor}" />
-    <SolidColorBrush x:Key="Highlight.Default" Color="#20FFFFFF" />
-    <SolidColorBrush x:Key="Highlight.Invert" Color="#20000000" />
+    <SolidColorBrush x:Key="Highlight.Default" Color="{StaticResource White}" />
+    <SolidColorBrush x:Key="Highlight.Invert" Color="{StaticResource Black}" />
 
     <!--  ==================== 尺寸 ====================  -->
     <sys:Double x:Key="Height.Horizontal.Caption">36</sys:Double>

@@ -1,7 +1,8 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
@@ -12,12 +13,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="RootGrid" Background="Transparent">
-                        <Path x:Name="IconPath"
-                              Width="12"
-                              Height="12"
-                              Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
-                              Fill="{DynamicResource Icon.Foreground.Default}"
-                              Stretch="Uniform" />
+                        <Path
+                            x:Name="IconPath"
+                            Width="12"
+                            Height="12"
+                            Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
+                            Fill="{DynamicResource Icon.Foreground.Default}"
+                            Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -32,9 +34,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TextBox.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type TextBox}">
+    <Style x:Key="TextBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -52,37 +52,41 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="RootBorder"
-                            Padding="3,0"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="3,0"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="Watermark"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontSize="{TemplateBinding FontSize}"
-                                       Foreground="{DynamicResource Text.Prompt}"
-                                       Text="{Binding Path=(hp:TextBoxHelper.Watermark), RelativeSource={RelativeSource AncestorType=TextBox}}"
-                                       Visibility="Collapsed" />
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Grid.Column="0"
-                                          Background="{TemplateBinding Background}"
-                                          Focusable="false"
-                                          HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden" />
-                            <Button x:Name="ClearButton"
-                                    Grid.Column="1"
-                                    Margin="0,0,3,0"
-                                    Command="{x:Static hp:TextBoxHelper.ClearCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}"
-                                    Style="{StaticResource TextBox.ClearButtonStyle}"
-                                    Visibility="{Binding Path=Text, Converter={x:Static conv:VisibilityConverter.VisibleWhenNotNullOrEmpty}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <TextBlock
+                                x:Name="Watermark"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                FontSize="{TemplateBinding FontSize}"
+                                Foreground="{DynamicResource Text.Prompt}"
+                                Text="{Binding Path=(hp:TextBoxHelper.Watermark), RelativeSource={RelativeSource AncestorType=TextBox}}"
+                                Visibility="Collapsed" />
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                Grid.Column="0"
+                                Background="{TemplateBinding Background}"
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Hidden" />
+                            <Button
+                                x:Name="ClearButton"
+                                Grid.Column="1"
+                                Margin="0,0,3,0"
+                                Command="{x:Static hp:TextBoxHelper.ClearCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}"
+                                Style="{StaticResource TextBox.ClearButtonStyle}"
+                                Visibility="{Binding Path=Text, Converter={x:Static conv:VisibilityConverter.VisibleWhenNotNullOrEmpty}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

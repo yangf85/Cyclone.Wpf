@@ -1,7 +1,8 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
@@ -19,10 +20,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
                     <Grid x:Name="RootGrid" Background="Transparent">
-                        <ContentPresenter x:Name="ContentContainer"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Content="{TemplateBinding Content}" />
+                        <ContentPresenter
+                            x:Name="ContentContainer"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -45,53 +47,56 @@
     </Style>
 
     <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic" TargetType="ctl:NumberBox">
-        <Border x:Name="RootBorder"
-                Margin="{TemplateBinding Padding}"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                SnapsToDevicePixels="True">
+        <Border
+            x:Name="RootBorder"
+            Margin="{TemplateBinding Padding}"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" MinWidth="24" />
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="PART_InputTextBox"
-                         Grid.Column="0"
-                         VerticalAlignment="Center"
-                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="{TemplateBinding Foreground}"
-                         InputMethod.IsInputMethodEnabled="False"
-                         KeyboardNavigation.TabNavigation="Local" />
-                <Rectangle x:Name="VerticalSeperater"
-                           Grid.Column="1"
-                           Width="1"
-                           Fill="{TemplateBinding BorderBrush}" />
-                <Popup x:Name="PART_ValueSliderPopup"
-                       Grid.Column="0"
-                       AllowsTransparency="True"
-                       PlacementTarget="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                       PopupAnimation="Slide"
-                       VerticalOffset="5"
-                       Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                <TextBox
+                    x:Name="PART_InputTextBox"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="{TemplateBinding Foreground}"
+                    InputMethod.IsInputMethodEnabled="False"
+                    KeyboardNavigation.TabNavigation="Local" />
+                <Rectangle
+                    x:Name="VerticalSeperater"
+                    Grid.Column="1"
+                    Width="1"
+                    Fill="{TemplateBinding BorderBrush}" />
+                <Popup
+                    x:Name="PART_ValueSliderPopup"
+                    Grid.Column="0"
+                    AllowsTransparency="True"
+                    PlacementTarget="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                    PopupAnimation="Slide"
+                    VerticalOffset="5"
+                    Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                     <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                         <Border Margin="5" Focusable="True">
-                            <Slider x:Name="PART_ValueSlider"
-                                    IsMoveToPointEnabled="True"
-                                    IsSnapToTickEnabled="True"
-                                    LargeChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                    Maximum="{Binding Path=Maximum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                    Minimum="{Binding Path=Minimum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                    SmallChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                    TickFrequency="{TemplateBinding Step}"
-                                    Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <Slider
+                                x:Name="PART_ValueSlider"
+                                IsMoveToPointEnabled="True"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                Maximum="{Binding Path=Maximum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                Minimum="{Binding Path=Minimum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                SmallChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                TickFrequency="{TemplateBinding Step}"
+                                Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="5"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="0" />
+                                <DropShadowEffect BlurRadius="5" Opacity="0.5" ShadowDepth="0" />
                             </Border.Effect>
                         </Border>
                     </Grid>
@@ -102,33 +107,38 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <RepeatButton x:Name="PART_IncreaseRepeatButton"
-                                  Grid.Row="0"
-                                  Command="{x:Static ctl:NumberBox.IncreaseCommand}"
-                                  Style="{StaticResource NumberBox.SpinButtonStyle}">
+                    <RepeatButton
+                        x:Name="PART_IncreaseRepeatButton"
+                        Grid.Row="0"
+                        Command="{x:Static ctl:NumberBox.IncreaseCommand}"
+                        Style="{StaticResource NumberBox.SpinButtonStyle}">
                         <RepeatButton.Content>
-                            <Path Width="10"
-                                  Height="10"
-                                  Data="M533.333333 384L341.333333 576l29.866667 29.866667 162.133333-162.133334 162.133334 162.133334 29.866666-29.866667L533.333333 384z"
-                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
-                                  Stretch="Uniform" />
+                            <Path
+                                Width="10"
+                                Height="10"
+                                Data="M533.333333 384L341.333333 576l29.866667 29.866667 162.133333-162.133334 162.133334 162.133334 29.866666-29.866667L533.333333 384z"
+                                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
+                                Stretch="Uniform" />
                         </RepeatButton.Content>
                     </RepeatButton>
-                    <Rectangle x:Name="SpinButtonSeperater"
-                               Grid.Row="1"
-                               Height="1"
-                               Fill="{TemplateBinding BorderBrush}" />
-                    <RepeatButton x:Name="PART_DecreaseRepeatButton"
-                                  Grid.Row="2"
-                                  Command="{x:Static ctl:NumberBox.DecreaseCommand}"
-                                  Style="{StaticResource NumberBox.SpinButtonStyle}">
+                    <Rectangle
+                        x:Name="SpinButtonSeperater"
+                        Grid.Row="1"
+                        Height="1"
+                        Fill="{TemplateBinding BorderBrush}" />
+                    <RepeatButton
+                        x:Name="PART_DecreaseRepeatButton"
+                        Grid.Row="2"
+                        Command="{x:Static ctl:NumberBox.DecreaseCommand}"
+                        Style="{StaticResource NumberBox.SpinButtonStyle}">
                         <RepeatButton.Content>
-                            <Path Width="10"
-                                  Height="10"
-                                  Data="M533.333333 605.866667L341.333333 413.866667l29.866667-29.866667 162.133333 162.133333L695.466667 384l29.866666 29.866667-192 192z"
-                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
-                                  Stretch="Uniform"
-                                  UseLayoutRounding="True" />
+                            <Path
+                                Width="10"
+                                Height="10"
+                                Data="M533.333333 605.866667L341.333333 413.866667l29.866667-29.866667 162.133333 162.133333L695.466667 384l29.866666 29.866667-192 192z"
+                                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RepeatButton}}"
+                                Stretch="Uniform"
+                                UseLayoutRounding="True" />
                         </RepeatButton.Content>
                     </RepeatButton>
                 </Grid>
@@ -151,9 +161,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="NumberBox.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="ctl:NumberBox">
+    <Style x:Key="NumberBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:NumberBox">
         <Setter Property="Template" Value="{StaticResource NumberBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />

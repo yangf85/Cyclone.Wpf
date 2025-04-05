@@ -11,26 +11,17 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="TextFilterBox.ActiveCheckBoxStyle"
-        BasedOn="{StaticResource CheckBox.Style.Basic}"
-        TargetType="CheckBox">
+    <Style x:Key="TextFilterBox.ActiveCheckBoxStyle" BasedOn="{StaticResource CheckBox.Style.Basic}" TargetType="CheckBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style
-        x:Key="TextFilterBox.OperatorComboBoxStyle"
-        BasedOn="{StaticResource ComboBox.Style.Basic}"
-        TargetType="ComboBox">
+    <Style x:Key="TextFilterBox.OperatorComboBoxStyle" BasedOn="{StaticResource ComboBox.Style.Basic}" TargetType="ComboBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style
-        x:Key="TextFilterBox.TextBoxStyle"
-        BasedOn="{StaticResource TextBox.Style.Basic}"
-        TargetType="TextBox" />
+    <Style x:Key="TextFilterBox.TextBoxStyle" BasedOn="{StaticResource TextBox.Style.Basic}" TargetType="TextBox" />
 
     <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
         <Border
