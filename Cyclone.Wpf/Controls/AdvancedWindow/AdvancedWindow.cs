@@ -22,31 +22,28 @@ public class AdvancedWindow : System.Windows.Window
 {
     static AdvancedWindow()
     {
-        
         DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedWindow), new FrameworkPropertyMetadata(typeof(AdvancedWindow)));
     }
 
-    const string PART_CloseButton = nameof(PART_CloseButton);
+    private const string PART_CloseButton = nameof(PART_CloseButton);
 
-    const string PART_RestoreButton = nameof(PART_RestoreButton);
+    private const string PART_RestoreButton = nameof(PART_RestoreButton);
 
-    const string PART_MaximizeButton = nameof(PART_MaximizeButton);
+    private const string PART_MaximizeButton = nameof(PART_MaximizeButton);
 
-    const string PART_MinimizeButton = nameof(PART_MinimizeButton);
+    private const string PART_MinimizeButton = nameof(PART_MinimizeButton);
 
-    const string PART_TopmostButton = nameof(PART_TopmostButton);
+    private const string PART_TopmostButton = nameof(PART_TopmostButton);
 
-    Button _close;
+    private Button _close;
 
-    Button _restore;
+    private Button _restore;
 
-    Button _maximize;
+    private Button _maximize;
 
-    Button _minimize;
+    private Button _minimize;
 
-    ToggleButton _topmost;
-
-    
+    private ToggleButton _topmost;
 
     #region Icon
 
@@ -61,11 +58,6 @@ public class AdvancedWindow : System.Windows.Window
 
     #endregion Icon
 
-  
-
-
-
-
     #region CaptionBackground
 
     public static readonly DependencyProperty CaptionBackgroundProperty =
@@ -79,8 +71,8 @@ public class AdvancedWindow : System.Windows.Window
 
     #endregion CaptionBackground
 
-
     #region CaptionButtonType
+
     public CaptionButtonType CaptionButtonType
     {
         get => (CaptionButtonType)GetValue(CaptionButtonTypeProperty);
@@ -90,8 +82,10 @@ public class AdvancedWindow : System.Windows.Window
     public static readonly DependencyProperty CaptionButtonTypeProperty =
         DependencyProperty.Register(nameof(CaptionButtonType), typeof(CaptionButtonType), typeof(AdvancedWindow), new PropertyMetadata(default(CaptionButtonType)));
 
-    #endregion
+    #endregion CaptionButtonType
+
     #region TitleBrush
+
     public Brush TitleBrush
     {
         get => (Brush)GetValue(TitleBrushProperty);
@@ -101,10 +95,10 @@ public class AdvancedWindow : System.Windows.Window
     public static readonly DependencyProperty TitleBrushProperty =
         DependencyProperty.Register(nameof(TitleBrush), typeof(Brush), typeof(AdvancedWindow), new PropertyMetadata(default(Brush)));
 
-    #endregion
-
+    #endregion TitleBrush
 
     #region CaptionHeight
+
     public double CaptionHeight
     {
         get => (double)GetValue(CaptionHeightProperty);
@@ -114,9 +108,7 @@ public class AdvancedWindow : System.Windows.Window
     public static readonly DependencyProperty CaptionHeightProperty =
         DependencyProperty.Register(nameof(CaptionHeight), typeof(double), typeof(AdvancedWindow), new PropertyMetadata(default(double)));
 
-    #endregion
-
-
+    #endregion CaptionHeight
 
     #region FunctionalZone
 
@@ -131,10 +123,7 @@ public class AdvancedWindow : System.Windows.Window
 
     #endregion FunctionalZone
 
-
-
     #region Override
-
 
     protected override void OnInitialized(EventArgs e)
     {
@@ -145,14 +134,13 @@ public class AdvancedWindow : System.Windows.Window
         CommandBindings.Add(new CommandBinding(CaptionButtonCommand.RestoreCommand, CaptionButtonCommand.OnRestore, CaptionButtonCommand.OnCanRestore));
         CommandBindings.Add(new CommandBinding(CaptionButtonCommand.MinimizeCommand, CaptionButtonCommand.OnMinimize, CaptionButtonCommand.OnCanMinimize));
         CommandBindings.Add(new CommandBinding(CaptionButtonCommand.TopmostCommand, CaptionButtonCommand.OnTopmost, CaptionButtonCommand.OnCanTopmost));
-
     }
+
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        
-     
     }
+
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
@@ -162,7 +150,6 @@ public class AdvancedWindow : System.Windows.Window
         {
             InvalidateMeasure();
         }
-
     }
 
     #endregion Override

@@ -13,26 +13,28 @@ using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
 using System.Windows;
 using Cyclone.Wpf.Controls;
-
+using Corner = ToastNotifications.Position.Corner;
 
 namespace Cyclone.Wpf.Demo.ViewModels;
 
 public interface INotificationService
 {
-    void ShowSuccess(string message, MessageOptions options=null);
+    void ShowSuccess(string message, MessageOptions options = null);
+
     void ShowError(string message, MessageOptions options = null);
+
     void ShowWarning(string message, MessageOptions options = null);
+
     void ShowInfo(string message, MessageOptions options = null);
+
     void ShowCustom(string message, MessageOptions options = null);
-    
 }
 
 public class NotificationService : INotificationService
 {
     public static NotificationService Instance { get; } = new NotificationService();
 
-
-    Notifier _notifier;
+    private Notifier _notifier;
 
     private NotificationService()
     {
@@ -70,7 +72,6 @@ public class NotificationService : INotificationService
     public void ShowInfo(string message, MessageOptions options = null)
     {
         _notifier.Notify(() => new InformationMessage(message, options));
-        
     }
 
     public void ShowSuccess(string message, MessageOptions options = null)

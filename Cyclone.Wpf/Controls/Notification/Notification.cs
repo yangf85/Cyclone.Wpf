@@ -1,20 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Runtime.InteropServices;
 using System.Windows.Threading;
-using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
+#region 核心通知类型
+
 /// <summary>
-/// Defines the position where notifications will appear
+/// 通知类型枚举
 /// </summary>
-public enum NotificationPosition
+public enum NotificationType
+{
+    Information,
+    Success,
+    Warning,
+    Error,
+    Custom
+}
+
+/// <summary>
+/// 通知选项类
+/// </summary>
+public class NotificationOptions
+{
+    /// <summary>
+    /// 显示持续时间
+    /// </summary>
+    public TimeSpan DisplayDuration { get; set; } = TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// 最大不透明度
+    /// </summary>
+    public double MaxOpacity { get; set; } = 0.9;
+
+    /// <summary>
+    /// 位置
+    /// </summary>
+    public Position Position { get; set; } = Position.BottomRight;
+
+    /// <summary>
+    /// X轴偏移量
+    /// </summary>
+    public double OffsetX { get; set; } = 10;
+
+    /// <summary>
+    /// Y轴偏移量
+    /// </summary>
+    public double OffsetY { get; set; } = 10;
+
+    /// <summary>
+    /// 通知之间的间隙
+    /// </summary>
+    public double NotificationGap { get; set; } = 5;
+
+    /// <summary>
+    /// 是否允许多个通知
+    /// </summary>
+    public bool AllowMultiple { get; set; } = true;
+
+    /// <summary>
+    /// 通知宽度
+    /// </summary>
+    public double Width { get; set; } = 300;
+
+    /// <summary>
+    /// 最大高度
+    /// </summary>
+    public double MaxHeight { get; set; } = 100;
+}
+
+/// <summary>
+/// 通知位置枚举
+/// </summary>
+public enum Position
 {
     TopLeft,
     TopRight,
@@ -22,714 +89,516 @@ public enum NotificationPosition
     BottomRight
 }
 
-/// <summary>
-/// Defines the type of notification
-/// </summary>
-public enum NotificationType
-{
-    Information,
-    Success,
-    Warning,
-    Error
-}
+#endregion 核心通知类型
+
+#region 通知服务
 
 /// <summary>
-/// Main notification service for displaying toast notifications
-/// Works seamlessly with both regular WPF windows and window handles
+/// 通知服务类
 /// </summary>
-public class NotificationService
+public class NotificationService : IDisposable
 {
-    #region Private Fields
-
+    private readonly NotificationOptions _options;
     private readonly List<NotificationWindow> _activeNotifications = new List<NotificationWindow>();
-    private readonly object _lockObject = new object();
-    private NotificationPosition _position = NotificationPosition.BottomRight;
-    private TimeSpan _displayTime = TimeSpan.FromSeconds(5);
-    private int _maxNotifications = 5;
-    private int _offsetX = 20;
-    private int _offsetY = 20;
-    private int _spacing = 10;
-    private IntPtr _windowHandle;
-    private Window _windowReference;
+    private IntPtr _ownerHandle;
+    private readonly DispatcherTimer _cleanupTimer;
+    private DispatcherTimer _positionCheckTimer;
 
-    #endregion Private Fields
+    // 用于处理窗口句柄的本地方法
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
-    #region Public Properties
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern bool IsWindow(IntPtr hWnd);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    // 单例模式的静态实例
+    private static NotificationService _instance;
 
     /// <summary>
-    /// Gets or sets the position where notifications will appear
+    /// 获取通知服务的单例实例
     /// </summary>
-    public NotificationPosition Position
+    public static NotificationService Instance => _instance ??= new NotificationService();
+
+    /// <summary>
+    /// 使用默认选项初始化通知服务
+    /// </summary>
+    public NotificationService()
+        : this(new NotificationOptions())
     {
-        get => _position;
-        set => _position = value;
     }
 
     /// <summary>
-    /// Gets or sets how long notifications will be displayed
+    /// 使用自定义选项初始化通知服务
     /// </summary>
-    public TimeSpan DisplayTime
+    public NotificationService(NotificationOptions options)
     {
-        get => _displayTime;
-        set => _displayTime = value;
-    }
-
-    /// <summary>
-    /// Gets or sets the maximum number of notifications to display at once
-    /// </summary>
-    public int MaxNotifications
-    {
-        get => _maxNotifications;
-        set => _maxNotifications = value;
-    }
-
-    /// <summary>
-    /// Gets or sets the X offset from the edge of the screen
-    /// </summary>
-    public int OffsetX
-    {
-        get => _offsetX;
-        set => _offsetX = value;
-    }
-
-    /// <summary>
-    /// Gets or sets the Y offset from the edge of the screen
-    /// </summary>
-    public int OffsetY
-    {
-        get => _offsetY;
-        set => _offsetY = value;
-    }
-
-    /// <summary>
-    /// Gets or sets the spacing between notifications
-    /// </summary>
-    public int Spacing
-    {
-        get => _spacing;
-        set => _spacing = value;
-    }
-
-    #endregion Public Properties
-
-    #region Constructors
-
-    /// <summary>
-    /// Creates a notification service that positions relative to the given WPF window
-    /// </summary>
-    /// <param name="window">The WPF window to position notifications relative to</param>
-    public NotificationService(Window window)
-    {
-        if (window == null)
-            throw new ArgumentNullException(nameof(window));
-
-        _windowReference = window;
-
-        // Get the window handle if the window is already initialized
-        if (PresentationSource.FromVisual(window) is HwndSource)
-            _windowHandle = new WindowInteropHelper(window).Handle;
-
-        // Attach to SourceInitialized to get the handle if the window isn't initialized yet
-        window.SourceInitialized += (s, e) =>
+        _options = options;
+        _cleanupTimer = new DispatcherTimer
         {
-            _windowHandle = new WindowInteropHelper(window).Handle;
+            Interval = TimeSpan.FromSeconds(1)
         };
+        _cleanupTimer.Tick += CleanupTimerOnTick;
+        _cleanupTimer.Start();
     }
 
     /// <summary>
-    /// Creates a notification service that positions relative to the given window handle
+    /// 设置WPF窗口作为通知的所有者
     /// </summary>
-    /// <param name="windowHandle">The window handle to position notifications relative to</param>
-    public NotificationService(IntPtr windowHandle)
+    public void SetOwner(Window owner)
+    {
+        if (owner == null)
+            throw new ArgumentNullException(nameof(owner));
+
+        var handle = new WindowInteropHelper(owner).Handle;
+        SetOwnerInternal(handle);
+
+        // 添加WPF特定的事件处理程序
+        owner.LocationChanged += (sender, args) => RepositionActiveNotifications();
+        owner.SizeChanged += (sender, args) => RepositionActiveNotifications();
+        owner.StateChanged += (sender, args) => RepositionActiveNotifications();
+        owner.Closed += (sender, args) => Dispose();
+    }
+
+    /// <summary>
+    /// 设置非WPF窗口句柄作为通知的所有者
+    /// </summary>
+    public void SetOwner(IntPtr windowHandle)
     {
         if (windowHandle == IntPtr.Zero)
-            throw new ArgumentException("Window handle cannot be zero.", nameof(windowHandle));
+            throw new ArgumentException("窗口句柄不能为零", nameof(windowHandle));
 
-        _windowHandle = windowHandle;
-    }
+        if (!IsWindow(windowHandle))
+            throw new ArgumentException("无效的窗口句柄", nameof(windowHandle));
 
-    #endregion Constructors
-
-    #region Public Methods
-
-    /// <summary>
-    /// Shows a notification with the specified message
-    /// </summary>
-    /// <param name="message">The message to display</param>
-    /// <param name="type">The type of notification</param>
-    public void Show(string message, NotificationType type = NotificationType.Information)
-    {
-        Show(null, message, type);
+        SetOwnerInternal(windowHandle);
     }
 
     /// <summary>
-    /// Shows a notification with the specified title and message
+    /// 将当前前台窗口设置为所有者
     /// </summary>
-    /// <param name="title">The title to display</param>
-    /// <param name="message">The message to display</param>
-    /// <param name="type">The type of notification</param>
-    public void Show(string title, string message, NotificationType type = NotificationType.Information)
+    public void SetOwnerToForegroundWindow()
     {
-        // Ensure we're on the UI thread
-        if (!Application.Current.Dispatcher.CheckAccess())
+        IntPtr foregroundHandle = GetForegroundWindow();
+        if (foregroundHandle != IntPtr.Zero)
         {
-            Application.Current.Dispatcher.Invoke(() => Show(title, message, type));
-            return;
-        }
-
-        // Check if we have too many notifications already
-        lock (_lockObject)
-        {
-            if (_activeNotifications.Count >= _maxNotifications)
-            {
-                // Remove the oldest notification
-                if (_activeNotifications.Count > 0)
-                {
-                    var oldestNotification = _activeNotifications[0];
-                    _activeNotifications.RemoveAt(0);
-                    oldestNotification.Close();
-                }
-            }
-
-            // Create new notification
-            var notification = new NotificationWindow
-            {
-                Title = title,
-                Message = message,
-                NotificationType = type
-            };
-
-            // Set the owner appropriately based on what we have
-            if (_windowHandle != IntPtr.Zero)
-            {
-                notification.SetOwnerHandle(_windowHandle);
-            }
-            else if (_windowReference != null)
-            {
-                notification.Owner = _windowReference;
-            }
-
-            // Add notification to active list
-            _activeNotifications.Add(notification);
-
-            // Setup notification events
-            notification.Closed += (s, e) =>
-            {
-                lock (_lockObject)
-                {
-                    _activeNotifications.Remove(notification);
-                    RepositionNotifications();
-                }
-            };
-
-            // Position and show the notification
-            PositionNotification(notification);
-            notification.Show();
-
-            // Setup auto-close timer
-            var timer = new DispatcherTimer
-            {
-                Interval = _displayTime
-            };
-            timer.Tick += (s, e) =>
-            {
-                timer.Stop();
-                notification.StartCloseAnimation();
-            };
-            timer.Start();
-        }
-    }
-
-    /// <summary>
-    /// Closes all active notifications
-    /// </summary>
-    public void CloseAll()
-    {
-        lock (_lockObject)
-        {
-            foreach (var notification in _activeNotifications.ToArray())
-            {
-                notification.Close();
-            }
-            _activeNotifications.Clear();
-        }
-    }
-
-    #endregion Public Methods
-
-    #region Private Methods
-
-    // Positions a new notification based on current settings
-    private void PositionNotification(NotificationWindow notification)
-    {
-        RECT windowRect = new RECT();
-
-        // Get the position and size of the window
-        if (_windowHandle != IntPtr.Zero)
-        {
-            GetWindowRect(_windowHandle, ref windowRect);
-        }
-        else if (_windowReference != null)
-        {
-            // Fallback to using the WPF window
-            windowRect.left = (int)_windowReference.Left;
-            windowRect.top = (int)_windowReference.Top;
-            windowRect.right = (int)(_windowReference.Left + _windowReference.ActualWidth);
-            windowRect.bottom = (int)(_windowReference.Top + _windowReference.ActualHeight);
+            SetOwnerInternal(foregroundHandle);
         }
         else
         {
-            // Get the working area of the primary screen
-            var workingArea = SystemParameters.WorkArea;
-            windowRect.left = (int)workingArea.Left;
-            windowRect.top = (int)workingArea.Top;
-            windowRect.right = (int)workingArea.Right;
-            windowRect.bottom = (int)workingArea.Bottom;
+            throw new InvalidOperationException("无法获取前台窗口句柄");
+        }
+    }
+
+    // 内部方法，用于设置所有者句柄和跟踪
+    private void SetOwnerInternal(IntPtr handle)
+    {
+        // 清理现有计时器
+        if (_positionCheckTimer != null)
+        {
+            _positionCheckTimer.Stop();
+            _positionCheckTimer = null;
         }
 
-        // Show the notification to calculate its actual size
-        notification.Opacity = 0;
-        notification.Show();
-        notification.UpdateLayout();
+        _ownerHandle = handle;
 
-        double notificationWidth = notification.ActualWidth;
-        double notificationHeight = notification.ActualHeight;
-        notification.Hide();
-        notification.Opacity = 1;
-
-        // Calculate position based on settings
-        double left, top;
-
-        switch (_position)
+        // 设置窗口位置跟踪
+        _positionCheckTimer = new DispatcherTimer
         {
-            case NotificationPosition.TopLeft:
-                left = windowRect.left + _offsetX;
-                top = windowRect.top + _offsetY + GetNotificationOffset(notification);
+            Interval = TimeSpan.FromMilliseconds(200)
+        };
+
+        RECT lastKnownPosition;
+        GetWindowRect(_ownerHandle, out lastKnownPosition);
+
+        _positionCheckTimer.Tick += (sender, args) =>
+        {
+            if (!IsWindow(_ownerHandle))
+            {
+                // 窗口句柄不再有效，清理资源
+                _positionCheckTimer.Stop();
+                Dispose();
+                return;
+            }
+
+            RECT currentPosition;
+            if (GetWindowRect(_ownerHandle, out currentPosition))
+            {
+                if (lastKnownPosition.Left != currentPosition.Left ||
+                    lastKnownPosition.Top != currentPosition.Top ||
+                    lastKnownPosition.Right != currentPosition.Right ||
+                    lastKnownPosition.Bottom != currentPosition.Bottom)
+                {
+                    lastKnownPosition = currentPosition;
+                    RepositionActiveNotifications();
+                }
+            }
+        };
+
+        _positionCheckTimer.Start();
+    }
+
+    /// <summary>
+    /// 显示指定消息和类型的通知
+    /// </summary>
+    public void ShowNotification(string message, NotificationType type)
+    {
+        if (_ownerHandle == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("在显示通知之前必须设置所有者窗口。");
+        }
+
+        ShowNotificationInternal(new TextBlock
+        {
+            Text = message,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = Brushes.White,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            Margin = new Thickness(5)
+        }, type);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容的通知
+    /// </summary>
+    public void ShowNotification(UIElement content, NotificationType type)
+    {
+        if (_ownerHandle == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("在显示通知之前必须设置所有者窗口。");
+        }
+
+        ShowNotificationInternal(content, type);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容和背景的通知
+    /// </summary>
+    public void ShowNotification(UIElement content, Brush background)
+    {
+        if (_ownerHandle == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("在显示通知之前必须设置所有者窗口。");
+        }
+
+        var options = new NotificationOptions
+        {
+            DisplayDuration = _options.DisplayDuration,
+            MaxOpacity = _options.MaxOpacity,
+            Position = _options.Position,
+            OffsetX = _options.OffsetX,
+            OffsetY = _options.OffsetY,
+            NotificationGap = _options.NotificationGap,
+            AllowMultiple = _options.AllowMultiple,
+            Width = _options.Width,
+            MaxHeight = _options.MaxHeight,
+        };
+
+        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var notification = new NotificationWindow();
+            AddNotification(notification);
+        }));
+    }
+
+    private void ShowNotificationInternal(UIElement content, NotificationType type)
+    {
+        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var notification = new NotificationWindow();
+            AddNotification(notification);
+        }));
+    }
+
+    // 将通知添加到活动列表并定位它
+    private void AddNotification(NotificationWindow notification)
+    {
+        if (!_options.AllowMultiple && _activeNotifications.Count > 0)
+        {
+            // 如果不允许多个通知，移除现有通知
+            foreach (var existingNotification in _activeNotifications.ToList())
+            {
+                existingNotification.Close();
+            }
+            _activeNotifications.Clear();
+        }
+
+        notification.Closed += (sender, args) => RemoveNotification(notification);
+        _activeNotifications.Add(notification);
+        PositionNotification(notification);
+        notification.Show();
+    }
+
+    // 从活动列表中移除通知
+    private void RemoveNotification(NotificationWindow notification)
+    {
+        _activeNotifications.Remove(notification);
+        RepositionActiveNotifications();
+    }
+
+    // 根据现有通知定位新通知
+    private void PositionNotification(NotificationWindow notification)
+    {
+        if (!IsWindow(_ownerHandle))
+        {
+            // 如果无法获取所有者窗口位置，使用屏幕中心
+            notification.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            return;
+        }
+
+        RECT ownerRect;
+        if (!GetWindowRect(_ownerHandle, out ownerRect))
+        {
+            // 如果无法获取所有者窗口位置，使用屏幕中心
+            notification.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            return;
+        }
+
+        double left = 0;
+        double startY = 0;
+        bool growDown = true;
+
+        // 根据选定的位置确定起始位置
+        switch (_options.Position)
+        {
+            case Position.TopLeft:
+                left = ownerRect.Left + _options.OffsetX;
+                startY = ownerRect.Top + _options.OffsetY;
+                growDown = true;
                 break;
 
-            case NotificationPosition.TopRight:
-                left = windowRect.right - notificationWidth - _offsetX;
-                top = windowRect.top + _offsetY + GetNotificationOffset(notification);
+            case Position.TopRight:
+                left = ownerRect.Right - _options.Width - _options.OffsetX;
+                startY = ownerRect.Top + _options.OffsetY;
+                growDown = true;
                 break;
 
-            case NotificationPosition.BottomLeft:
-                left = windowRect.left + _offsetX;
-                top = windowRect.bottom - notificationHeight - _offsetY - GetNotificationOffset(notification);
+            case Position.BottomLeft:
+                left = ownerRect.Left + _options.OffsetX;
+                startY = ownerRect.Bottom - _options.OffsetY;
+                growDown = false;
                 break;
 
-            case NotificationPosition.BottomRight:
-            default:
-                left = windowRect.right - notificationWidth - _offsetX;
-                top = windowRect.bottom - notificationHeight - _offsetY - GetNotificationOffset(notification);
+            case Position.BottomRight:
+                left = ownerRect.Right - _options.Width - _options.OffsetX;
+                startY = ownerRect.Bottom - _options.OffsetY;
+                growDown = false;
                 break;
         }
 
         notification.Left = left;
-        notification.Top = top;
-        notification.StartEntryAnimation();
+        ArrangeNotificationsVertically(notification, startY, growDown);
     }
 
-    // Calculates the offset for a notification based on existing notifications
-    private double GetNotificationOffset(NotificationWindow notification)
+    // 垂直排列通知的辅助方法
+    private void ArrangeNotificationsVertically(NotificationWindow notification, double startY, bool growDown)
     {
-        int index = _activeNotifications.IndexOf(notification);
-        if (index <= 0) return 0;
+        var activeNotifications = _activeNotifications
+            .Where(n => n != notification)
+            .OrderBy(n => growDown ? n.Top : -n.Top)
+            .ToList();
 
-        double offset = 0;
-        for (int i = 0; i < index; i++)
+        if (activeNotifications.Count == 0)
         {
-            if (i < _activeNotifications.Count)
-            {
-                offset += _activeNotifications[i].ActualHeight + _spacing;
-            }
-        }
-
-        return offset;
-    }
-
-    // Repositions all active notifications after one is closed
-    private void RepositionNotifications()
-    {
-        for (int i = 0; i < _activeNotifications.Count; i++)
-        {
-            var notification = _activeNotifications[i];
-            var targetTop = 0.0;
-
-            // Recalculate the target top position based on position setting
-            if (_position == NotificationPosition.TopLeft || _position == NotificationPosition.TopRight)
-            {
-                RECT windowRect = new RECT();
-                if (_windowHandle != IntPtr.Zero)
-                {
-                    GetWindowRect(_windowHandle, ref windowRect);
-                    targetTop = windowRect.top + _offsetY + GetNotificationOffset(notification);
-                }
-                else if (_windowReference != null)
-                {
-                    targetTop = _windowReference.Top + _offsetY + GetNotificationOffset(notification);
-                }
-                else
-                {
-                    targetTop = SystemParameters.WorkArea.Top + _offsetY + GetNotificationOffset(notification);
-                }
-            }
-            else // Bottom positions
-            {
-                RECT windowRect = new RECT();
-                if (_windowHandle != IntPtr.Zero)
-                {
-                    GetWindowRect(_windowHandle, ref windowRect);
-                    targetTop = windowRect.bottom - notification.ActualHeight - _offsetY - GetNotificationOffset(notification);
-                }
-                else if (_windowReference != null)
-                {
-                    targetTop = _windowReference.Top + _windowReference.ActualHeight - notification.ActualHeight - _offsetY - GetNotificationOffset(notification);
-                }
-                else
-                {
-                    targetTop = SystemParameters.WorkArea.Bottom - notification.ActualHeight - _offsetY - GetNotificationOffset(notification);
-                }
-            }
-
-            // Animate to new position
-            notification.AnimateToPosition(targetTop);
-        }
-    }
-
-    #endregion Private Methods
-
-    #region Native Methods
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct RECT
-    {
-        public int left;
-        public int top;
-        public int right;
-        public int bottom;
-    }
-
-    #endregion Native Methods
-}
-
-/// <summary>
-/// Notification window for displaying toast messages
-/// </summary>
-public class NotificationWindow : Window
-{
-    #region Private Fields
-
-    private TextBlock _titleTextBlock;
-    private TextBlock _messageTextBlock;
-    private Button _closeButton;
-    private Border _iconBorder;
-    private TextBlock _iconText;
-    private HwndSource _hwndSource;
-
-    #endregion Private Fields
-
-    #region Public Properties
-
-    /// <summary>
-    /// Gets or sets the notification message
-    /// </summary>
-    public string Message
-    {
-        get => _messageTextBlock?.Text ?? string.Empty;
-        set
-        {
-            if (_messageTextBlock != null)
-                _messageTextBlock.Text = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the notification type
-    /// </summary>
-    public NotificationType NotificationType { get; set; }
-
-    #endregion Public Properties
-
-    #region Constructors
-
-    /// <summary>
-    /// Creates a new notification window
-    /// </summary>
-    public NotificationWindow()
-    {
-        // Configure window style
-        WindowStyle = WindowStyle.None;
-        AllowsTransparency = true;
-        Topmost = true;
-        ShowInTaskbar = false;
-        SizeToContent = SizeToContent.WidthAndHeight;
-        ResizeMode = ResizeMode.NoResize;
-        Background = Brushes.Transparent;
-        MaxWidth = 400;
-
-        // Create content
-        CreateContent();
-
-        // Initialize HwndSource
-        SourceInitialized += (s, e) =>
-        {
-            _hwndSource = PresentationSource.FromVisual(this) as HwndSource;
-        };
-    }
-
-    #endregion Constructors
-
-    #region Public Methods
-
-    /// <summary>
-    /// Sets the window owner using a handle instead of a WPF window reference
-    /// </summary>
-    /// <param name="ownerHandle">Handle to the owner window</param>
-    public void SetOwnerHandle(IntPtr ownerHandle)
-    {
-        if (ownerHandle == IntPtr.Zero)
+            // 第一个通知
+            notification.Top = growDown ? startY : startY - notification.Height;
             return;
+        }
 
-        // If the window is not yet initialized, we need to wait
-        if (!IsInitialized)
+        if (growDown)
         {
-            SourceInitialized += (s, e) => SetOwnerHandleCore(ownerHandle);
+            // 从顶部开始向下堆叠
+            var lastNotification = activeNotifications.LastOrDefault();
+            notification.Top = lastNotification.Top + lastNotification.ActualHeight + _options.NotificationGap;
         }
         else
         {
-            SetOwnerHandleCore(ownerHandle);
+            // 从底部开始向上堆叠
+            var lastNotification = activeNotifications.LastOrDefault();
+            notification.Top = lastNotification.Top - notification.Height - _options.NotificationGap;
         }
     }
 
-    /// <summary>
-    /// Starts the entry animation for the notification
-    /// </summary>
-    public void StartEntryAnimation()
+    // 重新定位所有活动通知
+    private void RepositionActiveNotifications()
     {
-        // Create and start the animation
-        DoubleAnimation fadeInAnimation = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = TimeSpan.FromMilliseconds(300)
-        };
-
-        this.BeginAnimation(OpacityProperty, fadeInAnimation);
-    }
-
-    /// <summary>
-    /// Starts the close animation for the notification
-    /// </summary>
-    public void StartCloseAnimation()
-    {
-        // Create and start the animation
-        DoubleAnimation fadeOutAnimation = new DoubleAnimation
-        {
-            From = 1,
-            To = 0,
-            Duration = TimeSpan.FromMilliseconds(300)
-        };
-        fadeOutAnimation.Completed += (s, e) => Close();
-
-        this.BeginAnimation(OpacityProperty, fadeOutAnimation);
-    }
-
-    /// <summary>
-    /// Animates the notification to a new vertical position
-    /// </summary>
-    /// <param name="targetTop">The target top position</param>
-    public void AnimateToPosition(double targetTop)
-    {
-        // Create and start the animation
-        DoubleAnimation topAnimation = new DoubleAnimation
-        {
-            To = targetTop,
-            Duration = TimeSpan.FromMilliseconds(200),
-            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-        };
-
-        this.BeginAnimation(TopProperty, topAnimation);
-    }
-
-    #endregion Public Methods
-
-    #region Private Methods
-
-    // Core implementation to set the owner handle
-    private void SetOwnerHandleCore(IntPtr ownerHandle)
-    {
-        if (_hwndSource == null || _hwndSource.Handle == IntPtr.Zero)
+        if (_activeNotifications.Count == 0)
             return;
 
-        // Set the owner using native Win32 API
-        SetWindowLongPtr(_hwndSource.Handle, GWLP_HWNDPARENT, ownerHandle);
-    }
+        if (!IsWindow(_ownerHandle))
+            return;
 
-    // Creates the UI elements for the notification
-    private void CreateContent()
-    {
-        // Create main container
-        Grid mainGrid = new Grid
-        {
-            Margin = new Thickness(10)
-        };
-        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        mainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        mainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RECT ownerRect;
+        if (!GetWindowRect(_ownerHandle, out ownerRect))
+            return;
 
-        // Create outer border with styling
-        Border outerBorder = new Border
+        double left = 0;
+        double startY = 0;
+        bool growDown = true;
+
+        // 根据选项确定起始位置
+        switch (_options.Position)
         {
-            Background = new SolidColorBrush(Color.FromRgb(245, 245, 245)),
-            BorderBrush = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
-            BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(4),
-            Padding = new Thickness(12),
-            Effect = new System.Windows.Media.Effects.DropShadowEffect
+            case Position.TopLeft:
+                left = ownerRect.Left + _options.OffsetX;
+                startY = ownerRect.Top + _options.OffsetY;
+                growDown = true;
+                break;
+
+            case Position.TopRight:
+                left = ownerRect.Right - _options.Width - _options.OffsetX;
+                startY = ownerRect.Top + _options.OffsetY;
+                growDown = true;
+                break;
+
+            case Position.BottomLeft:
+                left = ownerRect.Left + _options.OffsetX;
+                startY = ownerRect.Bottom - _options.OffsetY;
+                growDown = false;
+                break;
+
+            case Position.BottomRight:
+                left = ownerRect.Right - _options.Width - _options.OffsetX;
+                startY = ownerRect.Bottom - _options.OffsetY;
+                growDown = false;
+                break;
+        }
+
+        // 按位置排序通知
+        var sortedNotifications = _activeNotifications
+            .OrderBy(n => growDown ? n.Top : -n.Top)
+            .ToList();
+
+        // 重新定位每个通知
+        double currentY = startY;
+        foreach (var notification in sortedNotifications)
+        {
+            notification.Left = left;
+
+            if (growDown)
             {
-                ShadowDepth = 3,
-                BlurRadius = 5,
-                Opacity = 0.3
+                notification.Top = currentY;
+                currentY += notification.ActualHeight + _options.NotificationGap;
             }
-        };
-
-        // Create icon
-        _iconBorder = new Border
-        {
-            Width = 40,
-            Height = 40,
-            CornerRadius = new CornerRadius(20),
-            Margin = new Thickness(0, 0, 12, 0),
-        };
-
-        _iconText = new TextBlock
-        {
-            FontFamily = new FontFamily("Segoe UI Symbol"),
-            FontSize = 18,
-            FontWeight = FontWeights.Bold,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Foreground = Brushes.White
-        };
-
-        _iconBorder.Child = _iconText;
-        Grid.SetRowSpan(_iconBorder, 2);
-        mainGrid.Children.Add(_iconBorder);
-
-        // Create title text block
-        _titleTextBlock = new TextBlock
-        {
-            FontWeight = FontWeights.Bold,
-            FontSize = 14,
-            Margin = new Thickness(0, 0, 0, 4),
-            TextWrapping = TextWrapping.Wrap
-        };
-        Grid.SetColumn(_titleTextBlock, 1);
-        mainGrid.Children.Add(_titleTextBlock);
-
-        // Create message text block
-        _messageTextBlock = new TextBlock
-        {
-            TextWrapping = TextWrapping.Wrap,
-            FontSize = 13,
-            Margin = new Thickness(0)
-        };
-        Grid.SetColumn(_messageTextBlock, 1);
-        Grid.SetRow(_messageTextBlock, 1);
-        mainGrid.Children.Add(_messageTextBlock);
-
-        // Create close button
-        _closeButton = new Button
-        {
-            Content = "✕",
-            FontFamily = new FontFamily("Segoe UI Symbol"),
-            Padding = new Thickness(5, 0, 5, 0),
-            BorderThickness = new Thickness(0),
-            Background = Brushes.Transparent,
-            Foreground = new SolidColorBrush(Color.FromRgb(150, 150, 150)),
-            VerticalAlignment = VerticalAlignment.Top,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            Cursor = Cursors.Hand
-        };
-        _closeButton.Click += (s, e) => StartCloseAnimation();
-        Grid.SetColumn(_closeButton, 2);
-        mainGrid.Children.Add(_closeButton);
-
-        // Add main grid to outer border
-        outerBorder.Child = mainGrid;
-
-        // Set the content
-        Content = outerBorder;
-
-        // Add mouse events for the entire window
-        MouseLeftButtonDown += (s, e) => StartCloseAnimation();
-        MouseEnter += (s, e) =>
-        {
-            // Add visual feedback on hover
-            outerBorder.Background = new SolidColorBrush(Color.FromRgb(250, 250, 250));
-        };
-        MouseLeave += (s, e) =>
-        {
-            // Restore original background on leave
-            outerBorder.Background = new SolidColorBrush(Color.FromRgb(245, 245, 245));
-        };
+            else
+            {
+                notification.Top = currentY - notification.Height;
+                currentY -= notification.Height + _options.NotificationGap;
+            }
+        }
     }
 
-    // Updates visual appearance based on notification type
-    protected override void OnContentRendered(EventArgs e)
+    // 清理过期通知
+    private void CleanupTimerOnTick(object sender, EventArgs e)
     {
-        base.OnContentRendered(e);
-
-        // Set appearance based on notification type
-        switch (NotificationType)
+        foreach (var notification in _activeNotifications.ToList())
         {
-            case NotificationType.Information:
-                _iconBorder.Background = new SolidColorBrush(Color.FromRgb(88, 150, 236));  // Blue
-                _iconText.Text = "ℹ";
-                break;
-
-            case NotificationType.Success:
-                _iconBorder.Background = new SolidColorBrush(Color.FromRgb(79, 186, 111));  // Green
-                _iconText.Text = "✓";
-                break;
-
-            case NotificationType.Warning:
-                _iconBorder.Background = new SolidColorBrush(Color.FromRgb(246, 187, 66));  // Orange
-                _iconText.Text = "⚠";
-                break;
-
-            case NotificationType.Error:
-                _iconBorder.Background = new SolidColorBrush(Color.FromRgb(232, 86, 86));   // Red
-                _iconText.Text = "✕";
-                break;
-        }
-
-        if (string.IsNullOrEmpty(Title))
-        {
-            _titleTextBlock.Visibility = Visibility.Collapsed;
         }
     }
 
-    #endregion Private Methods
+    /// <summary>
+    /// 释放通知服务并清除所有活动通知
+    /// </summary>
+    public void Dispose()
+    {
+        _cleanupTimer?.Stop();
+        _positionCheckTimer?.Stop();
 
-    #region Native Methods
-
-    // Constants
-    private const int GWLP_HWNDPARENT = -8;
-
-    // PInvoke methods for setting window owner
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-    // 64-bit compatible version for SetWindowLongPtr
-    [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
-    private static extern IntPtr SetWindowLongPtr32(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-    #endregion Native Methods
+        foreach (var notification in _activeNotifications.ToList())
+        {
+            notification.Close();
+        }
+        _activeNotifications.Clear();
+        _instance = null;
+    }
 }
+
+#endregion 通知服务
+
+
+
+#region 扩展方法
+
+/// <summary>
+/// 通知服务扩展方法
+/// </summary>
+public static class NotificationServiceExtensions
+{
+    /// <summary>
+    /// 显示信息通知
+    /// </summary>
+    public static void ShowInformation(this NotificationService service, string message)
+    {
+        service.ShowNotification(message, NotificationType.Information);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容的信息通知
+    /// </summary>
+    public static void ShowInformation(this NotificationService service, UIElement content)
+    {
+        service.ShowNotification(content, NotificationType.Information);
+    }
+
+    /// <summary>
+    /// 显示成功通知
+    /// </summary>
+    public static void ShowSuccess(this NotificationService service, string message)
+    {
+        service.ShowNotification(message, NotificationType.Success);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容的成功通知
+    /// </summary>
+    public static void ShowSuccess(this NotificationService service, UIElement content)
+    {
+        service.ShowNotification(content, NotificationType.Success);
+    }
+
+    /// <summary>
+    /// 显示警告通知
+    /// </summary>
+    public static void ShowWarning(this NotificationService service, string message)
+    {
+        service.ShowNotification(message, NotificationType.Warning);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容的警告通知
+    /// </summary>
+    public static void ShowWarning(this NotificationService service, UIElement content)
+    {
+        service.ShowNotification(content, NotificationType.Warning);
+    }
+
+    /// <summary>
+    /// 显示错误通知
+    /// </summary>
+    public static void ShowError(this NotificationService service, string message)
+    {
+        service.ShowNotification(message, NotificationType.Error);
+    }
+
+    /// <summary>
+    /// 显示带有自定义内容的错误通知
+    /// </summary>
+    public static void ShowError(this NotificationService service, UIElement content)
+    {
+        service.ShowNotification(content, NotificationType.Error);
+    }
+}
+
+#endregion 扩展方法

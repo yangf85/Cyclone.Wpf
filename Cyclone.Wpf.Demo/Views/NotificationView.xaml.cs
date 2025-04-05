@@ -1,4 +1,5 @@
-﻿using Cyclone.Wpf.Demo.ViewModels;
+﻿using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NotificationService = Cyclone.Wpf.Demo.ViewModels.NotificationService;
 
 namespace Cyclone.Wpf.Demo.Views
 {
@@ -55,8 +57,8 @@ namespace Cyclone.Wpf.Demo.Views
 
         private void Button_Custom(object sender, RoutedEventArgs e)
         {
-            var service = new Cyclone.Wpf.Controls.NotificationService(App.Current.MainWindow);
-            service.Show("fdafdafda");
+            var window = new NotificationWindow();
+            window.Show();
         }
     }
 }
