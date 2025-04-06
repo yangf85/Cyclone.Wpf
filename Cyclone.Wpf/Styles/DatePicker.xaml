@@ -13,13 +13,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Background="{TemplateBinding Background}">
-                        <Path
-                            x:Name="IconPath"
-                            Width="16"
-                            Height="16"
-                            Data="M384 256h256V213.333333h85.333333v42.666667h128v554.666667H170.666667V256h128V213.333333h85.333333v42.666667z m384 85.333333H256v384h512V341.333333z m-341.333333 85.333334v85.333333H341.333333v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m-256 128v85.333333H341.333333v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z"
-                            Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                            Stretch="Uniform" />
+                        <Path x:Name="IconPath"
+                              Width="16"
+                              Height="16"
+                              Data="M384 256h256V213.333333h85.333333v42.666667h128v554.666667H170.666667V256h128V213.333333h85.333333v42.666667z m384 85.333333H256v384h512V341.333333z m-341.333333 85.333334v85.333333H341.333333v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m-256 128v85.333333H341.333333v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z m128 0v85.333333h-85.333334v-85.333333h85.333334z"
+                              Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DatePicker}}" Value="True">
@@ -45,12 +44,11 @@
                 <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
                     <Border x:Name="RootBorder" Background="Transparent" BorderThickness="0">
                         <Grid>
-                            <ScrollViewer
-                                x:Name="PART_ContentHost"
-                                Padding="2"
-                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Background="Transparent" />
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Padding="2"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Background="Transparent" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -68,31 +66,28 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DatePicker}">
-                    <Border
-                        x:Name="RootBoder"
-                        Padding="{TemplateBinding Margin}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBoder"
+                            Padding="{TemplateBinding Margin}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <Grid x:Name="PART_Root">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Style="{DynamicResource DatePicker.TextBoxStyle}" />
-                            <Button
-                                x:Name="PART_Button"
-                                Grid.Column="1"
-                                Margin="0,0,3,0"
-                                Focusable="False"
-                                Style="{StaticResource DatePicker.OpenButtonStyle}" />
-                            <Popup
-                                x:Name="PART_Popup"
-                                AllowsTransparency="True"
-                                Placement="Bottom"
-                                PlacementTarget="{Binding ElementName=PART_TextBox}"
-                                StaysOpen="False" />
+                            <Button x:Name="PART_Button"
+                                    Grid.Column="1"
+                                    Margin="0,0,3,0"
+                                    Focusable="False"
+                                    Style="{StaticResource DatePicker.OpenButtonStyle}" />
+                            <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   Placement="Bottom"
+                                   PlacementTarget="{Binding ElementName=PART_TextBox}"
+                                   StaysOpen="False" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

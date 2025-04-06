@@ -76,9 +76,7 @@
                                       Focusable="False"
                                       Style="{StaticResource Menu.RepeatButtonStyle}">
                             <RepeatButton.Visibility>
-                                <MultiBinding ConverterParameter="0"
-                                              FallbackValue="Visibility.Collapsed"
-                                              UpdateSourceTrigger="Default">
+                                <MultiBinding ConverterParameter="0" FallbackValue="Visibility.Collapsed" UpdateSourceTrigger="Default">
                                     <MultiBinding.Converter>
                                         <MenuScrollingVisibilityConverter />
                                     </MultiBinding.Converter>
@@ -97,9 +95,7 @@
                                       Focusable="False"
                                       Style="{StaticResource Menu.RepeatButtonStyle}">
                             <RepeatButton.Visibility>
-                                <MultiBinding ConverterParameter="100"
-                                              FallbackValue="Visibility.Collapsed"
-                                              UpdateSourceTrigger="Default">
+                                <MultiBinding ConverterParameter="100" FallbackValue="Visibility.Collapsed" UpdateSourceTrigger="Default">
                                     <MultiBinding.Converter>
                                         <MenuScrollingVisibilityConverter />
                                     </MultiBinding.Converter>
@@ -304,9 +300,7 @@
                     SnapsToDevicePixels="True">
                 <Grid Margin="-1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"
-                                          MinWidth="22"
-                                          SharedSizeGroup="MenuItemIconColumnGroup" />
+                        <ColumnDefinition Width="Auto" MinWidth="22" SharedSizeGroup="MenuItemIconColumnGroup" />
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="30" />
@@ -393,9 +387,7 @@
                     SnapsToDevicePixels="True">
                 <Grid Margin="-1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"
-                                          MinWidth="22"
-                                          SharedSizeGroup="MenuItemIconColumnGroup" />
+                        <ColumnDefinition Width="Auto" MinWidth="22" SharedSizeGroup="MenuItemIconColumnGroup" />
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="30" />
@@ -544,9 +536,7 @@
 
     <Style BasedOn="{StaticResource MenuItem.Style.Basic}" TargetType="MenuItem" />
 
-    <Style x:Key="Menu.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type Menu}">
+    <Style x:Key="Menu.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type Menu}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}" />

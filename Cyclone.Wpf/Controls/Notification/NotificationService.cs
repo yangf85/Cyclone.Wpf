@@ -39,12 +39,12 @@ public class NotificationOption
     /// <summary>
     /// X轴偏移量
     /// </summary>
-    public double OffsetX { get; set; } = 0;
+    public double OffsetX { get; set; } = 5;
 
     /// <summary>
     /// Y轴偏移量
     /// </summary>
-    public double OffsetY { get; set; } = 0;
+    public double OffsetY { get; set; } = 5;
 
     /// <summary>
     /// 通知之间的间隙
@@ -102,6 +102,15 @@ public class NotificationService : INotificationService, IDisposable
     private readonly List<NotificationWindow> _activeWindows = [];
     private IntPtr _ownerHandle;
     private bool _useScreenForPositioning = false;
+    private static ResourceDictionary _dict;
+
+    static NotificationService()
+    {
+        _dict = new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute)
+        };
+    }
 
     #region HandleWindowIntPtr
 
@@ -210,16 +219,6 @@ public class NotificationService : INotificationService, IDisposable
         }
     }
 
-    /// <summary>
-    /// 使用整个屏幕作为定位基准
-    /// </summary>
-    public void UseScreenForPositioning()
-    {
-        _useScreenForPositioning = true;
-        _ownerHandle = IntPtr.Zero;
-        RepositionActiveWindows();
-    }
-
     // 内部方法，用于设置所有者句柄和跟踪
     private void SetOwnerInternal(IntPtr handle)
     {
@@ -248,9 +247,8 @@ public class NotificationService : INotificationService, IDisposable
 
     #region Implementation  INotificationService
 
-    public void Show(object content, DataTemplate template, string title = null)
+    private void InternalShow(object content, DataTemplate template, string title)
     {
-        // 不再需要检查 _ownerHandle，因为我们可以使用屏幕作为定位基准
         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
         {
             var window = new NotificationWindow();
@@ -263,6 +261,12 @@ public class NotificationService : INotificationService, IDisposable
             window.DisplayDuration = _option.DisplayDuration;
             AddWindow(window);
         }));
+    }
+
+    public void Show(object content, DataTemplate template = null, string title = null)
+    {
+        template ??= _dict["Notification.Default.DataTemplate"] as DataTemplate;
+        InternalShow(content, template, title);
     }
 
     #endregion Implementation  INotificationService
@@ -503,13 +507,19 @@ public static class NotificationServiceExtension
 
     public static void Success(this INotificationService service, string message)
     {
+        var template = _dict["Notification.Success.DataTemplate"] as DataTemplate;
+        service.Show(message, template);
     }
 
-    public static void ShowWarning(this INotificationService service, string message)
+    public static void Warning(this INotificationService service, string message)
     {
+        var template = _dict["Notification.Warning.DataTemplate"] as DataTemplate;
+        service.Show(message, template);
     }
 
-    public static void ShowError(this INotificationService service, string message)
+    public static void Error(this INotificationService service, string message)
     {
+        var template = _dict["Notification.Error.DataTemplate"] as DataTemplate;
+        service.Show(message, template);
     }
 }

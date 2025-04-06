@@ -178,11 +178,21 @@ internal class NotificationWindow : Window
                 break;
         }
 
+        // 创建透明度动画
+        DoubleAnimation opacityAnimation = new DoubleAnimation
+        {
+            From = 0.0,
+            To = 1.0,
+            Duration = TimeSpan.FromMilliseconds(200),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
         // 开始动画
         if (positionAnimation != null && animatedProperty != null)
         {
             BeginAnimation(animatedProperty, positionAnimation);
         }
+        BeginAnimation(Window.OpacityProperty, opacityAnimation);
     }
 
     private void PlayCloseAnimation(Action completedCallback)
@@ -219,29 +229,36 @@ internal class NotificationWindow : Window
                 break;
         }
 
-        // 设置完成回调
-        if (positionAnimation != null)
+        // 创建透明度动画
+        DoubleAnimation opacityAnimation = new DoubleAnimation
         {
-            positionAnimation.Completed += (s, e) => completedCallback?.Invoke();
-        }
-        else
-        {
-            // 如果没有位置动画，直接调用回调
-            completedCallback?.Invoke();
-        }
+            From = 1.0,
+            To = 0.0,
+            Duration = TimeSpan.FromMilliseconds(300),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
+
+        // 设置透明度动画的完成回调，确保窗口关闭在透明度动画完成后
+        opacityAnimation.Completed += (s, e) => completedCallback?.Invoke();
 
         // 开始动画
         if (positionAnimation != null && animatedProperty != null)
         {
             BeginAnimation(animatedProperty, positionAnimation);
         }
+        BeginAnimation(Window.OpacityProperty, opacityAnimation);
     }
 
     public void CloseWithAnimation()
     {
         if (_isClosing) return;
 
-        StopAutoCloseTimer();
+        // Check if _autoCloseTimer is not null before stopping it
+        if (_autoCloseTimer != null)
+        {
+            StopAutoCloseTimer();
+        }
+
         PlayCloseAnimation(() =>
         {
             base.Close();
@@ -250,23 +267,30 @@ internal class NotificationWindow : Window
 
     private void StartAutoCloseTimer()
     {
-        // 如果计时器已经在运行或者鼠标在窗口上，则不启动计时器
+        // Add null check for _autoCloseTimer
+        if (_autoCloseTimer == null)
+        {
+            _autoCloseTimer = new DispatcherTimer();
+            _autoCloseTimer.Tick += AutoCloseTimer_Tick;
+        }
+
+        // If timer is already running or mouse is over window, don't start timer
         if (_autoCloseTimer.IsEnabled || this.IsMouseOver || DisplayDuration <= TimeSpan.Zero)
         {
             return;
         }
 
-        // 设置计时器间隔并启动
+        // Set timer interval and start
         _autoCloseTimer.Interval = DisplayDuration;
         _autoCloseTimer.Start();
 
-        // 调试提示
+        // Debug output
         Console.WriteLine($"Auto close timer started: {DisplayDuration.TotalMilliseconds}ms");
     }
 
     private void StopAutoCloseTimer()
     {
-        if (_autoCloseTimer.IsEnabled)
+        if (_autoCloseTimer != null && _autoCloseTimer.IsEnabled)
         {
             _autoCloseTimer.Stop();
             Console.WriteLine("Auto close timer stopped");
@@ -321,7 +345,6 @@ internal class NotificationWindow : Window
         }
     }
 
-    // 重写Close方法，使用动画关闭
     public new void Close()
     {
         CloseWithAnimation();

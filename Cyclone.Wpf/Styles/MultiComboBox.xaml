@@ -145,9 +145,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ItemsControl Grid.Column="0"
-                              ItemContainerStyle="{StaticResource MultiComboBox.PresentItemStyle}"
-                              ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}">
+                <ItemsControl Grid.Column="0" ItemContainerStyle="{StaticResource MultiComboBox.PresentItemStyle}" ItemsSource="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:MultiComboBox}}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="1" />
@@ -189,9 +187,7 @@
                                        Height="1"
                                        Margin="0,1"
                                        Fill="{TemplateBinding BorderBrush}" />
-                            <ScrollViewer Grid.Row="2"
-                                          Background="Transparent"
-                                          VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer Grid.Row="2" Background="Transparent" VerticalScrollBarVisibility="Auto">
                                 <ItemsPresenter />
                             </ScrollViewer>
                         </Grid>

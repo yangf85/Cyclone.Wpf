@@ -54,9 +54,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Expander.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type Expander}">
+    <Style x:Key="Expander.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type Expander}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Height" Value="Auto" />

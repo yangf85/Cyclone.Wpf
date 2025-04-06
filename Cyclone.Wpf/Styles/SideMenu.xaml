@@ -74,9 +74,7 @@
 
     <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}" TargetType="ctl:SideMenuItem" />
 
-    <Style x:Key="SideMenu.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="ctl:SideMenu">
+    <Style x:Key="SideMenu.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:SideMenu">
         <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />

@@ -13,11 +13,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}" />
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
@@ -69,50 +68,43 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <RepeatButton
-                    x:Name="PART_StartRegion"
-                    Grid.Column="0"
-                    Height="{TemplateBinding TrackThickness}"
-                    Background="{TemplateBinding InactiveTrackColor}"
-                    Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
-                <Thumb
-                    x:Name="PART_StartThumb"
-                    Grid.Column="1"
-                    Panel.ZIndex="99"
-                    Style="{StaticResource RangeSlider.ThumbStyle}">
+                <RepeatButton x:Name="PART_StartRegion"
+                              Grid.Column="0"
+                              Height="{TemplateBinding TrackThickness}"
+                              Background="{TemplateBinding InactiveTrackColor}"
+                              Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
+                <Thumb x:Name="PART_StartThumb"
+                       Grid.Column="1"
+                       Panel.ZIndex="99"
+                       Style="{StaticResource RangeSlider.ThumbStyle}">
                     <Thumb.ToolTip>
-                        <ToolTip
-                            x:Name="StartThumbToolTip"
-                            Content="{TemplateBinding LowerValue}"
-                            Placement="Top"
-                            PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
+                        <ToolTip x:Name="StartThumbToolTip"
+                                 Content="{TemplateBinding LowerValue}"
+                                 Placement="Top"
+                                 PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
                     </Thumb.ToolTip>
                 </Thumb>
-                <RepeatButton
-                    x:Name="PART_MiddleRegion"
-                    Grid.Column="2"
-                    Height="{TemplateBinding TrackThickness}"
-                    Background="{TemplateBinding ActiveTrackColor}"
-                    Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
-                <Thumb
-                    x:Name="PART_EndThumb"
-                    Grid.Column="3"
-                    Panel.ZIndex="99"
-                    Style="{StaticResource RangeSlider.ThumbStyle}">
+                <RepeatButton x:Name="PART_MiddleRegion"
+                              Grid.Column="2"
+                              Height="{TemplateBinding TrackThickness}"
+                              Background="{TemplateBinding ActiveTrackColor}"
+                              Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
+                <Thumb x:Name="PART_EndThumb"
+                       Grid.Column="3"
+                       Panel.ZIndex="99"
+                       Style="{StaticResource RangeSlider.ThumbStyle}">
                     <Thumb.ToolTip>
-                        <ToolTip
-                            x:Name="EndThumbToolTip"
-                            Content="{TemplateBinding UpperValue}"
-                            Placement="Top"
-                            PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
+                        <ToolTip x:Name="EndThumbToolTip"
+                                 Content="{TemplateBinding UpperValue}"
+                                 Placement="Top"
+                                 PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
                     </Thumb.ToolTip>
                 </Thumb>
-                <RepeatButton
-                    x:Name="PART_EndRegion"
-                    Grid.Column="4"
-                    Height="{TemplateBinding TrackThickness}"
-                    Background="{TemplateBinding InactiveTrackColor}"
-                    Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
+                <RepeatButton x:Name="PART_EndRegion"
+                              Grid.Column="4"
+                              Height="{TemplateBinding TrackThickness}"
+                              Background="{TemplateBinding InactiveTrackColor}"
+                              Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
             </Grid>
             <!--<TickBar x:Name="BottomTickBar"
                          Grid.Row="2"
@@ -138,19 +130,17 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <RepeatButton
-                    x:Name="PART_StartRegion"
-                    Grid.Row="0"
-                    Background="{TemplateBinding Background}"
-                    Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
+                <RepeatButton x:Name="PART_StartRegion"
+                              Grid.Row="0"
+                              Background="{TemplateBinding Background}"
+                              Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
                 <Thumb x:Name="PART_StartThumb" Grid.Row="1" Style="{StaticResource RangeSlider.ThumbStyle}" />
                 <RepeatButton x:Name="PART_MiddleRegion" Grid.Row="2" Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
                 <Thumb x:Name="PART_EndThumb" Grid.Row="3" Style="{StaticResource RangeSlider.ThumbStyle}" />
-                <RepeatButton
-                    x:Name="PART_EndRegion"
-                    Grid.Row="4"
-                    Background="{TemplateBinding Background}"
-                    Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
+                <RepeatButton x:Name="PART_EndRegion"
+                              Grid.Row="4"
+                              Background="{TemplateBinding Background}"
+                              Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
             </Grid>
             <!--<TickBar x:Name="BottomTickBar"
                      Grid.Column="2"

@@ -4,9 +4,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="GroupBox.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type GroupBox}">
+    <Style x:Key="GroupBox.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type GroupBox}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
@@ -30,13 +28,9 @@
                                   Grid.Row="0"
                                   Height="{DynamicResource Height.Horizontal.Header}"
                                   Background="{DynamicResource Background.Header}">
-                                <ContentPresenter HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Center"
-                                                  ContentSource="Header" />
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" ContentSource="Header" />
                             </Grid>
-                            <Rectangle Grid.Row="1"
-                                       Height="1"
-                                       Fill="{TemplateBinding BorderBrush}" />
+                            <Rectangle Grid.Row="1" Height="1" Fill="{TemplateBinding BorderBrush}" />
                             <ContentPresenter Grid.Row="2"
                                               Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"

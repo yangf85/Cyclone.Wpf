@@ -19,9 +19,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}" />
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -48,9 +46,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}" />
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -128,16 +124,12 @@
                            Foreground="{TemplateBinding TitleBrush}" />
                     <ContentPresenter Grid.Column="2" Content="{TemplateBinding FunctionalZone}" />
 
-                    <UniformGrid Grid.Column="3"
-                                 Rows="1"
-                                 WindowChrome.IsHitTestVisibleInChrome="True">
+                    <UniformGrid Grid.Column="3" Rows="1" WindowChrome.IsHitTestVisibleInChrome="True">
                         <ToggleButton x:Name="PART_TopmostButton"
                                       Command="{x:Static ctl:CaptionButtonCommand.TopmostCommand}"
                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"
                                       Style="{StaticResource Window.TopmostButtonStyle}" />
-                        <Button x:Name="PART_MinimizeButton"
-                                Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}"
-                                Style="{StaticResource Window.CaptionButtonStyle}">
+                        <Button x:Name="PART_MinimizeButton" Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
                             <Path Width="16"
                                   Height="16"
                                   Data="M 0,5 L 8,5"
@@ -145,9 +137,7 @@
                                   Stroke="White"
                                   StrokeThickness="1" />
                         </Button>
-                        <Button x:Name="PART_MaximizeButton"
-                                Command="{x:Static ctl:CaptionButtonCommand.MaximizeCommand}"
-                                Style="{StaticResource Window.CaptionButtonStyle}">
+                        <Button x:Name="PART_MaximizeButton" Command="{x:Static ctl:CaptionButtonCommand.MaximizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
                             <Path Width="16"
                                   Height="16"
                                   Data="M 1,1 L 1,7 L 7,7 L 7,1 Z"
@@ -166,9 +156,7 @@
                                   Stroke="White"
                                   StrokeThickness="1" />
                         </Button>
-                        <Button x:Name="PART_CloseButton"
-                                Command="{x:Static ctl:CaptionButtonCommand.CloseCommand}"
-                                Style="{StaticResource Window.CaptionCloseButtonStyle}">
+                        <Button x:Name="PART_CloseButton" Command="{x:Static ctl:CaptionButtonCommand.CloseCommand}" Style="{StaticResource Window.CaptionCloseButtonStyle}">
                             <Path Width="18"
                                   Height="18"
                                   Data="M 0,0 L 8,8 M 8,0 L 0,8"
@@ -181,9 +169,7 @@
                 <!--  ClientArea  -->
                 <AdornerDecorator Grid.Row="1" KeyboardNavigation.IsTabStop="False">
                     <Grid Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="MainContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          KeyboardNavigation.TabNavigation="Cycle" />
+                        <ContentPresenter x:Name="MainContentPresenter" Content="{TemplateBinding Content}" KeyboardNavigation.TabNavigation="Cycle" />
                     </Grid>
                 </AdornerDecorator>
                 <ResizeGrip x:Name="ResizeGrip"

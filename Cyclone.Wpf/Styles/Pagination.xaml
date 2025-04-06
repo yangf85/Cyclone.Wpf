@@ -11,17 +11,11 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="Pagination.PrevNextRepeatButtonStyle"
-           BasedOn="{StaticResource RepeatButton.Style.Basic}"
-           TargetType="RepeatButton" />
+    <Style x:Key="Pagination.PrevNextRepeatButtonStyle" BasedOn="{StaticResource RepeatButton.Style.Basic}" TargetType="RepeatButton" />
 
-    <Style x:Key="Pagination.GotoPageButtonStyle"
-           BasedOn="{StaticResource Button.Style.Basic}"
-           TargetType="Button" />
+    <Style x:Key="Pagination.GotoPageButtonStyle" BasedOn="{StaticResource Button.Style.Basic}" TargetType="Button" />
 
-    <Style x:Key="Pagination.GotoPageNumberBoxStyle"
-           BasedOn="{StaticResource NumberBox.Style.Basic}"
-           TargetType="ctl:NumberBox" />
+    <Style x:Key="Pagination.GotoPageNumberBoxStyle" BasedOn="{StaticResource NumberBox.Style.Basic}" TargetType="ctl:NumberBox" />
 
     <Style x:Key="Pagination.SelectListBoxItemStyleKey" TargetType="{x:Type ListBoxItem}">
         <Setter Property="Width" Value="{Binding Path=ActualHeight, Converter={x:Static conv:MathConverter.Scale}, ConverterParameter=1.3, RelativeSource={RelativeSource Mode=Self}}" />
@@ -76,9 +70,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             SnapsToDevicePixels="True">
-                        <ScrollViewer Padding="{TemplateBinding Padding}"
-                                      Background="Transparent"
-                                      Focusable="False">
+                        <ScrollViewer Padding="{TemplateBinding Padding}" Background="Transparent" Focusable="False">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Border>
@@ -111,13 +103,9 @@
                            Grid.Column="0"
                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                            Text="{Binding ItemCount, StringFormat=共 {0} 条, RelativeSource={RelativeSource TemplatedParent}}" />
-                <StackPanel Grid.Column="1"
-                            Margin="10,0,5,0"
-                            Orientation="Horizontal">
+                <StackPanel Grid.Column="1" Margin="10,0,5,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="每页 " />
-                    <ComboBox x:Name="PART_PerpageCountComboBox"
-                              MinWidth="80"
-                              SelectedValue="{Binding Path=PerpageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    <ComboBox x:Name="PART_PerpageCountComboBox" MinWidth="80" SelectedValue="{Binding Path=PerpageCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                     <TextBlock VerticalAlignment="Center" Text=" 条" />
                 </StackPanel>
                 <StackPanel Grid.Column="2"
@@ -168,9 +156,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
-                    <TextBlock Margin="5,0"
-                               VerticalAlignment="Center"
-                               Text="前往" />
+                    <TextBlock Margin="5,0" VerticalAlignment="Center" Text="前往" />
                     <ctl:NumberBox x:Name="PART_GotoPageNumberBox"
                                    MinWidth="75"
                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -180,9 +166,7 @@
                                    Minimum="1"
                                    NumberStyle="Integer"
                                    Value="{Binding Path=PageIndex, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                    <TextBlock Margin="5,0"
-                               VerticalAlignment="Center"
-                               Text="页" />
+                    <TextBlock Margin="5,0" VerticalAlignment="Center" Text="页" />
                     <Button x:Name="PART_GotoPageButton"
                             MinWidth="75"
                             Margin="5,0,0,0"
@@ -202,9 +186,7 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="Pagination.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type ctl:Pagination}">
+    <Style x:Key="Pagination.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ctl:Pagination}">
         <Setter Property="Template" Value="{StaticResource Pagination.ControlTemplate.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />

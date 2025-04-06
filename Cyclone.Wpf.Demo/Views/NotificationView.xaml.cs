@@ -30,38 +30,32 @@ namespace Cyclone.Wpf.Demo.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var instance = Cyclone.Wpf.Controls.NotificationService.Instance;
+            instance.SetOwner(App.Current.MainWindow);
+
             var button = (Button)sender;
             switch (button.Content)
             {
-                case "Success":
-                    NotificationService.Instance.ShowSuccess("成功");
+                case "Default":
+                    instance.Show($"通知消息");
                     break;
 
-                case "Info":
-                    NotificationService.Instance.ShowInfo("信息");
+                case "Success":
+                    instance.Success("成功");
+                    break;
+
+                case "Infomation":
+                    instance.Information("信息");
                     break;
 
                 case "Warning":
-                    NotificationService.Instance.ShowWarning("警告");
+                    instance.Warning("警告");
                     break;
 
                 case "Error":
-                    NotificationService.Instance.ShowError("错误");
-                    break;
-
-                case "Custom":
-
+                    instance.Error("错误");
                     break;
             }
-        }
-
-        private int index;
-
-        private void Button_Custom(object sender, RoutedEventArgs e)
-        {
-            var instance = Cyclone.Wpf.Controls.NotificationService.Instance;
-            instance.SetOwner(App.Current.MainWindow);
-            instance.Information($"通知消息   {index++}");
         }
     }
 }

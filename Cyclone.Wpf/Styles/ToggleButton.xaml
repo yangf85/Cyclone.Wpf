@@ -4,9 +4,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="AccentToggleButton"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type ToggleButton}">
+    <Style x:Key="AccentToggleButton" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="{StaticResource AccentBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -61,9 +59,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ToggleButton.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="{x:Type ToggleButton}">
+    <Style x:Key="ToggleButton.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
