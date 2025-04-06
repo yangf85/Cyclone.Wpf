@@ -55,10 +55,13 @@ namespace Cyclone.Wpf.Demo.Views
             }
         }
 
+        private int index;
+
         private void Button_Custom(object sender, RoutedEventArgs e)
         {
-            var window = new NotificationWindow();
-            window.Show();
+            var instance = Cyclone.Wpf.Controls.NotificationService.Instance;
+            instance.SetOwner(App.Current.MainWindow);
+            instance.Information($"通知消息   {index++}");
         }
     }
 }

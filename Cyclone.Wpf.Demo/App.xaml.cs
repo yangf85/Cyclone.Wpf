@@ -10,5 +10,4 @@ namespace Cyclone.Wpf.Demo
     public partial class App : Application
     {
     }
-
 }

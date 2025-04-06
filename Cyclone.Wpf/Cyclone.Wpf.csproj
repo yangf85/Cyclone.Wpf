@@ -4,7 +4,7 @@
 	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-	  <LangVersion>13.0</LangVersion>
+	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyVersion>1.25.4.35</AssemblyVersion>
     <FileVersion>1.25.4.35</FileVersion>
@@ -17,6 +17,8 @@
 	  <PackageOutputPath>E:\YangF\Code\Nugets</PackageOutputPath>
 
 	  <Version>$(AssemblyVersion)</Version>
+
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

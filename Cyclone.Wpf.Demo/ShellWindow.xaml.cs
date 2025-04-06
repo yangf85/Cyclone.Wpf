@@ -1,5 +1,6 @@
 ﻿using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.ViewModels;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,5 +23,12 @@ public partial class ShellWindow : AdvancedWindow
     {
         InitializeComponent();
         DataContext = new ShellWindowViewModel();
+        Loaded += ShellWindow_Loaded;
+    }
+
+    private void ShellWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        Debug.WriteLine($"ShellWindow Top:{Top} \n Left:{Left} \n Bottom:{Top + ActualHeight} \n Right:{Left + ActualWidth}");
+        Debug.WriteLine($"ShellWindow Width:{ActualWidth} \n Height:{ActualHeight} ");
     }
 }

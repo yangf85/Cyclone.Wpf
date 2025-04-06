@@ -68,18 +68,12 @@
                     <Setter Property="Opacity" Value="{StaticResource ParticleOpacity}" />
                 </Style>
             </Grid.Resources>
-            <Canvas
-                Width="1"
-                Height="1"
-                Margin="0,0,0,0">
+            <Canvas Width="1" Height="1" Margin="0,0,0,0">
                 <Canvas.Triggers>
                     <EventTrigger RoutedEvent="Canvas.Loaded">
                         <EventTrigger.Actions>
                             <BeginStoryboard>
-                                <Storyboard
-                                    BeginTime="{StaticResource StoryBoardBeginTimeP0}"
-                                    RepeatBehavior="Forever"
-                                    Duration="{StaticResource StoryBoardDuration}">
+                                <Storyboard BeginTime="{StaticResource StoryBoardBeginTimeP0}" RepeatBehavior="Forever" Duration="{StaticResource StoryBoardDuration}">
                                     <DoubleAnimation
                                         BeginTime="{StaticResource ParticleBeginTime1}"
                                         Storyboard.TargetName="p0"
@@ -104,10 +98,7 @@
                                 </Storyboard>
                             </BeginStoryboard>
                             <BeginStoryboard>
-                                <Storyboard
-                                    BeginTime="{StaticResource StoryBoardBeginTimeP1}"
-                                    RepeatBehavior="Forever"
-                                    Duration="{StaticResource StoryBoardDuration}">
+                                <Storyboard BeginTime="{StaticResource StoryBoardBeginTimeP1}" RepeatBehavior="Forever" Duration="{StaticResource StoryBoardDuration}">
 
                                     <DoubleAnimation
                                         BeginTime="{StaticResource ParticleBeginTime1}"
@@ -133,10 +124,7 @@
                                 </Storyboard>
                             </BeginStoryboard>
                             <BeginStoryboard>
-                                <Storyboard
-                                    BeginTime="{StaticResource StoryBoardBeginTimeP2}"
-                                    RepeatBehavior="Forever"
-                                    Duration="{StaticResource StoryBoardDuration}">
+                                <Storyboard BeginTime="{StaticResource StoryBoardBeginTimeP2}" RepeatBehavior="Forever" Duration="{StaticResource StoryBoardDuration}">
 
                                     <DoubleAnimation
                                         BeginTime="{StaticResource ParticleBeginTime1}"
@@ -163,10 +151,7 @@
                             </BeginStoryboard>
 
                             <BeginStoryboard>
-                                <Storyboard
-                                    BeginTime="{StaticResource StoryBoardBeginTimeP3}"
-                                    RepeatBehavior="Forever"
-                                    Duration="{StaticResource StoryBoardDuration}">
+                                <Storyboard BeginTime="{StaticResource StoryBoardBeginTimeP3}" RepeatBehavior="Forever" Duration="{StaticResource StoryBoardDuration}">
 
                                     <DoubleAnimation
                                         BeginTime="{StaticResource ParticleBeginTime1}"
@@ -193,10 +178,7 @@
                             </BeginStoryboard>
 
                             <BeginStoryboard>
-                                <Storyboard
-                                    BeginTime="{StaticResource StoryBoardBeginTimeP4}"
-                                    RepeatBehavior="Forever"
-                                    Duration="{StaticResource StoryBoardDuration}">
+                                <Storyboard BeginTime="{StaticResource StoryBoardBeginTimeP4}" RepeatBehavior="Forever" Duration="{StaticResource StoryBoardDuration}">
 
                                     <DoubleAnimation
                                         BeginTime="{StaticResource ParticleBeginTime1}"
@@ -224,10 +206,7 @@
                         </EventTrigger.Actions>
                     </EventTrigger>
                 </Canvas.Triggers>
-                <Border
-                    x:Name="p0"
-                    Background="{StaticResource ParticleBackgroundColor}"
-                    Opacity="{StaticResource ParticleOpacity}">
+                <Border x:Name="p0" Background="{StaticResource ParticleBackgroundColor}" Opacity="{StaticResource ParticleOpacity}">
                     <Border.RenderTransform>
                         <RotateTransform />
                     </Border.RenderTransform>
@@ -243,10 +222,7 @@
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </Border>
-                <Border
-                    x:Name="p1"
-                    Background="{StaticResource ParticleBackgroundColor}"
-                    Opacity="{StaticResource ParticleOpacity}">
+                <Border x:Name="p1" Background="{StaticResource ParticleBackgroundColor}" Opacity="{StaticResource ParticleOpacity}">
                     <Border.RenderTransform>
                         <RotateTransform />
                     </Border.RenderTransform>
@@ -262,10 +238,7 @@
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </Border>
-                <Border
-                    x:Name="p2"
-                    Background="{StaticResource ParticleBackgroundColor}"
-                    Opacity="{StaticResource ParticleOpacity}">
+                <Border x:Name="p2" Background="{StaticResource ParticleBackgroundColor}" Opacity="{StaticResource ParticleOpacity}">
                     <Border.RenderTransform>
                         <RotateTransform />
                     </Border.RenderTransform>
@@ -281,10 +254,7 @@
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </Border>
-                <Border
-                    x:Name="p3"
-                    Background="{StaticResource ParticleBackgroundColor}"
-                    Opacity="{StaticResource ParticleOpacity}">
+                <Border x:Name="p3" Background="{StaticResource ParticleBackgroundColor}" Opacity="{StaticResource ParticleOpacity}">
                     <Border.RenderTransform>
                         <RotateTransform />
                     </Border.RenderTransform>
@@ -300,10 +270,7 @@
                         </Ellipse.RenderTransform>
                     </Ellipse>
                 </Border>
-                <Border
-                    x:Name="p4"
-                    Background="{StaticResource ParticleBackgroundColor}"
-                    Opacity="{StaticResource ParticleOpacity}">
+                <Border x:Name="p4" Background="{StaticResource ParticleBackgroundColor}" Opacity="{StaticResource ParticleOpacity}">
                     <Border.RenderTransform>
                         <RotateTransform />
                     </Border.RenderTransform>
