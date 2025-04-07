@@ -32,8 +32,4 @@
     <Folder Include="Controls\Card\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ToastNotifications.Net" Version="2.6.0" />
-  </ItemGroup>
-
 </Project>

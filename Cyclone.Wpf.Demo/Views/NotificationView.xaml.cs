@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NotificationService = Cyclone.Wpf.Demo.ViewModels.NotificationService;
 
 namespace Cyclone.Wpf.Demo.Views
 {

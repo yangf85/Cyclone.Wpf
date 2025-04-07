@@ -1,8 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
-                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -67,13 +68,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <Path x:Name="IndicatorTopmost"
-                              Width="16"
-                              Height="16"
-                              Data="M405.333333 430.933333l136.533334-136.533333-29.866667-29.866667L605.866667 170.666667l273.066666 273.066666-89.6 89.6-29.866666-29.866666-140.8 136.533333 59.733333 59.733333-89.6 89.6L256 460.8l89.6-89.6 59.733333 59.733333z m-89.6 29.866667l273.066667 273.066667 29.866667-29.866667-59.733334-64 200.533334-200.533333 29.866666 29.866666 29.866667-29.866666-209.066667-209.066667-29.866666 29.866667 29.866666 29.866666-200.533333 200.533334-59.733333-59.733334-34.133334 29.866667z m55.466667 192l29.866667 29.866667-200.533334 200.533333-29.866666-34.133333 200.533333-196.266667z"
-                              Fill="White"
-                              Stretch="Uniform"
-                              StrokeThickness="0" />
+                        <Path
+                            x:Name="IndicatorTopmost"
+                            Width="16"
+                            Height="16"
+                            Data="M405.333333 430.933333l136.533334-136.533333-29.866667-29.866667L605.866667 170.666667l273.066666 273.066666-89.6 89.6-29.866666-29.866666-140.8 136.533333 59.733333 59.733333-89.6 89.6L256 460.8l89.6-89.6 59.733333 59.733333z m-89.6 29.866667l273.066667 273.066667 29.866667-29.866667-59.733334-64 200.533334-200.533333 29.866666 29.866666 29.866667-29.866666-209.066667-209.066667-29.866666 29.866667 29.866666 29.866666-200.533333 200.533334-59.733333-59.733334-34.133334 29.866667z m55.466667 192l29.866667 29.866667-200.533334 200.533333-29.866666-34.133333 200.533333-196.266667z"
+                            Fill="White"
+                            Stretch="Uniform"
+                            StrokeThickness="0" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
@@ -89,12 +91,13 @@
     </Style>
 
     <ControlTemplate x:Key="BasicWindowControlTemplate" TargetType="ctl:AdvancedWindow">
-        <Border x:Name="RootBorder"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                SnapsToDevicePixels="True"
-                UseLayoutRounding="True">
+        <Border
+            x:Name="RootBorder"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True"
+            UseLayoutRounding="True">
             <Grid x:Name="LayoutRoot" Background="{TemplateBinding Background}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -102,67 +105,76 @@
                 </Grid.RowDefinitions>
                 <!--  Caption  -->
 
-                <Grid x:Name="RootGrid"
-                      Height="{TemplateBinding CaptionHeight}"
-                      Background="{TemplateBinding CaptionBackground}"
-                      SnapsToDevicePixels="True">
+                <Grid
+                    x:Name="RootGrid"
+                    Height="{TemplateBinding CaptionHeight}"
+                    Background="{TemplateBinding CaptionBackground}"
+                    SnapsToDevicePixels="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter Grid.Column="0"
-                                      Margin="5,0,0,0"
-                                      VerticalAlignment="Center"
-                                      Content="{TemplateBinding Icon}" />
-                    <Label Grid.Column="1"
-                           VerticalAlignment="Center"
-                           Content="{TemplateBinding Title}"
-                           FontSize="15"
-                           FontWeight="Regular"
-                           Foreground="{TemplateBinding TitleBrush}" />
+                    <ContentPresenter
+                        Grid.Column="0"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="{TemplateBinding Icon}" />
+                    <Label
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Content="{TemplateBinding Title}"
+                        FontSize="15"
+                        FontWeight="Regular"
+                        Foreground="{TemplateBinding TitleBrush}" />
                     <ContentPresenter Grid.Column="2" Content="{TemplateBinding FunctionalZone}" />
 
                     <UniformGrid Grid.Column="3" Rows="1" WindowChrome.IsHitTestVisibleInChrome="True">
-                        <ToggleButton x:Name="PART_TopmostButton"
-                                      Command="{x:Static ctl:CaptionButtonCommand.TopmostCommand}"
-                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"
-                                      Style="{StaticResource Window.TopmostButtonStyle}" />
+                        <ToggleButton
+                            x:Name="PART_TopmostButton"
+                            Command="{x:Static ctl:CaptionButtonCommand.TopmostCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"
+                            Style="{StaticResource Window.TopmostButtonStyle}" />
                         <Button x:Name="PART_MinimizeButton" Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
-                            <Path Width="16"
-                                  Height="16"
-                                  Data="M 0,5 L 8,5"
-                                  Stretch="Uniform"
-                                  Stroke="White"
-                                  StrokeThickness="1" />
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="M 0,5 L 8,5"
+                                Stretch="Uniform"
+                                Stroke="White"
+                                StrokeThickness="1" />
                         </Button>
                         <Button x:Name="PART_MaximizeButton" Command="{x:Static ctl:CaptionButtonCommand.MaximizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
-                            <Path Width="16"
-                                  Height="16"
-                                  Data="M 1,1 L 1,7 L 7,7 L 7,1 Z"
-                                  Stretch="Uniform"
-                                  Stroke="White"
-                                  StrokeThickness="1" />
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="M 1,1 L 1,7 L 7,7 L 7,1 Z"
+                                Stretch="Uniform"
+                                Stroke="White"
+                                StrokeThickness="1" />
                         </Button>
-                        <Button x:Name="PART_RestoreButton"
-                                Command="{x:Static ctl:CaptionButtonCommand.RestoreCommand}"
-                                Style="{StaticResource Window.CaptionButtonStyle}"
-                                Visibility="Collapsed">
-                            <Path Width="16"
-                                  Height="16"
-                                  Data="M 1,3 L 1,9 L 7,9 L 7,3 Z M 3,1 L 9,1 L 9,7 L 7,7 M 3,1 L 3,3 L 7,3"
-                                  Stretch="Uniform"
-                                  Stroke="White"
-                                  StrokeThickness="1" />
+                        <Button
+                            x:Name="PART_RestoreButton"
+                            Command="{x:Static ctl:CaptionButtonCommand.RestoreCommand}"
+                            Style="{StaticResource Window.CaptionButtonStyle}"
+                            Visibility="Collapsed">
+                            <Path
+                                Width="16"
+                                Height="16"
+                                Data="M 1,3 L 1,9 L 7,9 L 7,3 Z M 3,1 L 9,1 L 9,7 L 7,7 M 3,1 L 3,3 L 7,3"
+                                Stretch="Uniform"
+                                Stroke="White"
+                                StrokeThickness="1" />
                         </Button>
                         <Button x:Name="PART_CloseButton" Command="{x:Static ctl:CaptionButtonCommand.CloseCommand}" Style="{StaticResource Window.CaptionCloseButtonStyle}">
-                            <Path Width="18"
-                                  Height="18"
-                                  Data="M 0,0 L 8,8 M 8,0 L 0,8"
-                                  Stretch="Uniform"
-                                  Stroke="White"
-                                  StrokeThickness="1" />
+                            <Path
+                                Width="18"
+                                Height="18"
+                                Data="M 0,0 L 8,8 M 8,0 L 0,8"
+                                Stretch="Uniform"
+                                Stroke="White"
+                                StrokeThickness="1" />
                         </Button>
                     </UniformGrid>
                 </Grid>
@@ -172,13 +184,14 @@
                         <ContentPresenter x:Name="MainContentPresenter" Content="{TemplateBinding Content}" KeyboardNavigation.TabNavigation="Cycle" />
                     </Grid>
                 </AdornerDecorator>
-                <ResizeGrip x:Name="ResizeGrip"
-                            Grid.Row="1"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            IsTabStop="False"
-                            Visibility="Hidden"
-                            WindowChrome.ResizeGripDirection="BottomRight" />
+                <ResizeGrip
+                    x:Name="ResizeGrip"
+                    Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    IsTabStop="False"
+                    Visibility="Hidden"
+                    WindowChrome.ResizeGripDirection="BottomRight" />
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
@@ -232,10 +245,11 @@
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <WindowChrome GlassFrameThickness="-1"
-                              NonClientFrameEdges="None"
-                              ResizeBorderThickness="4"
-                              UseAeroCaptionButtons="False" />
+                <WindowChrome
+                    GlassFrameThickness="-1"
+                    NonClientFrameEdges="None"
+                    ResizeBorderThickness="4"
+                    UseAeroCaptionButtons="False" />
             </Setter.Value>
         </Setter>
     </Style>

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Cyclone.Wpf.Demo.Views
         public RangeView()
         {
             InitializeComponent();
-            DataContext= new RangeViewModel();
+            DataContext = new RangeViewModel();
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +54,7 @@ namespace Cyclone.Wpf.Demo.Views
         [RelayCommand]
         void ShowValue()
         {
-            NotificationService.Instance.ShowInfo($"当前值：{Value}");
+            NotificationService.Instance.Show($"当前值：{Value}");
         }
     }
 }

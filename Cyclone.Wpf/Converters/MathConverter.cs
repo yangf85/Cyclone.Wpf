@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,4 +27,7 @@ public class MathConverter
 
     public static FuncValueConverter<double, double, double> Division { get; } =
         new((number, div) => number / div);
+
+    public static FuncValueConverter<IEnumerable, IEnumerable> ObjectsToIndexes { get; } =
+        new(objects => objects.OfType<object>().Select((i, j) => j));
 }

@@ -6,10 +6,11 @@
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="RadioButtonGroup.ControlTemplate.Basic" TargetType="ctl:RadioButtonGroup">
-        <Border x:Name="RootBorder"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}">
+        <Border
+            x:Name="RootBorder"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}">
             <ItemsPresenter />
         </Border>
     </ControlTemplate>

@@ -13,6 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\carousel1.jpeg" />
+    <None Remove="Assets\carousel2.jpeg" />
+    <None Remove="Assets\carousel3.jpeg" />
+    <None Remove="Assets\carousel4.jpeg" />
+    <None Remove="Assets\Logo.png" />
     <None Remove="iconfont.ttf" />
   </ItemGroup>
 
@@ -28,9 +33,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\carousel1.jpeg" />
+    <Resource Include="Assets\carousel2.jpeg" />
+    <Resource Include="Assets\carousel3.jpeg" />
+    <Resource Include="Assets\carousel4.jpeg" />
     <Resource Include="Assets\iconfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Logo.png" />
   </ItemGroup>
 
 </Project>

@@ -47,6 +47,7 @@ public partial class MainViewModel : ObservableObject
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
+            "Carousel" => new CarouselView(),
             _ => new object(),
         };
     }
@@ -130,6 +131,11 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="DataGrid",
                     Icon= "\xe751",
                 },
+                new SideMenuItemViewModel()
+                {
+                    Header="Carousel",
+                    Icon= "\xe751",
+                },
             ]
         });
         Items.Add(new SideMenuItemViewModel()
@@ -206,6 +212,29 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header="Panel",
                     Icon= "\xe614",
+                    Items =
+                    [
+                        new SideMenuItemViewModel()
+                        {
+                            Header="Card",
+                            Icon= "\xe614",
+                        },
+                        new SideMenuItemViewModel()
+                        {
+                            Header="Dialog",
+                            Icon= "\xe614",
+                        },
+                        new SideMenuItemViewModel()
+                        {
+                            Header="Popover",
+                            Icon= "\xe614",
+                        },
+                        new SideMenuItemViewModel()
+                        {
+                            Header="Tooltip",
+                            Icon= "\xe614",
+                        },
+                    ]
                 },
 
             ]

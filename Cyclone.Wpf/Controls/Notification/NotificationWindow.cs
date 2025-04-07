@@ -8,15 +8,6 @@ using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
-/// <summary>
-/// 动画方向枚举
-/// </summary>
-public enum AnimationDirection
-{
-    FromLeft,
-    FromRight,
-}
-
 internal class NotificationWindow : Window
 {
     #region DisplayDuration
@@ -76,6 +67,26 @@ internal class NotificationWindow : Window
             new PropertyMetadata(AnimationDirection.FromRight));
 
     #endregion AnimationDirection
+
+    #region CloseCommand
+
+    public static RoutedCommand CloseWindowCommand { get; private set; } =
+        new RoutedCommand("CloseWindow", typeof(NotificationWindow));
+
+    private void ExecuteCloseWindow(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (sender is NotificationWindow window)
+        {
+            window.CloseWithAnimation();
+        }
+    }
+
+    private void CanExecuteCloseWindow(object sender, CanExecuteRoutedEventArgs e)
+    {
+        e.CanExecute = true;
+    }
+
+    #endregion CloseCommand
 
     private DispatcherTimer _autoCloseTimer;
     private bool _isClosing = false;
@@ -351,62 +362,4 @@ internal class NotificationWindow : Window
     }
 
     #endregion Override
-
-    #region CloseCommand
-
-    public static RoutedCommand CloseWindowCommand { get; private set; } =
-        new RoutedCommand("CloseWindow", typeof(NotificationWindow));
-
-    private void ExecuteCloseWindow(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (sender is NotificationWindow window)
-        {
-            window.CloseWithAnimation();
-        }
-    }
-
-    private void CanExecuteCloseWindow(object sender, CanExecuteRoutedEventArgs e)
-    {
-        e.CanExecute = true;
-    }
-
-    #endregion CloseCommand
-}
-
-internal static class SystemMenuManager
-{
-    [DllImport("user32.dll", EntryPoint = "GetSystemMenu")]
-    private static extern IntPtr GetSystemMenu(IntPtr hwnd, int bRevert);
-
-    [DllImport("user32.dll", EntryPoint = "RemoveMenu")]
-    private static extern int RemoveMenu(IntPtr hMenu, uint uPosition, uint uFlags);
-
-    [DllImport("user32.dll", EntryPoint = "DrawMenuBar")]
-    private static extern IntPtr DrawMenuBar(IntPtr hwnd);
-
-    [DllImport("user32.dll", EntryPoint = "GetMenuItemCount")]
-    private static extern int GetMenuItemCount(IntPtr hMenu);
-
-    private const uint MF_BYPOSITION = 0x0400;
-
-    public static void DisableCloseMenuItem(Window window)
-    {
-        if (window == null) return;
-
-        window.SourceInitialized += (s, e) =>
-        {
-            var helper = new WindowInteropHelper(window);
-            IntPtr hwnd = helper.Handle;
-            IntPtr hMenu = GetSystemMenu(hwnd, 0);
-
-            // 移除所有系统菜单项
-            int itemCount = GetMenuItemCount(hMenu);
-            for (int i = itemCount - 1; i >= 0; i--)
-            {
-                RemoveMenu(hMenu, (uint)i, MF_BYPOSITION);
-            }
-
-            DrawMenuBar(hwnd);
-        };
-    }
 }

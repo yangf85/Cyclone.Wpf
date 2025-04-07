@@ -17,7 +17,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NotificationService = Cyclone.Wpf.Demo.ViewModels.NotificationService;
 
 namespace Cyclone.Wpf.Demo.Views;
 
@@ -46,7 +45,7 @@ public partial class CascadeItemViewModel : ObservableObject
 
     partial void OnCityChanged(City value)
     {
-        NotificationService.Instance.ShowInfo($"选择的城市为：{value}");
+        NotificationService.Instance.Show($"选择的城市为：{value}");
     }
 
     [ObservableProperty]

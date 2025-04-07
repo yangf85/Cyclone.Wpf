@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,19 +8,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Cyclone.Wpf.Controls;
 
-public class SideMenu:ItemsControl
+public class SideMenu : ItemsControl
 {
-
     static SideMenu()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(SideMenu), new FrameworkPropertyMetadata(typeof(SideMenu)));
     }
-   
 
     #region Indent
+
     public double Indent
     {
         get => (double)GetValue(IndentProperty);
@@ -29,11 +31,10 @@ public class SideMenu:ItemsControl
     public static readonly DependencyProperty IndentProperty =
         DependencyProperty.Register(nameof(Indent), typeof(double), typeof(SideMenu), new PropertyMetadata(20d));
 
-    #endregion
-
-
+    #endregion Indent
 
     #region IsCompact
+
     public bool IsCompact
     {
         get => (bool)GetValue(IsCompactProperty);
@@ -41,11 +42,26 @@ public class SideMenu:ItemsControl
     }
 
     public static readonly DependencyProperty IsCompactProperty =
-        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu), new PropertyMetadata(default(bool)));
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu),
+        new PropertyMetadata(false, OnIsCompactChanged));
 
-    #endregion
+    private static void OnIsCompactChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var sideMenu = (SideMenu)d;
+
+        // 如果在设计模式中，直接设置宽度
+        if (DesignerProperties.GetIsInDesignMode(sideMenu))
+        {
+            sideMenu.Width = (bool)e.NewValue ? sideMenu.CollapseWidth : sideMenu.ExpansionWidth;
+        }
+
+        // 注意：实际宽度动画在XAML中通过EventTrigger处理
+    }
+
+    #endregion IsCompact
 
     #region CollapseWidth
+
     public double CollapseWidth
     {
         get => (double)GetValue(CollapseWidthProperty);
@@ -53,12 +69,12 @@ public class SideMenu:ItemsControl
     }
 
     public static readonly DependencyProperty CollapseWidthProperty =
-        DependencyProperty.Register(nameof(CollapseWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(default(double)));
+        DependencyProperty.Register(nameof(CollapseWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(60d));
 
-    #endregion
-
+    #endregion CollapseWidth
 
     #region ExpansionWidth
+
     public double ExpansionWidth
     {
         get => (double)GetValue(ExpansionWidthProperty);
@@ -66,11 +82,12 @@ public class SideMenu:ItemsControl
     }
 
     public static readonly DependencyProperty ExpansionWidthProperty =
-        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(default(double)));
+        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(240d));
 
-    #endregion
+    #endregion ExpansionWidth
 
     #region Header
+
     public object Header
     {
         get => (object)GetValue(HeaderProperty);
@@ -80,10 +97,10 @@ public class SideMenu:ItemsControl
     public static readonly DependencyProperty HeaderProperty =
         DependencyProperty.Register(nameof(Header), typeof(object), typeof(SideMenu), new PropertyMetadata(default(object)));
 
-    #endregion
-
+    #endregion Header
 
     #region Footer
+
     public object Footer
     {
         get => (object)GetValue(FooterProperty);
@@ -93,25 +110,29 @@ public class SideMenu:ItemsControl
     public static readonly DependencyProperty FooterProperty =
         DependencyProperty.Register(nameof(Footer), typeof(object), typeof(SideMenu), new PropertyMetadata(default(object)));
 
-    #endregion
+    #endregion Footer
+
     #region Override
 
-   
     protected override DependencyObject GetContainerForItemOverride()
     {
         return new SideMenuItem();
-         
     }
+
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is SideMenuItem;
     }
 
+    #endregion Override
 
-    #endregion
-
-
-
+    /// <summary>
+    /// 切换紧凑/展开模式
+    /// </summary>
+    public void ToggleCompact()
+    {
+        IsCompact = !IsCompact;
+    }
 
     internal void DeactivateItems()
     {
@@ -141,5 +162,4 @@ public class SideMenu:ItemsControl
             }
         }
     }
-
 }

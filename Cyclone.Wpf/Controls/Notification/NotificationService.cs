@@ -13,84 +13,6 @@ using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
-public class NotificationOption
-{
-    /// <summary>
-    /// 显示持续时间
-    /// </summary>
-    public TimeSpan DisplayDuration
-    {
-        get => field;
-        set
-        {
-            if (value <= TimeSpan.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Duration must be >0");
-            }
-            field = value;
-        }
-    } = TimeSpan.FromMilliseconds(2400);
-
-    /// <summary>
-    /// 位置
-    /// </summary>
-    public Position Position { get; set; } = Position.BottomRight;
-
-    /// <summary>
-    /// X轴偏移量
-    /// </summary>
-    public double OffsetX { get; set; } = 5;
-
-    /// <summary>
-    /// Y轴偏移量
-    /// </summary>
-    public double OffsetY { get; set; } = 5;
-
-    /// <summary>
-    /// 通知之间的间隙
-    /// </summary>
-    public double Spacing { get; set; } = 5;
-
-    /// <summary>
-    /// 最多显示多少个通知
-    /// </summary>
-    public int MaxCount
-    {
-        get => field;
-        set
-        {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "MaxCount must be >0");
-            }
-            field = value;
-        }
-    } = 5;
-
-    /// <summary>
-    /// 通知宽度
-    /// </summary>
-    public double MaxWidth { get; set; } = 240;
-
-    /// <summary>
-    /// 最大高度
-    /// </summary>
-    public double MaxHeight { get; set; } = 75;
-
-    /// <summary>
-    /// 是否显示关闭按钮
-    /// </summary>
-    public bool IsShowCloseButton { get; set; } = true;
-}
-
-public enum Position
-{
-    TopLeft,
-    TopRight,
-    BottomLeft,
-    BottomRight
-}
-
 public interface INotificationService
 {
     void Show(object content, DataTemplate template, string title = null);
@@ -298,13 +220,13 @@ public class NotificationService : INotificationService, IDisposable
 
         switch (_option.Position)
         {
-            case Position.TopLeft:
-            case Position.BottomLeft:
+            case NotificationPosition.TopLeft:
+            case NotificationPosition.BottomLeft:
                 animDirection = AnimationDirection.FromLeft;
                 break;
 
-            case Position.TopRight:
-            case Position.BottomRight:
+            case NotificationPosition.TopRight:
+            case NotificationPosition.BottomRight:
             default:
                 animDirection = AnimationDirection.FromRight;
                 break;
@@ -363,25 +285,25 @@ public class NotificationService : INotificationService, IDisposable
         // 计算基准位置
         switch (_option.Position)
         {
-            case Position.TopLeft:
+            case NotificationPosition.TopLeft:
                 baseLeft = ownerRect.Left + _option.OffsetX;
                 baseTop = ownerRect.Top + _option.OffsetY;
                 isTop = true;
                 break;
 
-            case Position.TopRight:
+            case NotificationPosition.TopRight:
                 baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
                 baseTop = ownerRect.Top + _option.OffsetY;
                 isTop = true;
                 break;
 
-            case Position.BottomLeft:
+            case NotificationPosition.BottomLeft:
                 baseLeft = ownerRect.Left + _option.OffsetX;
                 baseTop = ownerRect.Bottom - _option.OffsetY;
                 isTop = false;
                 break;
 
-            case Position.BottomRight:
+            case NotificationPosition.BottomRight:
                 baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
                 baseTop = ownerRect.Bottom - _option.OffsetY;
                 isTop = false;
@@ -482,44 +404,4 @@ public class NotificationService : INotificationService, IDisposable
     }
 
     #endregion Implementation  IDisposable
-}
-
-/// <summary>
-/// 通知服务扩展方法
-/// </summary>
-public static class NotificationServiceExtension
-{
-    private static ResourceDictionary _dict;
-
-    static NotificationServiceExtension()
-    {
-        _dict = new ResourceDictionary
-        {
-            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute)
-        };
-    }
-
-    public static void Information(this INotificationService self, string message)
-    {
-        var template = _dict["Notification.Information.DataTemplate"] as DataTemplate;
-        self.Show(message, template);
-    }
-
-    public static void Success(this INotificationService service, string message)
-    {
-        var template = _dict["Notification.Success.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
-    }
-
-    public static void Warning(this INotificationService service, string message)
-    {
-        var template = _dict["Notification.Warning.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
-    }
-
-    public static void Error(this INotificationService service, string message)
-    {
-        var template = _dict["Notification.Error.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
-    }
 }

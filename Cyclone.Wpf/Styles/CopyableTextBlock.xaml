@@ -15,22 +15,24 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Path x:Name="CopyedPath"
-                              Grid.Column="0"
-                              Width="14"
-                              Height="14"
-                              Margin="0,0,3,0"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Data="M967.52 97.76C675.68 276.8 464 502.88 368.48 616.16l-233.28-182.88-103.2 83.04 402.72 409.92c69.12-177.6 288.96-524.64 557.28-771.36l-24.48-57.12m0 0z"
-                              Fill="{DynamicResource Icon.Foreground.Focused}"
-                              Stretch="UniformToFill" />
-                        <TextBlock x:Name="PART_TextBlock"
-                                   Grid.Column="1"
-                                   VerticalAlignment="Center"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   Text="{TemplateBinding Text}"
-                                   TextWrapping="{TemplateBinding TextWrapping}" />
+                        <Path
+                            x:Name="CopyedPath"
+                            Grid.Column="0"
+                            Width="14"
+                            Height="14"
+                            Margin="0,0,3,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M967.52 97.76C675.68 276.8 464 502.88 368.48 616.16l-233.28-182.88-103.2 83.04 402.72 409.92c69.12-177.6 288.96-524.64 557.28-771.36l-24.48-57.12m0 0z"
+                            Fill="{DynamicResource Icon.Foreground.Focused}"
+                            Stretch="UniformToFill" />
+                        <TextBlock
+                            x:Name="PART_TextBlock"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Foreground="{TemplateBinding Foreground}"
+                            Text="{TemplateBinding Text}"
+                            TextWrapping="{TemplateBinding TextWrapping}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsCopyed" Value="True">

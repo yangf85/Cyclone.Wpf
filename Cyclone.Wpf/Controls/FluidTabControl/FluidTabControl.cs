@@ -11,6 +11,7 @@ using System.Collections;
 using System.Windows.Media;
 using Cyclone.Wpf.Helpers;
 using System.Windows.Media.Animation;
+using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -276,6 +277,25 @@ public class FluidTabControl : Selector
         }
 
         UpdateItemsContent();
+
+        PreviewMouseWheel += FluidTabControl_PreviewMouseWheel;
+    }
+
+    // 修复在Item区域滚动时，鼠标滚轮事件被拦截的问题
+    private void FluidTabControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (_container != null && !_isScrolling)
+        {
+            // 计算新的垂直偏移
+            double newOffset = _container.VerticalOffset - (e.Delta / 3.0);
+            newOffset = Math.Max(0, Math.Min(newOffset, _container.ScrollableHeight));
+
+            // 滚动到新位置
+            _container.ScrollToVerticalOffset(newOffset);
+
+            // 标记事件为已处理
+            e.Handled = true;
+        }
     }
 
     #endregion Override

@@ -22,6 +22,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/GridView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/DataGrid.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Carousel.xaml" />
 
         <!--  导航与布局容器  -->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TabControl.xaml" />

@@ -11,10 +11,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ContentPresenter Grid.Column="0"
-                              HorizontalAlignment="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                              Content="{TemplateBinding Label}" />
+            <ContentPresenter
+                Grid.Column="0"
+                HorizontalAlignment="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Label}" />
             <ContentPresenter Grid.Column="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
             <ContentPresenter Grid.Column="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding AttachedObject}" />
         </Grid>

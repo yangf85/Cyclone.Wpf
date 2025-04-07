@@ -14,6 +14,7 @@ namespace Cyclone.Wpf.Converters;
 public class LeftMarginMultiplierConverter : BasicConverter
 {
     public double Length { get; set; }
+
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is not TreeViewItem item) return new Thickness(0);

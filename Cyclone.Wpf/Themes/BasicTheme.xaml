@@ -29,6 +29,12 @@
     <SolidColorBrush x:Key="Background.Caption" Color="{StaticResource BlueDarken4}" />
     <SolidColorBrush x:Key="Background.Transition" Color="{StaticResource GrayLighten5}" />
 
+    <SolidColorBrush x:Key="Background.TransparentLight" Color="#33000000" />
+
+    <SolidColorBrush x:Key="Background.TransparentMedium" Color="#66000000" />
+
+    <SolidColorBrush x:Key="Background.TransparentDark" Color="#99000000" />
+
     <SolidColorBrush x:Key="Foreground.Global" Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Foreground.Default" Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Foreground.Active" Color="{StaticResource White}" />

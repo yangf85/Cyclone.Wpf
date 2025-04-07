@@ -118,16 +118,18 @@
                                             </TransformGroup>
                                         </Grid.RenderTransform>
                                         <Border Background="{TemplateBinding Background}">
-                                            <Viewbox Margin="{TemplateBinding Padding}"
-                                                     HorizontalAlignment="Left"
-                                                     SnapsToDevicePixels="True"
-                                                     StretchDirection="DownOnly">
-                                                <TextBlock VerticalAlignment="Center"
-                                                           FontSize="{TemplateBinding FontSize}"
-                                                           Foreground="{DynamicResource Foreground.Invert}"
-                                                           RenderTransformOrigin="0.5,0.5"
-                                                           SnapsToDevicePixels="True"
-                                                           Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, StringFormat={}{0}%}">
+                                            <Viewbox
+                                                Margin="{TemplateBinding Padding}"
+                                                HorizontalAlignment="Left"
+                                                SnapsToDevicePixels="True"
+                                                StretchDirection="DownOnly">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="{TemplateBinding FontSize}"
+                                                    Foreground="{DynamicResource Foreground.Invert}"
+                                                    RenderTransformOrigin="0.5,0.5"
+                                                    SnapsToDevicePixels="True"
+                                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, StringFormat={}{0}%}">
                                                     <TextBlock.RenderTransform>
                                                         <TransformGroup>
                                                             <ScaleTransform ScaleX="-1" ScaleY="1" />

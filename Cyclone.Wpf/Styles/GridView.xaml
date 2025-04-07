@@ -11,24 +11,26 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                     <Grid SnapsToDevicePixels="True">
-                        <Border x:Name="HeaderBorder"
-                                Height="{TemplateBinding Height}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}">
+                        <Border
+                            x:Name="HeaderBorder"
+                            Height="{TemplateBinding Height}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition MaxHeight="7" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Border Grid.RowSpan="2" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter x:Name="HeaderContent"
-                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                      Content="{TemplateBinding Content}"
-                                                      ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                      RecognizesAccessKey="True"
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <ContentPresenter
+                                        x:Name="HeaderContent"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}"
+                                        ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        RecognizesAccessKey="True"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
                             </Grid>
                         </Border>
