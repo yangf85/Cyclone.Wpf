@@ -67,28 +67,13 @@ namespace Cyclone.Wpf.Demo.Views
 
     public partial class ImageViewModel : ObservableObject
     {
-        private string _mainTitle;
+        [ObservableProperty]
+        public partial string MainTitle { get; set; }
 
-        private string _subTitle;
+        [ObservableProperty]
+        public partial string SubTitle { get; set; }
 
-        private string _imagePath;
-
-        public string MainTitle
-        {
-            get => _mainTitle;
-            set => SetProperty(ref _mainTitle, value);
-        }
-
-        public string SubTitle
-        {
-            get => _subTitle;
-            set => SetProperty(ref _subTitle, value);
-        }
-
-        public string ImagePath
-        {
-            get => _imagePath;
-            set => SetProperty(ref _imagePath, value);
-        }
+        [ObservableProperty]
+        public partial string ImagePath { get; set; }
     }
 }

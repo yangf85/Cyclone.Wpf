@@ -20,19 +20,6 @@ public class SideMenu : ItemsControl
         DefaultStyleKeyProperty.OverrideMetadata(typeof(SideMenu), new FrameworkPropertyMetadata(typeof(SideMenu)));
     }
 
-    #region Indent
-
-    public double Indent
-    {
-        get => (double)GetValue(IndentProperty);
-        set => SetValue(IndentProperty, value);
-    }
-
-    public static readonly DependencyProperty IndentProperty =
-        DependencyProperty.Register(nameof(Indent), typeof(double), typeof(SideMenu), new PropertyMetadata(20d));
-
-    #endregion Indent
-
     #region IsCompact
 
     public bool IsCompact
@@ -42,23 +29,22 @@ public class SideMenu : ItemsControl
     }
 
     public static readonly DependencyProperty IsCompactProperty =
-        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu),
-        new PropertyMetadata(false, OnIsCompactChanged));
-
-    private static void OnIsCompactChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var sideMenu = (SideMenu)d;
-
-        // 如果在设计模式中，直接设置宽度
-        if (DesignerProperties.GetIsInDesignMode(sideMenu))
-        {
-            sideMenu.Width = (bool)e.NewValue ? sideMenu.CollapseWidth : sideMenu.ExpansionWidth;
-        }
-
-        // 注意：实际宽度动画在XAML中通过EventTrigger处理
-    }
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu), new PropertyMetadata(false));
 
     #endregion IsCompact
+
+    #region IsShowOpenButton
+
+    public bool IsShowOpenButton
+    {
+        get => (bool)GetValue(IsShowOpenButtonProperty);
+        set => SetValue(IsShowOpenButtonProperty, value);
+    }
+
+    public static readonly DependencyProperty IsShowOpenButtonProperty =
+        DependencyProperty.Register(nameof(IsShowOpenButton), typeof(bool), typeof(SideMenu), new PropertyMetadata(true));
+
+    #endregion IsShowOpenButton
 
     #region CollapseWidth
 
@@ -82,7 +68,7 @@ public class SideMenu : ItemsControl
     }
 
     public static readonly DependencyProperty ExpansionWidthProperty =
-        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(240d));
+        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(180d));
 
     #endregion ExpansionWidth
 
@@ -125,14 +111,6 @@ public class SideMenu : ItemsControl
     }
 
     #endregion Override
-
-    /// <summary>
-    /// 切换紧凑/展开模式
-    /// </summary>
-    public void ToggleCompact()
-    {
-        IsCompact = !IsCompact;
-    }
 
     internal void DeactivateItems()
     {

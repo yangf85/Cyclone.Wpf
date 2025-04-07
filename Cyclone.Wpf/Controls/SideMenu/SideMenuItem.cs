@@ -62,79 +62,6 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
 
     #endregion IsActived
 
-    #region Indent
-
-    private void SideMenuItem_Unloaded(object sender, RoutedEventArgs e)
-    {
-        if (_root != null)
-        {
-            var descriptor = DependencyPropertyDescriptor.FromProperty(SideMenu.IndentProperty, typeof(SideMenu));
-            descriptor.RemoveValueChanged(_root, OnIndentChanged);
-        }
-    }
-
-    private void SideMenuItem_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (_root != null)
-        {
-            var descriptor = DependencyPropertyDescriptor.FromProperty(SideMenu.IndentProperty, typeof(SideMenu));
-            descriptor.AddValueChanged(_root, OnIndentChanged);
-            SetValue(IndentPropertyKey, GetDepth() * _root.Indent);
-        }
-    }
-
-    private void OnIndentChanged(object? sender, EventArgs e)
-    {
-        if (_root != null)
-        {
-            var indent = GetDepth() * _root.Indent;
-            SetValue(IndentPropertyKey, indent);
-        }
-    }
-
-    /// <summary>
-    /// 在视觉树中查找当前元素的上一级（最近的） SideMenuItem 父元素，跳过其他非 SideMenuItem 的容器
-    /// </summary>
-    private static SideMenuItem FindVisualParentSideMenuItem(DependencyObject child)
-    {
-        DependencyObject parent = VisualTreeHelper.GetParent(child);
-        while (parent != null && parent is not SideMenuItem)
-        {
-            parent = VisualTreeHelper.GetParent(parent);
-        }
-        return parent as SideMenuItem;
-    }
-
-    private int GetDepth()
-    {
-        if (_root.IsCompact)
-        {
-            return 0;
-        }
-
-        int depth = 0;
-        DependencyObject current = this;
-        // 每次获取视觉树中最近的 SideMenuItem 父级
-        while ((current = FindVisualParentSideMenuItem(current)) != null)
-        {
-            depth++;
-        }
-
-        return depth;
-    }
-
-    public double Indent
-    {
-        get => (double)GetValue(IndentProperty);
-    }
-
-    private static readonly DependencyPropertyKey IndentPropertyKey =
-        DependencyProperty.RegisterReadOnly(nameof(Indent), typeof(double), typeof(SideMenuItem), new PropertyMetadata(default(double)));
-
-    public static readonly DependencyProperty IndentProperty = IndentPropertyKey.DependencyProperty;
-
-    #endregion Indent
-
     #region Icon
 
     public object Icon
@@ -251,9 +178,6 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
     {
         base.OnApplyTemplate();
         _root = VisualTreeHelperExtension.TryFindVisualParent<SideMenu>(this);
-
-        Loaded += SideMenuItem_Loaded;
-        Unloaded += SideMenuItem_Unloaded;
     }
 
     #endregion Override

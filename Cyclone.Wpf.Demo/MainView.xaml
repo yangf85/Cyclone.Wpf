@@ -20,14 +20,9 @@
         <cy:SideMenu
             x:Name="SideMenu"
             Grid.Column="0"
-            Width="240"
             HorizontalAlignment="Left"
             CollapseWidth="60"
-            ExpansionWidth="240"
-            Indent="10"
-            IsCompact="False"
             ItemsSource="{Binding SideMenu.Items}">
-            <!--  Optional header content  -->
             <cy:SideMenu.Header>
                 <StackPanel Height="50" HorizontalAlignment="Center" Orientation="Horizontal">
                     <Image
@@ -37,17 +32,13 @@
                         RenderOptions.BitmapScalingMode="HighQuality"
                         Source="/Assets/logo.png" />
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Margin="5,0"
                         VerticalAlignment="Center"
-                        FontSize="20"
-                        FontWeight="Heavy"
                         Foreground="{DynamicResource Text.Title}"
                         Text="Cyclone.Wpf"
                         Visibility="{Binding IsCompact, ElementName=SideMenu, Converter={x:Static cy:VisibilityConverter.VisibleWhenFalse}}" />
                 </StackPanel>
             </cy:SideMenu.Header>
-
-            <!--  Menu item template  -->
             <cy:SideMenu.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Items}">
                     <Grid>
@@ -71,8 +62,6 @@
                     </Grid>
                 </HierarchicalDataTemplate>
             </cy:SideMenu.ItemTemplate>
-
-            <!--  Optional footer content  -->
             <cy:SideMenu.Footer>
                 <Button BorderThickness="0" Content="⚙" Visibility="{Binding IsCompact, ElementName=SideMenu, Converter={x:Static cy:VisibilityConverter.VisibleWhenFalse}}" />
             </cy:SideMenu.Footer>
