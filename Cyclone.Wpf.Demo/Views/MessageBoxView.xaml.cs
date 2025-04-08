@@ -59,7 +59,8 @@ namespace Cyclone.Wpf.Demo.Views
 
         private void Alert_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Hello World");
+            var window = new AlertWindow();
+            window.ShowDialog();
         }
     }
 }

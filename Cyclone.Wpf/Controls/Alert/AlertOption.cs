@@ -1,10 +1,10 @@
-﻿namespace Cyclone.Wpf.Controls;
+﻿using System.Windows;
+using System.Windows.Media;
+
+namespace Cyclone.Wpf.Controls;
 
 public class AlertOption
 {
-    /// <summary>
-    /// 警告窗口宽度
-    /// </summary>
     public double Width
     {
         get => field;
@@ -18,28 +18,25 @@ public class AlertOption
         }
     } = 400;
 
-    /// <summary>
-    /// 警告窗口高度
-    /// </summary>
     public double Height { get; set; } = 200;
 
-    /// <summary>
-    /// 要显示的按钮类型
-    /// </summary>
     public AlertButton ButtonType { get; set; } = AlertButton.Ok;
 
-    /// <summary>
-    /// 窗口标题
-    /// </summary>
     public string Title { get; set; } = "Alert";
 
-    /// <summary>
-    /// 自定义确定按钮文本
-    /// </summary>
+    public object Icon { get; set; }
+
+    public double CaptionHeight { get; set; } = SystemParameters.CaptionHeight;
+
+    public Brush CaptionBackground { get; set; } = SystemColors.ActiveCaptionBrush;
+
+    public Brush TitleForeground { get; set; }
+
+    public Brush AlertButtonGroupBackground { get; set; }
+
+    public double AlertButtonGroupHeight { get; set; }
+
     public string OkButtonText { get; set; } = "Ok";
 
-    /// <summary>
-    /// 自定义取消按钮文本
-    /// </summary>
     public string CancelButtonText { get; set; } = "Cancel";
 }
