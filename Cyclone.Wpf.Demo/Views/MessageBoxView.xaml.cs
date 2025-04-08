@@ -20,9 +20,9 @@ namespace Cyclone.Wpf.Demo.Views
     /// <summary>
     /// NotificationView.xaml 的交互逻辑
     /// </summary>
-    public partial class NotificationView : UserControl
+    public partial class MessageBoxView : UserControl
     {
-        public NotificationView()
+        public MessageBoxView()
         {
             InitializeComponent();
         }
@@ -55,6 +55,11 @@ namespace Cyclone.Wpf.Demo.Views
                     instance.Error("错误");
                     break;
             }
+        }
+
+        private void Alert_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hello World");
         }
     }
 }

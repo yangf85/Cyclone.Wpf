@@ -20,18 +20,9 @@
             BorderThickness="0"
             Label="SwitchTheme"
             WindowChrome.IsHitTestVisibleInChrome="True">
-            <cy:SplitButtonItem
-                Command="{Binding SwitchThemeCommand}"
-                CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"
-                Content="Basic" />
-            <cy:SplitButtonItem
-                Command="{Binding SwitchThemeCommand}"
-                CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"
-                Content="Light" />
-            <cy:SplitButtonItem
-                Command="{Binding SwitchThemeCommand}"
-                CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"
-                Content="Dark" />
+            <cy:SplitButtonItem Command="{Binding SwitchThemeCommand}" CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" Content="Basic" />
+            <cy:SplitButtonItem Command="{Binding SwitchThemeCommand}" CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" Content="Light" />
+            <cy:SplitButtonItem Command="{Binding SwitchThemeCommand}" CommandParameter="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" Content="Dark" />
         </cy:SplitButton>
     </cy:AdvancedWindow.FunctionalZone>
     <Grid>

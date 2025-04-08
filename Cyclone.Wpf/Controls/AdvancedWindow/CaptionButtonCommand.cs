@@ -6,10 +6,10 @@ using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
-
 public class CaptionButtonCommand
 {
     #region Commands
+
     static CaptionButtonCommand()
     {
         CommandManager.RegisterClassCommandBinding(typeof(CaptionButtonCommand), new CommandBinding(CloseCommand, OnClose, OnCanClose));
@@ -20,7 +20,9 @@ public class CaptionButtonCommand
     }
 
     #region Close
+
     public static RoutedCommand CloseCommand { get; private set; } = new RoutedCommand("Close", typeof(CaptionButtonCommand));
+
     public static void OnClose(object sender, ExecutedRoutedEventArgs e)
     {
         var window = sender as Window;
@@ -29,7 +31,6 @@ public class CaptionButtonCommand
 
     public static void OnCanClose(object sender, CanExecuteRoutedEventArgs e)
     {
-
         if (sender is Window window)
         {
             e.CanExecute = window.Visibility == Visibility.Visible && window.IsActive;
@@ -38,7 +39,8 @@ public class CaptionButtonCommand
 
         e.CanExecute = false;
     }
-    #endregion
+
+    #endregion Close
 
     #region Maximize
 
@@ -48,7 +50,6 @@ public class CaptionButtonCommand
         {
             window.WindowState = (window.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
         }
-
     }
 
     public static void OnCanMaximize(object sender, CanExecuteRoutedEventArgs e)
@@ -62,13 +63,14 @@ public class CaptionButtonCommand
         }
 
         e.CanExecute = false;
-
     }
 
     public static RoutedCommand MaximizeCommand { get; private set; } = new RoutedCommand("Maximize", typeof(CaptionButtonCommand));
-    #endregion
+
+    #endregion Maximize
 
     #region Restore
+
     public static void OnCanRestore(object sender, CanExecuteRoutedEventArgs e)
     {
         if (sender is Window window)
@@ -80,7 +82,6 @@ public class CaptionButtonCommand
         }
 
         e.CanExecute = false;
-
     }
 
     public static void OnRestore(object sender, ExecutedRoutedEventArgs e)
@@ -89,15 +90,13 @@ public class CaptionButtonCommand
         {
             window.WindowState = (window.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized;
         }
-
     }
+
     public static RoutedCommand RestoreCommand { get; private set; } = new RoutedCommand("Restore", typeof(CaptionButtonCommand));
 
-
-    #endregion
+    #endregion Restore
 
     #region Minimize
-
 
     public static void OnCanMinimize(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -110,8 +109,6 @@ public class CaptionButtonCommand
         }
 
         e.CanExecute = false;
-
-
     }
 
     public static void OnMinimize(object sender, ExecutedRoutedEventArgs e)
@@ -120,13 +117,14 @@ public class CaptionButtonCommand
         {
             window.WindowState = (window.WindowState == WindowState.Minimized) ? WindowState.Normal : WindowState.Minimized;
         }
-
     }
 
     public static RoutedCommand MinimizeCommand { get; private set; } = new RoutedCommand("Minimize", typeof(CaptionButtonCommand));
-    #endregion
+
+    #endregion Minimize
 
     #region Topmost
+
     public static void OnCanTopmost(object sender, CanExecuteRoutedEventArgs e)
     {
         if (sender is Window window)
@@ -136,7 +134,6 @@ public class CaptionButtonCommand
         }
 
         e.CanExecute = false;
-
     }
 
     public static void OnTopmost(object sender, ExecutedRoutedEventArgs e)
@@ -145,15 +142,12 @@ public class CaptionButtonCommand
 
         if (sender is not Window window) { return; }
 
-
         window.Topmost = button.IsChecked ?? false;
-
     }
 
     public static RoutedCommand TopmostCommand { get; private set; } = new RoutedCommand("Topmost", typeof(CaptionButtonCommand));
-    #endregion
 
+    #endregion Topmost
 
-
-    #endregion
+    #endregion Commands
 }

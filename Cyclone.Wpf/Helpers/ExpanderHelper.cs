@@ -5,6 +5,7 @@ using System.Windows;
 
 namespace Cyclone.Wpf.Helpers;
 
+[Obsolete("实现起来有点复杂,不要使用")]
 public static class ExpanderHelper
 {
     #region AnimationDuration 附加属性

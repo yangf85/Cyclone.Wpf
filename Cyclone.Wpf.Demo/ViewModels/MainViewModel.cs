@@ -40,7 +40,7 @@ public partial class MainViewModel : ObservableObject
             "ComboBox" => new ComboBoxView(),
             "ListView" => new CollectionView(),
             "ListBox" => new ListBoxView(),
-            "Notification" => new NotificationView(),
+            "Notification" => new MessageBoxView(),
             "TransferBox" => new TransferBoxView(),
             "HintBox" => new HintBoxView(),
             "Panel" => new PanelView(),

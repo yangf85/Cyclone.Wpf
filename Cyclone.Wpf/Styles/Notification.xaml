@@ -168,16 +168,16 @@
     </DataTemplate>
 
     <Style TargetType="{x:Type ctl:NotificationWindow}">
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
-        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="ShowInTaskbar" Value="False" />
         <Setter Property="Topmost" Value="True" />
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Opacity" Value="0" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
                 <WindowChrome
+                    CaptionHeight="0"
                     GlassFrameThickness="-1"
                     NonClientFrameEdges="None"
                     ResizeBorderThickness="0"
@@ -200,9 +200,11 @@
                                 Content="{TemplateBinding Title}"
                                 FontWeight="Bold" />
                             <Button
+                                x:Name="PART_CloseButton"
+                                Background="Transparent"
                                 Command="{x:Static ctl:NotificationWindow.CloseWindowCommand}"
                                 Style="{StaticResource NotificationWindow.CloseButton.Style}"
-                                Visibility="{Binding Path=IsShowCloseButton, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                Visibility="Collapsed"
                                 WindowChrome.IsHitTestVisibleInChrome="True">
                                 <Path
                                     Width="16"
@@ -213,10 +215,18 @@
                                     Stroke="{DynamicResource Icon.Foreground.Invert}"
                                     StrokeThickness="1" />
                             </Button>
-
                             <ContentPresenter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsShowCloseButton" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

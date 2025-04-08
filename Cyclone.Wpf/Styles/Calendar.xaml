@@ -28,33 +28,36 @@
         <Grid Cursor="Hand">
             <Rectangle Fill="#363636" Opacity="1" Stretch="Fill" />
             <Grid>
-                <Path x:Name="IndicatorPath"
-                      Width="15"
-                      Height="15"
-                      Margin="20,0,0,0"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Center"
-                      Data="M100,0 L100,100 L13.4,50 Z"
-                      Fill="#e0e0e0"
-                      Stretch="Fill" />
+                <Path
+                    x:Name="IndicatorPath"
+                    Width="15"
+                    Height="15"
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Data="M100,0 L100,100 L13.4,50 Z"
+                    Fill="#e0e0e0"
+                    Stretch="Fill" />
             </Grid>
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetName="IndictorPath"
-                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                            To="#FF73A9D8"
-                                            Duration="0" />
+                            <ColorAnimation
+                                Storyboard.TargetName="IndictorPath"
+                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                To="#FF73A9D8"
+                                Duration="0" />
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Disabled">
                         <Storyboard>
-                            <DoubleAnimation Storyboard.TargetName="IndicatorPath"
-                                             Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
-                                             To=".5"
-                                             Duration="0" />
+                            <DoubleAnimation
+                                Storyboard.TargetName="IndicatorPath"
+                                Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
+                                To=".5"
+                                Duration="0" />
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
@@ -66,33 +69,36 @@
         <Grid Cursor="Hand">
             <Rectangle Fill="#363636" Opacity="1" Stretch="Fill" />
             <Grid>
-                <Path x:Name="IndicatorPath"
-                      Width="15"
-                      Height="15"
-                      Margin="0,0,20,0"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center"
-                      Data="M0,0 L0,100 L86.6,50 Z"
-                      Fill="#e0e0e0"
-                      Stretch="Fill" />
+                <Path
+                    x:Name="IndicatorPath"
+                    Width="15"
+                    Height="15"
+                    Margin="0,0,20,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Data="M0,0 L0,100 L86.6,50 Z"
+                    Fill="#e0e0e0"
+                    Stretch="Fill" />
             </Grid>
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="MouseOver">
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetName="IndicatorPath"
-                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                            To="#FF73A9D8"
-                                            Duration="0" />
+                            <ColorAnimation
+                                Storyboard.TargetName="IndicatorPath"
+                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                To="#FF73A9D8"
+                                Duration="0" />
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Disabled">
                         <Storyboard>
-                            <DoubleAnimation Storyboard.TargetName="IndicatorPath"
-                                             Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
-                                             To=".5"
-                                             Duration="0" />
+                            <DoubleAnimation
+                                Storyboard.TargetName="IndicatorPath"
+                                Storyboard.TargetProperty="(Shape.Fill).(Brush.Opacity)"
+                                To=".5"
+                                Duration="0" />
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
@@ -105,15 +111,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid Margin="{TemplateBinding Padding}"
-                          Cursor="Hand"
-                          SnapsToDevicePixels="True"
-                          UseLayoutRounding="True">
-                        <ContentPresenter x:Name="ContentContainer"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    <Grid
+                        Margin="{TemplateBinding Padding}"
+                        Cursor="Hand"
+                        SnapsToDevicePixels="True"
+                        UseLayoutRounding="True">
+                        <ContentPresenter
+                            x:Name="ContentContainer"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -134,17 +142,19 @@
                 <ControlTemplate TargetType="{x:Type CalendarItem}">
                     <ControlTemplate.Resources>
                         <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
-                            <TextBlock Margin="0,5"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Text="{Binding StringFormat=周{0}}" />
+                            <TextBlock
+                                Margin="0,5"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding StringFormat=周{0}}" />
                         </DataTemplate>
                     </ControlTemplate.Resources>
                     <Grid x:Name="PART_Root">
-                        <Border Padding="{TemplateBinding Margin}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0">
+                        <Border
+                            Padding="{TemplateBinding Margin}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" MinHeight="36" />
@@ -156,50 +166,56 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Border Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource Border.Default}" />
-                                <Button x:Name="PART_PreviousButton"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Margin="10,0,0,0"
+                                <Button
+                                    x:Name="PART_PreviousButton"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    Focusable="False"
+                                    Style="{StaticResource CalendarItem.PreviousNextButtonStyle}">
+                                    <Path
+                                        x:Name="PreviousPath"
+                                        Width="16"
+                                        Height="16"
                                         HorizontalAlignment="Left"
-                                        Focusable="False"
-                                        Style="{StaticResource CalendarItem.PreviousNextButtonStyle}">
-                                    <Path x:Name="PreviousPath"
-                                          Width="16"
-                                          Height="16"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Data="M473.6 490.666667L789.333333 170.666667 853.333333 230.4l-260.266666 260.266667 260.266666 260.266666-64 59.733334-315.733333-320z m-302.933333 0L490.666667 170.666667l59.733333 59.733333-260.266667 260.266667 260.266667 260.266666-59.733333 59.733334L170.666667 490.666667z"
-                                          Fill="{Binding Foreground, ElementName=PART_PreviousButton}"
-                                          Stretch="Uniform" />
-                                </Button>
-                                <Button x:Name="PART_HeaderButton"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Focusable="False"
-                                        Style="{StaticResource Calendar.HeaderButtonStyle}" />
-                                <Button x:Name="PART_NextButton"
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Margin="0,0,10,0"
-                                        HorizontalAlignment="Right"
-                                        Focusable="False"
-                                        Style="{StaticResource CalendarItem.PreviousNextButtonStyle}">
-                                    <Path x:Name="NextPath"
-                                          Width="16"
-                                          Height="16"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Data="M550.4 490.666667L230.4 170.666667 170.666667 230.4l260.266666 260.266667L170.666667 750.933333 230.4 810.666667l320-320z m298.666667 0L533.333333 170.666667 469.333333 230.4l260.266667 260.266667-260.266667 260.266666 59.733334 59.733334 320-320z"
-                                          Fill="{Binding Foreground, ElementName=PART_NextButton}"
-                                          Stretch="Uniform" />
+                                        Data="M473.6 490.666667L789.333333 170.666667 853.333333 230.4l-260.266666 260.266667 260.266666 260.266666-64 59.733334-315.733333-320z m-302.933333 0L490.666667 170.666667l59.733333 59.733333-260.266667 260.266667 260.266667 260.266666-59.733333 59.733334L170.666667 490.666667z"
+                                        Fill="{Binding Foreground, ElementName=PART_PreviousButton}"
+                                        Stretch="Uniform" />
                                 </Button>
-                                <Border Grid.Row="1"
-                                        Grid.ColumnSpan="3"
-                                        Padding="3"
-                                        BorderBrush="{DynamicResource Border.Default}"
-                                        BorderThickness="1">
+                                <Button
+                                    x:Name="PART_HeaderButton"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Focusable="False"
+                                    Style="{StaticResource Calendar.HeaderButtonStyle}" />
+                                <Button
+                                    x:Name="PART_NextButton"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="0,0,10,0"
+                                    HorizontalAlignment="Right"
+                                    Focusable="False"
+                                    Style="{StaticResource CalendarItem.PreviousNextButtonStyle}">
+                                    <Path
+                                        x:Name="NextPath"
+                                        Width="16"
+                                        Height="16"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Data="M550.4 490.666667L230.4 170.666667 170.666667 230.4l260.266666 260.266667L170.666667 750.933333 230.4 810.666667l320-320z m298.666667 0L533.333333 170.666667 469.333333 230.4l260.266667 260.266667-260.266667 260.266666 59.733334 59.733334 320-320z"
+                                        Fill="{Binding Foreground, ElementName=PART_NextButton}"
+                                        Stretch="Uniform" />
+                                </Button>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    Padding="3"
+                                    BorderBrush="{DynamicResource Border.Default}"
+                                    BorderThickness="1">
                                     <Grid x:Name="PART_MonthView" Visibility="Visible">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -221,11 +237,12 @@
                                         </Grid.ColumnDefinitions>
                                     </Grid>
                                 </Border>
-                                <Grid x:Name="PART_YearView"
-                                      Grid.Row="1"
-                                      Grid.ColumnSpan="3"
-                                      Margin="3"
-                                      Visibility="Hidden">
+                                <Grid
+                                    x:Name="PART_YearView"
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    Margin="3"
+                                    Visibility="Hidden">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
@@ -268,34 +285,38 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarDayButton}">
-                    <Border x:Name="RootGrid"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
+                    <Border
+                        x:Name="RootGrid"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
                         <Grid>
-                            <ContentPresenter x:Name="ContentContainer"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              TextElement.Foreground="{DynamicResource DefaultForegroundBrush}" />
-                            <Path x:Name="TodayIndicator"
-                                  Width="20"
-                                  Height="20"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Bottom"
-                                  Data="M691.2 725.333333l-38.4-38.4-46.933333 46.933334 81.066666 81.066666 46.933334-46.933333 85.333333-85.333333-42.666667-42.666667-85.333333 85.333333zM896 341.333333v554.666667H341.333333L896 341.333333z"
-                                  Fill="{DynamicResource Border.Checked}"
-                                  Stretch="Uniform"
-                                  Visibility="Collapsed" />
-                            <Path x:Name="BlockoutIndicator"
-                                  Width="24"
-                                  Height="24"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Data="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64z m392 448c0 98-36.4 187.5-96.1 256.3L255.7 216.1C324.5 156.4 414 120 512 120c216.1 0 392 175.9 392 392z m-784 0c0-98 36.4-187.5 96.1-256.3l552.2 552.2C699.5 867.6 610 904 512 904c-216.1 0-392-175.9-392-392z"
-                                  Fill="{DynamicResource Border.Error}"
-                                  Stretch="Uniform"
-                                  Visibility="Collapsed" />
+                            <ContentPresenter
+                                x:Name="ContentContainer"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                TextElement.Foreground="{DynamicResource DefaultForegroundBrush}" />
+                            <Path
+                                x:Name="TodayIndicator"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Data="M691.2 725.333333l-38.4-38.4-46.933333 46.933334 81.066666 81.066666 46.933334-46.933333 85.333333-85.333333-42.666667-42.666667-85.333333 85.333333zM896 341.333333v554.666667H341.333333L896 341.333333z"
+                                Fill="{DynamicResource Border.Checked}"
+                                Stretch="Uniform"
+                                Visibility="Collapsed" />
+                            <Path
+                                x:Name="BlockoutIndicator"
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64z m392 448c0 98-36.4 187.5-96.1 256.3L255.7 216.1C324.5 156.4 414 120 512 120c216.1 0 392 175.9 392 392z m-784 0c0-98 36.4-187.5 96.1-256.3l552.2 552.2C699.5 867.6 610 904 512 904c-216.1 0-392-175.9-392-392z"
+                                Fill="{DynamicResource Border.Error}"
+                                Stretch="Uniform"
+                                Visibility="Collapsed" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -340,10 +361,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarButton}">
-                    <Border x:Name="RootBoder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBoder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter x:Name="ContentContainer" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -370,15 +392,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Calendar}">
                     <StackPanel x:Name="PART_Root" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <CalendarItem x:Name="PART_CalendarItem"
-                                      Width="{TemplateBinding Width}"
-                                      Height="{TemplateBinding Height}"
-                                      HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Stretch"
-                                      Background="{TemplateBinding Background}"
-                                      BorderBrush="{TemplateBinding BorderBrush}"
-                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                      Style="{TemplateBinding CalendarItemStyle}" />
+                        <CalendarItem
+                            x:Name="PART_CalendarItem"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Style="{TemplateBinding CalendarItemStyle}" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

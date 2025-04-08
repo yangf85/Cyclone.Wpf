@@ -101,8 +101,6 @@ internal class NotificationWindow : Window
         dict.Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute);
         Resources.MergedDictionaries.Add(dict);
 
-        SystemMenuManager.DisableCloseMenuItem(this);
-
         // 初始化自动关闭计时器
         _autoCloseTimer = new DispatcherTimer();
         _autoCloseTimer.Tick += AutoCloseTimer_Tick;
@@ -114,8 +112,8 @@ internal class NotificationWindow : Window
     private void NotificationWindow_Loaded(object sender, RoutedEventArgs e)
     {
         // 保存原始位置用于动画
-        _originalLeft = this.Left;
-        _originalTop = this.Top;
+        _originalLeft = Left;
+        _originalTop = Top;
 
         // 根据动画方向设置初始位置
         SetInitialPositionForAnimation();
