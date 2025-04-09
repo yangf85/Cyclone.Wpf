@@ -10,14 +10,14 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <StackPanel>
-        <GroupBox Header="Notification">
-            <UniformGrid Rows="1">
+        <GroupBox Padding="10" Header="Notification">
+            <cy:SpacingUniformGrid Rows="1">
                 <Button Background="{DynamicResource Background.Info}" Click="Button_Click" Content="Infomation" />
                 <Button Background="{DynamicResource Background.Success}" Click="Button_Click" Content="Success" />
                 <Button Background="{DynamicResource Background.Error}" Click="Button_Click" Content="Error" />
                 <Button Background="{DynamicResource Background.Warning}" Click="Button_Click" Content="Warning" />
                 <Button Click="Button_Click" Content="Default" />
-            </UniformGrid>
+            </cy:SpacingUniformGrid>
         </GroupBox>
         <GroupBox Header="Alert">
             <Button Click="Alert_Click" />

@@ -167,6 +167,51 @@
         </Setter>
     </Style>
 
+    <Style x:Key="AlertWindow.AlertButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Pressed}" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Pressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="RootBorder" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type ctl:AlertWindow}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
@@ -200,6 +245,7 @@
                             <DockPanel Grid.Row="0" Height="{TemplateBinding CaptionHeight}" Background="{TemplateBinding CaptionBackground}">
                                 <ContentPresenter
                                     x:Name="IconPresenter"
+                                    Margin="5,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Content="{TemplateBinding Icon}" />
@@ -235,12 +281,14 @@
                                         x:Name="PART_OkButton"
                                         MinWidth="120"
                                         Command="{x:Static ctl:AlertWindow.CancelCommand}"
-                                        Content="{TemplateBinding OkButtonText}" />
+                                        Content="{TemplateBinding OkButtonText}"
+                                        Style="{DynamicResource AlertWindow.AlertButtonStyle}" />
                                     <Button
                                         x:Name="PART_CancelButton"
                                         Margin="5,0,0,0"
                                         Command="{x:Static ctl:AlertWindow.OkCommand}"
                                         Content="{TemplateBinding CancelButtonText}"
+                                        Style="{DynamicResource AlertWindow.AlertButtonStyle}"
                                         Visibility="Visible" />
                                 </UniformGrid>
                                 <Rectangle x:Name="AlertButtonGroupMask" Height="{TemplateBinding AlertButtonGroupHeight}" Fill="{TemplateBinding AlertButtonGroupBackground}" />

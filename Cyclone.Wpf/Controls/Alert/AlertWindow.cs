@@ -31,7 +31,7 @@ public class AlertWindow : Window
     }
 
     public static readonly DependencyProperty TitleForegroundProperty =
-        DependencyProperty.Register(nameof(TitleForeground), typeof(Brush), typeof(AlertWindow), new PropertyMetadata(Brushes.Black));
+        DependencyProperty.Register(nameof(TitleForeground), typeof(Brush), typeof(AlertWindow), new PropertyMetadata(Brushes.White));
 
     #endregion TitleForeground
 

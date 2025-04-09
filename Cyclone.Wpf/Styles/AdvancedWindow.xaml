@@ -104,7 +104,7 @@
                 </Grid.RowDefinitions>
                 <!--  Caption  -->
                 <Grid
-                    x:Name="RootGrid"
+                    x:Name="CaptionGrid"
                     Height="{TemplateBinding CaptionHeight}"
                     Background="{TemplateBinding CaptionBackground}"
                     SnapsToDevicePixels="True">
@@ -193,6 +193,9 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
+            <Trigger Property="IsActive" Value="False">
+                <Setter TargetName="CaptionGrid" Property="Opacity" Value="0.75" />
+            </Trigger>
             <Trigger Property="WindowState" Value="Normal">
                 <Setter TargetName="PART_RestoreButton" Property="Visibility" Value="Collapsed" />
                 <Setter TargetName="PART_MaximizeButton" Property="Visibility" Value="Visible" />

@@ -61,7 +61,8 @@ namespace Cyclone.Wpf.Demo.Views
         {
             var service = Cyclone.Wpf.Controls.AlertService.Instance;
             service.SetOwner(App.Current.MainWindow);
-            service.Show("Hello World");
+            service.Show("Hello World", null, "标题");
+            //MessageBox.Show("Hello World");
         }
     }
 }
