@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,298 +8,6 @@ using System.Windows.Media;
 using System.Collections.Concurrent;
 
 namespace Cyclone.Wpf.Controls;
-
-/// <summary>
-/// 处理通知窗口的定位
-/// </summary>
-internal class NotificationWindowPositioner
-{
-    #region HandleWindowIntPtr
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-    [DllImport("user32.dll")]
-    private static extern bool IsWindow(IntPtr hWnd);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-    }
-
-    #endregion HandleWindowIntPtr
-
-    private readonly NotificationOption _option;
-    private IntPtr _ownerHandle;
-    private volatile bool _useScreenForPositioning = true;
-
-    public NotificationWindowPositioner(NotificationOption option)
-    {
-        _option = option ?? throw new ArgumentNullException(nameof(option));
-    }
-
-    /// <summary>
-    /// 设置用于定位通知的所有者句柄
-    /// </summary>
-    public void SetOwner(IntPtr windowHandle)
-    {
-        if (windowHandle == IntPtr.Zero)
-        {
-            throw new ArgumentNullException(nameof(windowHandle), "Invalid WindowHandle");
-        }
-
-        if (!IsWindow(windowHandle))
-        {
-            throw new ArgumentException("Handle is not a Window", nameof(windowHandle));
-        }
-
-        // 原子操作设置状态
-        _ownerHandle = windowHandle;
-        _useScreenForPositioning = false;
-    }
-
-    /// <summary>
-    /// 重置为使用屏幕坐标进行定位
-    /// </summary>
-    public void UseScreenPositioning()
-    {
-        // 原子操作设置状态
-        _useScreenForPositioning = true;
-    }
-
-    /// <summary>
-    /// 根据当前设置定位所有通知窗口
-    /// </summary>
-    public void PositionWindows(IList<NotificationWindow> activeWindows)
-    {
-        if (activeWindows == null || activeWindows.Count == 0)
-        {
-            return;
-        }
-
-        // 创建只读状态副本，避免计算过程中状态变化
-        bool useScreen = _useScreenForPositioning;
-        IntPtr ownerHandle = _ownerHandle;
-
-        RECT ownerRect;
-        var screenBounds = System.Windows.SystemParameters.WorkArea;
-
-        if (useScreen || !IsWindow(ownerHandle) || !GetWindowRect(ownerHandle, out ownerRect))
-        {
-            // 使用屏幕作为定位参考
-            ownerRect = new RECT
-            {
-                Left = (int)screenBounds.Left,
-                Top = (int)screenBounds.Top,
-                Right = (int)screenBounds.Right,
-                Bottom = (int)screenBounds.Bottom
-            };
-        }
-        else
-        {
-            // 将窗口坐标转换为WPF单位
-            var wpfRect = ConvertRectToWpfUnit(ownerRect);
-            ownerRect = new RECT
-            {
-                Left = (int)wpfRect.Left,
-                Top = (int)wpfRect.Top,
-                Right = (int)wpfRect.Right,
-                Bottom = (int)wpfRect.Bottom
-            };
-        }
-
-        double baseLeft = 0;
-        double baseTop = 0;
-        bool isTop = false;  // 是否从顶部定位
-
-        // 计算基础位置
-        switch (_option.Position)
-        {
-            case NotificationPosition.TopLeft:
-                baseLeft = ownerRect.Left + _option.OffsetX;
-                baseTop = ownerRect.Top + _option.OffsetY;
-                isTop = true;
-                break;
-
-            case NotificationPosition.TopRight:
-                baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
-                baseTop = ownerRect.Top + _option.OffsetY;
-                isTop = true;
-                break;
-
-            case NotificationPosition.BottomLeft:
-                baseLeft = ownerRect.Left + _option.OffsetX;
-                baseTop = ownerRect.Bottom - _option.OffsetY;
-                isTop = false;
-                break;
-
-            case NotificationPosition.BottomRight:
-                baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
-                baseTop = ownerRect.Bottom - _option.OffsetY;
-                isTop = false;
-                break;
-        }
-
-        // 确保左侧位置在屏幕边界内
-        if (baseLeft + _option.MaxWidth > screenBounds.Right)
-        {
-            baseLeft = screenBounds.Right - _option.MaxWidth;
-        }
-
-        if (baseLeft < screenBounds.Left)
-        {
-            baseLeft = screenBounds.Left;
-        }
-
-        // 调整顶部位置以确保它在屏幕上
-        if (isTop && baseTop < screenBounds.Top)
-        {
-            baseTop = screenBounds.Top;
-        }
-        else if (!isTop && baseTop > screenBounds.Bottom)
-        {
-            baseTop = screenBounds.Bottom;
-        }
-
-        // 重新排序窗口
-        List<NotificationWindow> orderedWindows;
-
-        if (isTop)
-        {
-            // 最新的窗口在底部（数组开始）
-            orderedWindows = activeWindows.OrderBy(w => activeWindows.IndexOf(w)).ToList();
-        }
-        else
-        {
-            // 最新的窗口在顶部（数组末尾）
-            orderedWindows = activeWindows.OrderByDescending(w => activeWindows.IndexOf(w)).ToList();
-        }
-
-        // 按顺序定位窗口
-        double currentPosition = baseTop;
-
-        foreach (var window in orderedWindows)
-        {
-            // 获取实际窗口高度
-            double windowHeight = window.ActualHeight > 0 ? window.ActualHeight : _option.MaxHeight;
-
-            // 设置水平位置
-            window.Left = baseLeft;
-
-            if (isTop)
-            {
-                // 顶部定位：向下增长
-                window.Top = currentPosition;
-                currentPosition += windowHeight + _option.Spacing;
-
-                // 确保不超过屏幕底部
-                if (window.Top + windowHeight > screenBounds.Bottom)
-                {
-                    window.Top = screenBounds.Bottom - windowHeight;
-                }
-            }
-            else
-            {
-                // 底部定位：向上增长
-                // 计算窗口顶部位置
-                window.Top = currentPosition - windowHeight;
-                currentPosition = window.Top - _option.Spacing;
-
-                // 确保不超过屏幕顶部
-                if (window.Top < screenBounds.Top)
-                {
-                    window.Top = screenBounds.Top;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 根据位置为通知窗口设置动画方向
-    /// </summary>
-    public void SetAnimationDirection(NotificationWindow window)
-    {
-        if (window == null)
-        {
-            throw new ArgumentNullException(nameof(window));
-        }
-
-        // 设置窗口动画方向
-        NotificationAnimationDirection animDirection;
-
-        switch (_option.Position)
-        {
-            case NotificationPosition.TopLeft:
-            case NotificationPosition.BottomLeft:
-                animDirection = NotificationAnimationDirection.FromLeft;
-                break;
-
-            case NotificationPosition.TopRight:
-            case NotificationPosition.BottomRight:
-            default:
-                animDirection = NotificationAnimationDirection.FromRight;
-                break;
-        }
-
-        window.AnimationDirection = animDirection;
-
-        // 如果需要，设置初始尺寸
-        if (window.ActualWidth == 0)
-        {
-            window.Width = _option.MaxWidth;
-        }
-
-        if (window.ActualHeight == 0)
-        {
-            window.Height = _option.MaxHeight;
-        }
-    }
-
-    #region DPI Scaling
-
-    /// <summary>
-    /// 获取当前DPI缩放比例
-    /// </summary>
-    private Matrix GetDpiScale()
-    {
-        var source = PresentationSource.FromVisual(Application.Current.MainWindow);
-        if (source?.CompositionTarget != null)
-        {
-            return source.CompositionTarget.TransformToDevice;
-        }
-        return Matrix.Identity; // 如果无法确定，则返回1:1比例
-    }
-
-    /// <summary>
-    /// 将物理像素坐标转换为WPF设备无关单位
-    /// </summary>
-    private Point ConvertPixelToWpfUnit(int x, int y)
-    {
-        Matrix transformToDevice = GetDpiScale();
-        double dpiX = transformToDevice.M11;
-        double dpiY = transformToDevice.M22;
-
-        // 转换坐标
-        return new Point(x / dpiX, y / dpiY);
-    }
-
-    /// <summary>
-    /// 将RECT结构转换为WPF Rect（设备无关单位）
-    /// </summary>
-    private Rect ConvertRectToWpfUnit(RECT rect)
-    {
-        Point topLeft = ConvertPixelToWpfUnit(rect.Left, rect.Top);
-        Point bottomRight = ConvertPixelToWpfUnit(rect.Right, rect.Bottom);
-
-        return new Rect(topLeft, bottomRight);
-    }
-
-    #endregion DPI Scaling
-}
 
 public interface INotificationService
 {
@@ -336,16 +43,6 @@ public class NotificationService : INotificationService, IDisposable
             Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute)
         };
     }
-
-    #region Native Windows API
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll")]
-    private static extern bool IsWindow(IntPtr hWnd);
-
-    #endregion Native Windows API
 
     /// <summary>
     /// 获取通知服务的单例实例
@@ -417,7 +114,7 @@ public class NotificationService : INotificationService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        if (!IsWindow(windowHandle))
+        if (!WindowsNativeService.IsWindow(windowHandle))
         {
             throw new ArgumentException("Handle is not a Window", nameof(windowHandle));
         }
@@ -433,7 +130,7 @@ public class NotificationService : INotificationService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        IntPtr foregroundHandle = GetForegroundWindow();
+        IntPtr foregroundHandle = WindowsNativeService.GetForegroundWindow();
         if (foregroundHandle != IntPtr.Zero)
         {
             SetOwnerInternal(foregroundHandle);
@@ -451,7 +148,7 @@ public class NotificationService : INotificationService, IDisposable
         if (Interlocked.CompareExchange(ref _isDisposed, 0, 0) == 1) return;
 
         // 确保句柄有效
-        if (IsWindow(handle))
+        if (WindowsNativeService.IsValidWindow(handle))
         {
             _ownerHandle = handle;
             _windowPositioner.SetOwner(handle);

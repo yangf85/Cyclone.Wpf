@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Threading;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -12,7 +11,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 弹出警告框服务接口
 /// </summary>
-public interface IAlertService
+public interface IAlertService : IDisposable
 {
     bool? Show(object content, DataTemplate template, string title = null);
 }
@@ -20,107 +19,54 @@ public interface IAlertService
 /// <summary>
 /// 警告框服务实现类
 /// </summary>
-public class AlertService : IAlertService
+public class AlertService : IAlertService, IDisposable
 {
     private readonly AlertOption _option;
 
-    #region 原生Windows API
+    // 使用非readonly的静态字段，允许重新分配
+    private static Lazy<AlertService> _lazyInstance;
 
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+    // 确保实例重置线程安全的锁对象
+    private static readonly object _instanceLock = new object();
 
-    [DllImport("user32.dll")]
-    private static extern bool IsWindow(IntPtr hWnd);
+    // 使用原子操作控制对象状态
+    private int _isDisposed;
 
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool BringWindowToTop(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool IsWindowVisible(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool EnableWindow(IntPtr hWnd, bool bEnable);
-
-    [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    // ShowWindow函数的常量参数
-    private const int SW_SHOW = 5;       // 显示窗口
-
-    private const int SW_SHOWNA = 8;     // 显示窗口但不激活
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-    [DllImport("user32.dll")]
-    private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-    // 窗口样式常量
-    private const int GWL_EXSTYLE = -20;               // 扩展窗口样式
-
-    private const int WS_EX_NOACTIVATE = 0x08000000;   // 窗口不激活
-    private const int WS_EX_TRANSPARENT = 0x00000020;  // 透明窗口（点击穿透）
-    private const int HWND_TOPMOST = -1;               // 置顶窗口
-    private const int HWND_NOTOPMOST = -2;             // 取消置顶
-
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-    // SetWindowPos标志常量
-    private const uint SWP_NOSIZE = 0x0001;        // 保持当前大小
-
-    private const uint SWP_NOMOVE = 0x0002;        // 保持当前位置
-    private const uint SWP_NOACTIVATE = 0x0010;    // 不激活窗口
-    private const uint SWP_SHOWWINDOW = 0x0040;    // 显示窗口
-
-    // 添加Windows钩子常量和函数，用于窗口消息监控
-    private const int WM_MOVE = 0x0003;            // 窗口移动消息
-
-    private const int WM_SIZE = 0x0005;            // 窗口大小改变消息
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax,
-        IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess,
-        uint idThread, uint dwFlags);
-
-    [DllImport("user32.dll")]
-    private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
-
-    // 窗口事件常量
-    private const uint EVENT_OBJECT_LOCATIONCHANGE = 0x800B;  // 窗口位置变化事件
-
-    private const uint EVENT_OBJECT_REORDER = 0x8004;         // 窗口Z序变化事件
-    private const uint WINEVENT_OUTOFCONTEXT = 0x0000;        // 事件钩子标志
-
-    // 窗口事件监控委托
-    private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType,
-        IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
+    /// <summary>
+    /// 静态构造函数，初始化单例实例
+    /// </summary>
+    static AlertService()
     {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
+        _lazyInstance = new Lazy<AlertService>(() =>
+            new AlertService(), LazyThreadSafetyMode.ExecutionAndPublication);
     }
-
-    #endregion 原生Windows API
-
-    // 静态单例实例
-    private static readonly Lazy<AlertService> _lazyInstance =
-        new Lazy<AlertService>(() => new AlertService(), LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
     /// 获取AlertService的单例实例
     /// </summary>
-    public static AlertService Instance => _lazyInstance.Value;
+    public static AlertService Instance
+    {
+        get
+        {
+            lock (_instanceLock)
+            {
+                return _lazyInstance.Value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 重置警告服务单例实例
+    /// 用于服务处置后重新开始使用的情况
+    /// </summary>
+    public static void ResetInstance()
+    {
+        lock (_instanceLock)
+        {
+            _lazyInstance = new Lazy<AlertService>(() =>
+                new AlertService(), LazyThreadSafetyMode.ExecutionAndPublication);
+        }
+    }
 
     private Window _ownerWindow;               // 拥有者WPF窗口
     private IntPtr _ownerHandle;               // 拥有者窗口句柄
@@ -132,7 +78,7 @@ public class AlertService : IAlertService
     private IntPtr _winEventHook = IntPtr.Zero;
 
     // 窗口事件委托（保持引用以防止被垃圾回收）
-    private WinEventDelegate _winEventProc;
+    private WindowsNativeService.WinEventDelegate _winEventProc;
 
     /// <summary>
     /// 使用默认选项初始化AlertService的新实例
@@ -163,11 +109,17 @@ public class AlertService : IAlertService
             throw new ArgumentNullException(nameof(owner));
         }
 
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         // 清理任何已存在的事件钩子
         UnhookEvents();
 
         _ownerWindow = owner;
         _ownerHandle = new WindowInteropHelper(owner).Handle;
+
+        // 添加窗口关闭事件，确保在Owner关闭时释放资源
+        owner.Closed += (sender, args) => Dispose();
     }
 
     /// <summary>
@@ -180,7 +132,10 @@ public class AlertService : IAlertService
             throw new ArgumentNullException(nameof(windowHandle), "无效的窗口句柄");
         }
 
-        if (!IsWindow(windowHandle))
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        if (!WindowsNativeService.IsWindow(windowHandle))
         {
             throw new ArgumentException("句柄不是一个窗口", nameof(windowHandle));
         }
@@ -197,8 +152,11 @@ public class AlertService : IAlertService
     /// </summary>
     public void SetOwnerToForegroundWindow()
     {
-        IntPtr foregroundHandle = GetForegroundWindow();
-        if (foregroundHandle != IntPtr.Zero && IsWindow(foregroundHandle))
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        IntPtr foregroundHandle = WindowsNativeService.GetForegroundWindow();
+        if (foregroundHandle != IntPtr.Zero && WindowsNativeService.IsWindow(foregroundHandle))
         {
             // 清理任何已存在的事件钩子
             UnhookEvents();
@@ -215,7 +173,7 @@ public class AlertService : IAlertService
     {
         if (_winEventHook != IntPtr.Zero)
         {
-            UnhookWinEvent(_winEventHook);
+            WindowsNativeService.UnhookWinEvent(_winEventHook);
             _winEventHook = IntPtr.Zero;
             _winEventProc = null;
         }
@@ -230,6 +188,9 @@ public class AlertService : IAlertService
     /// <returns>创建的AlertWindow实例</returns>
     private AlertWindow CreateAlertWindow(object content, DataTemplate template, string title)
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         var window = new AlertWindow
         {
             Width = _option.Width,
@@ -261,6 +222,9 @@ public class AlertService : IAlertService
     /// <returns>创建的蒙版窗口或null</returns>
     private Window CreateMaskWindow()
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         if (_ownerWindow == null && _ownerHandle == IntPtr.Zero)
         {
             return null; // 没有所有者，不创建蒙版
@@ -277,10 +241,10 @@ public class AlertService : IAlertService
         else
         {
             // 使用句柄窗口
-            if (GetWindowRect(_ownerHandle, out RECT rect))
+            var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
+            if (wpfRect.HasValue)
             {
-                var wpfRect = ConvertRectToWpfUnit(rect);
-                ownerRect = wpfRect;
+                ownerRect = wpfRect.Value;
             }
             else
             {
@@ -333,8 +297,8 @@ public class AlertService : IAlertService
             {
                 // 将警告窗口置于前台
                 _currentAlertWindow.Activate();
-                BringWindowToTop(new WindowInteropHelper(_currentAlertWindow).Handle);
-                SetForegroundWindow(new WindowInteropHelper(_currentAlertWindow).Handle);
+                WindowsNativeService.BringWindowToTop(new WindowInteropHelper(_currentAlertWindow).Handle);
+                WindowsNativeService.SetForegroundWindow(new WindowInteropHelper(_currentAlertWindow).Handle);
             }
             e.Handled = true;
         };
@@ -343,8 +307,7 @@ public class AlertService : IAlertService
         maskWindow.Loaded += (sender, e) =>
         {
             var hwnd = new WindowInteropHelper(maskWindow).Handle;
-            var extendedStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-            SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_NOACTIVATE);
+            WindowsNativeService.SetWindowNoActivate(hwnd);
         };
 
         return maskWindow;
@@ -356,6 +319,9 @@ public class AlertService : IAlertService
     /// <param name="window">要定位的窗口</param>
     private void PositionWindowInCenter(Window window)
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         if (window == null)
         {
             throw new ArgumentNullException(nameof(window));
@@ -370,21 +336,18 @@ public class AlertService : IAlertService
         }
 
         // 如果有有效的句柄，使用句柄窗口位置计算中心点
-        if (_ownerHandle != IntPtr.Zero && IsWindow(_ownerHandle))
+        if (WindowsNativeService.IsValidWindow(_ownerHandle))
         {
-            RECT ownerRect;
-            if (GetWindowRect(_ownerHandle, out ownerRect))
+            var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
+            if (wpfRect.HasValue)
             {
-                // 转换为WPF单位
-                var wpfRect = ConvertRectToWpfUnit(ownerRect);
-
                 // 计算窗口的尺寸
-                double ownerWidth = wpfRect.Width;
-                double ownerHeight = wpfRect.Height;
+                double ownerWidth = wpfRect.Value.Width;
+                double ownerHeight = wpfRect.Value.Height;
 
                 // 计算中心点
-                double ownerCenterX = wpfRect.Left + (ownerWidth / 2);
-                double ownerCenterY = wpfRect.Top + (ownerHeight / 2);
+                double ownerCenterX = wpfRect.Value.Left + (ownerWidth / 2);
+                double ownerCenterY = wpfRect.Value.Top + (ownerHeight / 2);
 
                 // 计算警告窗口左上角位置
                 window.Left = ownerCenterX - (window.Width / 2);
@@ -432,53 +395,6 @@ public class AlertService : IAlertService
         }
     }
 
-    #region DPI缩放
-
-    /// <summary>
-    /// 获取当前DPI缩放比例
-    /// </summary>
-    /// <returns>DPI缩放矩阵</returns>
-    private Matrix GetDpiScale()
-    {
-        var source = PresentationSource.FromVisual(Application.Current.MainWindow);
-        if (source?.CompositionTarget != null)
-        {
-            return source.CompositionTarget.TransformToDevice;
-        }
-        return Matrix.Identity; // 如果无法确定，则返回1:1比例
-    }
-
-    /// <summary>
-    /// 将物理像素坐标转换为WPF设备无关单位
-    /// </summary>
-    /// <param name="x">像素X坐标</param>
-    /// <param name="y">像素Y坐标</param>
-    /// <returns>WPF坐标点</returns>
-    private Point ConvertPixelToWpfUnit(int x, int y)
-    {
-        Matrix transformToDevice = GetDpiScale();
-        double dpiX = transformToDevice.M11;
-        double dpiY = transformToDevice.M22;
-
-        // 转换坐标
-        return new Point(x / dpiX, y / dpiY);
-    }
-
-    /// <summary>
-    /// 将RECT结构转换为WPF Rect（设备无关单位）
-    /// </summary>
-    /// <param name="rect">原始RECT结构</param>
-    /// <returns>转换后的WPF Rect</returns>
-    private Rect ConvertRectToWpfUnit(RECT rect)
-    {
-        Point topLeft = ConvertPixelToWpfUnit(rect.Left, rect.Top);
-        Point bottomRight = ConvertPixelToWpfUnit(rect.Right, rect.Bottom);
-
-        return new Rect(topLeft, bottomRight);
-    }
-
-    #endregion DPI缩放
-
     /// <summary>
     /// 更新蒙版窗口位置
     /// </summary>
@@ -508,17 +424,15 @@ public class AlertService : IAlertService
     /// </summary>
     private void UpdateMaskPositionFromHandle()
     {
-        if (_maskWindow != null && _ownerHandle != IntPtr.Zero && IsWindow(_ownerHandle))
+        if (_maskWindow != null && WindowsNativeService.IsValidWindow(_ownerHandle))
         {
-            RECT rect;
-            if (GetWindowRect(_ownerHandle, out rect))
+            var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
+            if (wpfRect.HasValue)
             {
-                var wpfRect = ConvertRectToWpfUnit(rect);
-
-                _maskWindow.Left = wpfRect.Left;
-                _maskWindow.Top = wpfRect.Top;
-                _maskWindow.Width = wpfRect.Width;
-                _maskWindow.Height = wpfRect.Height;
+                _maskWindow.Left = wpfRect.Value.Left;
+                _maskWindow.Top = wpfRect.Value.Top;
+                _maskWindow.Width = wpfRect.Value.Width;
+                _maskWindow.Height = wpfRect.Value.Height;
             }
         }
     }
@@ -526,13 +440,6 @@ public class AlertService : IAlertService
     /// <summary>
     /// 用于监控非WPF窗口变化的窗口事件回调
     /// </summary>
-    /// <param name="hWinEventHook">事件钩子句柄</param>
-    /// <param name="eventType">事件类型</param>
-    /// <param name="hwnd">窗口句柄</param>
-    /// <param name="idObject">对象ID</param>
-    /// <param name="idChild">子项ID</param>
-    /// <param name="dwEventThread">事件线程ID</param>
-    /// <param name="dwmsEventTime">事件时间戳</param>
     private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
         // 只处理我们拥有者窗口的事件
@@ -550,14 +457,24 @@ public class AlertService : IAlertService
     /// </summary>
     private void SetupNonWpfWindowMonitoring()
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         // 只有在有非WPF所有者且尚未设置钩子时才设置
         if (_ownerHandle != IntPtr.Zero && _winEventHook == IntPtr.Zero && _ownerWindow == null)
         {
             // 创建委托（保持引用以防止垃圾回收）
-            _winEventProc = new WinEventDelegate(WinEventProc);
+            _winEventProc = new WindowsNativeService.WinEventDelegate(WinEventProc);
 
             // 为窗口位置变化设置事件钩子
-            _winEventHook = SetWinEventHook(EVENT_OBJECT_LOCATIONCHANGE, EVENT_OBJECT_LOCATIONCHANGE, IntPtr.Zero, _winEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
+            _winEventHook = WindowsNativeService.SetWinEventHook(
+                WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
+                WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
+                IntPtr.Zero,
+                _winEventProc,
+                0,
+                0,
+                WindowsNativeService.WINEVENT_OUTOFCONTEXT);
         }
     }
 
@@ -579,16 +496,14 @@ public class AlertService : IAlertService
 
                     // 获取并使用窗口句柄来确保窗口位于前台
                     IntPtr ownerHandle = new WindowInteropHelper(_ownerWindow).Handle;
-                    BringWindowToTop(ownerHandle);
-                    SetForegroundWindow(ownerHandle);
+                    WindowsNativeService.ActivateAndBringToFront(ownerHandle);
                 }
             }
             // 如果只有Owner句柄
-            else if (_ownerHandle != IntPtr.Zero && IsWindow(_ownerHandle))
+            else if (WindowsNativeService.IsValidWindow(_ownerHandle))
             {
                 // 使用Win32 API设置窗口到前台
-                BringWindowToTop(_ownerHandle);
-                SetForegroundWindow(_ownerHandle);
+                WindowsNativeService.ActivateAndBringToFront(_ownerHandle);
             }
         }
         catch (Exception ex)
@@ -609,6 +524,9 @@ public class AlertService : IAlertService
     /// <returns>对话框结果</returns>
     public bool? Show(object content, DataTemplate template = null, string title = null)
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         // 确保在UI线程上执行
         if (Application.Current.Dispatcher.CheckAccess())
         {
@@ -632,12 +550,15 @@ public class AlertService : IAlertService
     /// <returns>对话框结果</returns>
     private bool? ShowDialogInternal(object content, DataTemplate template, string title)
     {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
         var window = CreateAlertWindow(content, template, title);
         _currentAlertWindow = window;
         PositionWindowInCenter(window);
 
         // 存储弹窗显示前的当前活动窗口句柄
-        IntPtr previousActiveWindow = GetForegroundWindow();
+        IntPtr previousActiveWindow = WindowsNativeService.GetForegroundWindow();
 
         // 不禁用Owner窗口，允许用户与Owner窗口交互
         // 移除了EnableWindow(false)的调用，允许用户正常操作Owner窗口
@@ -653,7 +574,7 @@ public class AlertService : IAlertService
 
                 // 使用Win32 API确保蒙版窗口显示但不激活
                 var maskHandle = new WindowInteropHelper(_maskWindow).Handle;
-                ShowWindow(maskHandle, SW_SHOWNA);
+                WindowsNativeService.ShowWindowNoActivate(maskHandle);
 
                 // 添加位置和尺寸同步
                 if (_ownerWindow != null)
@@ -730,7 +651,7 @@ public class AlertService : IAlertService
             {
                 var hwnd = new WindowInteropHelper(window).Handle;
                 // 主动设置窗口为顶层
-                SetWindowPos(hwnd, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+                WindowsNativeService.SetWindowTopMostAndShow(hwnd);
             };
 
             window.Deactivated += (sender, e) =>
@@ -743,7 +664,7 @@ public class AlertService : IAlertService
                     {
                         var hwnd = new WindowInteropHelper(window).Handle;
                         // 使用HWND_TOPMOST保持在最上层，但不强制激活
-                        SetWindowPos(hwnd, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                        WindowsNativeService.SetWindowTopMostNoActivate(hwnd);
                     }
                 });
             };
@@ -772,4 +693,84 @@ public class AlertService : IAlertService
     }
 
     #endregion 实现IAlertService接口
+
+    #region 实现IDisposable接口
+
+    // 使用无锁方式检查是否已处置
+    private void ThrowIfDisposed()
+    {
+        if (Interlocked.CompareExchange(ref _isDisposed, 0, 0) == 1)
+        {
+            throw new ObjectDisposedException(nameof(AlertService));
+        }
+    }
+
+    /// <summary>
+    /// 处置警告服务并清除所有活动资源
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// 释放警告服务使用的所有资源
+    /// </summary>
+    /// <param name="disposing">是否为显式释放</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        // 使用原子操作设置处置标志
+        if (Interlocked.Exchange(ref _isDisposed, 1) == 0)
+        {
+            if (disposing)
+            {
+                // 清理非托管资源
+                UnhookEvents();
+
+                // 在UI线程上执行清理
+                if (Application.Current != null && Application.Current.Dispatcher != null)
+                {
+                    try
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            // 关闭警告窗口
+                            if (_currentAlertWindow != null)
+                            {
+                                _currentAlertWindow.Close();
+                                _currentAlertWindow = null;
+                            }
+
+                            // 关闭蒙版窗口
+                            if (_maskWindow != null)
+                            {
+                                _maskWindow.Close();
+                                _maskWindow = null;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        // 记录任何清理过程中的异常，但不阻止释放继续进行
+                        System.Diagnostics.Debug.WriteLine($"释放AlertService资源时出错: {ex.Message}");
+                    }
+                }
+
+                // 释放引用
+                _ownerWindow = null;
+                _ownerHandle = IntPtr.Zero;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 析构函数，确保非托管资源释放
+    /// </summary>
+    ~AlertService()
+    {
+        Dispose(false);
+    }
+
+    #endregion 实现IDisposable接口
 }
