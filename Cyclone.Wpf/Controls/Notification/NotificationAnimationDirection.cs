@@ -3,7 +3,7 @@
 /// <summary>
 /// 动画方向枚举
 /// </summary>
-public enum AnimationDirection
+public enum NotificationAnimationDirection
 {
     FromLeft,
     FromRight,

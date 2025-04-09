@@ -5,18 +5,7 @@ namespace Cyclone.Wpf.Controls;
 
 public class AlertOption
 {
-    public double Width
-    {
-        get => field;
-        set
-        {
-            if (value <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Width must be > 0");
-            }
-            field = value;
-        }
-    } = 400;
+    public double Width { get; set; } = 400;
 
     public double Height { get; set; } = 200;
 
@@ -39,4 +28,8 @@ public class AlertOption
     public string OkButtonText { get; set; } = "Ok";
 
     public string CancelButtonText { get; set; } = "Cancel";
+
+    public bool IsShowMask { get; set; } = true;
+
+    public Brush MaskBrush { get; set; } = new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00));
 }

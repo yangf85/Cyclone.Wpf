@@ -230,19 +230,19 @@ internal class NotificationWindowPositioner
         }
 
         // 设置窗口动画方向
-        AnimationDirection animDirection;
+        NotificationAnimationDirection animDirection;
 
         switch (_option.Position)
         {
             case NotificationPosition.TopLeft:
             case NotificationPosition.BottomLeft:
-                animDirection = AnimationDirection.FromLeft;
+                animDirection = NotificationAnimationDirection.FromLeft;
                 break;
 
             case NotificationPosition.TopRight:
             case NotificationPosition.BottomRight:
             default:
-                animDirection = AnimationDirection.FromRight;
+                animDirection = NotificationAnimationDirection.FromRight;
                 break;
         }
 

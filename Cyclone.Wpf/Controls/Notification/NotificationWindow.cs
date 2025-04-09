@@ -56,15 +56,15 @@ internal class NotificationWindow : Window
 
     #region AnimationDirection
 
-    public AnimationDirection AnimationDirection
+    public NotificationAnimationDirection AnimationDirection
     {
-        get => (AnimationDirection)GetValue(AnimationDirectionProperty);
+        get => (NotificationAnimationDirection)GetValue(AnimationDirectionProperty);
         set => SetValue(AnimationDirectionProperty, value);
     }
 
     public static readonly DependencyProperty AnimationDirectionProperty =
-        DependencyProperty.Register(nameof(AnimationDirection), typeof(AnimationDirection), typeof(NotificationWindow),
-            new PropertyMetadata(AnimationDirection.FromRight));
+        DependencyProperty.Register(nameof(AnimationDirection), typeof(NotificationAnimationDirection), typeof(NotificationWindow),
+            new PropertyMetadata(NotificationAnimationDirection.FromRight));
 
     #endregion AnimationDirection
 
@@ -132,11 +132,11 @@ internal class NotificationWindow : Window
     {
         switch (AnimationDirection)
         {
-            case AnimationDirection.FromLeft:
+            case NotificationAnimationDirection.FromLeft:
                 Left = _originalLeft - ActualWidth;
                 break;
 
-            case AnimationDirection.FromRight:
+            case NotificationAnimationDirection.FromRight:
                 Left = _originalLeft + ActualWidth;
                 break;
         }
@@ -164,7 +164,7 @@ internal class NotificationWindow : Window
         // 根据方向创建适当的动画
         switch (AnimationDirection)
         {
-            case AnimationDirection.FromLeft:
+            case NotificationAnimationDirection.FromLeft:
                 positionAnimation = new DoubleAnimation
                 {
                     From = _originalLeft - ActualWidth,
@@ -175,7 +175,7 @@ internal class NotificationWindow : Window
                 animatedProperty = Window.LeftProperty;
                 break;
 
-            case AnimationDirection.FromRight:
+            case NotificationAnimationDirection.FromRight:
                 positionAnimation = new DoubleAnimation
                 {
                     From = _originalLeft + ActualWidth,
@@ -215,7 +215,7 @@ internal class NotificationWindow : Window
         // 根据方向创建适当的动画
         switch (AnimationDirection)
         {
-            case AnimationDirection.FromLeft:
+            case NotificationAnimationDirection.FromLeft:
                 positionAnimation = new DoubleAnimation
                 {
                     From = Left,
@@ -226,7 +226,7 @@ internal class NotificationWindow : Window
                 animatedProperty = Window.LeftProperty;
                 break;
 
-            case AnimationDirection.FromRight:
+            case NotificationAnimationDirection.FromRight:
                 positionAnimation = new DoubleAnimation
                 {
                     From = Left,

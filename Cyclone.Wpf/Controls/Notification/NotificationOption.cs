@@ -5,18 +5,7 @@ public class NotificationOption
     /// <summary>
     /// 显示持续时间
     /// </summary>
-    public TimeSpan DisplayDuration
-    {
-        get => field;
-        set
-        {
-            if (value <= TimeSpan.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Duration must be >0");
-            }
-            field = value;
-        }
-    } = TimeSpan.FromMilliseconds(2400);
+    public TimeSpan DisplayDuration { get; set; } = TimeSpan.FromMilliseconds(2400);
 
     /// <summary>
     /// 位置
@@ -41,18 +30,7 @@ public class NotificationOption
     /// <summary>
     /// 最多显示多少个通知
     /// </summary>
-    public int MaxCount
-    {
-        get => field;
-        set
-        {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "MaxCount must be >0");
-            }
-            field = value;
-        }
-    } = 5;
+    public int MaxCount { get; set; } = 5;
 
     /// <summary>
     /// 通知宽度

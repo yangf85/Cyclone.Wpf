@@ -59,8 +59,9 @@ namespace Cyclone.Wpf.Demo.Views
 
         private void Alert_Click(object sender, RoutedEventArgs e)
         {
-            var window = new AlertWindow();
-            window.ShowDialog();
+            var service = Cyclone.Wpf.Controls.AlertService.Instance;
+            service.SetOwner(App.Current.MainWindow);
+            service.Show("Hello World");
         }
     }
 }
