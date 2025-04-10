@@ -42,12 +42,7 @@
             </HeaderedContentControl>
             <HeaderedContentControl Header="MultiComboBox">
                 <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                    <cy:MultiComboBox MaxColumns="5" MaxRows="1">
-                        <cy:MultiComboBox>Item 1</cy:MultiComboBox>
-                        <cy:MultiComboBox>Item 2</cy:MultiComboBox>
-                        <cy:MultiComboBox>Item 3</cy:MultiComboBox>
-                        <cy:MultiComboBox>Item 4</cy:MultiComboBox>
-                    </cy:MultiComboBox>
+
                     <ComboBox />
                     <ComboBox />
                 </cy:SpacingUniformGrid>

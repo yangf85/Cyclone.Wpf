@@ -12,14 +12,13 @@ public static class AlertServiceExtension
 {
     public static bool? Messgae(this IAlertService self, string message, string title = "提示")
     {
-        var content = new AlertMessageContent()
+        var content = new AlertDefaultMessage()
         {
             DataContext = message,
         };
 
-        var service = AlertService.Instance;
-        service.Option.ButtonType = AlertButton.Yes;
-        return service.Show(content, title);
+        self.Option.ButtonType = AlertButton.Yes;
+        return self.Show(content, title);
     }
 
     /// <summary>
@@ -27,13 +26,13 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Information(this IAlertService self, string message, string title = "信息")
     {
-        var content = new AlertInformationContent()
+        var content = new AlertInformationMessage()
         {
             DataContext = message,
         };
-        var service = AlertService.Instance;
-        service.Option.ButtonType = AlertButton.YesNo;
-        return service.Show(content, title);
+
+        self.Option.ButtonType = AlertButton.YesNo;
+        return self.Show(content, title);
     }
 
     /// <summary>
@@ -41,14 +40,13 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Success(this IAlertService self, string message, string title = "成功")
     {
-        var content = new AlertSuccessContent()
+        var content = new AlertSuccessMessage()
         {
             DataContext = message,
         };
 
-        var service = AlertService.Instance;
-        service.Option.ButtonType = AlertButton.YesNo;
-        return service.Show(content, title);
+        self.Option.ButtonType = AlertButton.YesNo;
+        return self.Show(content, title);
     }
 
     /// <summary>
@@ -56,13 +54,13 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Warning(this IAlertService self, string message, string title = "警告")
     {
-        var content = new AlertWarningContent()
+        var content = new AlertWarningMessage()
         {
             DataContext = message,
         };
-        var service = AlertService.Instance;
-        service.Option.ButtonType = AlertButton.YesNo;
-        return service.Show(content, title);
+
+        self.Option.ButtonType = AlertButton.YesNo;
+        return self.Show(content, title);
     }
 
     /// <summary>
@@ -70,13 +68,13 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Error(this IAlertService self, string message, string title = "错误")
     {
-        var content = new AlertWarningContent()
+        var content = new AlertWarningMessage()
         {
             DataContext = message,
         };
-        var service = new AlertService();
-        service.Option.ButtonType = AlertButton.YesNo;
-        return service.Show(content, title);
+
+        self.Option.ButtonType = AlertButton.YesNo;
+        return self.Show(content, title);
     }
 
     /// <summary>
@@ -84,12 +82,12 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Question(this IAlertService self, string message, string title = "疑问")
     {
-        var content = new AlertQuestionContent()
+        var content = new AlertQuestionMessage()
         {
             DataContext = message,
         };
-        var service = AlertService.Instance;
-        service.Option.ButtonType = AlertButton.YesNo;
-        return service.Show(content, title);
+
+        self.Option.ButtonType = AlertButton.YesNo;
+        return self.Show(content, title);
     }
 }

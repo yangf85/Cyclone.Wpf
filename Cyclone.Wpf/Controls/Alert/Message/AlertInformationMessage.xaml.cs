@@ -18,9 +18,9 @@ namespace Cyclone.Wpf.Controls
     /// <summary>
     /// AlertInformationContent.xaml 的交互逻辑
     /// </summary>
-    public partial class AlertInformationContent : UserControl
+    public partial class AlertInformationMessage : UserControl
     {
-        public AlertInformationContent()
+        public AlertInformationMessage()
         {
             InitializeComponent();
         }

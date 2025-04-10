@@ -19,7 +19,7 @@
                 <TextBox Text="{Binding Address}" />
             </cy:FormItem>
             <cy:FormItem Label="邮箱:" SharedName="Form">
-                <TextBox Text="{Binding Address}" />
+                <TextBox Text="{Binding Email}" />
             </cy:FormItem>
         </cy:SpacingStackPanel>
     </Grid>

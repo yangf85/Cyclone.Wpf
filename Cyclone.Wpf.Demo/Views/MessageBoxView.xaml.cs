@@ -26,16 +26,10 @@ namespace Cyclone.Wpf.Demo.Views
     /// </summary>
     public partial class MessageBoxView : UserControl
     {
-        public static DataTemplate Faker { get; set; }
-
         public MessageBoxView()
         {
             InitializeComponent();
             DataContext = new MessageBoxViewModel();
-            Loaded += (s, e) =>
-            {
-                Faker = (DataTemplate)Resources["FakerData"];
-            };
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -47,7 +41,7 @@ namespace Cyclone.Wpf.Demo.Views
             switch (button.Content)
             {
                 case "Default":
-                    instance.Show($"通知消息");
+                    instance.Message($"通知消息");
                     break;
 
                 case "Success":
@@ -121,8 +115,6 @@ namespace Cyclone.Wpf.Demo.Views
             {
                 DataContext = Data,
             });
-
-            var mm = Data;
         }
 
         public MessageBoxViewModel()

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Cyclone.Wpf.Controls
 {
     /// <summary>
-    /// AlertWarningContent.xaml 的交互逻辑
+    /// AlertSuccessContent.xaml 的交互逻辑
     /// </summary>
-    public partial class AlertWarningContent : UserControl
+    public partial class AlertSuccessMessage : UserControl
     {
-        public AlertWarningContent()
+        public AlertSuccessMessage()
         {
             InitializeComponent();
         }

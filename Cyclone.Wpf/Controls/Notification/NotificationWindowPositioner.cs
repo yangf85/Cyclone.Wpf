@@ -107,7 +107,7 @@ internal class NotificationWindowPositioner
                 break;
 
             case NotificationPosition.TopRight:
-                baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
+                baseLeft = ownerRect.Right - _option.Width - _option.OffsetX;
                 baseTop = ownerRect.Top + _option.OffsetY;
                 isTop = true;
                 break;
@@ -119,16 +119,16 @@ internal class NotificationWindowPositioner
                 break;
 
             case NotificationPosition.BottomRight:
-                baseLeft = ownerRect.Right - _option.MaxWidth - _option.OffsetX;
+                baseLeft = ownerRect.Right - _option.Width - _option.OffsetX;
                 baseTop = ownerRect.Bottom - _option.OffsetY;
                 isTop = false;
                 break;
         }
 
         // 确保左侧位置在屏幕边界内
-        if (baseLeft + _option.MaxWidth > screenBounds.Right)
+        if (baseLeft + _option.Width > screenBounds.Right)
         {
-            baseLeft = screenBounds.Right - _option.MaxWidth;
+            baseLeft = screenBounds.Right - _option.Width;
         }
 
         if (baseLeft < screenBounds.Left)
@@ -166,7 +166,7 @@ internal class NotificationWindowPositioner
         foreach (var window in orderedWindows)
         {
             // 获取实际窗口高度
-            double windowHeight = window.ActualHeight > 0 ? window.ActualHeight : _option.MaxHeight;
+            double windowHeight = window.ActualHeight > 0 ? window.ActualHeight : _option.Height;
 
             // 设置水平位置
             window.Left = baseLeft;
@@ -231,12 +231,12 @@ internal class NotificationWindowPositioner
         // 如果需要，设置初始尺寸
         if (window.ActualWidth == 0)
         {
-            window.Width = _option.MaxWidth;
+            window.Width = _option.Width;
         }
 
         if (window.ActualHeight == 0)
         {
-            window.Height = _option.MaxHeight;
+            window.Height = _option.Height;
         }
     }
 }

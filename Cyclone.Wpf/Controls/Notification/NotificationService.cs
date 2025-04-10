@@ -11,19 +11,16 @@ namespace Cyclone.Wpf.Controls;
 
 public interface INotificationService
 {
-    void Show(object content, DataTemplate template, string title = null);
+    void Show(object content, string title = null);
 }
 
 public class NotificationService : INotificationService, IDisposable
 {
-    private readonly NotificationOption _option;
-
     // 使用线程安全的字典，避免显式锁
     // 使用线程安全的字典存储活动窗口，并用创建时间跟踪添加顺序
     private readonly ConcurrentDictionary<NotificationWindow, DateTime> _activeWindows = [];
 
     private IntPtr _ownerHandle;
-    private static ResourceDictionary _dict;
     private readonly NotificationWindowPositioner _windowPositioner;
 
     // 使用原子操作控制对象状态
@@ -36,18 +33,19 @@ public class NotificationService : INotificationService, IDisposable
     // 确保实例重置线程安全的锁对象
     private static readonly object _instanceLock = new object();
 
-    static NotificationService()
-    {
-        _dict = new ResourceDictionary
-        {
-            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute)
-        };
-    }
-
     /// <summary>
     /// 获取通知服务的单例实例
     /// </summary>
     public static NotificationService Instance => _lazyInstance.Value;
+
+    public NotificationOption Option
+    {
+        get => field;
+        private set
+        {
+            field = value;
+        }
+    }
 
     /// <summary>
     /// 重置通知服务单例实例
@@ -74,7 +72,7 @@ public class NotificationService : INotificationService, IDisposable
     /// </summary>
     public NotificationService(NotificationOption option)
     {
-        _option = option;
+        Option = option;
         _windowPositioner = new NotificationWindowPositioner(option);
     }
 
@@ -167,11 +165,10 @@ public class NotificationService : INotificationService, IDisposable
 
     #region Implementation INotificationService
 
-    private void InternalShow(object content, DataTemplate template, string title)
+    public void Show(object content, string title = null)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
-
         // 我们需要在UI线程上创建窗口
         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
         {
@@ -180,23 +177,13 @@ public class NotificationService : INotificationService, IDisposable
             var window = new NotificationWindow();
             window.Title = title ?? string.Empty;
             window.Content = content;
-            window.ContentTemplate = template;
-            window.Width = _option.MaxWidth;
-            window.Height = _option.MaxHeight;
-            window.IsShowCloseButton = _option.IsShowCloseButton;
-            window.DisplayDuration = _option.DisplayDuration;
+            window.Width = Option.Width;
+            window.Height = Option.Height;
+            window.IsShowCloseButton = Option.IsShowCloseButton;
+            window.DisplayDuration = Option.DisplayDuration;
 
             AddWindow(window);
         }));
-    }
-
-    public void Show(object content, DataTemplate template = null, string title = null)
-    {
-        // 检查是否已被处置
-        ThrowIfDisposed();
-
-        template ??= _dict["Notification.Default.DataTemplate"] as DataTemplate;
-        InternalShow(content, template, title);
     }
 
     #endregion Implementation INotificationService
@@ -204,7 +191,7 @@ public class NotificationService : INotificationService, IDisposable
     private void AddWindow(NotificationWindow window)
     {
         // 检查是否超过最大窗口数
-        while (_activeWindows.Count >= _option.MaxCount)
+        while (_activeWindows.Count >= Option.MaxCount)
         {
             // 找到最早添加的窗口（按添加时间排序）
             var orderedWindows = _activeWindows.OrderBy(pair => pair.Value).ToList();
@@ -263,8 +250,8 @@ public class NotificationService : INotificationService, IDisposable
         List<NotificationWindow> windowsSnapshot;
 
         // 根据位置决定排序方向
-        bool isTopPosition = _option.Position == NotificationPosition.TopLeft ||
-                             _option.Position == NotificationPosition.TopRight;
+        bool isTopPosition = Option.Position == NotificationPosition.TopLeft ||
+                             Option.Position == NotificationPosition.TopRight;
 
         if (isTopPosition)
         {
@@ -290,7 +277,7 @@ public class NotificationService : INotificationService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        action?.Invoke(_option);
+        action?.Invoke(Option);
     }
 
     #region Implementation IDisposable

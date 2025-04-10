@@ -7,37 +7,53 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public static class NotificationServiceExtension
 {
-    private static ResourceDictionary _dict;
-
-    static NotificationServiceExtension()
+    public static void Message(this INotificationService self, string message)
     {
-        _dict = new ResourceDictionary
+        var content = new NotificationDefaultMessage()
         {
-            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute)
+            DataContext = message,
         };
+
+        self.Show(content);
     }
 
     public static void Information(this INotificationService self, string message)
     {
-        var template = _dict["Notification.Information.DataTemplate"] as DataTemplate;
-        self.Show(message, template);
+        var content = new NotificationInformationMessage()
+        {
+            DataContext = message,
+        };
+
+        self.Show(content);
     }
 
     public static void Success(this INotificationService service, string message)
     {
-        var template = _dict["Notification.Success.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
+        var content = new NotificationSuccessMessage()
+        {
+            DataContext = message,
+        };
+
+        service.Show(content);
     }
 
     public static void Warning(this INotificationService service, string message)
     {
-        var template = _dict["Notification.Warning.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
+        var content = new NotificationWarningMessage()
+        {
+            DataContext = message,
+        };
+
+        service.Show(content);
     }
 
     public static void Error(this INotificationService service, string message)
     {
-        var template = _dict["Notification.Error.DataTemplate"] as DataTemplate;
-        service.Show(message, template);
+        var content = new NotificationErrorMessage()
+        {
+            DataContext = message,
+        };
+
+        service.Show(content);
     }
 }

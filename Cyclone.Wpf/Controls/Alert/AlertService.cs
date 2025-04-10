@@ -14,6 +14,8 @@ namespace Cyclone.Wpf.Controls;
 public interface IAlertService : IDisposable
 {
     bool? Show(object content, string title = null);
+
+    AlertOption Option { get; }
 }
 
 /// <summary>
@@ -206,12 +208,8 @@ public class AlertService : IAlertService, IDisposable
             AlertButtonGroupHorizontalAlignment = Option.AlertButtonHorizontalAlignment,
             OkButtonText = Option.OkButtonText,
             CancelButtonText = Option.CancelButtonText,
-
             Content = content,
-
-            // 不设置为始终最前以允许用户切换窗口
             Topmost = false,
-            // 在任务栏显示，使最小化后可以还原
             ShowInTaskbar = false,
         };
 

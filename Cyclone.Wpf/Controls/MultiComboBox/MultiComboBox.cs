@@ -1,234 +1,519 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Markup;
+using System.Windows.Media;
 
-namespace Cyclone.Wpf.Controls;
-
-[TemplatePart(Name = PART_SelectedItemsControl, Type = (typeof(ItemsControl)))]
-[TemplatePart(Name = PART_OpenButton, Type = (typeof(ToggleButton)))]
-[TemplatePart(Name = PART_Popup, Type = (typeof(Popup)))]
-public class MultiComboBox : MultiSelector
+namespace Cyclone.Wpf.Controls
 {
-    private const string PART_OpenButton = nameof(PART_OpenButton);
-
-    private const string PART_Popup = nameof(PART_Popup);
-
-    private const string PART_SelectedItemsControl = nameof(PART_SelectedItemsControl);
-
-    private Popup _popup;
-
-    ItemsControl _itemsControl;
-
-    static MultiComboBox()
+    [ContentProperty("Items")]
+    [TemplatePart(Name = "PART_EditableTextBox", Type = typeof(TextBox))]
+    [TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
+    [TemplatePart(Name = "PART_ItemsPresenter", Type = typeof(ItemsPresenter))]
+    [TemplatePart(Name = "PART_SelectAllButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_UnselectAllButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_InvertSelectionButton", Type = typeof(Button))]
+    public class MultiComboBox : Control
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiComboBox), new FrameworkPropertyMetadata(typeof(MultiComboBox)));
+        #region Fields
 
-        CommandManager.RegisterClassCommandBinding(typeof(MultiComboBox),
-              new CommandBinding(DeselectItemCommand, OnDeselectItemCommand, OnCanDeselectItemCommand));
-    }
+        private TextBox _textBox;
+        private Popup _popup;
+        private Button _selectAllButton;
+        private Button _unselectAllButton;
+        private Button _invertSelectionButton;
+        private bool _isInternalChange;
+        private ObservableCollection<object> _selectedItems;
 
-    public MultiComboBox()
-    {
-        SelectionChanged += MultiSelectComboBox_SelectionChanged;
-    }
+        #endregion Fields
 
-    private void MultiSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        foreach (var item in e.RemovedItems)
+        #region Constructors
+
+        static MultiComboBox()
         {
-            BindableSelectItems?.Remove(item);
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiComboBox), new FrameworkPropertyMetadata(typeof(MultiComboBox)));
         }
-        foreach (var item in e.AddedItems)
+
+        public MultiComboBox()
         {
-            BindableSelectItems?.Add(item);
+            _selectedItems = new ObservableCollection<object>();
+            _selectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+
+            Items = new ObservableCollection<object>();
+            CommandBindings.Add(new CommandBinding(SelectAllCommand, OnSelectAllCommand));
+            CommandBindings.Add(new CommandBinding(UnselectAllCommand, OnUnselectAllCommand));
+            CommandBindings.Add(new CommandBinding(InvertSelectionCommand, OnInvertSelectionCommand));
         }
-    }
 
-    #region Override
+        #endregion Constructors
 
-    protected override DependencyObject GetContainerForItemOverride()
-    {
-        return new MultiComboBoxItem();
-    }
+        #region Commands
 
-    protected override bool IsItemItsOwnContainerOverride(object item)
-    {
-        return item is MultiComboBoxItem;
-    }
+        public static readonly RoutedCommand SelectAllCommand = new RoutedCommand("SelectAll", typeof(MultiComboBox));
+        public static readonly RoutedCommand UnselectAllCommand = new RoutedCommand("UnselectAll", typeof(MultiComboBox));
+        public static readonly RoutedCommand InvertSelectionCommand = new RoutedCommand("InvertSelection", typeof(MultiComboBox));
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        IsOpened = false;
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-
-        _popup = GetTemplateChild(PART_Popup) as Popup;
-    }
-
-    #endregion Override
-
-    #region MaxColumns
-
-    public static readonly DependencyProperty MaxColumnsProperty =
-        DependencyProperty.Register(nameof(MaxColumns), typeof(int), typeof(MultiComboBox), new PropertyMetadata(5));
-
-    public int MaxColumns
-    {
-        get => (int)GetValue(MaxColumnsProperty);
-        set => SetValue(MaxColumnsProperty, value);
-    }
-
-    #endregion MaxColumns
-
-    #region MaxRows
-
-    public static readonly DependencyProperty MaxRowsProperty =
-        DependencyProperty.Register(nameof(MaxRows), typeof(int), typeof(MultiComboBox), new PropertyMetadata(default(int)));
-
-    public int MaxRows
-    {
-        get => (int)GetValue(MaxRowsProperty);
-        set => SetValue(MaxRowsProperty, value);
-    }
-
-    #endregion MaxRows
-
-    #region IsSelectAll
-
-    public static readonly DependencyProperty IsSelectAllProperty =
-                DependencyProperty.Register(nameof(IsSelectAll), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool), OnIsSelectAllChanged));
-
-    public bool IsSelectAll
-    {
-        get => (bool)GetValue(IsSelectAllProperty);
-        set => SetValue(IsSelectAllProperty, value);
-    }
-
-    private static void OnIsSelectAllChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var box = d as MultiComboBox;
-        if ((bool)e.NewValue)
+        private void OnSelectAllCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            box.SelectAll();
+            SelectAll();
         }
-        else
+
+        private void OnUnselectAllCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            box.UnselectAll();
+            UnselectAll();
         }
-    }
 
-    #endregion IsSelectAll
-
-    #region SelectAllText
-
-    public static readonly DependencyProperty SelectAllTextProperty =
-        DependencyProperty.Register(nameof(SelectAllText), typeof(string), typeof(MultiComboBox), new PropertyMetadata("SelectAll"));
-
-    public string SelectAllText
-    {
-        get => (string)GetValue(SelectAllTextProperty);
-        set => SetValue(SelectAllTextProperty, value);
-    }
-
-    #endregion SelectAllText
-
-    #region BindableSelectItems
-
-    public static readonly DependencyProperty BindableSelectItemsProperty =
-        DependencyProperty.Register(nameof(BindableSelectItems), typeof(IList), typeof(MultiComboBox), new PropertyMetadata(default(IList)));
-
-    public IList BindableSelectItems
-    {
-        get => (IList)GetValue(BindableSelectItemsProperty);
-        set => SetValue(BindableSelectItemsProperty, value);
-    }
-
-    #endregion BindableSelectItems
-
-    #region IsOpened
-
-    public static readonly DependencyProperty IsOpenedProperty =
-        DependencyProperty.Register(nameof(IsOpened), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool)));
-
-    public bool IsOpened
-    {
-        get => (bool)GetValue(IsOpenedProperty);
-        set => SetValue(IsOpenedProperty, value);
-    }
-
-    #endregion IsOpened
-
-    #region MaxDropDownHeight
-
-    public static readonly DependencyProperty MaxDropDownHeightProperty =
-        DependencyProperty.Register(nameof(MaxDropDownHeight), typeof(double), typeof(MultiComboBox), new PropertyMetadata(320d));
-
-    public double MaxDropDownHeight
-    {
-        get => (double)GetValue(MaxDropDownHeightProperty);
-        set => SetValue(MaxDropDownHeightProperty, value);
-    }
-
-    #endregion MaxDropDownHeight
-
-    #region PresenteItemStyle
-
-    public static readonly DependencyProperty PresenteItemStyleProperty =
-        DependencyProperty.Register(nameof(PresenteItemStyle), typeof(Style), typeof(MultiComboBox), new PropertyMetadata(default(Style)));
-
-    public Style PresenteItemStyle
-    {
-        get => (Style)GetValue(PresenteItemStyleProperty);
-        set => SetValue(PresenteItemStyleProperty, value);
-    }
-
-    #endregion PresenteItemStyle
-
-    #region DeselectItemCommand
-
-    public static RoutedCommand DeselectItemCommand { get; private set; } = new RoutedCommand("DeselectItem", typeof(MultiComboBox));
-
-    private static void OnCanDeselectItemCommand(object sender, CanExecuteRoutedEventArgs e)
-    {
-        e.CanExecute = true;
-    }
-
-    private static void OnDeselectItemCommand(object sender, ExecutedRoutedEventArgs e)
-    {
-        var multiComboBox = (MultiComboBox)sender;
-        foreach (var item in multiComboBox.SelectedItems)
+        private void OnInvertSelectionCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            if (item == e.Parameter)
+            InvertSelection();
+        }
+
+        #endregion Commands
+
+        #region Properties
+
+        public static readonly DependencyProperty IsDropDownOpenProperty = DependencyProperty.Register(
+            "IsDropDownOpen", typeof(bool), typeof(MultiComboBox), new PropertyMetadata(false, OnIsDropDownOpenChanged));
+
+        public bool IsDropDownOpen
+        {
+            get { return (bool)GetValue(IsDropDownOpenProperty); }
+            set { SetValue(IsDropDownOpenProperty, value); }
+        }
+
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
+            "ItemsSource", typeof(IEnumerable), typeof(MultiComboBox), new PropertyMetadata(null, OnItemsSourceChanged));
+
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
+            "Items", typeof(ObservableCollection<object>), typeof(MultiComboBox), new PropertyMetadata(null));
+
+        public ObservableCollection<object> Items
+        {
+            get { return (ObservableCollection<object>)GetValue(ItemsProperty); }
+            private set { SetValue(ItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayMemberPathProperty = DependencyProperty.Register(
+            "DisplayMemberPath", typeof(string), typeof(MultiComboBox), new PropertyMetadata(string.Empty, OnDisplayMemberPathChanged));
+
+        public string DisplayMemberPath
+        {
+            get { return (string)GetValue(DisplayMemberPathProperty); }
+            set { SetValue(DisplayMemberPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty ValueMemberPathProperty = DependencyProperty.Register(
+            "ValueMemberPath", typeof(string), typeof(MultiComboBox), new PropertyMetadata(string.Empty));
+
+        public string ValueMemberPath
+        {
+            get { return (string)GetValue(ValueMemberPathProperty); }
+            set { SetValue(ValueMemberPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty SeparatorProperty = DependencyProperty.Register(
+            "Separator", typeof(string), typeof(MultiComboBox), new PropertyMetadata(", ", OnSeparatorChanged));
+
+        public string Separator
+        {
+            get { return (string)GetValue(SeparatorProperty); }
+            set { SetValue(SeparatorProperty, value); }
+        }
+
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
+            "Text", typeof(string), typeof(MultiComboBox), new PropertyMetadata(string.Empty));
+
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
+            "SelectedItems", typeof(IList), typeof(MultiComboBox), new FrameworkPropertyMetadata(null,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemsChanged));
+
+        public IList SelectedItems
+        {
+            get { return (IList)GetValue(SelectedItemsProperty); }
+            set { SetValue(SelectedItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedValuesProperty = DependencyProperty.Register(
+            "SelectedValues", typeof(IList), typeof(MultiComboBox), new FrameworkPropertyMetadata(null,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedValuesChanged));
+
+        public IList SelectedValues
+        {
+            get { return (IList)GetValue(SelectedValuesProperty); }
+            set { SetValue(SelectedValuesProperty, value); }
+        }
+
+        public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register(
+            "ItemTemplate", typeof(DataTemplate), typeof(MultiComboBox), new PropertyMetadata(null));
+
+        public DataTemplate ItemTemplate
+        {
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
+        }
+
+        public static readonly DependencyProperty MaxDropDownHeightProperty = DependencyProperty.Register(
+            "MaxDropDownHeight", typeof(double), typeof(MultiComboBox), new PropertyMetadata(300.0));
+
+        public double MaxDropDownHeight
+        {
+            get { return (double)GetValue(MaxDropDownHeightProperty); }
+            set { SetValue(MaxDropDownHeightProperty, value); }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            // Get template parts
+            _textBox = GetTemplateChild("PART_EditableTextBox") as TextBox;
+            _popup = GetTemplateChild("PART_Popup") as Popup;
+            _selectAllButton = GetTemplateChild("PART_SelectAllButton") as Button;
+            _unselectAllButton = GetTemplateChild("PART_UnselectAllButton") as Button;
+            _invertSelectionButton = GetTemplateChild("PART_InvertSelectionButton") as Button;
+
+            if (_textBox != null)
             {
-                multiComboBox.SelectedItems.Remove(item);
-                break;
+                _textBox.GotFocus += (s, e) => IsDropDownOpen = true;
+                _textBox.IsReadOnly = true;
+            }
+
+            if (_popup != null)
+            {
+                _popup.StaysOpen = false;
+                _popup.Opened += (s, e) => { Focus(); };
+            }
+
+            if (_selectAllButton != null)
+            {
+                _selectAllButton.Click += (s, e) => SelectAll();
+            }
+
+            if (_unselectAllButton != null)
+            {
+                _unselectAllButton.Click += (s, e) => UnselectAll();
+            }
+
+            if (_invertSelectionButton != null)
+            {
+                _invertSelectionButton.Click += (s, e) => InvertSelection();
+            }
+
+            // Initial update of the text
+            UpdateText();
+        }
+
+        public void SelectAll()
+        {
+            _isInternalChange = true;
+            foreach (var item in Items)
+            {
+                if (!_selectedItems.Contains(item))
+                {
+                    _selectedItems.Add(item);
+                }
+            }
+            _isInternalChange = false;
+
+            UpdateText();
+            UpdateSelectedItemsSource();
+            UpdateSelectedValuesSource();
+        }
+
+        public void UnselectAll()
+        {
+            _isInternalChange = true;
+            _selectedItems.Clear();
+            _isInternalChange = false;
+
+            UpdateText();
+            UpdateSelectedItemsSource();
+            UpdateSelectedValuesSource();
+        }
+
+        public void InvertSelection()
+        {
+            _isInternalChange = true;
+            var newSelection = new List<object>();
+
+            foreach (var item in Items)
+            {
+                if (!_selectedItems.Contains(item))
+                {
+                    newSelection.Add(item);
+                }
+            }
+
+            _selectedItems.Clear();
+            foreach (var item in newSelection)
+            {
+                _selectedItems.Add(item);
+            }
+            _isInternalChange = false;
+
+            UpdateText();
+            UpdateSelectedItemsSource();
+            UpdateSelectedValuesSource();
+        }
+
+        private void UpdateText()
+        {
+            if (_selectedItems.Count == 0)
+            {
+                Text = string.Empty;
+                return;
+            }
+
+            var displayValues = new List<string>();
+            foreach (var item in _selectedItems)
+            {
+                string displayValue = GetDisplayValue(item);
+                displayValues.Add(displayValue);
+            }
+
+            Text = string.Join(Separator, displayValues);
+        }
+
+        private string GetDisplayValue(object item)
+        {
+            if (string.IsNullOrEmpty(DisplayMemberPath))
+            {
+                return item.ToString();
+            }
+
+            try
+            {
+                var property = TypeDescriptor.GetProperties(item).Find(DisplayMemberPath, true);
+                if (property != null)
+                {
+                    object value = property.GetValue(item);
+                    return value?.ToString() ?? string.Empty;
+                }
+            }
+            catch
+            {
+                // Fallback to ToString if any error occurs
+            }
+
+            return item.ToString();
+        }
+
+        private object GetItemValue(object item)
+        {
+            if (string.IsNullOrEmpty(ValueMemberPath))
+            {
+                return item;
+            }
+
+            try
+            {
+                var property = TypeDescriptor.GetProperties(item).Find(ValueMemberPath, true);
+                if (property != null)
+                {
+                    return property.GetValue(item);
+                }
+            }
+            catch
+            {
+                // Fallback to the item itself if any error occurs
+            }
+
+            return item;
+        }
+
+        private object FindItemByValue(object value)
+        {
+            if (string.IsNullOrEmpty(ValueMemberPath))
+            {
+                return Items.Cast<object>().FirstOrDefault(item =>
+                    item?.Equals(value) == true);
+            }
+
+            return Items.Cast<object>().FirstOrDefault(item =>
+            {
+                try
+                {
+                    var property = TypeDescriptor.GetProperties(item).Find(ValueMemberPath, true);
+                    if (property != null)
+                    {
+                        object itemValue = property.GetValue(item);
+                        return itemValue?.Equals(value) == true;
+                    }
+                }
+                catch
+                {
+                    // Ignore exceptions
+                }
+                return false;
+            });
+        }
+
+        private void SelectedItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_isInternalChange)
+                return;
+
+            UpdateText();
+            UpdateSelectedItemsSource();
+            UpdateSelectedValuesSource();
+        }
+
+        private void UpdateSelectedItemsSource()
+        {
+            if (SelectedItems == null || _isInternalChange)
+                return;
+
+            _isInternalChange = true;
+
+            // Create a new list or clear the existing one
+            if (SelectedItems is IList selectedItemsList)
+            {
+                selectedItemsList.Clear();
+                foreach (var item in _selectedItems)
+                {
+                    selectedItemsList.Add(item);
+                }
+            }
+
+            _isInternalChange = false;
+        }
+
+        private void UpdateSelectedValuesSource()
+        {
+            if (SelectedValues == null || _isInternalChange)
+                return;
+
+            _isInternalChange = true;
+
+            // Create a new list or clear the existing one
+            if (SelectedValues is IList selectedValuesList)
+            {
+                selectedValuesList.Clear();
+                foreach (var item in _selectedItems)
+                {
+                    selectedValuesList.Add(GetItemValue(item));
+                }
+            }
+
+            _isInternalChange = false;
+        }
+
+        private static void OnIsDropDownOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            if (control._popup != null)
+            {
+                control._popup.IsOpen = (bool)e.NewValue;
             }
         }
+
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            control.Items.Clear();
+
+            if (e.NewValue != null)
+            {
+                foreach (var item in (IEnumerable)e.NewValue)
+                {
+                    control.Items.Add(item);
+                }
+            }
+
+            // Clear selection when ItemsSource changes
+            control._isInternalChange = true;
+            control._selectedItems.Clear();
+            control._isInternalChange = false;
+            control.UpdateText();
+            control.UpdateSelectedItemsSource();
+            control.UpdateSelectedValuesSource();
+        }
+
+        private static void OnDisplayMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            control.UpdateText();
+        }
+
+        private static void OnSeparatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            control.UpdateText();
+        }
+
+        private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            if (control._isInternalChange)
+                return;
+
+            control._isInternalChange = true;
+            control._selectedItems.Clear();
+
+            if (e.NewValue is IEnumerable items)
+            {
+                foreach (var item in items)
+                {
+                    control._selectedItems.Add(item);
+                }
+            }
+
+            control._isInternalChange = false;
+            control.UpdateText();
+            control.UpdateSelectedValuesSource();
+        }
+
+        private static void OnSelectedValuesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as MultiComboBox;
+            if (control._isInternalChange)
+                return;
+
+            control._isInternalChange = true;
+            control._selectedItems.Clear();
+
+            if (e.NewValue is IEnumerable values)
+            {
+                foreach (var value in values)
+                {
+                    var item = control.FindItemByValue(value);
+                    if (item != null)
+                    {
+                        control._selectedItems.Add(item);
+                    }
+                }
+            }
+
+            control._isInternalChange = false;
+            control.UpdateText();
+            control.UpdateSelectedItemsSource();
+        }
+
+        #endregion Methods
     }
-
-    #endregion DeselectItemCommand
-
-    #region IsShowCheckBox
-
-    public static readonly DependencyProperty IsShowCheckBoxProperty =
-        DependencyProperty.Register(nameof(IsShowCheckBox), typeof(bool), typeof(MultiComboBox), new PropertyMetadata(default(bool)));
-
-    public bool IsShowCheckBox
-    {
-        get => (bool)GetValue(IsShowCheckBoxProperty);
-        set => SetValue(IsShowCheckBoxProperty, value);
-    }
-
-    #endregion IsShowCheckBox
 }

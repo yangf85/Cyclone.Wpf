@@ -35,12 +35,12 @@ public class NotificationOption
     /// <summary>
     /// 通知宽度
     /// </summary>
-    public double MaxWidth { get; set; } = 240;
+    public double Width { get; set; } = 240;
 
     /// <summary>
     /// 最大高度
     /// </summary>
-    public double MaxHeight { get; set; } = 75;
+    public double Height { get; set; } = 75;
 
     /// <summary>
     /// 是否显示关闭按钮
