@@ -8,9 +8,9 @@ public class AlertOption
 {
     public double Width { get; set; } = 400;
 
-    public double Height { get; set; } = 200;
+    public double Height { get; set; } = 240;
 
-    public AlertButton ButtonType { get; set; } = AlertButton.Ok;
+    public AlertButton ButtonType { get; set; } = AlertButton.Yes;
 
     public string Title { get; set; } = "Alert";
 
@@ -31,9 +31,13 @@ public class AlertOption
 
     public Brush TitleForeground { get; set; } = new SolidColorBrush(Color.FromArgb(0XFF, 0XFF, 0XFF, 0XFF));
 
-    public Brush AlertButtonGroupBackground { get; set; }
+    public Brush AlertButtonGroupBackground { get; set; } = new SolidColorBrush(Color.FromArgb(0x10, 0x80, 0x80, 0x80));
 
-    public double AlertButtonGroupHeight { get; set; }
+    public Brush ContentForeground { get; set; } = Brushes.DarkGray;
+
+    public Brush AlertIconForeground { get; set; } = Brushes.DarkGray;
+
+    public double AlertButtonGroupHeight { get; set; } = 56d;
 
     public string OkButtonText { get; set; } = "Ok";
 
@@ -42,4 +46,8 @@ public class AlertOption
     public bool IsShowMask { get; set; } = true;
 
     public Brush MaskBrush { get; set; } = new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00));
+
+    public HorizontalAlignment AlertButtonHorizontalAlignment { get; set; } = HorizontalAlignment.Center;
+
+    public AlertIcon AlertIcon { get; set; }
 }

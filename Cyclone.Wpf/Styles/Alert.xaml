@@ -7,139 +7,6 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate x:Key="Aler.Default.DataTemplate">
-        <Grid Background="{DynamicResource Background.Focused}">
-            <Grid HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Grid.Column="0"
-                    Width="20"
-                    Height="20"
-                    VerticalAlignment="Center"
-                    Data="M863.597777 762.214738c-7.613398-49.933249-95.696526-60.374042-97.194646-94.608751-1.5104-34.234709 7.432273-212.721823 7.432273-212.721823 5.027503-140.082432-91.236957-216.734206-190.076056-251.754814 0.10847-0.37453 0-1.00284-0.10847-1.655709 0.01228-0.713244 0.10847-1.401929 0.10847-2.12643 0-39.613206-32.132838-71.745021-71.757301-71.745021s-71.757301 32.132838-71.757301 71.757301c0 0.725524 0.084934 1.414209 0.10847 2.12643-0.10847 0.652869-0.217964 1.2689-0.10847 1.655709-98.850355 35.020608-195.114816 111.660102-190.076056 251.754814 0 0 8.942673 178.474834 7.432273 212.721823-1.5104 34.234709-89.582271 44.664246-97.194646 94.608751-4.967128 19.262716 17.268292 38.548968 38.573527 38.548968l225.77307 0c-0.51984 3.927449-0.89437 7.902994-0.89437 11.963473 0 48.700165 39.455617 88.203878 88.143503 88.264253 48.687886-0.060375 88.143503-39.564088 88.143503-88.264253 0-4.060479-0.37453-8.036024-0.89437-11.963473L825.02425 800.775986C846.329485 800.775986 868.552625 781.477454 863.597777 762.214738z"
-                    Fill="{DynamicResource Icon.Foreground.Invert}"
-                    Stretch="Uniform" />
-
-                <TextBlock
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource Foreground.Invert}"
-                    Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ctl:NotificationWindow}}"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Aler.Information.DataTemplate">
-        <Grid Background="{DynamicResource Background.Info}">
-            <Grid HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Grid.Column="0"
-                    Width="24"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    Data="M512 0A512 512 0 1 1 512 1024a512 512 0 0 1 0-1024zM564.516571 814.445714l0-438.857143-109.714285 0 0 438.857143 109.714285 0z m-1e-8-621.714285l-109.71428499 0 0 109.714285 109.714285 0-1e-8-109.714285z"
-                    Fill="{DynamicResource Icon.Foreground.Invert}"
-                    Stretch="Uniform" />
-
-                <TextBlock
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource Foreground.Invert}"
-                    Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ctl:NotificationWindow}}"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Aler.Warning.DataTemplate">
-        <Grid Background="{DynamicResource Background.Warning}">
-            <Grid HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Grid.Column="0"
-                    Width="24"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    Data="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024zM459.483429 209.554286v438.857143h109.714285v-438.857143h-109.714285z m0 621.714285h109.714285v-109.714285h-109.714285v109.714285z"
-                    Fill="{DynamicResource Icon.Foreground.Invert}"
-                    Stretch="Uniform" />
-                <TextBlock
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource Foreground.Invert}"
-                    Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ctl:NotificationWindow}}"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Aler.Error.DataTemplate">
-        <Grid Background="{DynamicResource Background.Error}">
-            <Grid HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Grid.Column="0"
-                    Width="24"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    Data="M16,2 C8.268,2 2,8.268 2,16 C2,23.732 8.268,30 16,30 C23.732,30 30,23.732 30,16 C30,8.268 23.732,2 16,2 Z M24,10 L18,16 L24,22 L22,24 L16,18 L10,24 L8,22 L14,16 L8,10 L10,8 L16,14 L22,8 L24,10 Z"
-                    Fill="{DynamicResource Icon.Foreground.Invert}"
-                    Stretch="Uniform"
-                    StrokeThickness="3" />
-                <TextBlock
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource Foreground.Invert}"
-                    Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ctl:NotificationWindow}}"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Aler.Success.DataTemplate">
-        <Grid Background="{DynamicResource Background.Success}">
-            <Grid HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Grid.Column="0"
-                    Width="24"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    Data="M510.545 28.22c-267.043 0-483.521 216.477-483.521 483.52s216.479 483.521 483.521 483.521 483.52-216.479 483.52-483.521S777.588 28.22 510.545 28.22zM776.855 407.855l-315.37 315.37c-9.763 9.763-22.559 14.645-35.355 14.645-12.796 0-25.592-4.882-35.355-14.645l-176.13-176.13c-19.526-19.525-19.526-51.184 0-70.71 19.526-19.526 51.184-19.527 70.711 0L426.13 617.159l280.015-280.015c19.527-19.526 51.184-19.526 70.711 0C796.382 356.671 796.382 388.329 776.855 407.855z"
-                    Fill="{DynamicResource Icon.Foreground.Invert}"
-                    Stretch="Uniform" />
-                <TextBlock
-                    Grid.Column="2"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource Foreground.Invert}"
-                    Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ctl:NotificationWindow}}"
-                    TextWrapping="WrapWithOverflow" />
-            </Grid>
-        </Grid>
-    </DataTemplate>
-
     <!--  警告窗口中按钮的样式  -->
     <Style x:Key="AlertWindow.CaptionCloseButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AlertWindow}}" />
@@ -273,31 +140,36 @@
                                 </Button>
                             </DockPanel>
                             <Grid Grid.Row="1">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ContentPresenter
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Content}"
+                                    TextElement.Foreground="{TemplateBinding ContentForeground}" />
                             </Grid>
-                            <Grid Grid.Row="2" Margin="5" Background="{TemplateBinding AlertButtonGroupBackground}">
-                                <UniformGrid HorizontalAlignment="{TemplateBinding AlertButtonHorizontalAlignment}" Panel.ZIndex="99" Rows="1">
-                                    <Button
-                                        x:Name="PART_OkButton"
-                                        MinWidth="120"
-                                        Command="{x:Static ctl:AlertWindow.CancelCommand}"
-                                        Content="{TemplateBinding OkButtonText}"
-                                        Style="{DynamicResource AlertWindow.AlertButtonStyle}" />
-                                    <Button
-                                        x:Name="PART_CancelButton"
-                                        Margin="5,0,0,0"
-                                        Command="{x:Static ctl:AlertWindow.OkCommand}"
-                                        Content="{TemplateBinding CancelButtonText}"
-                                        Style="{DynamicResource AlertWindow.AlertButtonStyle}"
-                                        Visibility="Visible" />
-                                </UniformGrid>
-                                <Rectangle x:Name="AlertButtonGroupMask" Height="{TemplateBinding AlertButtonGroupHeight}" Fill="{TemplateBinding AlertButtonGroupBackground}" />
+                            <Grid Grid.Row="2">
+                                <Border Height="{TemplateBinding AlertButtonGroupHeight}" Padding="5" Background="{TemplateBinding AlertButtonGroupBackground}">
+                                    <UniformGrid HorizontalAlignment="{TemplateBinding AlertButtonGroupHorizontalAlignment}" VerticalAlignment="Center" Rows="1">
+                                        <Button
+                                            x:Name="PART_YesButton"
+                                            MinWidth="120"
+                                            Command="{x:Static ctl:AlertWindow.CancelCommand}"
+                                            Content="{TemplateBinding OkButtonText}"
+                                            Style="{DynamicResource AlertWindow.AlertButtonStyle}" />
+                                        <Button
+                                            x:Name="PART_NoButton"
+                                            Margin="5,0,0,0"
+                                            Command="{x:Static ctl:AlertWindow.OkCommand}"
+                                            Content="{TemplateBinding CancelButtonText}"
+                                            Style="{DynamicResource AlertWindow.AlertButtonStyle}"
+                                            Visibility="Collapsed" />
+                                    </UniformGrid>
+                                </Border>
                             </Grid>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="ButtonType" Value="OkCancel">
-                            <Setter TargetName="PART_CancelButton" Property="Visibility" Value="Visible" />
+                        <Trigger Property="ButtonType" Value="YesNo">
+                            <Setter TargetName="PART_NoButton" Property="Visibility" Value="Visible" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

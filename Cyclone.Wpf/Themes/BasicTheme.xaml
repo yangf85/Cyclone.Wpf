@@ -92,10 +92,10 @@
     <SolidColorBrush x:Key="Border.FocusRing" Color="{StaticResource BlueLighten2}" />
 
     <SolidColorBrush x:Key="Text.Title" Color="{StaticResource GrayDarken4}" />
-    <SolidColorBrush x:Key="Text.Subtitle" Color="{StaticResource GrayDarken3}" />
-    <SolidColorBrush x:Key="Text.Header" Color="{StaticResource GrayDarken1}" />
-    <SolidColorBrush x:Key="Text.Caption" Color="{StaticResource GrayDarken1}" />
-    <SolidColorBrush x:Key="Text.Content" Color="{StaticResource GrayDefault}" />
+    <SolidColorBrush x:Key="Text.Subtitle" Color="{StaticResource GrayDarken4}" />
+    <SolidColorBrush x:Key="Text.Header" Color="{StaticResource GrayDarken3}" />
+    <SolidColorBrush x:Key="Text.Caption" Color="{StaticResource GrayDarken3}" />
+    <SolidColorBrush x:Key="Text.Content" Color="{StaticResource GrayDarken2}" />
     <SolidColorBrush x:Key="Text.Prompt" Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Text.Invert" Color="{StaticResource White}" />
 
@@ -110,7 +110,7 @@
     <SolidColorBrush x:Key="Icon.Foreground.Success" Color="{StaticResource GreenDarken3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Error" Color="{StaticResource RedDarken3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Warning" Color="{StaticResource OrangeLighten1}" />
-    <SolidColorBrush x:Key="Icon.Foreground.Info" Color="{StaticResource BlueLighten3}" />
+    <SolidColorBrush x:Key="Icon.Foreground.Info" Color="{StaticResource BlueDarken3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Disabled" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Icon.Foreground.Link" Color="{StaticResource BlueDarken3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Invert" Color="{StaticResource White}" />

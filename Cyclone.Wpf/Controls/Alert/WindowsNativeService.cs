@@ -59,6 +59,22 @@ internal static class WindowsNativeService
     public const uint EVENT_OBJECT_REORDER = 0x8004;         // 窗口Z序变化事件
     public const uint WINEVENT_OUTOFCONTEXT = 0x0000;        // 事件钩子标志
 
+    // 窗口显示和隐藏事件
+    /// <summary>
+    /// 窗口显示事件，触发于窗口从隐藏变为显示时
+    /// </summary>
+    public const uint EVENT_OBJECT_SHOW = 0x8002;
+
+    /// <summary>
+    /// 窗口隐藏事件，触发于窗口从显示变为隐藏时
+    /// </summary>
+    public const uint EVENT_OBJECT_HIDE = 0x8003;
+
+    /// <summary>
+    /// 窗口获得前台焦点事件，当窗口成为前台窗口时触发
+    /// </summary>
+    public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+
     #endregion 常量定义
 
     #region 委托定义
@@ -228,6 +244,38 @@ internal static class WindowsNativeService
         {
             BringWindowToTop(windowHandle);
             SetForegroundWindow(windowHandle);
+        }
+    }
+
+    /// <summary>
+    /// 设置窗口的Z顺序，使指定窗口位于参考窗口之上
+    /// </summary>
+    /// <param name="hWnd">要设置的窗口句柄</param>
+    /// <param name="hWndInsertAfter">参考窗口句柄，新窗口将置于此窗口之上</param>
+    /// <returns>操作是否成功</returns>
+    public static bool SetWindowZOrder(IntPtr hWnd, IntPtr hWndInsertAfter)
+    {
+        if (IsValidWindow(hWnd) && IsValidWindow(hWndInsertAfter))
+        {
+            // 在Windows API中，窗口Z顺序是一个链表，其中hWndInsertAfter指定的是
+            // 作为参考的窗口，然后hWnd被放在这个窗口之后（在Z顺序链中）
+            // 换句话说，hWnd将会在屏幕显示上位于hWndInsertAfter之上
+            return SetWindowPos(hWnd, hWndInsertAfter, 0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 取消窗口的置顶状态
+    /// </summary>
+    /// <param name="windowHandle">窗口句柄</param>
+    public static void SetWindowNotTopMost(IntPtr windowHandle)
+    {
+        if (IsValidWindow(windowHandle))
+        {
+            SetWindowPos(windowHandle, new IntPtr(HWND_NOTOPMOST), 0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
     }
 

@@ -1,4 +1,7 @@
-﻿using Cyclone.Wpf.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Demo.Helper;
 using Cyclone.Wpf.Demo.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -22,9 +26,16 @@ namespace Cyclone.Wpf.Demo.Views
     /// </summary>
     public partial class MessageBoxView : UserControl
     {
+        public static DataTemplate Faker { get; set; }
+
         public MessageBoxView()
         {
             InitializeComponent();
+            DataContext = new MessageBoxViewModel();
+            Loaded += (s, e) =>
+            {
+                Faker = (DataTemplate)Resources["FakerData"];
+            };
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -61,8 +72,61 @@ namespace Cyclone.Wpf.Demo.Views
         {
             var service = Cyclone.Wpf.Controls.AlertService.Instance;
             service.SetOwner(App.Current.MainWindow);
-            service.Show("Hello World", null, "标题");
-            //MessageBox.Show("Hello World");
+            var button = (Button)sender;
+            switch (button.Content)
+            {
+                case "Message":
+                    service.Messgae($"通知消息");
+                    break;
+
+                case "Success":
+                    service.Success("成功");
+                    break;
+
+                case "Infomation":
+                    service.Information("信息");
+                    break;
+
+                case "Warning":
+                    service.Warning("警告");
+                    break;
+
+                case "Error":
+                    service.Error("错误");
+                    break;
+
+                case "Question":
+                    service.Question("问题");
+                    break;
+            }
+        }
+    }
+
+    public partial class MessageBoxViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial FakerData Data { get; set; } = new FakerData();
+
+        [RelayCommand]
+        void ShowForm()
+        {
+            var service = new Cyclone.Wpf.Controls.AlertService();
+            service.SetOwner(App.Current.MainWindow);
+            service.Option.Title = "Faker";
+            service.Option.ButtonType = AlertButton.YesNo;
+            service.Option.AlertButtonHorizontalAlignment = HorizontalAlignment.Right;
+            service.Option.Width = 600;
+            service.Option.Height = 400;
+            var result = service.Show(new FakerForm()
+            {
+                DataContext = Data,
+            });
+
+            var mm = Data;
+        }
+
+        public MessageBoxViewModel()
+        {
         }
     }
 }

@@ -61,18 +61,18 @@ public class AlertWindow : Window
 
     #endregion CaptionHeight
 
-    #region AlertButtonHorizontalAlignment
+    #region AlertButtonGroupHorizontalAlignment
 
-    public HorizontalAlignment AlertButtonHorizontalAlignment
+    public HorizontalAlignment AlertButtonGroupHorizontalAlignment
     {
-        get => (HorizontalAlignment)GetValue(AlertButtonHorizontalAlignmentProperty);
-        set => SetValue(AlertButtonHorizontalAlignmentProperty, value);
+        get => (HorizontalAlignment)GetValue(AlertButtonGroupHorizontalAlignmentProperty);
+        set => SetValue(AlertButtonGroupHorizontalAlignmentProperty, value);
     }
 
-    public static readonly DependencyProperty AlertButtonHorizontalAlignmentProperty =
-        DependencyProperty.Register(nameof(AlertButtonHorizontalAlignment), typeof(HorizontalAlignment), typeof(AlertWindow), new PropertyMetadata(HorizontalAlignment.Center));
+    public static readonly DependencyProperty AlertButtonGroupHorizontalAlignmentProperty =
+        DependencyProperty.Register(nameof(AlertButtonGroupHorizontalAlignment), typeof(HorizontalAlignment), typeof(AlertWindow), new PropertyMetadata(HorizontalAlignment.Center));
 
-    #endregion AlertButtonHorizontalAlignment
+    #endregion AlertButtonGroupHorizontalAlignment
 
     #region ButtonType
 
@@ -84,7 +84,7 @@ public class AlertWindow : Window
 
     public static readonly DependencyProperty ButtonTypeProperty =
         DependencyProperty.Register(nameof(ButtonType), typeof(AlertButton), typeof(AlertWindow),
-            new PropertyMetadata(AlertButton.Ok));
+            new PropertyMetadata(AlertButton.Yes));
 
     #endregion ButtonType
 
@@ -129,6 +129,19 @@ public class AlertWindow : Window
 
     #endregion AlertButtonGroupBackground
 
+    #region AlertIconForeground
+
+    public Brush AlertIconForeground
+    {
+        get => (Brush)GetValue(AlertIconForegroundProperty);
+        set => SetValue(AlertIconForegroundProperty, value);
+    }
+
+    public static readonly DependencyProperty AlertIconForegroundProperty =
+        DependencyProperty.Register(nameof(AlertIconForeground), typeof(Brush), typeof(AlertWindow), new PropertyMetadata(default(Brush)));
+
+    #endregion AlertIconForeground
+
     #region AlertButtonGroupHeight
 
     public double AlertButtonGroupHeight
@@ -141,6 +154,19 @@ public class AlertWindow : Window
         DependencyProperty.Register(nameof(AlertButtonGroupHeight), typeof(double), typeof(AlertWindow), new PropertyMetadata(0d));
 
     #endregion AlertButtonGroupHeight
+
+    #region ContentForeground
+
+    public Brush ContentForeground
+    {
+        get => (Brush)GetValue(ContentForegroundProperty);
+        set => SetValue(ContentForegroundProperty, value);
+    }
+
+    public static readonly DependencyProperty ContentForegroundProperty =
+        DependencyProperty.Register(nameof(ContentForeground), typeof(Brush), typeof(AlertWindow), new PropertyMetadata(default(Brush)));
+
+    #endregion ContentForeground
 
     #region Command
 

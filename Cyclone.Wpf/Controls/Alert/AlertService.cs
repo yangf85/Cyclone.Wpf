@@ -13,16 +13,15 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public interface IAlertService : IDisposable
 {
-    bool? Show(object content, DataTemplate template, string title = null);
+    bool? Show(object content, string title = null);
 }
 
 /// <summary>
 /// 警告框服务实现类
+/// 现在存在一个问题，当使用窗口时，主窗口隐藏以后再显示,消息窗口无法显示 ,需要使用ALT+TAB键显示
 /// </summary>
 public class AlertService : IAlertService, IDisposable
 {
-    private readonly AlertOption _option;
-
     // 使用非readonly的静态字段，允许重新分配
     private static Lazy<AlertService> _lazyInstance;
 
@@ -55,6 +54,12 @@ public class AlertService : IAlertService, IDisposable
         }
     }
 
+    public AlertOption Option
+    {
+        get;
+        private set;
+    }
+
     /// <summary>
     /// 重置警告服务单例实例
     /// 用于服务处置后重新开始使用的情况
@@ -70,7 +75,6 @@ public class AlertService : IAlertService, IDisposable
 
     private Window _ownerWindow;               // 拥有者WPF窗口
     private IntPtr _ownerHandle;               // 拥有者窗口句柄
-    private static ResourceDictionary _dict;   // 资源字典
     private Window _maskWindow;                // 蒙版窗口
     private AlertWindow _currentAlertWindow;   // 当前活动的警告窗口
 
@@ -92,11 +96,7 @@ public class AlertService : IAlertService, IDisposable
     /// </summary>
     public AlertService(AlertOption option)
     {
-        _dict = new ResourceDictionary
-        {
-            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Alert.xaml", UriKind.Absolute)
-        };
-        _option = option ?? throw new ArgumentNullException(nameof(option));
+        Option = option ?? throw new ArgumentNullException(nameof(option));
     }
 
     /// <summary>
@@ -186,27 +186,29 @@ public class AlertService : IAlertService, IDisposable
     /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>创建的AlertWindow实例</returns>
-    private AlertWindow CreateAlertWindow(object content, DataTemplate template, string title)
+    private AlertWindow CreateAlertWindow(object content, string title)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
 
         var window = new AlertWindow
         {
-            Width = _option.Width,
-            Height = _option.Height,
-            ButtonType = _option.ButtonType,
-            Title = title ?? _option.Title,
-            Icon = _option.Icon,
-            CaptionHeight = _option.CaptionHeight,
-            CaptionBackground = _option.CaptionBackground,
-            TitleForeground = _option.TitleForeground,
-            AlertButtonGroupBackground = _option.AlertButtonGroupBackground,
-            AlertButtonGroupHeight = _option.AlertButtonGroupHeight,
-            OkButtonText = _option.OkButtonText,
-            CancelButtonText = _option.CancelButtonText,
+            Width = Option.Width,
+            Height = Option.Height,
+            ButtonType = Option.ButtonType,
+            Title = title ?? Option.Title,
+            Icon = Option.Icon,
+            CaptionHeight = Option.CaptionHeight,
+            CaptionBackground = Option.CaptionBackground,
+            TitleForeground = Option.TitleForeground,
+            AlertButtonGroupBackground = Option.AlertButtonGroupBackground,
+            AlertButtonGroupHeight = Option.AlertButtonGroupHeight,
+            AlertButtonGroupHorizontalAlignment = Option.AlertButtonHorizontalAlignment,
+            OkButtonText = Option.OkButtonText,
+            CancelButtonText = Option.CancelButtonText,
+
             Content = content,
-            ContentTemplate = template ?? _dict["Alert.Default.DataTemplate"] as DataTemplate,
+
             // 不设置为始终最前以允许用户切换窗口
             Topmost = false,
             // 在任务栏显示，使最小化后可以还原
@@ -266,7 +268,7 @@ public class AlertService : IAlertService, IDisposable
             Background = Brushes.Transparent,
             WindowStartupLocation = WindowStartupLocation.Manual,
             // 修改：设置为接收点击事件但不获取焦点
-            IsHitTestVisible = true,
+            IsHitTestVisible = false,
             // 修改：允许获取焦点以便正确处理Z顺序
             Focusable = true,
             // 设置为不是最上层，让Alert窗口可以在其上方
@@ -278,7 +280,7 @@ public class AlertService : IAlertService, IDisposable
         {
             Width = ownerRect.Width,
             Height = ownerRect.Height,
-            Fill = _option.MaskBrush ?? new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))
+            Fill = Option.MaskBrush ?? new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))
         };
 
         maskWindow.Content = rectangle;
@@ -290,24 +292,9 @@ public class AlertService : IAlertService, IDisposable
         }
 
         // 添加事件处理，确保点击蒙版时不会让蒙版获得焦点
-        maskWindow.MouseDown += (sender, e) =>
+        maskWindow.PreviewMouseDown += (sender, e) =>
         {
-            // 点击蒙版时确保Alert窗口保持在前台
-            if (_currentAlertWindow != null)
-            {
-                // 将警告窗口置于前台
-                _currentAlertWindow.Activate();
-                WindowsNativeService.BringWindowToTop(new WindowInteropHelper(_currentAlertWindow).Handle);
-                WindowsNativeService.SetForegroundWindow(new WindowInteropHelper(_currentAlertWindow).Handle);
-            }
             e.Handled = true;
-        };
-
-        // 添加窗口加载事件，设置窗口为无法激活
-        maskWindow.Loaded += (sender, e) =>
-        {
-            var hwnd = new WindowInteropHelper(maskWindow).Handle;
-            WindowsNativeService.SetWindowNoActivate(hwnd);
         };
 
         return maskWindow;
@@ -424,6 +411,12 @@ public class AlertService : IAlertService, IDisposable
     /// </summary>
     private void UpdateMaskPositionFromHandle()
     {
+        if (_currentAlertWindow != null && _currentAlertWindow.IsLoaded)
+        {
+            _currentAlertWindow.Visibility = Visibility.Visible;
+            _currentAlertWindow.Activate();
+        }
+
         if (_maskWindow != null && WindowsNativeService.IsValidWindow(_ownerHandle))
         {
             var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
@@ -522,7 +515,7 @@ public class AlertService : IAlertService, IDisposable
     /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>对话框结果</returns>
-    public bool? Show(object content, DataTemplate template = null, string title = null)
+    public bool? Show(object content, string title = null)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
@@ -530,13 +523,13 @@ public class AlertService : IAlertService, IDisposable
         // 确保在UI线程上执行
         if (Application.Current.Dispatcher.CheckAccess())
         {
-            return ShowDialogInternal(content, template, title);
+            return ShowDialogInternal(content, title);
         }
         else
         {
             return Application.Current.Dispatcher.Invoke(() =>
             {
-                return ShowDialogInternal(content, template, title);
+                return ShowDialogInternal(content, title);
             });
         }
     }
@@ -548,129 +541,42 @@ public class AlertService : IAlertService, IDisposable
     /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>对话框结果</returns>
-    private bool? ShowDialogInternal(object content, DataTemplate template, string title)
+    private bool? ShowDialogInternal(object content, string title)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        var window = CreateAlertWindow(content, template, title);
-        _currentAlertWindow = window;
-        PositionWindowInCenter(window);
-
-        // 存储弹窗显示前的当前活动窗口句柄
-        IntPtr previousActiveWindow = WindowsNativeService.GetForegroundWindow();
-
-        // 不禁用Owner窗口，允许用户与Owner窗口交互
-        // 移除了EnableWindow(false)的调用，允许用户正常操作Owner窗口
-
         // 如果启用了蒙版并且有所有者，显示蒙版
-        if (_option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
+        if (Option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
         {
             _maskWindow = CreateMaskWindow();
-            if (_maskWindow != null)
-            {
-                // 显示蒙版窗口但不激活它
-                _maskWindow.Show();
-
-                // 使用Win32 API确保蒙版窗口显示但不激活
-                var maskHandle = new WindowInteropHelper(_maskWindow).Handle;
-                WindowsNativeService.ShowWindowNoActivate(maskHandle);
-
-                // 添加位置和尺寸同步
-                if (_ownerWindow != null)
-                {
-                    // 对于WPF窗口，添加位置变化监听器
-                    _ownerWindow.LocationChanged += (s, e) => UpdateMaskPosition();
-                    _ownerWindow.SizeChanged += (s, e) => UpdateMaskSize();
-                }
-                else if (_ownerHandle != IntPtr.Zero)
-                {
-                    // 对于句柄窗口，设置窗口事件监控
-                    SetupNonWpfWindowMonitoring();
-                }
-
-                // 设置Alert窗口的Z顺序在蒙版之上
-                if (_ownerWindow != null)
-                {
-                    // 保留原始的Owner关系
-                    window.Owner = _ownerWindow;
-                }
-
-                // 添加蒙版窗口作为警告窗口的关闭回调
-                window.Closed += (sender, e) =>
-                {
-                    // 确保蒙版窗口关闭
-                    if (_maskWindow != null && _maskWindow.IsLoaded)
-                    {
-                        _maskWindow.Close();
-                    }
-
-                    // 清理事件钩子
-                    UnhookEvents();
-                };
-
-                // 添加窗口状态变化监听
-                window.StateChanged += (sender, e) =>
-                {
-                    if (window.WindowState == WindowState.Minimized)
-                    {
-                        // 如果警告窗口被最小化，也隐藏蒙版窗口
-                        if (_maskWindow != null && _maskWindow.IsLoaded)
-                        {
-                            _maskWindow.Visibility = Visibility.Hidden;
-                        }
-                    }
-                    else
-                    {
-                        // 如果警告窗口恢复，也显示蒙版窗口
-                        if (_maskWindow != null && _maskWindow.IsLoaded)
-                        {
-                            _maskWindow.Visibility = Visibility.Visible;
-
-                            // 更新蒙版位置和大小
-                            if (_ownerWindow != null)
-                            {
-                                UpdateMaskPosition();
-                                UpdateMaskSize();
-                            }
-                            else if (_ownerHandle != IntPtr.Zero)
-                            {
-                                UpdateMaskPositionFromHandle();
-                            }
-                        }
-                    }
-                };
-            }
+            // 显示蒙版窗口但不激活它
+            _maskWindow?.Show();
         }
 
+        var window = CreateAlertWindow(content, title);
+        // 添加蒙版窗口作为警告窗口的关闭回调
+        window.Closed += (sender, e) =>
+        {
+            // 确保蒙版窗口关闭
+            if (_maskWindow != null && _maskWindow.IsLoaded)
+            {
+                _maskWindow.Close();
+            }
+
+            // 清理事件钩子
+            UnhookEvents();
+        };
+
+        _currentAlertWindow = window;
+        PositionWindowInCenter(window);
+        window.Owner = _maskWindow;
         bool? result = null;
         try
         {
-            // 添加窗口焦点监控，确保Alert窗口始终在最上层
-            window.Loaded += (sender, e) =>
-            {
-                var hwnd = new WindowInteropHelper(window).Handle;
-                // 主动设置窗口为顶层
-                WindowsNativeService.SetWindowTopMostAndShow(hwnd);
-            };
-
-            window.Deactivated += (sender, e) =>
-            {
-                // 当窗口失去焦点时，不强制重新激活
-                // 但确保窗口保持在合适的Z顺序位置
-                window.Dispatcher.InvokeAsync(() =>
-                {
-                    if (window.IsLoaded)
-                    {
-                        var hwnd = new WindowInteropHelper(window).Handle;
-                        // 使用HWND_TOPMOST保持在最上层，但不强制激活
-                        WindowsNativeService.SetWindowTopMostNoActivate(hwnd);
-                    }
-                });
-            };
-
             // 显示模态对话框
             result = window.ShowDialog();
+
             return result;
         }
         finally

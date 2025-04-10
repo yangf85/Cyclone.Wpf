@@ -4,11 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cy="https://www.cyclone/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Demo.Helper"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:MessageBoxViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources />
     <StackPanel>
         <GroupBox Padding="10" Header="Notification">
             <cy:SpacingUniformGrid Rows="1">
@@ -19,8 +22,16 @@
                 <Button Click="Button_Click" Content="Default" />
             </cy:SpacingUniformGrid>
         </GroupBox>
-        <GroupBox Header="Alert">
-            <Button Click="Alert_Click" />
+        <GroupBox Padding="10" Header="Alert">
+            <cy:SpacingUniformGrid Rows="1">
+                <Button Background="{DynamicResource Background.Default}" Click="Alert_Click" Content="Message" />
+                <Button Background="{DynamicResource Background.Info}" Click="Alert_Click" Content="Infomation" />
+                <Button Background="{DynamicResource Background.Success}" Click="Alert_Click" Content="Success" />
+                <Button Background="{DynamicResource Background.Error}" Click="Alert_Click" Content="Error" />
+                <Button Background="{DynamicResource Background.Warning}" Click="Alert_Click" Content="Warning" />
+                <Button Background="{DynamicResource Background.Inactive}" Click="Alert_Click" Content="Question" />
+                <Button Background="{DynamicResource Background.Selected}" Command="{Binding ShowFormCommand}" Content="Custom" />
+            </cy:SpacingUniformGrid>
         </GroupBox>
     </StackPanel>
 </UserControl>
