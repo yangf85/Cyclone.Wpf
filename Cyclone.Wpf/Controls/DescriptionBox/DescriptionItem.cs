@@ -1,11 +1,12 @@
-﻿// DescriptionBox.cs
+﻿// DescriptionItem.cs
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Cyclone.Wpf.Controls;
 
 /// <summary>
-/// DescriptionItem - 显示标签、值和描述的项目
+/// DescriptionItem - 显示标签、值和描述的项目控件
+/// 用于在 DescriptionBox 中显示信息项
 /// </summary>
 public class DescriptionItem : ContentControl
 {
@@ -15,59 +16,122 @@ public class DescriptionItem : ContentControl
             new FrameworkPropertyMetadata(typeof(DescriptionItem)));
     }
 
-    public DescriptionItem()
+    #region LabelSharedSizeGroup
+
+    public string LabelSharedSizeGroup
     {
-        // 设置默认的行列设置
-        Grid.SetRow(this, 0);
-        Grid.SetColumn(this, 0);
-        Grid.SetRowSpan(this, 1);
-        Grid.SetColumnSpan(this, 1);
+        get => (string)GetValue(LabelSharedSizeGroupProperty);
+        set => SetValue(LabelSharedSizeGroupProperty, value);
     }
 
-    #region 依赖属性
+    public static readonly DependencyProperty LabelSharedSizeGroupProperty =
+        DependencyProperty.Register(nameof(LabelSharedSizeGroup), typeof(string), typeof(DescriptionItem), new PropertyMetadata(default(string)));
 
-    public static readonly DependencyProperty LabelProperty =
-        DependencyProperty.Register("Label", typeof(string), typeof(DescriptionItem),
-            new PropertyMetadata(string.Empty));
+    #endregion LabelSharedSizeGroup
 
-    public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(object), typeof(DescriptionItem),
-            new PropertyMetadata(null));
+    #region DescriptionSharedSizeGroup
 
-    public static readonly DependencyProperty DescriptionProperty =
-        DependencyProperty.Register("Description", typeof(string), typeof(DescriptionItem),
-            new PropertyMetadata(string.Empty));
+    public string DescriptionSharedSizeGroup
+    {
+        get => (string)GetValue(DescriptionSharedSizeGroupProperty);
+        set => SetValue(DescriptionSharedSizeGroupProperty, value);
+    }
 
-    #endregion 依赖属性
+    public static readonly DependencyProperty DescriptionSharedSizeGroupProperty =
+        DependencyProperty.Register(nameof(DescriptionSharedSizeGroup), typeof(string), typeof(DescriptionItem), new PropertyMetadata(default(string)));
 
-    #region 属性
+    #endregion DescriptionSharedSizeGroup
 
-    /// <summary>
-    /// 标签文本
-    /// </summary>
+    #region Label
+
     public string Label
     {
         get { return (string)GetValue(LabelProperty); }
         set { SetValue(LabelProperty, value); }
     }
 
-    /// <summary>
-    /// 值对象
-    /// </summary>
+    public static readonly DependencyProperty LabelProperty =
+       DependencyProperty.Register("Label", typeof(string), typeof(DescriptionItem),
+           new PropertyMetadata(string.Empty));
+
+    #endregion Label
+
+    #region Value
+
+    public static readonly DependencyProperty ValueProperty =
+     DependencyProperty.Register("Value", typeof(object), typeof(DescriptionItem),
+         new PropertyMetadata(null));
+
     public object Value
     {
         get { return GetValue(ValueProperty); }
         set { SetValue(ValueProperty, value); }
     }
 
-    /// <summary>
-    /// 描述文本
-    /// </summary>
+    #endregion Value
+
+    #region Description
+
     public string Description
     {
-        get { return (string)GetValue(DescriptionProperty); }
-        set { SetValue(DescriptionProperty, value); }
+        get => (string)GetValue(DescriptionProperty);
+        set => SetValue(DescriptionProperty, value);
     }
 
-    #endregion 属性
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(string), typeof(DescriptionItem), new PropertyMetadata(default(string)));
+
+    #endregion Description
+
+    #region Column
+
+    public int Column
+    {
+        get => (int)GetValue(ColumnProperty);
+        set => SetValue(ColumnProperty, value);
+    }
+
+    public static readonly DependencyProperty ColumnProperty =
+        DependencyProperty.Register(nameof(Column), typeof(int), typeof(DescriptionItem), new PropertyMetadata(default(int)));
+
+    #endregion Column
+
+    #region Row
+
+    public int Row
+    {
+        get => (int)GetValue(RowProperty);
+        set => SetValue(RowProperty, value);
+    }
+
+    public static readonly DependencyProperty RowProperty =
+        DependencyProperty.Register(nameof(Row), typeof(int), typeof(DescriptionItem), new PropertyMetadata(default(int)));
+
+    #endregion Row
+
+    #region ColumnSpan
+
+    public int ColumnSpan
+    {
+        get => (int)GetValue(ColumnSpanProperty);
+        set => SetValue(ColumnSpanProperty, value);
+    }
+
+    public static readonly DependencyProperty ColumnSpanProperty =
+        DependencyProperty.Register(nameof(ColumnSpan), typeof(int), typeof(DescriptionItem), new PropertyMetadata(default(int)));
+
+    #endregion ColumnSpan
+
+    #region RowSpan
+
+    public int RowSpan
+    {
+        get => (int)GetValue(RowSpanProperty);
+        set => SetValue(RowSpanProperty, value);
+    }
+
+    public static readonly DependencyProperty RowSpanProperty =
+        DependencyProperty.Register(nameof(RowSpan), typeof(int), typeof(DescriptionItem), new PropertyMetadata(default(int)));
+
+    #endregion RowSpan
 }

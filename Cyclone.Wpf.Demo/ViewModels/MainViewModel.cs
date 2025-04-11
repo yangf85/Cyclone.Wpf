@@ -49,6 +49,8 @@ public partial class MainViewModel : ObservableObject
             "Expander" => new ExpanderView(),
             "Carousel" => new CarouselView(),
             "Drawer" => new DrawerView(),
+            "Description" => new DescriptionBoxView(),
+            "Stepper" => new StepperView(),
             _ => new object(),
         };
     }
@@ -137,6 +139,11 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="Carousel",
                     Icon= "\xe751",
                 },
+                new SideMenuItemViewModel()
+                {
+                    Header="Description",
+                    Icon= "\xe751",
+                },
             ]
         });
         Items.Add(new SideMenuItemViewModel()
@@ -173,6 +180,11 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Drawer",
+                    Icon= "\xe6dd",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="Stepper",
                     Icon= "\xe6dd",
                 },
 

@@ -25,45 +25,39 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Border
-                                    Grid.Row="0"
-                                    Background="{TemplateBinding HeaderBackground}"
-                                    BorderBrush="{DynamicResource Border.Header}"
-                                    BorderThickness="0,0,0,1"
-                                    Visibility="{Binding Title, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToVisibilityConverter}}">
+                                <Border Grid.Row="0"
+                                        Background="{TemplateBinding HeaderBackground}"
+                                        BorderBrush="{DynamicResource Border.Header}"
+                                        BorderThickness="0,0,0,1"
+                                        Visibility="{Binding Title, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Grid Margin="{DynamicResource Margin.All}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <ContentPresenter
-                                            Grid.Column="0"
-                                            Margin="{DynamicResource Margin.Right}"
-                                            VerticalAlignment="Center"
-                                            Content="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <TextBlock
-                                            Grid.Column="1"
-                                            VerticalAlignment="Center"
-                                            FontSize="{DynamicResource Font.Header}"
-                                            Foreground="{TemplateBinding HeaderForeground}"
-                                            Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <ContentPresenter Grid.Column="0"
+                                                          Margin="{DynamicResource Margin.Right}"
+                                                          VerticalAlignment="Center"
+                                                          Content="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="{DynamicResource Font.Header}"
+                                                   Foreground="{TemplateBinding HeaderForeground}"
+                                                   Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" />
                                     </Grid>
                                 </Border>
-                                <ContentPresenter
-                                    Grid.Row="1"
-                                    Margin="{TemplateBinding Padding}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                                <Border
-                                    Grid.Row="2"
-                                    Background="{TemplateBinding FooterBackground}"
-                                    BorderBrush="{DynamicResource Border.Header}"
-                                    BorderThickness="0,1,0,0">
-                                    <ContentPresenter
-                                        Margin="{DynamicResource Margin.All}"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Center"
-                                        Content="{Binding Footer, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <ContentPresenter Grid.Row="1"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                <Border Grid.Row="2"
+                                        Background="{TemplateBinding FooterBackground}"
+                                        BorderBrush="{DynamicResource Border.Header}"
+                                        BorderThickness="0,1,0,0">
+                                    <ContentPresenter Margin="{DynamicResource Margin.All}"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Center"
+                                                      Content="{Binding Footer, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Border>
                             </Grid>
                         </Border>
@@ -89,44 +83,38 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Border
-                                Grid.Row="0"
-                                Background="{TemplateBinding HeaderBackground}"
-                                BorderBrush="{DynamicResource Border.Header}"
-                                BorderThickness="0,0,0,1">
+                            <Border Grid.Row="0"
+                                    Background="{TemplateBinding HeaderBackground}"
+                                    BorderBrush="{DynamicResource Border.Header}"
+                                    BorderThickness="0,0,0,1">
                                 <Grid Margin="{DynamicResource Margin.All}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ContentPresenter
-                                        Grid.Column="0"
-                                        Margin="{DynamicResource Margin.Right}"
-                                        VerticalAlignment="Center"
-                                        Content="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource Font.Header}"
-                                        Foreground="{TemplateBinding HeaderForeground}"
-                                        Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <ContentPresenter Grid.Column="0"
+                                                      Margin="{DynamicResource Margin.Right}"
+                                                      VerticalAlignment="Center"
+                                                      Content="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="{DynamicResource Font.Header}"
+                                               Foreground="{TemplateBinding HeaderForeground}"
+                                               Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Grid>
                             </Border>
-                            <ContentPresenter
-                                Grid.Row="1"
-                                Margin="{TemplateBinding Padding}"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}" />
-                            <Border
-                                Grid.Row="2"
-                                Background="{TemplateBinding FooterBackground}"
-                                BorderBrush="{DynamicResource Border.Header}"
-                                BorderThickness="0,1,0,0">
-                                <ContentPresenter
-                                    Margin="{DynamicResource Margin.All}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    Content="{Binding Footer, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <ContentPresenter Grid.Row="1"
+                                              Margin="{TemplateBinding Padding}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            <Border Grid.Row="2"
+                                    Background="{TemplateBinding FooterBackground}"
+                                    BorderBrush="{DynamicResource Border.Header}"
+                                    BorderThickness="0,1,0,0">
+                                <ContentPresenter Margin="{DynamicResource Margin.All}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center"
+                                                  Content="{Binding Footer, RelativeSource={RelativeSource TemplatedParent}}" />
                             </Border>
                         </Grid>
                     </Border>

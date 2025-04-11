@@ -7,24 +7,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Margin="{TemplateBinding Padding}"
-                        VerticalAlignment="Center"
-                        Background="Transparent">
-                        <Path
-                            x:Name="Arrow"
-                            Width="14"
-                            Height="14"
-                            HorizontalAlignment="Right"
-                            Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
-                            Fill="{DynamicResource Icon.Foreground.Default}"
-                            Stretch="Uniform" />
-                        <ContentPresenter
-                            x:Name="ContentSite"
-                            HorizontalAlignment="Left"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    <Grid x:Name="RootGrid"
+                          Margin="{TemplateBinding Padding}"
+                          VerticalAlignment="Center"
+                          Background="Transparent">
+                        <Path x:Name="Arrow"
+                              Width="14"
+                              Height="14"
+                              HorizontalAlignment="Right"
+                              Data="M533.333333 631.466667L866.133333 298.666667l29.866667 29.866666-362.666667 362.666667L170.666667 328.533333l29.866666-29.866666 332.8 332.8z"
+                              Fill="{DynamicResource Icon.Foreground.Default}"
+                              Stretch="Uniform" />
+                        <ContentPresenter x:Name="ContentSite"
+                                          HorizontalAlignment="Left"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -64,35 +61,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ToggleButton
-                                x:Name="HeaderContainer"
-                                Grid.Row="0"
-                                Height="{DynamicResource Height.Horizontal.Control}"
-                                Padding="3"
-                                Content="{TemplateBinding Header}"
-                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                Cursor="Hand"
-                                Foreground="{TemplateBinding Foreground}"
-                                IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type Expander}}}"
-                                Style="{StaticResource Expander.OpenButtonStyle}" />
+                            <ToggleButton x:Name="HeaderContainer"
+                                          Grid.Row="0"
+                                          Height="{DynamicResource Height.Horizontal.Control}"
+                                          Padding="3"
+                                          Content="{TemplateBinding Header}"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                          Cursor="Hand"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type Expander}}}"
+                                          Style="{StaticResource Expander.OpenButtonStyle}" />
 
-                            <Border
-                                x:Name="ContentBorder"
-                                Grid.Row="1"
-                                RenderTransformOrigin="0.5,0"
-                                Visibility="Collapsed">
+                            <Border x:Name="ContentBorder"
+                                    Grid.Row="1"
+                                    RenderTransformOrigin="0.5,0"
+                                    Visibility="Collapsed">
                                 <Border.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform />
@@ -101,13 +95,12 @@
                                         <TranslateTransform />
                                     </TransformGroup>
                                 </Border.RenderTransform>
-                                <ContentPresenter
-                                    x:Name="ContentContainer"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                                <ContentPresenter x:Name="ContentContainer"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                             </Border>
                         </Grid>
                     </Border>
@@ -123,18 +116,16 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Visibility">
                                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="Opacity"
-                                            From="0"
-                                            To="1"
-                                            Duration="0:0:0.3" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                            From="0"
-                                            To="1"
-                                            Duration="0:0:0.3">
+                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0"
+                                                         To="1"
+                                                         Duration="0:0:0.3" />
+                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                                         From="0"
+                                                         To="1"
+                                                         Duration="0:0:0.3">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
@@ -145,18 +136,16 @@
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="Opacity"
-                                            From="1"
-                                            To="0"
-                                            Duration="0:0:0.2" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
-                                            From="1"
-                                            To="0"
-                                            Duration="0:0:0.2">
+                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="1"
+                                                         To="0"
+                                                         Duration="0:0:0.2" />
+                                        <DoubleAnimation Storyboard.TargetName="ContentBorder"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                                         From="1"
+                                                         To="0"
+                                                         Duration="0:0:0.2">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseIn" />
                                             </DoubleAnimation.EasingFunction>
