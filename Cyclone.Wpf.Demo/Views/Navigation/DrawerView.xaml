@@ -1,0 +1,95 @@
+﻿<UserControl
+    x:Class="Cyclone.Wpf.Demo.Views.DrawerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cy="https://www.cyclone/wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid x:Name="ContainerGrid">
+        <cy:Drawer x:Name="Drawer" DrawerWidth="250" Placement="Bottom">
+            <!--  主窗口内容作为Drawer的Content  -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  顶部工具栏  -->
+                <StackPanel Grid.Row="0" Background="#F0F0F0" Orientation="Horizontal">
+                    <ToggleButton
+                        Margin="0,0,10,0"
+                        Padding="8,4"
+                        Content="打开菜单"
+                        IsChecked="{Binding Path=IsOpen, ElementName=Drawer}" />
+                    <Button Margin="0,0,10,0" Padding="8,4" Content="打开设置" />
+                </StackPanel>
+
+                <!--  主内容区域  -->
+                <Border Grid.Row="1" Padding="20" Background="White">
+                    <StackPanel>
+                        <TextBlock Margin="0,0,0,20" FontSize="24" Text="主应用内容区域" />
+                        <TextBlock TextWrapping="Wrap">
+                            这是应用程序的主要内容区域。这个简化版的Drawer控件允许你从屏幕边缘滑入菜单或面板，
+                            而不会干扰主内容的布局。Drawer可以设置为从左侧、右侧、顶部或底部滑入。
+                        </TextBlock>
+                        <TextBlock Margin="0,20,0,0" TextWrapping="Wrap">
+                            点击顶部的按钮可以打开不同方向的抽屉面板。你也可以点击遮罩层关闭抽屉。
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!--  抽屉内容 (左侧导航菜单)  -->
+            <cy:Drawer.DrawerContent>
+                <Border Padding="0" Background="#2D2D30">
+                    <StackPanel>
+                        <TextBlock
+                            Background="#1E1E1E"
+                            FontSize="20"
+                            Foreground="White"
+                            Text="应用导航" />
+
+                        <Button
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="首页"
+                            Foreground="White" />
+
+                        <Button
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="项目"
+                            Foreground="White" />
+
+                        <Button
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="报告"
+                            Foreground="White" />
+
+                        <Button
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="设置"
+                            Foreground="White" />
+
+                        <Button
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="退出"
+                            Foreground="White" />
+                    </StackPanel>
+                </Border>
+            </cy:Drawer.DrawerContent>
+        </cy:Drawer>
+    </Grid>
+</UserControl>

@@ -48,6 +48,7 @@ public partial class MainViewModel : ObservableObject
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
             "Carousel" => new CarouselView(),
+            "Drawer" => new DrawerView(),
             _ => new object(),
         };
     }
@@ -167,6 +168,11 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Expander",
+                    Icon= "\xe6dd",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="Drawer",
                     Icon= "\xe6dd",
                 },
 

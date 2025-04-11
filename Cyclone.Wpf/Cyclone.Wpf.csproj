@@ -28,8 +28,4 @@
     <Page Remove="Resources\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\Card\" />
-  </ItemGroup>
-
 </Project>

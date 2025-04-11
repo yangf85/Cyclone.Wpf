@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Demo.Helper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial ObservableCollection<FakerData> Data { get; set; }
 
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> SelectedItems { get; set; } = [];
+
         public ComboBoxViewModel()
         {
             Data = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(10));
@@ -51,8 +55,9 @@ namespace Cyclone.Wpf.Demo.Views
         }
 
         [RelayCommand]
-        void ItemSelected()
+        void ItemSelected(ObservableCollection<FakerData> items)
         {
+            var current = SelectedItems;
             MessageBox.Show("Item Selected");
         }
     }
