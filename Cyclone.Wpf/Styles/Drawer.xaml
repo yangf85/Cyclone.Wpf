@@ -3,68 +3,53 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type ctl:Drawer}">
-        <!--  默认属性设置  -->
+    <ControlTemplate x:Key="Drawer.ControlTemplate.Basic" TargetType="{x:Type ctl:Drawer}">
+        <Grid>
+            <ContentPresenter Content="{TemplateBinding Content}" />
+            <Border x:Name="PART_Overlay"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Panel.ZIndex="998"
+                    Background="{DynamicResource Background.TransparentLight}"
+                    Opacity="0"
+                    Visibility="Collapsed" />
+            <Border x:Name="PART_DrawerPanel"
+                    Panel.ZIndex="999"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding DrawerContent}" />
+            </Border>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="Placement" Value="Left">
+                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Left" />
+                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
+            </Trigger>
+            <Trigger Property="Placement" Value="Right">
+                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Right" />
+                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
+            </Trigger>
+            <Trigger Property="Placement" Value="Top">
+                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
+                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Top" />
+            </Trigger>
+            <Trigger Property="Placement" Value="Bottom">
+                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
+                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Bottom" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="Drawer.Style.Basic" TargetType="{x:Type ctl:Drawer}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Border.Container}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
-        <Setter Property="Padding" Value="{DynamicResource Padding.All}" />
+
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="CloseOnOverlayClick" Value="True" />
         <Setter Property="Panel.ZIndex" Value="1000" />
-
-        <!--  控件模板  -->
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ctl:Drawer}">
-                    <Grid>
-                        <!--  主内容 - 显示Drawer的Content属性  -->
-                        <ContentPresenter Content="{TemplateBinding Content}" />
-
-                        <!--  遮罩层 - 当抽屉打开时显示  -->
-                        <Border x:Name="PART_Overlay"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Panel.ZIndex="998"
-                                Background="{DynamicResource Background.TransparentMedium}"
-                                Opacity="0"
-                                Visibility="Collapsed" />
-
-                        <!--  抽屉面板 - 显示DrawerContent属性  -->
-                        <Border x:Name="PART_DrawerPanel"
-                                Panel.ZIndex="999"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{DynamicResource CornerRadius.Medium}">
-                            <!--  抽屉内容  -->
-                            <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding DrawerContent}" />
-                        </Border>
-                    </Grid>
-
-                    <!--  控件触发器  -->
-                    <ControlTemplate.Triggers>
-                        <!--  根据抽屉位置设置抽屉面板的初始对齐方式  -->
-                        <Trigger Property="Placement" Value="Left">
-                            <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Left" />
-                            <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
-                        </Trigger>
-                        <Trigger Property="Placement" Value="Right">
-                            <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Right" />
-                            <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
-                        </Trigger>
-                        <Trigger Property="Placement" Value="Top">
-                            <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
-                            <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Top" />
-                        </Trigger>
-                        <Trigger Property="Placement" Value="Bottom">
-                            <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
-                            <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Bottom" />
-                        </Trigger>
-
-                        <!--  不再使用触发器控制面板可见性，改为在代码中控制  -->
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Template" Value="{StaticResource Drawer.ControlTemplate.Basic}" />
     </Style>
+
+    <Style BasedOn="{StaticResource Drawer.Style.Basic}" TargetType="ctl:Drawer" />
 </ResourceDictionary>

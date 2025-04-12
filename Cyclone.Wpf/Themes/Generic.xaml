@@ -35,6 +35,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TransitionBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Drawer.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Stepper.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Breadcrumb.xaml" />
 
         <!--  日期时间组件  -->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Calendar.xaml" />

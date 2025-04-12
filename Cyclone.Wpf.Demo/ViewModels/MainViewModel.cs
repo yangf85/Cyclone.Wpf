@@ -51,6 +51,7 @@ public partial class MainViewModel : ObservableObject
             "Drawer" => new DrawerView(),
             "Description" => new DescriptionBoxView(),
             "Stepper" => new StepperView(),
+            "Breadcrumb" => new BreadcrumbView(),
             _ => new object(),
         };
     }
@@ -137,12 +138,12 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Carousel",
-                    Icon= "\xe751",
+                    Icon= "\xe6d2",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="Description",
-                    Icon= "\xe751",
+                    Icon= "\xe631",
                 },
             ]
         });
@@ -180,12 +181,17 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Drawer",
-                    Icon= "\xe6dd",
+                    Icon= "\xe637",
                 },
                  new SideMenuItemViewModel()
                 {
                     Header="Stepper",
-                    Icon= "\xe6dd",
+                    Icon= "\xe65f",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="Breadcrumb",
+                    Icon= "\xe69e",
                 },
 
             ]

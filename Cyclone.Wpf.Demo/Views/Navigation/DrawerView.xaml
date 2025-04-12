@@ -1,14 +1,13 @@
-﻿<UserControl
-    x:Class="Cyclone.Wpf.Demo.Views.DrawerView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cy="https://www.cyclone/wpf"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+﻿<UserControl x:Class="Cyclone.Wpf.Demo.Views.DrawerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cy="https://www.cyclone/wpf"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
     <Grid x:Name="ContainerGrid">
         <cy:Drawer x:Name="Drawer" DrawerWidth="250" Placement="Bottom">
             <!--  主窗口内容作为Drawer的Content  -->
@@ -20,11 +19,10 @@
 
                 <!--  顶部工具栏  -->
                 <StackPanel Grid.Row="0" Background="#F0F0F0" Orientation="Horizontal">
-                    <ToggleButton
-                        Margin="0,0,10,0"
-                        Padding="8,4"
-                        Content="打开菜单"
-                        IsChecked="{Binding Path=IsOpen, ElementName=Drawer}" />
+                    <ToggleButton Margin="0,0,10,0"
+                                  Padding="8,4"
+                                  Content="打开菜单"
+                                  IsChecked="{Binding Path=IsOpen, ElementName=Drawer}" />
                     <Button Margin="0,0,10,0" Padding="8,4" Content="打开设置" />
                 </StackPanel>
 
@@ -45,48 +43,42 @@
 
             <!--  抽屉内容 (左侧导航菜单)  -->
             <cy:Drawer.DrawerContent>
-                <Border Padding="0" Background="#2D2D30">
-                    <StackPanel>
-                        <TextBlock
-                            Background="#1E1E1E"
-                            FontSize="20"
-                            Foreground="White"
-                            Text="应用导航" />
+                <Border Background="#2D2D30">
+                    <StackPanel Margin="10">
+                        <TextBlock Background="#1E1E1E"
+                                   FontSize="20"
+                                   Foreground="White"
+                                   Text="应用导航" />
 
-                        <Button
-                            HorizontalContentAlignment="Left"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="首页"
-                            Foreground="White" />
+                        <Button HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="首页"
+                                Foreground="White" />
 
-                        <Button
-                            HorizontalContentAlignment="Left"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="项目"
-                            Foreground="White" />
+                        <Button HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="项目"
+                                Foreground="White" />
 
-                        <Button
-                            HorizontalContentAlignment="Left"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="报告"
-                            Foreground="White" />
+                        <Button HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="报告"
+                                Foreground="White" />
 
-                        <Button
-                            HorizontalContentAlignment="Left"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="设置"
-                            Foreground="White" />
+                        <Button HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="设置"
+                                Foreground="White" />
 
-                        <Button
-                            HorizontalContentAlignment="Left"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="退出"
-                            Foreground="White" />
+                        <Button HorizontalContentAlignment="Left"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="退出"
+                                Foreground="White" />
                     </StackPanel>
                 </Border>
             </cy:Drawer.DrawerContent>

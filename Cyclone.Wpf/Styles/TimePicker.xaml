@@ -6,17 +6,15 @@
 
     <!--  TimePicker 样式  -->
     <Style TargetType="{x:Type ctl:TimePicker}">
-        <Setter Property="Height" Value="28" />
-        <Setter Property="Width" Value="120" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="5,0" />
+        <Setter Property="Padding" Value="3,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="WatermarkText" Value="请选择时间" />
-        <Setter Property="Is24HourFormat" Value="True" />
         <Setter Property="ShowSeconds" Value="True" />
         <Setter Property="TimeFormat" Value="HH:mm:ss" />
         <Setter Property="Template">
@@ -167,7 +165,7 @@
                                                 Background="{DynamicResource Background.Default}"
                                                 BorderBrush="{DynamicResource Border.Default}"
                                                 BorderThickness="1">
-                                            <ctl:TimeSelector x:Name="PART_HourSelector" SelectedItemBackground="{DynamicResource Background.Selected}" />
+                                            <ctl:TimeSelector x:Name="PART_HourSelector" />
                                         </Border>
 
                                         <!--  分选择器  -->
@@ -176,7 +174,7 @@
                                                 Background="{DynamicResource Background.Default}"
                                                 BorderBrush="{DynamicResource Border.Default}"
                                                 BorderThickness="1">
-                                            <ctl:TimeSelector x:Name="PART_MinuteSelector" SelectedItemBackground="{DynamicResource Background.Selected}" />
+                                            <ctl:TimeSelector x:Name="PART_MinuteSelector" />
                                         </Border>
 
                                         <!--  秒选择器  -->
@@ -185,7 +183,7 @@
                                                 Background="{DynamicResource Background.Default}"
                                                 BorderBrush="{DynamicResource Border.Default}"
                                                 BorderThickness="1">
-                                            <ctl:TimeSelector x:Name="PART_SecondSelector" SelectedItemBackground="{DynamicResource Background.Selected}" />
+                                            <ctl:TimeSelector x:Name="PART_SecondSelector" />
 
                                             <Border.Style>
                                                 <Style TargetType="Border">
@@ -277,17 +275,60 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="SelectedItemBackground" Value="{DynamicResource Background.Selected}" />
+
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Margin="0,5"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{Binding DisplayText}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:TimeSelector}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                            <StackPanel x:Name="PART_ItemsPanel" Background="Transparent" />
-                        </ScrollViewer>
+                        <Grid>
+                            <!--  高亮选中区域  -->
+                            <Border Height="30"
+                                    VerticalAlignment="Center"
+
+                                    IsHitTestVisible="False"
+                                    Opacity="0.2" />
+
+                            <ScrollViewer x:Name="PART_ScrollViewer"
+                                          Padding="0"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Hidden">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Resources>
+            <!--  单个时间项的样式  -->
+            <Style TargetType="ContentPresenter">
+                <Setter Property="Width" Value="50" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Cursor" Value="Hand" />
+                <!--<Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
+                    </Trigger>
+                </Style.Triggers>-->
+            </Style>
+        </Style.Resources>
     </Style>
 </ResourceDictionary>
