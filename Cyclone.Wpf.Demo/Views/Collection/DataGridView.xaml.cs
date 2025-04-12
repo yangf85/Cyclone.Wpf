@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
+using Cyclone.Wpf.Helpers;
 using Faker;
 using System;
 using System.Collections.Generic;
@@ -109,8 +110,12 @@ public partial class DataGridViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<FakerData> SelectedItems { get; set; } = [];
 
+    [ObservableProperty]
+    public partial ObservableCollection<DataGridItem> MockData { get; set; } = [];
+
     public DataGridViewModel()
     {
+        InitMockData();
         Pagination = new PaginationViewModel<FakerData>(FakerDataHelper.GenerateFakerDataCollection(75));
     }
 
@@ -126,4 +131,62 @@ public partial class DataGridViewModel : ObservableObject
             MessageBox.Show($"{string.Join("\n", SelectedItems)}");
         }
     }
+
+    void InitMockData()
+    {
+        MockData =
+        [
+            new DataGridItem()
+            {
+                Name = "John Doe",
+                Gender = true,
+                Age = 30,
+                Status = Status.Success,
+            },
+            new DataGridItem()
+            {
+                Name = "Hally Bote",
+                Gender = false,
+                Age = 28,
+                Status = Status.Warning,
+            },
+            new DataGridItem()
+            {
+                Name = "Jane Doe",
+                Gender = false,
+                Age = 35,
+                Status = Status.Error,
+            },
+
+        ];
+    }
+}
+
+public enum Status
+{
+    Success,
+    Warning,
+    Error
+}
+
+public partial class DataGridItem : ObservableObject
+{
+    [ObservableProperty]
+    [DataGridProperty("名称", Index = 1)]
+    public partial string Name { get; set; }
+
+    [ObservableProperty]
+    [DataGridProperty("性别", Index = 2)]
+    public partial bool Gender { get; set; }
+
+    [ObservableProperty]
+    [DataGridProperty("年龄", Index = 3, IsReadOnly = true)]
+    public partial int Age { get; set; }
+
+    [ObservableProperty]
+    [DataGridProperty("状态", Index = 4)]
+    public partial Status Status { get; set; }
+
+    [ObservableProperty]
+    public partial string Icon { get; set; }
 }

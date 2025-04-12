@@ -14,7 +14,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextFilterBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberFilterBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/FormItem.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Form.xaml" />
 
         <!--  列表与数据展示  -->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ListBox.xaml" />

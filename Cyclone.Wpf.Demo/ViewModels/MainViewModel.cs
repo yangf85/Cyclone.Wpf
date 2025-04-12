@@ -52,6 +52,7 @@ public partial class MainViewModel : ObservableObject
             "Description" => new DescriptionBoxView(),
             "Stepper" => new StepperView(),
             "Breadcrumb" => new BreadcrumbView(),
+
             _ => new object(),
         };
     }
@@ -106,11 +107,7 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="CascadePicker",
                     Icon= "\xe78a",
                 },
-                 new SideMenuItemViewModel()
-                {
-                    Header="Form",
-                    Icon= "\xe60b",
-                },
+
             ]
         });
         Items.Add(new SideMenuItemViewModel()
@@ -119,6 +116,11 @@ public partial class SideMenuViewModel : ObservableObject
             Icon = "\xe6d5",
             Items =
             [
+                new SideMenuItemViewModel()
+                {
+                    Header="Form",
+                    Icon= "\xe60b",
+                },
 
                 new SideMenuItemViewModel()
                 {
