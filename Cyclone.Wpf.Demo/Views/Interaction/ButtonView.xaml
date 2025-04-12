@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:xf="clr-namespace:XamlFlair;assembly=XamlFlair.WPF"
              d:DataContext="{d:DesignInstance Type=local:ButtonViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
