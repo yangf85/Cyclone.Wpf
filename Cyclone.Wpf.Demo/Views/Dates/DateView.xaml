@@ -40,7 +40,9 @@
 
             <HeaderedContentControl Header="TimePicker">
                 <cy:SpacingUniformGrid Rows="1">
-                    <cy:TimePicker x:Name="BasicTimePicker" Margin="0,0,0,10" />
+                    <cy:TimePicker x:Name="BasicTimePicker" VisibleItemCount="7" />
+                    <cy:TimePicker />
+                    <cy:TimePicker />
                 </cy:SpacingUniformGrid>
             </HeaderedContentControl>
         </StackPanel>

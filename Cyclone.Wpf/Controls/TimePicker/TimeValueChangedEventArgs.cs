@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace Cyclone.Wpf.Controls
-{
-    public class TimeValueChangedEventArgs : EventArgs
-    {
-        public int Value { get; }
+namespace Cyclone.Wpf.Controls;
 
-        public TimeValueChangedEventArgs(int value)
-        {
-            Value = value;
-        }
+public class TimeValueChangedEventArgs : EventArgs
+{
+    public int Value { get; }
+
+    public TimeValueChangedEventArgs(int value)
+    {
+        Value = value;
     }
 }

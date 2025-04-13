@@ -2,522 +2,398 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
-namespace Cyclone.Wpf.Controls
+namespace Cyclone.Wpf.Controls;
+
+[TemplatePart(Name = "PART_ItemsContainer", Type = typeof(UniformGrid))]
+public class TimeSelector : ListBox
 {
-    [TemplatePart(Name = "PART_ScrollViewer", Type = typeof(ScrollViewer))]
-    public class TimeSelector : ItemsControl
+    #region Private Fields
+
+    private UniformGrid _container;
+    private bool _isInternalUpdate;
+    private bool _isDragging;
+    private Point _lastDragPoint;
+    private double _dragAccumulator;
+    private const double DRAG_THRESHOLD = 15.0; // 拖动阈值，超过这个值才会触发值变化
+    private int _maxValue; // 存储最大值
+
+    #endregion Private Fields
+
+    #region Events
+
+    public event EventHandler<TimeValueChangedEventArgs> ValueChanged;
+
+    #endregion Events
+
+    #region Construction
+
+    static TimeSelector()
     {
-        #region Private Fields
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSelector), new FrameworkPropertyMetadata(typeof(TimeSelector)));
+    }
 
-        private ScrollViewer _scrollViewer;
-        private Point _startDragPoint;
-        private double _startVerticalOffset;
-        private bool _isDragging;
-        private int _itemHeight = 30;
-        private const int VISIBLE_ITEMS = 5;
-        private int _maxValue; // 存储最大值用于循环计算
+    public TimeSelector()
+    {
+        Loaded += TimeSelector_Loaded;
+        SelectionChanged += TimeSelector_SelectionChanged;
+        PreviewMouseWheel += TimeSelector_PreviewMouseWheel;
+        PreviewMouseDown += TimeSelector_PreviewMouseDown;
+        PreviewMouseMove += TimeSelector_PreviewMouseMove;
+        PreviewMouseUp += TimeSelector_PreviewMouseUp;
+    }
 
-        #endregion Private Fields
+    private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
+    {
+        InitializeItems();
 
-        #region Events
-
-        public event EventHandler<TimeValueChangedEventArgs> ValueChanged;
-
-        #endregion Events
-
-        #region Construction
-
-        static TimeSelector()
+        // 确保在UI完全加载后设置选中值
+        Dispatcher.BeginInvoke(new Action(() =>
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSelector), new FrameworkPropertyMetadata(typeof(TimeSelector)));
-        }
+            UpdateSelection(SelectedValue);
+        }), DispatcherPriority.Loaded);
+    }
 
-        public TimeSelector()
+    private void TimeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0 && !_isInternalUpdate)
         {
-            Loaded += TimeSelector_Loaded;
-        }
+            int value = -1;
 
-        private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
-        {
-            UpdateItems();
-        }
-
-        #endregion Construction
-
-        #region Properties
-
-        #region SelectedValue
-
-        public int SelectedValue
-        {
-            get { return (int)GetValue(SelectedValueProperty); }
-            set { SetValue(SelectedValueProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectedValueProperty =
-            DependencyProperty.Register("SelectedValue", typeof(int), typeof(TimeSelector),
-                new PropertyMetadata(0, OnSelectedValueChanged));
-
-        private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var selector = (TimeSelector)d;
-            selector.UpdateSelectedItem();
-        }
-
-        #endregion SelectedValue
-
-        #region SelectorType
-
-        public TimeSelectorType SelectorType
-        {
-            get { return (TimeSelectorType)GetValue(SelectorTypeProperty); }
-            set { SetValue(SelectorTypeProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectorTypeProperty =
-            DependencyProperty.Register("SelectorType", typeof(TimeSelectorType), typeof(TimeSelector),
-                new PropertyMetadata(TimeSelectorType.Hour, OnSelectorTypeChanged));
-
-        private static void OnSelectorTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var selector = (TimeSelector)d;
-            selector.UpdateItems();
-        }
-
-        #endregion SelectorType
-
-        #region SelectedItemBackground
-
-        public Brush SelectedItemBackground
-        {
-            get { return (Brush)GetValue(SelectedItemBackgroundProperty); }
-            set { SetValue(SelectedItemBackgroundProperty, value); }
-        }
-
-        public static readonly DependencyProperty SelectedItemBackgroundProperty =
-            DependencyProperty.Register("SelectedItemBackground", typeof(Brush), typeof(TimeSelector),
-                new PropertyMetadata(null));
-
-        #endregion SelectedItemBackground
-
-        #region IsCyclical
-
-        public bool IsCyclical
-        {
-            get { return (bool)GetValue(IsCyclicalProperty); }
-            set { SetValue(IsCyclicalProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsCyclicalProperty =
-            DependencyProperty.Register("IsCyclical", typeof(bool), typeof(TimeSelector),
-                new PropertyMetadata(true));
-
-        #endregion IsCyclical
-
-        #endregion Properties
-
-        #region Overrides
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            // 取消现有事件绑定
-            if (_scrollViewer != null)
+            if (e.AddedItems[0] is TimeSelectorItem timeItem)
             {
-                _scrollViewer.PreviewMouseWheel -= ScrollViewer_PreviewMouseWheel;
-                _scrollViewer.PreviewMouseDown -= ScrollViewer_PreviewMouseDown;
-                _scrollViewer.PreviewMouseMove -= ScrollViewer_PreviewMouseMove;
-                _scrollViewer.PreviewMouseUp -= ScrollViewer_PreviewMouseUp;
-                _scrollViewer.ScrollChanged -= ScrollViewer_ScrollChanged;
+                value = timeItem.Value;
+            }
+            else if (e.AddedItems[0] is int intValue)
+            {
+                value = intValue;
             }
 
-            // 获取模板部件
-            _scrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
-
-            // 绑定事件
-            if (_scrollViewer != null)
+            if (value >= 0 && SelectedValue != value)
             {
-                _scrollViewer.PreviewMouseWheel += ScrollViewer_PreviewMouseWheel;
-                _scrollViewer.PreviewMouseDown += ScrollViewer_PreviewMouseDown;
-                _scrollViewer.PreviewMouseMove += ScrollViewer_PreviewMouseMove;
-                _scrollViewer.PreviewMouseUp += ScrollViewer_PreviewMouseUp;
-                _scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
-            }
-
-            UpdateItems();
-        }
-
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-        {
-            base.PrepareContainerForItemOverride(element, item);
-
-            if (element is ContentPresenter container && item is TimeItem timeItem)
-            {
-                container.MouseLeftButtonDown += Container_MouseLeftButtonDown;
-                container.Tag = timeItem.Value; // 存储值用于点击处理
+                _isInternalUpdate = true;
+                try
+                {
+                    SelectedValue = value;
+                    ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(value));
+                }
+                finally
+                {
+                    _isInternalUpdate = false;
+                }
             }
         }
+    }
 
-        protected override void ClearContainerForItemOverride(DependencyObject element, object item)
+    #endregion Construction
+
+    #region Properties
+
+    #region SelectedValue
+
+    public int SelectedValue
+    {
+        get { return (int)GetValue(SelectedValueProperty); }
+        set { SetValue(SelectedValueProperty, value); }
+    }
+
+    public static readonly DependencyProperty SelectedValueProperty =
+        DependencyProperty.Register("SelectedValue", typeof(int), typeof(TimeSelector),
+            new PropertyMetadata(0, OnSelectedValueChanged));
+
+    private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var selector = (TimeSelector)d;
+
+        // 避免在内部更新时重复处理
+        if (!selector._isInternalUpdate)
         {
-            if (element is ContentPresenter container)
+            selector.UpdateSelection((int)e.NewValue);
+        }
+    }
+
+    #endregion SelectedValue
+
+    #region SelectorType
+
+    public TimeSelectorType SelectorType
+    {
+        get { return (TimeSelectorType)GetValue(SelectorTypeProperty); }
+        set { SetValue(SelectorTypeProperty, value); }
+    }
+
+    public static readonly DependencyProperty SelectorTypeProperty =
+        DependencyProperty.Register("SelectorType", typeof(TimeSelectorType), typeof(TimeSelector),
+            new PropertyMetadata(TimeSelectorType.Hour, OnSelectorTypeChanged));
+
+    private static void OnSelectorTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var selector = (TimeSelector)d;
+        selector.InitializeItems();
+    }
+
+    #endregion SelectorType
+
+    #region IsCyclical
+
+    public bool IsCyclical
+    {
+        get { return (bool)GetValue(IsCyclicalProperty); }
+        set { SetValue(IsCyclicalProperty, value); }
+    }
+
+    public static readonly DependencyProperty IsCyclicalProperty =
+        DependencyProperty.Register("IsCyclical", typeof(bool), typeof(TimeSelector),
+            new PropertyMetadata(true));
+
+    #endregion IsCyclical
+
+    #endregion Properties
+
+    #region Overrides
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        _container = GetTemplateChild("PART_Container") as UniformGrid;
+    }
+
+    protected override DependencyObject GetContainerForItemOverride()
+    {
+        return new TimeSelectorItem();
+    }
+
+    protected override bool IsItemItsOwnContainerOverride(object item)
+    {
+        return item is TimeSelectorItem;
+    }
+
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        if (element is TimeSelectorItem container && item is not TimeSelectorItem)
+        {
+            if (item is int value)
             {
-                container.MouseLeftButtonDown -= Container_MouseLeftButtonDown;
-            }
-
-            base.ClearContainerForItemOverride(element, item);
-        }
-
-        protected override DependencyObject GetContainerForItemOverride()
-        {
-            return new ContentPresenter();
-        }
-
-        #endregion Overrides
-
-        #region Event Handlers
-
-        private void Container_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is ContentPresenter container && container.Tag is int value)
-            {
-                SelectValue(value);
-                e.Handled = true;
+                // 设置实际值和显示文本
+                int actualValue = GetNormalizedValue(value);
+                container.Value = actualValue;
+                container.DisplayText = actualValue.ToString("D2");
             }
         }
+    }
 
-        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    #endregion Overrides
+
+    #region Event Handlers
+
+    private void TimeSelector_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        e.Handled = true;
+
+        // 向上滚动为负值，向下滚动为正值
+        int delta = e.Delta > 0 ? -1 : 1;
+
+        // 改变选中值
+        ChangeValue(delta);
+    }
+
+    private void TimeSelector_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed)
         {
+            _lastDragPoint = e.GetPosition(this);
+            _isDragging = true;
+            _dragAccumulator = 0;
+            CaptureMouse();
             e.Handled = true;
-            double newOffset;
-
-            if (e.Delta > 0) // 向上滚动
-            {
-                newOffset = _scrollViewer.VerticalOffset - _itemHeight;
-            }
-            else // 向下滚动
-            {
-                newOffset = _scrollViewer.VerticalOffset + _itemHeight;
-            }
-
-            // 连续循环滚动处理
-            if (IsCyclical)
-            {
-                // 计算显示区域的位置
-                int realItemsCount = _maxValue + 1; // 实际项目数量
-                double minOffset = 0;
-                double maxOffset = (realItemsCount + VISIBLE_ITEMS * 2) * _itemHeight;
-                double realAreaStart = VISIBLE_ITEMS * _itemHeight;
-                double realAreaEnd = (VISIBLE_ITEMS + realItemsCount) * _itemHeight;
-
-                _scrollViewer.ScrollToVerticalOffset(newOffset);
-
-                // 检查是否达到边界区域
-                if (newOffset <= realAreaStart && newOffset >= minOffset)
-                {
-                    // 计算位于实际区域中的相对位置
-                    double relativePos = newOffset - minOffset;
-                    double wrappedOffset = realAreaEnd - (realAreaStart - relativePos);
-                    if (wrappedOffset < maxOffset)
-                    {
-                        // 在下一帧更新，避免闪烁
-                        Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            _scrollViewer.ScrollToVerticalOffset(wrappedOffset);
-                        }), System.Windows.Threading.DispatcherPriority.Render);
-                    }
-                }
-                else if (newOffset >= realAreaEnd && newOffset <= maxOffset)
-                {
-                    // 计算位于实际区域中的相对位置
-                    double relativePos = newOffset - realAreaEnd;
-                    double wrappedOffset = realAreaStart + relativePos;
-                    if (wrappedOffset >= minOffset)
-                    {
-                        // 在下一帧更新，避免闪烁
-                        Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            _scrollViewer.ScrollToVerticalOffset(wrappedOffset);
-                        }), System.Windows.Threading.DispatcherPriority.Render);
-                    }
-                }
-            }
-            else
-            {
-                _scrollViewer.ScrollToVerticalOffset(newOffset);
-            }
         }
+    }
 
-        private void ScrollViewer_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    private void TimeSelector_PreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            Point currentPoint = e.GetPosition(this);
+            double deltaY = currentPoint.Y - _lastDragPoint.Y;
+            _lastDragPoint = currentPoint;
+
+            // 累积拖动距离
+            _dragAccumulator += deltaY;
+
+            // 如果累积的拖动距离超过阈值，改变选中值
+            if (Math.Abs(_dragAccumulator) >= DRAG_THRESHOLD)
             {
-                _startDragPoint = e.GetPosition(_scrollViewer);
-                _startVerticalOffset = _scrollViewer.VerticalOffset;
-                _isDragging = true;
-                _scrollViewer.CaptureMouse();
-                e.Handled = true;
+                int change = _dragAccumulator > 0 ? 1 : -1; // 向下拖动为正，向上拖动为负
+                ChangeValue(change);
+                _dragAccumulator = 0; // 重置累积值
             }
+
+            e.Handled = true;
         }
+    }
 
-        private void ScrollViewer_PreviewMouseMove(object sender, MouseEventArgs e)
+    private void TimeSelector_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_isDragging)
         {
-            if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point currentPoint = e.GetPosition(_scrollViewer);
-                double yDelta = _startDragPoint.Y - currentPoint.Y;
-                double newOffset = _startVerticalOffset + yDelta;
-
-                // 连续循环滚动处理
-                if (IsCyclical)
-                {
-                    // 计算实际项目区域的位置
-                    int realItemsCount = _maxValue + 1; // 实际项目数量
-                    double realAreaStart = VISIBLE_ITEMS * _itemHeight;
-                    double realAreaEnd = (VISIBLE_ITEMS + realItemsCount) * _itemHeight;
-
-                    _scrollViewer.ScrollToVerticalOffset(newOffset);
-
-                    // 检查是否拖动到了边界区域
-                    if (newOffset < realAreaStart)
-                    {
-                        // 计算相对位置，使其映射到下半部分
-                        double relativePos = realAreaStart - newOffset;
-                        double wrappedOffset = realAreaEnd - relativePos;
-
-                        // 更新拖拽起始点，保持平滑滚动
-                        _startDragPoint = currentPoint;
-                        _startVerticalOffset = wrappedOffset;
-
-                        // 在下一帧更新，避免闪烁
-                        Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            _scrollViewer.ScrollToVerticalOffset(wrappedOffset);
-                        }), System.Windows.Threading.DispatcherPriority.Render);
-                    }
-                    else if (newOffset > realAreaEnd)
-                    {
-                        // 计算相对位置，使其映射到上半部分
-                        double relativePos = newOffset - realAreaEnd;
-                        double wrappedOffset = realAreaStart + relativePos;
-
-                        // 更新拖拽起始点，保持平滑滚动
-                        _startDragPoint = currentPoint;
-                        _startVerticalOffset = wrappedOffset;
-
-                        // 在下一帧更新，避免闪烁
-                        Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            _scrollViewer.ScrollToVerticalOffset(wrappedOffset);
-                        }), System.Windows.Threading.DispatcherPriority.Render);
-                    }
-                }
-                else
-                {
-                    _scrollViewer.ScrollToVerticalOffset(newOffset);
-                }
-
-                e.Handled = true;
-            }
+            _isDragging = false;
+            ReleaseMouseCapture();
+            e.Handled = true;
         }
+    }
 
-        private void ScrollViewer_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+    #endregion Event Handlers
+
+    #region Methods
+
+    private void InitializeItems()
+    {
+        Items.Clear();
+
+        _maxValue = GetMaxValueForType();
+
+        // 获取显示的行数（从TimePicker获取）
+        int visibleCount = GetVisibleItemCount();
+
+        // 计算需要显示多少个值
+        // 半数是上方显示的值，半数是下方显示的值，再加上中间选中的值
+        int halfCount = visibleCount / 2;
+
+        // 添加所有项
+        for (int i = -halfCount; i <= halfCount; i++)
         {
-            if (_isDragging)
-            {
-                _isDragging = false;
-                _scrollViewer.ReleaseMouseCapture();
-
-                // 滚动到最近的项
-                int itemIndex = (int)Math.Round(_scrollViewer.VerticalOffset / _itemHeight);
-                double targetOffset = itemIndex * _itemHeight;
-
-                // 检查是否需要调整到实际项区域
-                if (IsCyclical)
-                {
-                    int realItemsCount = _maxValue + 1;
-                    double realAreaStart = VISIBLE_ITEMS * _itemHeight;
-                    double realAreaEnd = (VISIBLE_ITEMS + realItemsCount) * _itemHeight;
-
-                    // 如果在前面的虚拟区域
-                    if (targetOffset < realAreaStart)
-                    {
-                        // 计算对应的真实位置
-                        double relativePos = targetOffset;
-                        double equivalentOffset = realAreaEnd - (realAreaStart - relativePos);
-
-                        // 确保在有效范围内
-                        if (equivalentOffset < (realItemsCount + VISIBLE_ITEMS * 2) * _itemHeight)
-                        {
-                            targetOffset = equivalentOffset;
-                        }
-                    }
-                    // 如果在后面的虚拟区域
-                    else if (targetOffset >= realAreaEnd)
-                    {
-                        // 计算对应的真实位置
-                        double relativePos = targetOffset - realAreaEnd;
-                        double equivalentOffset = realAreaStart + relativePos;
-
-                        // 确保在有效范围内
-                        if (equivalentOffset >= 0)
-                        {
-                            targetOffset = equivalentOffset;
-                        }
-                    }
-                }
-
-                _scrollViewer.ScrollToVerticalOffset(targetOffset);
-
-                // 更新选中值
-                UpdateSelectedValueFromOffset(targetOffset);
-
-                e.Handled = true;
-            }
+            // 计算实际值（考虑循环）
+            int value = GetValueWithOffset(SelectedValue, i);
+            Items.Add(value);
         }
+    }
 
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    private int GetMaxValueForType()
+    {
+        return SelectorType switch
         {
-            // 只在手动结束滚动或程序滚动结束时更新
-            if (!_isDragging && e.ExtentHeightChange == 0)
-            {
-                UpdateSelectedValueFromOffset(e.VerticalOffset);
-            }
+            TimeSelectorType.Hour => 23,
+            TimeSelectorType.Minute => 59,
+            TimeSelectorType.Second => 59,
+            _ => 59
+        };
+    }
+
+    // 获取规范化的值（确保在有效范围内）
+    private int GetNormalizedValue(int value)
+    {
+        int totalValues = _maxValue + 1;
+        return ((value % totalValues) + totalValues) % totalValues;
+    }
+
+    // 获取指定偏移量的值
+    private int GetValueWithOffset(int baseValue, int offset)
+    {
+        if (!IsCyclical)
+        {
+            // 非循环模式，限制在有效范围内
+            int result = baseValue + offset;
+            return Math.Max(0, Math.Min(result, _maxValue));
         }
-
-        #endregion Event Handlers
-
-        #region Methods
-
-        private void UpdateSelectedValueFromOffset(double offset)
+        else
         {
-            int itemIndex = (int)Math.Round(offset / _itemHeight);
-
-            // 有效索引范围检查
-            if (itemIndex >= VISIBLE_ITEMS / 2 && itemIndex < Items.Count - VISIBLE_ITEMS / 2)
-            {
-                if (Items[itemIndex] is TimeItem timeItem && timeItem.Value >= 0)
-                {
-                    SelectValue(timeItem.Value);
-                }
-            }
+            // 循环模式，循环计算
+            return GetNormalizedValue(baseValue + offset);
         }
+    }
 
-        private void SelectValue(int value)
+    // 改变当前值（增加或减少）
+    private void ChangeValue(int delta)
+    {
+        if (!IsCyclical)
         {
-            if (value < 0) return; // 忽略无效值（空白项）
-
-            // 如果启用循环，确保值在有效范围内
-            if (IsCyclical && _maxValue > 0)
-            {
-                // 循环调整值到有效范围
-                while (value < 0)
-                {
-                    value += (_maxValue + 1);
-                }
-
-                value = value % (_maxValue + 1);
-            }
-
-            if (SelectedValue != value)
-            {
-                SelectedValue = value;
-                ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(value));
-            }
-        }
-
-        private void UpdateItems()
-        {
-            Items.Clear();
-
-            _maxValue = 0;
-
-            switch (SelectorType)
-            {
-                case TimeSelectorType.Hour:
-                    _maxValue = 23; // 只使用24小时制
-                    break;
-
-                case TimeSelectorType.Minute:
-                case TimeSelectorType.Second:
-                    _maxValue = 59;
-                    break;
-            }
-
-            // 连续循环实现：创建三倍的项目集
-
-            // 添加前面的虚拟项（底部项的副本）
-            for (int i = 0; i < VISIBLE_ITEMS; i++)
-            {
-                // 从尾部开始，依次添加 VISIBLE_ITEMS 个项目
-                int valueIndex = _maxValue - VISIBLE_ITEMS + i + 1;
-                // 处理越界情况
-                if (valueIndex < 0) valueIndex += (_maxValue + 1);
-
-                int value = IsCyclical ? valueIndex : -1;
-                string displayText = value >= 0 ? value.ToString("D2") : string.Empty;
-
-                Items.Add(new TimeItem { Value = value, DisplayText = displayText });
-            }
-
-            // 添加实际时间项（主要项）
-            for (int i = 0; i <= _maxValue; i++)
-            {
-                var timeItem = new TimeItem
-                {
-                    Value = i,
-                    DisplayText = i.ToString("D2")
-                };
-
-                Items.Add(timeItem);
-            }
-
-            // 添加后面的虚拟项（顶部项的副本）
-            for (int i = 0; i < VISIBLE_ITEMS; i++)
-            {
-                // 添加头部的值作为后缀
-                int value = IsCyclical ? i : -1;
-                string displayText = value >= 0 ? value.ToString("D2") : string.Empty;
-
-                Items.Add(new TimeItem { Value = value, DisplayText = displayText });
-            }
-
-            UpdateSelectedItem();
-        }
-
-        private void UpdateSelectedItem()
-        {
-            if (_scrollViewer == null || Items.Count == 0)
+            // 非循环模式，检查边界
+            int newValue = SelectedValue + delta;
+            if (newValue < 0 || newValue > _maxValue)
                 return;
 
-            int index = -1;
+            UpdateSelection(newValue);
+        }
+        else
+        {
+            // 循环模式，循环变化
+            int newValue = GetNormalizedValue(SelectedValue + delta);
+            UpdateSelection(newValue);
+        }
+    }
 
-            // 查找中间区域的匹配项（非虚拟项）
-            for (int i = VISIBLE_ITEMS; i < VISIBLE_ITEMS + _maxValue + 1; i++)
+    // 更新选中项
+    private void UpdateSelection(int value)
+    {
+        if (Items.Count == 0) return;
+
+        // 调整值确保在有效范围内
+        int normalizedValue = GetNormalizedValue(value);
+
+        _isInternalUpdate = true;
+        try
+        {
+            // 更新选中值
+            SelectedValue = normalizedValue;
+
+            // 获取可见项数量
+            int visibleCount = GetVisibleItemCount();
+            int halfCount = visibleCount / 2;
+
+            // 更新所有项的值
+            Items.Clear();
+            for (int i = -halfCount; i <= halfCount; i++)
             {
-                if (Items[i] is TimeItem timeItem && timeItem.Value == SelectedValue)
-                {
-                    index = i;
-                    break;
-                }
+                int itemValue = GetValueWithOffset(normalizedValue, i);
+                Items.Add(itemValue);
             }
 
-            if (index >= 0)
-            {
-                _scrollViewer.ScrollToVerticalOffset(index * _itemHeight);
-            }
+            // 设置中间项为选中项
+            SelectedIndex = halfCount;
+
+            // 触发值改变事件
+            ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(normalizedValue));
+        }
+        finally
+        {
+            _isInternalUpdate = false;
+        }
+    }
+
+    // 获取可见项数量
+    private int GetVisibleItemCount()
+    {
+        // 从父TimePicker获取可见项数量
+        FrameworkElement parent = this.Parent as FrameworkElement;
+        while (parent != null && !(parent is TimePicker))
+        {
+            parent = parent.Parent as FrameworkElement;
         }
 
-        #endregion Methods
+        if (parent is TimePicker timePicker)
+        {
+            return timePicker.VisibleItemCount;
+        }
+
+        // 默认显示5行
+        return 5;
     }
 
-    public class TimeItem
+    // 为TimePicker提供的公共方法
+    public void ForceScrollToValueAndSelect(int value)
     {
-        public int Value { get; set; }
-        public string DisplayText { get; set; }
+        // 确保在UI线程中执行
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            UpdateSelection(value);
+        }), DispatcherPriority.Render);
     }
+
+    #endregion Methods
 }
