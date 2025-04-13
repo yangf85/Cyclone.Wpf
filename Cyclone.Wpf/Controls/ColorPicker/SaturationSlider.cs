@@ -8,6 +8,6 @@ using System.Windows.Controls;
 
 namespace Cyclone.Wpf.Controls;
 
-public class SaturationBrightnessBox : Control
+public class SaturationSlider : ColorSlider
 {
 }
