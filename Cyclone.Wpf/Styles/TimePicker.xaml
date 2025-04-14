@@ -23,16 +23,9 @@
                                    Foreground="{TemplateBinding Foreground}"
                                    Text="{TemplateBinding DisplayText}" />
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Background.Hover}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Focusable" Value="True" />
     </Style>
 
     <!--  TimeSelector 样式  -->
@@ -114,7 +107,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="TimeFormat" Value="HH:mm:ss" />
-        <Setter Property="VisibleItemCount" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:TimePicker}">

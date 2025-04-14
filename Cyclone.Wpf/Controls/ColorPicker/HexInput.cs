@@ -8,6 +8,9 @@ using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
+/// <summary>
+/// Hex颜色文本框
+/// </summary>
 public class HexInput : TextBox
 {
 }

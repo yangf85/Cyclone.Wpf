@@ -170,45 +170,19 @@ public class TimePicker : Control
 
     #endregion Watermark
 
-    #region VisibleItemCount
+    #region SecondsVisible
 
-    public int VisibleItemCount
+    public bool SecondsVisible
     {
-        get { return (int)GetValue(VisibleItemCountProperty); }
-        set { SetValue(VisibleItemCountProperty, value); }
+        get { return (bool)GetValue(SecondsVisibleProperty); }
+        set { SetValue(SecondsVisibleProperty, value); }
     }
 
-    public static readonly DependencyProperty VisibleItemCountProperty =
-        DependencyProperty.Register("VisibleItemCount", typeof(int), typeof(TimePicker),
-            new PropertyMetadata(5, OnVisibleItemCountChanged));
+    public static readonly DependencyProperty SecondsVisibleProperty =
+        DependencyProperty.Register("SecondsVisible", typeof(bool), typeof(TimePicker),
+            new PropertyMetadata(true));
 
-    private static void OnVisibleItemCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var timePicker = (TimePicker)d;
-        int newValue = (int)e.NewValue;
-
-        // 确保是奇数且在合理范围内
-        if (newValue % 2 == 0)
-        {
-            newValue = Math.Max(3, newValue - 1);
-            timePicker.VisibleItemCount = newValue;
-            return;
-        }
-
-        if (newValue < 3)
-        {
-            timePicker.VisibleItemCount = 3;
-            return;
-        }
-
-        if (newValue > 9)
-        {
-            timePicker.VisibleItemCount = 9;
-            return;
-        }
-    }
-
-    #endregion VisibleItemCount
+    #endregion SecondsVisible
 
     #endregion Properties
 

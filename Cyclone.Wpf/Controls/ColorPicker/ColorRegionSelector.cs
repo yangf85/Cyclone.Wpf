@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
-public abstract class ColorSlider : Slider
+/// <summary>
+/// HSL颜色平面选择器
+/// </summary>
+public class ColorRegionSelector
 {
 }

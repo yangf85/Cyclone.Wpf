@@ -8,6 +8,9 @@ using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
+/// <summary>
+/// 默认颜色选择器
+/// </summary>
 public class StandardColorPalette : ItemsControl
 {
 }

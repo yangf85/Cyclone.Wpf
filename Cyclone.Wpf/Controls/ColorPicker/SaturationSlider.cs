@@ -8,6 +8,9 @@ using System.Windows.Controls;
 
 namespace Cyclone.Wpf.Controls;
 
-public class SaturationSlider : ColorSlider
+/// <summary>
+/// 饱和度选择器
+/// </summary>
+public class SaturationSlider
 {
 }

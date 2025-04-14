@@ -8,6 +8,9 @@ using System.Windows.Controls;
 
 namespace Cyclone.Wpf.Controls;
 
-public class BrightnessSlider : ColorSlider
+/// <summary>
+/// 亮度滑块
+/// </summary>
+public class BrightnessSlider
 {
 }

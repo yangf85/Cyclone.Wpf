@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
-public class AlphaInput : TextBox
+/// <summary>
+/// 色相选择器控件
+/// </summary>
+public class HuaSelector
 {
 }

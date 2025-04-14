@@ -21,6 +21,7 @@ public class TimeSelector : ListBox
     private double _dragAccumulator;
     private const double DRAG_THRESHOLD = 15.0; // 拖动阈值，超过这个值才会触发值变化
     private int _maxValue; // 存储最大值
+    private const int VISIBLE_ITEM_COUNT = 5; // 固定显示的项数（确保是奇数）
 
     #endregion Private Fields
 
@@ -258,12 +259,8 @@ public class TimeSelector : ListBox
 
         _maxValue = GetMaxValueForType();
 
-        // 获取显示的行数（从TimePicker获取）
-        int visibleCount = GetVisibleItemCount();
-
-        // 计算需要显示多少个值
-        // 半数是上方显示的值，半数是下方显示的值，再加上中间选中的值
-        int halfCount = visibleCount / 2;
+        // 使用固定的显示项数量
+        int halfCount = VISIBLE_ITEM_COUNT / 2;
 
         // 添加所有项
         for (int i = -halfCount; i <= halfCount; i++)
@@ -342,9 +339,8 @@ public class TimeSelector : ListBox
             // 更新选中值
             SelectedValue = normalizedValue;
 
-            // 获取可见项数量
-            int visibleCount = GetVisibleItemCount();
-            int halfCount = visibleCount / 2;
+            // 使用固定的可见项数量
+            int halfCount = VISIBLE_ITEM_COUNT / 2;
 
             // 更新所有项的值
             Items.Clear();
@@ -364,25 +360,6 @@ public class TimeSelector : ListBox
         {
             _isInternalUpdate = false;
         }
-    }
-
-    // 获取可见项数量
-    private int GetVisibleItemCount()
-    {
-        // 从父TimePicker获取可见项数量
-        FrameworkElement parent = this.Parent as FrameworkElement;
-        while (parent != null && !(parent is TimePicker))
-        {
-            parent = parent.Parent as FrameworkElement;
-        }
-
-        if (parent is TimePicker timePicker)
-        {
-            return timePicker.VisibleItemCount;
-        }
-
-        // 默认显示5行
-        return 5;
     }
 
     // 为TimePicker提供的公共方法

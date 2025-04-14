@@ -8,6 +8,9 @@ using System.Windows.Controls.Primitives;
 
 namespace Cyclone.Wpf.Controls;
 
-public class RgbSlider : ColorSlider
+/// <summary>
+/// 透明度滑块
+/// </summary>
+public class AlphaSlider
 {
 }

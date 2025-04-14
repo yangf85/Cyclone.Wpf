@@ -40,11 +40,16 @@
 
             <HeaderedContentControl Header="TimePicker">
                 <cy:SpacingUniformGrid Rows="1">
-                    <cy:TimePicker x:Name="BasicTimePicker" VisibleItemCount="7" />
+                    <cy:TimePicker />
                     <cy:TimePicker />
                     <cy:TimePicker />
                 </cy:SpacingUniformGrid>
             </HeaderedContentControl>
+
+            <GroupBox Header="aaa">
+                <UniformGrid Rows="4" Columns="1">
+                </UniformGrid>
+            </GroupBox>
         </StackPanel>
     </cy:SpacingStackPanel>
 </UserControl>

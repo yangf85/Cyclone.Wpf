@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
+/// <summary>
+/// 取色器
+/// </summary>
 public class EyedropperTool : Button
 {
 }
