@@ -9,27 +9,20 @@
              d:DesignWidth="800"
              mc:Ignorable="d">
     <Grid>
-        <Grid>
-            <cy:CircularPanel Width="300"
-                              Height="300"
-                              Background="{DynamicResource Background.Default}"
-                              BorderBrush="{DynamicResource Border.Default}"
-                              BorderThickness="1"
-                              InnerRadiusRatio="0.6"
-                              ShowGridLines="True">
-                <Button Margin="2"
-                        Background="Orange"
-                        Content="Item1" />
-                <Button Margin="2"
-                        Background="LightGreen"
-                        Content="Item2" />
-                <Button Margin="2"
-                        Background="SkyBlue"
-                        Content="Item3" />
-                <Button Margin="2"
-                        Background="Violet"
-                        Content="Item4" />
-            </cy:CircularPanel>
-        </Grid>
+        <StackPanel Margin="10">
+            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                <cy:CyclePanel x:Name="CyclePanel" Orientation="Vertical" VisibleItemCount="5">
+                    <Button Height="Auto" Background="Orange" Content="Item1" />
+                    <Button Height="Auto" Background="LightGreen" Content="Item2" />
+                    <Button Height="Auto" Background="SkyBlue" Content="Item3" />
+                    <Button Height="Auto" Background="Violet" Content="Item4" />
+                    <Button Height="Auto" Background="Cyan" Content="Item5" />
+                    <Button Height="Auto" Background="Red" Content="Item6" />
+                    <Button Height="Auto" Background="RosyBrown" Content="Item7" />
+                    <Button Height="Auto" Background="DarkBlue" Content="Item8" />
+                </cy:CyclePanel>
+            </ScrollViewer>
+            <ListBox ItemsSource="{Binding ElementName=CyclePanel, Path=VisibleItemIndices}" />
+        </StackPanel>
     </Grid>
 </UserControl>
