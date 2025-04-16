@@ -44,6 +44,9 @@ public class TimePicker : Control
     public TimePicker()
     {
         Loaded += TimePicker_Loaded;
+
+        // 设置默认可见项数量为5
+        VisibleItemCount = 5;
     }
 
     private void TimePicker_Loaded(object sender, RoutedEventArgs e)
@@ -170,19 +173,36 @@ public class TimePicker : Control
 
     #endregion Watermark
 
-    #region SecondsVisible
+    #region VisibleItemCount
 
-    public bool SecondsVisible
+    /// <summary>
+    /// 时间选择器中可见项目的数量，必须为奇数
+    /// </summary>
+    public int VisibleItemCount
     {
-        get { return (bool)GetValue(SecondsVisibleProperty); }
-        set { SetValue(SecondsVisibleProperty, value); }
+        get { return (int)GetValue(VisibleItemCountProperty); }
+        set { SetValue(VisibleItemCountProperty, value); }
     }
 
-    public static readonly DependencyProperty SecondsVisibleProperty =
-        DependencyProperty.Register("SecondsVisible", typeof(bool), typeof(TimePicker),
-            new PropertyMetadata(true));
+    public static readonly DependencyProperty VisibleItemCountProperty =
+        DependencyProperty.Register("VisibleItemCount", typeof(int), typeof(TimePicker),
+            new PropertyMetadata(5, OnVisibleItemCountChanged));
 
-    #endregion SecondsVisible
+    private static void OnVisibleItemCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var timePicker = (TimePicker)d;
+        int value = (int)e.NewValue;
+
+        // 确保值为正奇数
+        if (value <= 0 || value % 2 == 0)
+        {
+            // 如果不是奇数，则取最近的奇数
+            int correctedValue = value <= 0 ? 5 : (value % 2 == 0 ? value + 1 : value);
+            timePicker.SetCurrentValue(VisibleItemCountProperty, correctedValue);
+        }
+    }
+
+    #endregion VisibleItemCount
 
     #endregion Properties
 
@@ -273,9 +293,9 @@ public class TimePicker : Control
             if (_hourSelector != null && _minuteSelector != null && _secondSelector != null)
             {
                 // 获取当前选择器的值
-                int hour = _hourSelector.SelectedValue;
-                int minute = _minuteSelector.SelectedValue;
-                int second = _secondSelector.SelectedValue;
+                int hour = _hourSelector.SelectedTimeValue;
+                int minute = _minuteSelector.SelectedTimeValue;
+                int second = _secondSelector.SelectedTimeValue;
 
                 // 使用当前选择的值构造新的TimeSpan
                 TimeSpan newTime = new TimeSpan(hour, minute, second);
@@ -364,6 +384,11 @@ public class TimePicker : Control
                 // 更新临时选择的时间
                 _tempSelectedTime = new TimeSpan(now.Hour, now.Minute, now.Second);
             }
+
+            // 强制更新布局
+            _hourSelector.UpdateLayout();
+            _minuteSelector.UpdateLayout();
+            _secondSelector.UpdateLayout();
         }
         finally
         {
@@ -383,9 +408,9 @@ public class TimePicker : Control
             return;
         }
 
-        int hour = _hourSelector.SelectedValue;
-        int minute = _minuteSelector.SelectedValue;
-        int second = _secondSelector.SelectedValue;
+        int hour = _hourSelector.SelectedTimeValue;
+        int minute = _minuteSelector.SelectedTimeValue;
+        int second = _secondSelector.SelectedTimeValue;
 
         // 更新临时选择的时间
         _tempSelectedTime = new TimeSpan(hour, minute, second);

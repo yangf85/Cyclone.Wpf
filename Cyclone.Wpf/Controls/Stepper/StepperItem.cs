@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -18,20 +19,6 @@ public class StepperItem : ContentControl
         DefaultStyleKeyProperty.OverrideMetadata(typeof(StepperItem),
             new FrameworkPropertyMetadata(typeof(StepperItem)));
     }
-
-    #region Header
-
-    public object Header
-    {
-        get => GetValue(HeaderProperty);
-        set => SetValue(HeaderProperty, value);
-    }
-
-    public static readonly DependencyProperty HeaderProperty =
-        DependencyProperty.Register(nameof(Header), typeof(object), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion Header
 
     #region Description
 
@@ -52,250 +39,168 @@ public class StepperItem : ContentControl
     public StepStatus Status
     {
         get => (StepStatus)GetValue(StatusProperty);
-        set => SetValue(StatusProperty, value);
+        private set => SetValue(StatusPropertyKey, value);
     }
 
-    public static readonly DependencyProperty StatusProperty =
-        DependencyProperty.Register(nameof(Status), typeof(StepStatus), typeof(StepperItem),
-            new PropertyMetadata(StepStatus.Pending));
+    private static readonly DependencyPropertyKey StatusPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(Status), typeof(StepStatus), typeof(StepperItem),
+            new PropertyMetadata(StepStatus.Pending, OnStatusChanged));
+
+    public static readonly DependencyProperty StatusProperty = StatusPropertyKey.DependencyProperty;
+
+    private static void OnStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is StepperItem item)
+        {
+            item.OnStatusChanged((StepStatus)e.OldValue, (StepStatus)e.NewValue);
+        }
+    }
+
+    protected virtual void OnStatusChanged(StepStatus oldStatus, StepStatus newStatus)
+    {
+        // 状态变化时可以执行自定义逻辑
+        // 这个方法可以被子类重写以添加自定义行为
+
+        // 触发StatusChanged事件
+        StatusChanged?.Invoke(this, new RoutedEventArgs());
+    }
+
+    /// <summary>
+    /// 状态变化事件
+    /// </summary>
+    public event RoutedEventHandler StatusChanged;
+
+    /// <summary>
+    /// 内部方法，根据当前步骤索引更新状态
+    /// </summary>
+    internal void UpdateStatus(int currentIndex)
+    {
+        if (Index < currentIndex)
+            SetValue(StatusPropertyKey, StepStatus.Completed);
+        else if (Index == currentIndex)
+            SetValue(StatusPropertyKey, StepStatus.Current);
+        else
+            SetValue(StatusPropertyKey, StepStatus.Pending);
+    }
 
     #endregion Status
 
-    #region StepNumber
+    #region IsLast
 
-    public int StepNumber
+    public bool IsLast
     {
-        get => (int)GetValue(StepNumberProperty);
-        set => SetValue(StepNumberProperty, value);
+        get => (bool)GetValue(IsLastProperty);
+        private set => SetValue(IsLastPropertyKey, value);
     }
 
-    public static readonly DependencyProperty StepNumberProperty =
-        DependencyProperty.Register(nameof(StepNumber), typeof(int), typeof(StepperItem),
-            new PropertyMetadata(0));
+    internal static readonly DependencyPropertyKey IsLastPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(IsLast), typeof(bool), typeof(StepperItem),
+            new PropertyMetadata(default(bool), OnIsLastChanged));
 
-    #endregion StepNumber
+    public static readonly DependencyProperty IsLastProperty = IsLastPropertyKey.DependencyProperty;
 
-    #region IsFirstStep
-
-    public bool IsFirstStep
+    private static void OnIsLastChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        get => (bool)GetValue(IsFirstStepProperty);
-        set => SetValue(IsFirstStepProperty, value);
+        // 不需要特殊处理，连接器可见性由样式控制
     }
 
-    public static readonly DependencyProperty IsFirstStepProperty =
-        DependencyProperty.Register(nameof(IsFirstStep), typeof(bool), typeof(StepperItem),
-            new PropertyMetadata(false));
-
-    #endregion IsFirstStep
-
-    #region IsLastStep
-
-    public bool IsLastStep
+    /// <summary>
+    /// 内部方法，设置是否是最后一项
+    /// </summary>
+    internal void SetIsLast(bool value)
     {
-        get => (bool)GetValue(IsLastStepProperty);
-        set => SetValue(IsLastStepProperty, value);
+        SetValue(IsLastPropertyKey, value);
     }
 
-    public static readonly DependencyProperty IsLastStepProperty =
-        DependencyProperty.Register(nameof(IsLastStep), typeof(bool), typeof(StepperItem),
-            new PropertyMetadata(false));
+    #endregion IsLast
 
-    #endregion IsLastStep
+    #region IsFirst
 
-    #region StepIcon
-
-    public object StepIcon
+    public bool IsFirst
     {
-        get => GetValue(StepIconProperty);
-        set => SetValue(StepIconProperty, value);
+        get => (bool)GetValue(IsFirstProperty);
+        private set => SetValue(IsFirstPropertyKey, value);
     }
 
-    public static readonly DependencyProperty StepIconProperty =
-        DependencyProperty.Register(nameof(StepIcon), typeof(object), typeof(StepperItem),
-            new PropertyMetadata(null));
+    internal static readonly DependencyPropertyKey IsFirstPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(IsFirst), typeof(bool), typeof(StepperItem),
+            new PropertyMetadata(default(bool)));
 
-    #endregion StepIcon
+    public static readonly DependencyProperty IsFirstProperty = IsFirstPropertyKey.DependencyProperty;
 
-    #region CompletedIcon
-
-    public object CompletedIcon
+    /// <summary>
+    /// 内部方法，设置是否是第一项
+    /// </summary>
+    internal void SetIsFirst(bool value)
     {
-        get => GetValue(CompletedIconProperty);
-        set => SetValue(CompletedIconProperty, value);
+        SetValue(IsFirstPropertyKey, value);
     }
 
-    public static readonly DependencyProperty CompletedIconProperty =
-        DependencyProperty.Register(nameof(CompletedIcon), typeof(object), typeof(StepperItem),
-            new PropertyMetadata(null));
+    #endregion IsFirst
 
-    #endregion CompletedIcon
+    #region Index
 
-    #region ErrorIcon
-
-    public object ErrorIcon
+    /// <summary>
+    /// 获取该步骤在Stepper中的索引
+    /// </summary>
+    public int Index
     {
-        get => GetValue(ErrorIconProperty);
-        set => SetValue(ErrorIconProperty, value);
+        get => (int)GetValue(IndexProperty);
+        private set => SetValue(IndexPropertyKey, value);
     }
 
-    public static readonly DependencyProperty ErrorIconProperty =
-        DependencyProperty.Register(nameof(ErrorIcon), typeof(object), typeof(StepperItem),
-            new PropertyMetadata(null));
+    internal static readonly DependencyPropertyKey IndexPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(Index), typeof(int), typeof(StepperItem),
+            new PropertyMetadata(-1));
 
-    #endregion ErrorIcon
+    public static readonly DependencyProperty IndexProperty = IndexPropertyKey.DependencyProperty;
 
-    #region IconBackground
-
-    public Brush IconBackground
+    /// <summary>
+    /// 内部方法，设置项目索引
+    /// </summary>
+    internal void SetIndex(int value)
     {
-        get => (Brush)GetValue(IconBackgroundProperty);
-        set => SetValue(IconBackgroundProperty, value);
+        SetValue(IndexPropertyKey, value);
     }
 
-    public static readonly DependencyProperty IconBackgroundProperty =
-        DependencyProperty.Register(nameof(IconBackground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
+    #endregion Index
 
-    #endregion IconBackground
+    #region CanNavigate
 
-    #region CompletedIconBackground
-
-    public Brush CompletedIconBackground
+    /// <summary>
+    /// 指示是否可以导航到此步骤
+    /// </summary>
+    public bool CanNavigate
     {
-        get => (Brush)GetValue(CompletedIconBackgroundProperty);
-        set => SetValue(CompletedIconBackgroundProperty, value);
+        get => (bool)GetValue(CanNavigateProperty);
+        set => SetValue(CanNavigateProperty, value);
     }
 
-    public static readonly DependencyProperty CompletedIconBackgroundProperty =
-        DependencyProperty.Register(nameof(CompletedIconBackground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
+    public static readonly DependencyProperty CanNavigateProperty =
+        DependencyProperty.Register(nameof(CanNavigate), typeof(bool), typeof(StepperItem),
+            new PropertyMetadata(true));
 
-    #endregion CompletedIconBackground
+    #endregion CanNavigate
 
-    #region CurrentIconBackground
-
-    public Brush CurrentIconBackground
+    public StepperItem()
     {
-        get => (Brush)GetValue(CurrentIconBackgroundProperty);
-        set => SetValue(CurrentIconBackgroundProperty, value);
+        // 无需特殊处理连接器可见性，由样式控制
     }
 
-    public static readonly DependencyProperty CurrentIconBackgroundProperty =
-        DependencyProperty.Register(nameof(CurrentIconBackground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion CurrentIconBackground
-
-    #region IconForeground
-
-    public Brush IconForeground
+    /// <summary>
+    /// 导航到此步骤
+    /// </summary>
+    /// <returns>导航是否成功</returns>
+    public bool NavigateTo()
     {
-        get => (Brush)GetValue(IconForegroundProperty);
-        set => SetValue(IconForegroundProperty, value);
+        if (!CanNavigate) return false;
+
+        var parent = ItemsControl.ItemsControlFromItemContainer(this) as Stepper;
+        if (parent != null && Index >= 0)
+        {
+            parent.CurrentIndex = Index;
+            return true;
+        }
+        return false;
     }
-
-    public static readonly DependencyProperty IconForegroundProperty =
-        DependencyProperty.Register(nameof(IconForeground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion IconForeground
-
-    #region CompletedIconForeground
-
-    public Brush CompletedIconForeground
-    {
-        get => (Brush)GetValue(CompletedIconForegroundProperty);
-        set => SetValue(CompletedIconForegroundProperty, value);
-    }
-
-    public static readonly DependencyProperty CompletedIconForegroundProperty =
-        DependencyProperty.Register(nameof(CompletedIconForeground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion CompletedIconForeground
-
-    #region CurrentIconForeground
-
-    public Brush CurrentIconForeground
-    {
-        get => (Brush)GetValue(CurrentIconForegroundProperty);
-        set => SetValue(CurrentIconForegroundProperty, value);
-    }
-
-    public static readonly DependencyProperty CurrentIconForegroundProperty =
-        DependencyProperty.Register(nameof(CurrentIconForeground), typeof(Brush), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion CurrentIconForeground
-
-    #region HasError
-
-    public bool HasError
-    {
-        get => (bool)GetValue(HasErrorProperty);
-        set => SetValue(HasErrorProperty, value);
-    }
-
-    public static readonly DependencyProperty HasErrorProperty =
-        DependencyProperty.Register(nameof(HasError), typeof(bool), typeof(StepperItem),
-            new PropertyMetadata(false));
-
-    #endregion HasError
-
-    #region ParentStepper
-
-    internal Stepper ParentStepper
-    {
-        get => (Stepper)GetValue(ParentStepperProperty);
-        set => SetValue(ParentStepperProperty, value);
-    }
-
-    internal static readonly DependencyProperty ParentStepperProperty =
-        DependencyProperty.Register(nameof(ParentStepper), typeof(Stepper), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion ParentStepper
-
-    #region HasConnector
-
-    public bool HasConnector
-    {
-        get => (bool)GetValue(HasConnectorProperty);
-        set => SetValue(HasConnectorProperty, value);
-    }
-
-    public static readonly DependencyProperty HasConnectorProperty =
-        DependencyProperty.Register(nameof(HasConnector), typeof(bool), typeof(StepperItem),
-            new PropertyMetadata(false));
-
-    #endregion HasConnector
-
-    #region IsConnectorActive
-
-    public bool IsConnectorActive
-    {
-        get => (bool)GetValue(IsConnectorActiveProperty);
-        set => SetValue(IsConnectorActiveProperty, value);
-    }
-
-    public static readonly DependencyProperty IsConnectorActiveProperty =
-        DependencyProperty.Register(nameof(IsConnectorActive), typeof(bool), typeof(StepperItem),
-            new PropertyMetadata(false));
-
-    #endregion IsConnectorActive
-
-    #region ConnectorContent
-
-    public object ConnectorContent
-    {
-        get => GetValue(ConnectorContentProperty);
-        set => SetValue(ConnectorContentProperty, value);
-    }
-
-    public static readonly DependencyProperty ConnectorContentProperty =
-        DependencyProperty.Register(nameof(ConnectorContent), typeof(object), typeof(StepperItem),
-            new PropertyMetadata(null));
-
-    #endregion ConnectorContent
 }

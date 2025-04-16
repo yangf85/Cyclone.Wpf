@@ -30,17 +30,24 @@
 
     <!--  TimeSelector 样式  -->
     <Style TargetType="{x:Type ctl:TimeSelector}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:TimeSelector">
-                    <Border Name="RootBorder">
-                        <UniformGrid x:Name="PART_ItemsContainer" Columns="1" IsItemsHost="True" />
-                    </Border>
+                    <ScrollViewer x:Name="PART_ScrollViewer"
+                                  CanContentScroll="True"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <ItemsPresenter />
+                        <!--  使用默认的ItemsPresenter  -->
+                    </ScrollViewer>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ctl:CyclePanel x:Name="PART_ItemsPanel" VisibleItemCount="5" />
+                </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
     </Style>
@@ -107,6 +114,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="TimeFormat" Value="HH:mm:ss" />
+        <Setter Property="VisibleItemCount" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:TimePicker}">
@@ -205,18 +213,7 @@
                                             <!--  各个时间选择器  -->
                                             <ctl:TimeSelector x:Name="PART_HourSelector" Grid.Column="0" />
                                             <ctl:TimeSelector x:Name="PART_MinuteSelector" Grid.Column="1" Margin="5,0" />
-                                            <ctl:TimeSelector x:Name="PART_SecondSelector" Grid.Column="2">
-                                                <ctl:TimeSelector.Style>
-                                                    <Style BasedOn="{StaticResource {x:Type ctl:TimeSelector}}" TargetType="ctl:TimeSelector">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding SecondsVisible, RelativeSource={RelativeSource AncestorType=ctl:TimePicker}}" Value="False">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ctl:TimeSelector.Style>
-                                            </ctl:TimeSelector>
+                                            <ctl:TimeSelector x:Name="PART_SecondSelector" Grid.Column="2" />
 
                                             <!--  中间遮罩区域  -->
                                             <Border x:Name="PART_CenterMask"

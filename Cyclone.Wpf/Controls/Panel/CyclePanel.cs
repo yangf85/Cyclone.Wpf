@@ -16,6 +16,7 @@ public class CyclePanel : VirtualizingPanel, IScrollInfo
     #region Private Fields
 
     private ScrollViewer _owner;
+
     private Size _extent = new Size(0, 0);
     private Size _viewport = new Size(0, 0);
     private Point _offset = new Point(0, 0);
@@ -125,7 +126,7 @@ public class CyclePanel : VirtualizingPanel, IScrollInfo
         VirtualizingPanel.SetCacheLengthUnit(this, VirtualizationCacheLengthUnit.Page);
 
         // 初始化可见项目索引列表
-        VisibleItemIndices = new List<int>();
+        VisibleItemIndices = [];
 
         // 设置默认可见性阈值
         VisibilityThreshold = 0.2;
@@ -296,6 +297,16 @@ public class CyclePanel : VirtualizingPanel, IScrollInfo
         {
             _isInMeasure = false;
         }
+    }
+
+    protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args)
+    {
+        base.OnItemsChanged(sender, args);
+
+        InvalidateMeasure();
+        InvalidateArrange();
+
+        _itemCount = InternalChildren.Count;
     }
 
     protected override Size ArrangeOverride(Size finalSize)

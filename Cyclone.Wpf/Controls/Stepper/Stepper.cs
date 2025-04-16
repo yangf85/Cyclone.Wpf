@@ -1,12 +1,26 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Markup;
-using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
 
-[ContentProperty("Items")]
+public enum StepChangeDirection
+{
+    Forward,
+    Backward
+}
+
+public class StepChangedEventArgs : RoutedEventArgs
+{
+    public int Current { get; set; }
+    public StepChangeDirection Direction { get; set; }
+
+    public StepChangedEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
+    {
+    }
+}
+
 public class Stepper : ItemsControl
 {
     static Stepper()
@@ -15,27 +29,60 @@ public class Stepper : ItemsControl
             new FrameworkPropertyMetadata(typeof(Stepper)));
     }
 
-    #region CurrentStep
+    #region CurrentIndex
 
-    public int CurrentStep
+    public int CurrentIndex
     {
-        get => (int)GetValue(CurrentStepProperty);
-        set => SetValue(CurrentStepProperty, value);
+        get => (int)GetValue(CurrentIndexProperty);
+        set => SetValue(CurrentIndexProperty, value);
     }
 
-    public static readonly DependencyProperty CurrentStepProperty =
-        DependencyProperty.Register(nameof(CurrentStep), typeof(int), typeof(Stepper),
-            new PropertyMetadata(0, OnCurrentStepChanged));
+    public static readonly DependencyProperty CurrentIndexProperty =
+        DependencyProperty.Register(nameof(CurrentIndex), typeof(int), typeof(Stepper),
+            new PropertyMetadata(default(int), OnCurrentIndexChanged));
 
-    private static void OnCurrentStepChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnCurrentIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is Stepper stepper)
         {
-            stepper.UpdateStepperItems();
+            int oldIndex = (int)e.OldValue;
+            int newIndex = (int)e.NewValue;
+
+            if (oldIndex == newIndex) return;
+
+            // 更新所有StepperItem的状态
+            stepper.UpdateStepperItemsStatus();
+
+            // 触发StepChanged事件
+            var direction = newIndex > oldIndex ? StepChangeDirection.Forward : StepChangeDirection.Backward;
+            var args = new StepChangedEventArgs(StepChangedEvent, stepper)
+            {
+                Current = newIndex,
+                Direction = direction
+            };
+
+            stepper.RaiseEvent(args);
         }
     }
 
-    #endregion CurrentStep
+    private void UpdateStepperItemsStatus()
+    {
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (ItemContainerGenerator.ContainerFromIndex(i) is StepperItem item)
+            {
+                // 设置索引
+                item.SetIndex(i);
+
+                // 更新步骤项的状态、是否第一项或最后一项
+                item.UpdateStatus(CurrentIndex);
+                item.SetIsFirst(i == 0);
+                item.SetIsLast(i == Items.Count - 1);
+            }
+        }
+    }
+
+    #endregion CurrentIndex
 
     #region Orientation
 
@@ -51,138 +98,83 @@ public class Stepper : ItemsControl
 
     #endregion Orientation
 
-    #region StepSpacing
+    #region StepChangedEvent
 
-    public double StepSpacing
+    public static readonly RoutedEvent StepChangedEvent = EventManager.RegisterRoutedEvent(
+        "StepChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Stepper));
+
+    public event RoutedEventHandler StepChanged
     {
-        get => (double)GetValue(StepSpacingProperty);
-        set => SetValue(StepSpacingProperty, value);
+        add { AddHandler(StepChangedEvent, value); }
+        remove { RemoveHandler(StepChangedEvent, value); }
     }
 
-    public static readonly DependencyProperty StepSpacingProperty =
-        DependencyProperty.Register(nameof(StepSpacing), typeof(double), typeof(Stepper),
-            new PropertyMetadata(40.0));
+    #endregion StepChangedEvent
 
-    #endregion StepSpacing
+    #region 公共方法
 
-    #region ConnectorTemplate
-
-    public DataTemplate ConnectorTemplate
+    /// <summary>
+    /// 前进到下一步
+    /// </summary>
+    /// <returns>如果成功前进则返回true，否则返回false</returns>
+    public bool MoveNext()
     {
-        get => (DataTemplate)GetValue(ConnectorTemplateProperty);
-        set => SetValue(ConnectorTemplateProperty, value);
+        if (CurrentIndex < Items.Count - 1)
+        {
+            CurrentIndex++;
+            return true;
+        }
+        return false;
     }
 
-    public static readonly DependencyProperty ConnectorTemplateProperty =
-        DependencyProperty.Register(nameof(ConnectorTemplate), typeof(DataTemplate), typeof(Stepper),
-            new PropertyMetadata(null));
-
-    #endregion ConnectorTemplate
-
-    #region ActiveConnectorTemplate
-
-    public DataTemplate ActiveConnectorTemplate
+    /// <summary>
+    /// 后退到上一步
+    /// </summary>
+    /// <returns>如果成功后退则返回true，否则返回false</returns>
+    public bool MovePrevious()
     {
-        get => (DataTemplate)GetValue(ActiveConnectorTemplateProperty);
-        set => SetValue(ActiveConnectorTemplateProperty, value);
+        if (CurrentIndex > 0)
+        {
+            CurrentIndex--;
+            return true;
+        }
+        return false;
     }
 
-    public static readonly DependencyProperty ActiveConnectorTemplateProperty =
-        DependencyProperty.Register(nameof(ActiveConnectorTemplate), typeof(DataTemplate), typeof(Stepper),
-            new PropertyMetadata(null));
-
-    #endregion ActiveConnectorTemplate
-
-    #region DefaultConnectorStyle
-
-    public Style DefaultConnectorStyle
+    /// <summary>
+    /// 跳转到指定步骤
+    /// </summary>
+    /// <param name="index">步骤索引</param>
+    /// <returns>如果跳转成功则返回true，否则返回false</returns>
+    public bool JumpTo(int index)
     {
-        get => (Style)GetValue(DefaultConnectorStyleProperty);
-        set => SetValue(DefaultConnectorStyleProperty, value);
+        if (index >= 0 && index < Items.Count && index != CurrentIndex)
+        {
+            CurrentIndex = index;
+            return true;
+        }
+        return false;
     }
 
-    public static readonly DependencyProperty DefaultConnectorStyleProperty =
-        DependencyProperty.Register(nameof(DefaultConnectorStyle), typeof(Style), typeof(Stepper),
-            new PropertyMetadata(null));
-
-    #endregion DefaultConnectorStyle
-
-    #region DefaultActiveConnectorStyle
-
-    public Style DefaultActiveConnectorStyle
+    /// <summary>
+    /// 重置到第一步
+    /// </summary>
+    public void Reset()
     {
-        get => (Style)GetValue(DefaultActiveConnectorStyleProperty);
-        set => SetValue(DefaultActiveConnectorStyleProperty, value);
+        CurrentIndex = 0;
     }
 
-    public static readonly DependencyProperty DefaultActiveConnectorStyleProperty =
-        DependencyProperty.Register(nameof(DefaultActiveConnectorStyle), typeof(Style), typeof(Stepper),
-            new PropertyMetadata(null));
+    #endregion 公共方法
 
-    #endregion DefaultActiveConnectorStyle
-
-    protected override void OnItemsChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        base.OnItemsChanged(e);
-        UpdateStepperItems();
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-        UpdateStepperItems();
-    }
-
-    // 构造函数
     public Stepper()
     {
-        Loaded += (s, e) =>
-        {
-            UpdateStepperItems();
-        };
+        // 注册事件，以便在加载后初始化所有StepperItem
+        Loaded += Stepper_Loaded;
     }
 
-    // 更新所有步骤项的状态和连接器
-    private void UpdateStepperItems()
+    private void Stepper_Loaded(object sender, RoutedEventArgs e)
     {
-        int itemCount = Items.Count;
-        if (itemCount == 0) return;
-
-        // 更新步骤项状态
-        for (int i = 0; i < itemCount; i++)
-        {
-            if (ItemContainerGenerator.ContainerFromIndex(i) is StepperItem stepperItem)
-            {
-                stepperItem.StepNumber = i + 1;
-                stepperItem.IsFirstStep = (i == 0);
-                stepperItem.IsLastStep = (i == itemCount - 1);
-
-                // 设置状态
-                if (i < CurrentStep)
-                {
-                    stepperItem.Status = StepStatus.Completed;
-                }
-                else if (i == CurrentStep)
-                {
-                    stepperItem.Status = StepStatus.Current;
-                }
-                else
-                {
-                    stepperItem.Status = StepStatus.Pending;
-                }
-
-                // 设置连接器可见性和状态
-                if (i < itemCount - 1)
-                {
-                    stepperItem.HasConnector = true;
-                    stepperItem.IsConnectorActive = (i < CurrentStep);
-                }
-                else
-                {
-                    stepperItem.HasConnector = false;
-                }
-            }
-        }
+        UpdateStepperItemsStatus();
     }
 
     protected override DependencyObject GetContainerForItemOverride()
@@ -195,29 +187,28 @@ public class Stepper : ItemsControl
         return item is StepperItem;
     }
 
+    protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+    {
+        base.OnItemsChanged(e);
+        UpdateStepperItemsStatus();
+    }
+
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         base.PrepareContainerForItemOverride(element, item);
 
         if (element is StepperItem stepperItem)
         {
-            stepperItem.ParentStepper = this;
+            // 获取项的索引
+            int index = ItemContainerGenerator.IndexFromContainer(element);
 
-            // 如果项目不是StepperItem，则设置Header
-            if (!(item is StepperItem) && item != null)
-            {
-                stepperItem.Header = item.ToString();
-            }
-        }
-    }
+            // 设置索引
+            stepperItem.SetIndex(index);
 
-    protected override void ClearContainerForItemOverride(DependencyObject element, object item)
-    {
-        base.ClearContainerForItemOverride(element, item);
-
-        if (element is StepperItem stepperItem)
-        {
-            stepperItem.ParentStepper = null;
+            // 更新状态和位置
+            stepperItem.UpdateStatus(CurrentIndex);
+            stepperItem.SetIsFirst(index == 0);
+            stepperItem.SetIsLast(index == Items.Count - 1);
         }
     }
 }

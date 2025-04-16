@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Data;
+using System.Collections.Generic;
 using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
-[TemplatePart(Name = "PART_ItemsContainer", Type = typeof(UniformGrid))]
+/// <summary>
+/// 时间选择器控件，支持小时、分钟、秒的选择
+/// </summary>
+[TemplatePart(Name = "PART_ItemsPanel", Type = typeof(CyclePanel))]
+[TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
 public class TimeSelector : ListBox
 {
     #region Private Fields
 
-    private UniformGrid _container;
+    private CyclePanel _itemsPanel;
     private bool _isInternalUpdate;
-    private bool _isDragging;
-    private Point _lastDragPoint;
-    private double _dragAccumulator;
-    private const double DRAG_THRESHOLD = 15.0; // 拖动阈值，超过这个值才会触发值变化
     private int _maxValue; // 存储最大值
-    private const int VISIBLE_ITEM_COUNT = 5; // 固定显示的项数（确保是奇数）
+    private ScrollViewer _scrollViewer;
 
     #endregion Private Fields
 
@@ -40,12 +40,8 @@ public class TimeSelector : ListBox
 
     public TimeSelector()
     {
-        Loaded += TimeSelector_Loaded;
         SelectionChanged += TimeSelector_SelectionChanged;
-        PreviewMouseWheel += TimeSelector_PreviewMouseWheel;
-        PreviewMouseDown += TimeSelector_PreviewMouseDown;
-        PreviewMouseMove += TimeSelector_PreviewMouseMove;
-        PreviewMouseUp += TimeSelector_PreviewMouseUp;
+        Loaded += TimeSelector_Loaded;
     }
 
     private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
@@ -55,37 +51,37 @@ public class TimeSelector : ListBox
         // 确保在UI完全加载后设置选中值
         Dispatcher.BeginInvoke(new Action(() =>
         {
-            UpdateSelection(SelectedValue);
+            UpdateSelection(SelectedTimeValue);
         }), DispatcherPriority.Loaded);
     }
 
     private void TimeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (e.AddedItems.Count > 0 && !_isInternalUpdate)
+        if (_isInternalUpdate || e.AddedItems.Count == 0)
+            return;
+
+        int value = -1;
+
+        if (e.AddedItems[0] is TimeSelectorItem timeItem)
         {
-            int value = -1;
+            value = timeItem.Value;
+        }
+        else if (e.AddedItems[0] is int intValue)
+        {
+            value = intValue;
+        }
 
-            if (e.AddedItems[0] is TimeSelectorItem timeItem)
+        if (value >= 0 && SelectedTimeValue != value)
+        {
+            _isInternalUpdate = true;
+            try
             {
-                value = timeItem.Value;
+                SelectedTimeValue = value;
+                ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(value));
             }
-            else if (e.AddedItems[0] is int intValue)
+            finally
             {
-                value = intValue;
-            }
-
-            if (value >= 0 && SelectedValue != value)
-            {
-                _isInternalUpdate = true;
-                try
-                {
-                    SelectedValue = value;
-                    ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(value));
-                }
-                finally
-                {
-                    _isInternalUpdate = false;
-                }
+                _isInternalUpdate = false;
             }
         }
     }
@@ -94,19 +90,22 @@ public class TimeSelector : ListBox
 
     #region Properties
 
-    #region SelectedValue
+    #region SelectedTimeValue
 
-    public int SelectedValue
+    /// <summary>
+    /// 获取或设置所选时间值
+    /// </summary>
+    public int SelectedTimeValue
     {
-        get { return (int)GetValue(SelectedValueProperty); }
-        set { SetValue(SelectedValueProperty, value); }
+        get { return (int)GetValue(SelectedTimeValueProperty); }
+        set { SetValue(SelectedTimeValueProperty, value); }
     }
 
-    public static readonly DependencyProperty SelectedValueProperty =
-        DependencyProperty.Register("SelectedValue", typeof(int), typeof(TimeSelector),
-            new PropertyMetadata(0, OnSelectedValueChanged));
+    public static readonly DependencyProperty SelectedTimeValueProperty =
+        DependencyProperty.Register("SelectedTimeValue", typeof(int), typeof(TimeSelector),
+            new PropertyMetadata(0, OnSelectedTimeValueChanged));
 
-    private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnSelectedTimeValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var selector = (TimeSelector)d;
 
@@ -117,7 +116,7 @@ public class TimeSelector : ListBox
         }
     }
 
-    #endregion SelectedValue
+    #endregion SelectedTimeValue
 
     #region SelectorType
 
@@ -139,20 +138,6 @@ public class TimeSelector : ListBox
 
     #endregion SelectorType
 
-    #region IsCyclical
-
-    public bool IsCyclical
-    {
-        get { return (bool)GetValue(IsCyclicalProperty); }
-        set { SetValue(IsCyclicalProperty, value); }
-    }
-
-    public static readonly DependencyProperty IsCyclicalProperty =
-        DependencyProperty.Register("IsCyclical", typeof(bool), typeof(TimeSelector),
-            new PropertyMetadata(true));
-
-    #endregion IsCyclical
-
     #endregion Properties
 
     #region Overrides
@@ -160,7 +145,12 @@ public class TimeSelector : ListBox
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        _container = GetTemplateChild("PART_Container") as UniformGrid;
+
+        // 查找CyclePanel控件
+        _itemsPanel = GetTemplateChild("PART_ItemsPanel") as CyclePanel;
+        _scrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
+        //_scrollViewer.CanContentScroll = true;
+        //_itemsPanel.ScrollOwner = _scrollViewer;
     }
 
     protected override DependencyObject GetContainerForItemOverride()
@@ -182,74 +172,73 @@ public class TimeSelector : ListBox
             if (item is int value)
             {
                 // 设置实际值和显示文本
-                int actualValue = GetNormalizedValue(value);
-                container.Value = actualValue;
-                container.DisplayText = actualValue.ToString("D2");
+                container.Value = value;
+                container.DisplayText = value.ToString("D2");
             }
         }
     }
 
     #endregion Overrides
 
-    #region Event Handlers
+    #region Additional Properties for Binding
 
-    private void TimeSelector_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    /// <summary>
+    /// 用于接收CyclePanel的VisibleItemIndices属性变化
+    /// </summary>
+    public IReadOnlyList<int> VisibleItemIndices
     {
-        e.Handled = true;
-
-        // 向上滚动为负值，向下滚动为正值
-        int delta = e.Delta > 0 ? -1 : 1;
-
-        // 改变选中值
-        ChangeValue(delta);
+        get { return (IReadOnlyList<int>)GetValue(VisibleItemIndicesProperty); }
+        set { SetValue(VisibleItemIndicesProperty, value); }
     }
 
-    private void TimeSelector_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    public static readonly DependencyProperty VisibleItemIndicesProperty =
+        DependencyProperty.Register("VisibleItemIndices", typeof(IReadOnlyList<int>), typeof(TimeSelector),
+            new PropertyMetadata(null, OnVisibleItemIndicesChanged));
+
+    private static void OnVisibleItemIndicesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            _lastDragPoint = e.GetPosition(this);
-            _isDragging = true;
-            _dragAccumulator = 0;
-            CaptureMouse();
-            e.Handled = true;
-        }
+        var selector = (TimeSelector)d;
+        selector.UpdateFromVisibleIndices();
     }
 
-    private void TimeSelector_PreviewMouseMove(object sender, MouseEventArgs e)
+    private void UpdateFromVisibleIndices()
     {
-        if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
+        if (VisibleItemIndices == null || VisibleItemIndices.Count == 0 || _isInternalUpdate)
+            return;
+
+        // 获取当前可见项中的中间项索引
+        int middleIndex = VisibleItemIndices.Count / 2;
+
+        if (middleIndex < VisibleItemIndices.Count)
         {
-            Point currentPoint = e.GetPosition(this);
-            double deltaY = currentPoint.Y - _lastDragPoint.Y;
-            _lastDragPoint = currentPoint;
-
-            // 累积拖动距离
-            _dragAccumulator += deltaY;
-
-            // 如果累积的拖动距离超过阈值，改变选中值
-            if (Math.Abs(_dragAccumulator) >= DRAG_THRESHOLD)
+            int visibleItemIndex = VisibleItemIndices[middleIndex];
+            if (visibleItemIndex >= 0 && visibleItemIndex < Items.Count)
             {
-                int change = _dragAccumulator > 0 ? 1 : -1; // 向下拖动为正，向上拖动为负
-                ChangeValue(change);
-                _dragAccumulator = 0; // 重置累积值
+                // 设置选中项
+                _isInternalUpdate = true;
+                try
+                {
+                    SelectedIndex = visibleItemIndex;
+
+                    // 获取选中值
+                    if (Items[visibleItemIndex] is TimeSelectorItem item)
+                    {
+                        SelectedTimeValue = item.Value;
+                    }
+                    else if (Items[visibleItemIndex] is int value)
+                    {
+                        SelectedTimeValue = value;
+                    }
+                }
+                finally
+                {
+                    _isInternalUpdate = false;
+                }
             }
-
-            e.Handled = true;
         }
     }
 
-    private void TimeSelector_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-    {
-        if (_isDragging)
-        {
-            _isDragging = false;
-            ReleaseMouseCapture();
-            e.Handled = true;
-        }
-    }
-
-    #endregion Event Handlers
+    #endregion Additional Properties for Binding
 
     #region Methods
 
@@ -259,15 +248,10 @@ public class TimeSelector : ListBox
 
         _maxValue = GetMaxValueForType();
 
-        // 使用固定的显示项数量
-        int halfCount = VISIBLE_ITEM_COUNT / 2;
-
-        // 添加所有项
-        for (int i = -halfCount; i <= halfCount; i++)
+        // 添加所有可能的值
+        for (int i = 0; i <= _maxValue; i++)
         {
-            // 计算实际值（考虑循环）
-            int value = GetValueWithOffset(SelectedValue, i);
-            Items.Add(value);
+            Items.Add(i);
         }
     }
 
@@ -282,79 +266,49 @@ public class TimeSelector : ListBox
         };
     }
 
-    // 获取规范化的值（确保在有效范围内）
-    private int GetNormalizedValue(int value)
-    {
-        int totalValues = _maxValue + 1;
-        return ((value % totalValues) + totalValues) % totalValues;
-    }
-
-    // 获取指定偏移量的值
-    private int GetValueWithOffset(int baseValue, int offset)
-    {
-        if (!IsCyclical)
-        {
-            // 非循环模式，限制在有效范围内
-            int result = baseValue + offset;
-            return Math.Max(0, Math.Min(result, _maxValue));
-        }
-        else
-        {
-            // 循环模式，循环计算
-            return GetNormalizedValue(baseValue + offset);
-        }
-    }
-
-    // 改变当前值（增加或减少）
-    private void ChangeValue(int delta)
-    {
-        if (!IsCyclical)
-        {
-            // 非循环模式，检查边界
-            int newValue = SelectedValue + delta;
-            if (newValue < 0 || newValue > _maxValue)
-                return;
-
-            UpdateSelection(newValue);
-        }
-        else
-        {
-            // 循环模式，循环变化
-            int newValue = GetNormalizedValue(SelectedValue + delta);
-            UpdateSelection(newValue);
-        }
-    }
-
     // 更新选中项
     private void UpdateSelection(int value)
     {
         if (Items.Count == 0) return;
 
-        // 调整值确保在有效范围内
-        int normalizedValue = GetNormalizedValue(value);
+        // 确保值在有效范围内
+        int normalizedValue = Math.Max(0, Math.Min(value, _maxValue));
 
         _isInternalUpdate = true;
         try
         {
             // 更新选中值
-            SelectedValue = normalizedValue;
+            SelectedTimeValue = normalizedValue;
 
-            // 使用固定的可见项数量
-            int halfCount = VISIBLE_ITEM_COUNT / 2;
-
-            // 更新所有项的值
-            Items.Clear();
-            for (int i = -halfCount; i <= halfCount; i++)
+            // 寻找匹配的项
+            for (int i = 0; i < Items.Count; i++)
             {
-                int itemValue = GetValueWithOffset(normalizedValue, i);
-                Items.Add(itemValue);
+                if (Items[i] is TimeSelectorItem item)
+                {
+                    if (item.Value == normalizedValue)
+                    {
+                        SelectedIndex = i;
+                        break;
+                    }
+                }
+                else if (Items[i] is int itemValue)
+                {
+                    if (itemValue == normalizedValue)
+                    {
+                        SelectedIndex = i;
+                        break;
+                    }
+                }
             }
-
-            // 设置中间项为选中项
-            SelectedIndex = halfCount;
 
             // 触发值改变事件
             ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(normalizedValue));
+
+            // 确保选中的项在可视区域中间
+            if (_itemsPanel != null && SelectedIndex >= 0)
+            {
+                ScrollIntoView(Items[SelectedIndex]);
+            }
         }
         finally
         {
@@ -369,6 +323,8 @@ public class TimeSelector : ListBox
         Dispatcher.BeginInvoke(new Action(() =>
         {
             UpdateSelection(value);
+            // 强制更新布局以确保选择器能立即显示正确值
+            UpdateLayout();
         }), DispatcherPriority.Render);
     }
 

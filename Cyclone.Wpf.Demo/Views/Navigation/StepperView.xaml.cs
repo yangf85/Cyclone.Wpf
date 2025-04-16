@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Cyclone.Wpf.Demo.Views
 {
@@ -19,85 +22,75 @@ namespace Cyclone.Wpf.Demo.Views
             DataContext = new StepperViewModel();
         }
 
-        /// <summary>
-        /// 前往上一步
-        /// </summary>
-        private void PreviousStep_Click(object sender, RoutedEventArgs e)
+        private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            if (BasicStepper.CurrentStep > 0)
-            {
-                BasicStepper.CurrentStep--;
-            }
+            HorizontalStepper.MovePrevious();
         }
 
-        /// <summary>
-        /// 前往下一步
-        /// </summary>
-        private void NextStep_Click(object sender, RoutedEventArgs e)
+        private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (BasicStepper.CurrentStep < BasicStepper.Items.Count - 1)
-            {
-                BasicStepper.CurrentStep++;
-            }
+            //这里只控制垂直Stepper，也可以同时控制两个
+            HorizontalStepper.MoveNext();
         }
     }
 
-    /// <summary>
-    /// Stepper 控件的视图模型
-    /// </summary>
     public partial class StepperViewModel : ObservableObject
     {
-        /// <summary>
-        /// 当前步骤索引
-        /// </summary>
         [ObservableProperty]
-        private int _currentStepIndex = 1;
+        public partial int CurrentStepIndex { get; set; }
 
-        /// <summary>
-        /// 步骤项集合
-        /// </summary>
         [ObservableProperty]
-        private ObservableCollection<StepperItemViewModel> _stepperItems;
+        public partial ObservableCollection<StepperItemViewModel> StepperItems { get; set; }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
         public StepperViewModel()
         {
             // 初始化步骤项集合
-            StepperItems = new ObservableCollection<StepperItemViewModel>
-            {
+            StepperItems =
+            [
                 new StepperItemViewModel
                 {
                     Header = "需求分析",
                     Description = "收集和分析用户需求",
-                    HasError = false
                 },
                 new StepperItemViewModel
                 {
                     Header = "设计方案",
                     Description = "制定系统设计方案",
-                    HasError = false
                 },
                 new StepperItemViewModel
                 {
                     Header = "编码实现",
                     Description = "实现系统功能",
-                    HasError = false
                 },
                 new StepperItemViewModel
                 {
                     Header = "测试验证",
                     Description = "进行系统测试",
-                    HasError = false
                 },
                 new StepperItemViewModel
                 {
                     Header = "部署上线",
                     Description = "系统部署和上线",
-                    HasError = false
                 }
-            };
+            ];
+        }
+
+        [RelayCommand]
+        void Next()
+        {
+            if (CurrentStepIndex < StepperItems.Count)
+            {
+                CurrentStepIndex++;
+            }
+        }
+
+        [RelayCommand]
+        void Previous()
+        {
+            if (CurrentStepIndex > 0)
+            {
+                CurrentStepIndex--;
+            }
         }
     }
 
@@ -117,11 +110,5 @@ namespace Cyclone.Wpf.Demo.Views
         /// </summary>
         [ObservableProperty]
         private string _description;
-
-        /// <summary>
-        /// 是否有错误
-        /// </summary>
-        [ObservableProperty]
-        private bool _hasError;
     }
 }

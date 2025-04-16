@@ -10,19 +10,50 @@
              mc:Ignorable="d">
     <Grid>
         <StackPanel Margin="10">
-            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                <cy:CyclePanel x:Name="CyclePanel" Orientation="Vertical" VisibleItemCount="5">
-                    <Button Height="Auto" Background="Orange" Content="Item1" />
-                    <Button Height="Auto" Background="LightGreen" Content="Item2" />
-                    <Button Height="Auto" Background="SkyBlue" Content="Item3" />
-                    <Button Height="Auto" Background="Violet" Content="Item4" />
-                    <Button Height="Auto" Background="Cyan" Content="Item5" />
-                    <Button Height="Auto" Background="Red" Content="Item6" />
-                    <Button Height="Auto" Background="RosyBrown" Content="Item7" />
-                    <Button Height="Auto" Background="DarkBlue" Content="Item8" />
+            <ScrollViewer x:Name="scrollViewer"
+               CanContentScroll="True"
+               HorizontalScrollBarVisibility="Hidden"
+               VerticalScrollBarVisibility="Hidden">
+                <cy:CyclePanel VisibleItemCount="5">
+                    <Button Height="Auto" Content="Item 0" />
+                    <Button Height="Auto" Content="Item 1" />
+                    <Button Height="Auto" Content="Item 2" />
+                    <Button Height="Auto" Content="Item 3" />
+                    <Button Height="Auto" Content="Item 4" />
+                    <Button Height="Auto" Content="Item 5" />
+                    <Button Height="Auto" Content="Item 6" />
+                    <Button Height="Auto" Content="Item 7" />
+                    <Button Height="Auto" Content="Item 8" />
+                    <Button Height="Auto" Content="Item 9" />
+                    <Button Height="Auto" Content="Item 10" />
+                    <Button Height="Auto" Content="Item 11" />
                 </cy:CyclePanel>
             </ScrollViewer>
-            <ListBox ItemsSource="{Binding ElementName=CyclePanel, Path=VisibleItemIndices}" />
+            <!--<ListBox x:Name="testListBox" Width="150" Height="150">
+                <ListBox.Template>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        </Border>
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel cy:CyclicScrolling.CanScrollVertically="True" cy:CyclicScrolling.IsEnabled="True" cy:CyclicScrolling.VisibleItemCount="5" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBoxItem Height="Auto" Content="Item 0" />
+                <ListBoxItem Height="Auto" Content="Item 1" />
+                <ListBoxItem Height="Auto" Content="Item 2" />
+                <ListBoxItem Height="Auto" Content="Item 3" />
+                <ListBoxItem Height="Auto" Content="Item 4" />
+                <ListBoxItem Height="Auto" Content="Item 5" />
+                <ListBoxItem Height="Auto" Content="Item 6" />
+                <ListBoxItem Height="Auto" Content="Item 7" />
+                <ListBoxItem Height="Auto" Content="Item 8" />
+                <ListBoxItem Height="Auto" Content="Item 9" />
+                <ListBoxItem Height="Auto" Content="Item 10" />
+                <ListBoxItem Height="Auto" Content="Item 11" />
+            </ListBox>-->
         </StackPanel>
     </Grid>
 </UserControl>
