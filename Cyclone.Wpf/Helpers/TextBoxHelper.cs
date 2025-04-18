@@ -68,6 +68,7 @@ public class TextBoxHelper
     {
         var textBox = sender as TextBox;
         textBox.Clear();
+        var ps = new PasswordBox();
     }
 
     #endregion ClearCommand

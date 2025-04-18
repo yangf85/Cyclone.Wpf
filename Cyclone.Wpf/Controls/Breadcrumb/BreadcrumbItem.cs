@@ -1,64 +1,56 @@
-﻿using System.Windows;
-using System.Windows.Controls.Primitives;
+﻿using System;
+using System.Collections;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls
 {
-    /// <summary>
-    /// 面包屑项控件
-    /// </summary>
-    public class BreadcrumbItem : ButtonBase
+    public class BreadCrumbBarItem : ContentControl
     {
-        #region 依赖属性
-
-        public static readonly DependencyProperty ShowSeparatorProperty =
-            DependencyProperty.Register("ShowSeparator", typeof(bool), typeof(BreadcrumbItem),
-                new PropertyMetadata(true));
-
-        public static readonly DependencyProperty IsLastItemProperty =
-            DependencyProperty.Register("IsLastItem", typeof(bool), typeof(BreadcrumbItem),
-                new PropertyMetadata(false));
-
-        public static readonly DependencyProperty IsSelectedProperty =
-            DependencyProperty.Register("IsSelected", typeof(bool), typeof(BreadcrumbItem),
-                new PropertyMetadata(false));
-
-        #endregion
-
-        #region 属性
-
-        /// <summary>
-        /// 获取或设置是否显示分隔符
-        /// </summary>
-        public bool ShowSeparator
+        static BreadCrumbBarItem()
         {
-            get { return (bool)GetValue(ShowSeparatorProperty); }
-            set { SetValue(ShowSeparatorProperty, value); }
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadCrumbBarItem), new FrameworkPropertyMetadata(typeof(BreadCrumbBarItem)));
         }
 
-        /// <summary>
-        /// 获取或设置是否是最后一项
-        /// </summary>
-        public bool IsLastItem
+        #region Icon
+
+        public object Icon
         {
-            get { return (bool)GetValue(IsLastItemProperty); }
-            set { SetValue(IsLastItemProperty, value); }
+            get => (object)GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
         }
 
-        /// <summary>
-        /// 获取或设置是否被选中
-        /// </summary>
-        public bool IsSelected
+        public static readonly DependencyProperty IconProperty =
+            DependencyProperty.Register(nameof(Icon), typeof(object), typeof(BreadCrumbBarItem), new PropertyMetadata(default(object)));
+
+        #endregion Icon
+
+        #region Indicator
+
+        public object Indicator
         {
-            get { return (bool)GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
+            get => (object)GetValue(IndicatorProperty);
+            set => SetValue(IndicatorProperty, value);
         }
 
-        #endregion
+        public static readonly DependencyProperty IndicatorProperty =
+            DependencyProperty.Register(nameof(Indicator), typeof(object), typeof(BreadCrumbBarItem), new PropertyMetadata(default(object)));
 
-        static BreadcrumbItem()
+        #endregion Indicator
+
+        #region IndicatorTemplate
+
+        public DataTemplate IndicatorTemplate
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadcrumbItem),
-                new FrameworkPropertyMetadata(typeof(BreadcrumbItem)));
+            get => (DataTemplate)GetValue(IndicatorTemplateProperty);
+            set => SetValue(IndicatorTemplateProperty, value);
         }
+
+        public static readonly DependencyProperty IndicatorTemplateProperty =
+            DependencyProperty.Register(nameof(IndicatorTemplate), typeof(DataTemplate), typeof(BreadCrumbBarItem), new PropertyMetadata(default(DataTemplate)));
+
+        #endregion IndicatorTemplate
     }
 }
