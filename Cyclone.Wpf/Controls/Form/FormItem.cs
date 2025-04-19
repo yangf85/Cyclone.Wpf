@@ -214,10 +214,10 @@ public class FormItem : ContentControl
                     }
                 }
 
-                if (parentForm != null && parentForm.ShareLabelColumn)
-                {
-                    SharedName = "FormLabels";
-                }
+                //if (parentForm != null && parentForm.ShareLabelColumn)
+                //{
+                //    SharedName = "FormLabels";
+                //}
             }
         };
     }

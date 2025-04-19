@@ -31,7 +31,8 @@ public class TextBoxHelper
     #region HasClearButton
 
     public static readonly DependencyProperty HasClearButtonProperty =
-                DependencyProperty.RegisterAttached("HasClearButton", typeof(bool), typeof(TextBoxHelper), new PropertyMetadata(default(bool), OnHasClearButtonChanged));
+                DependencyProperty.RegisterAttached("HasClearButton", typeof(bool), typeof(TextBoxHelper),
+                    new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsArrange, OnHasClearButtonChanged));
 
     private static void OnHasClearButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -45,6 +46,7 @@ public class TextBoxHelper
             {
                 textBox.CommandBindings.Remove(new CommandBinding(ClearCommand, OnClear, OnCanClear));
             }
+            VisualStateManager.GoToState(textBox, "Normal", true);
         }
     }
 
@@ -67,8 +69,7 @@ public class TextBoxHelper
     private static void OnClear(object sender, ExecutedRoutedEventArgs e)
     {
         var textBox = sender as TextBox;
-        textBox.Clear();
-        var ps = new PasswordBox();
+        textBox?.Clear();
     }
 
     #endregion ClearCommand

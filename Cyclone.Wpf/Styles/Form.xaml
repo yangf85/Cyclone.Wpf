@@ -119,10 +119,6 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="DefaultLabelPosition" Value="Left" />
-        <Setter Property="DefaultLabelWidth" Value="120" />
-        <Setter Property="ItemSpacing" Value="8" />
-        <Setter Property="EnableGrouping" Value="False" />
-        <Setter Property="ShareLabelColumn" Value="True" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>

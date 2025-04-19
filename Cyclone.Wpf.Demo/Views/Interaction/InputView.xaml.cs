@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -55,6 +57,12 @@ namespace Cyclone.Wpf.Demo.Views
         {
             var tt = HasErrors;
             var t = 1;
+        }
+
+        [RelayCommand]
+        void ShowPassword()
+        {
+            NotificationService.Instance.Warning(Password);
         }
     }
 }

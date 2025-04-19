@@ -13,15 +13,16 @@
         <HeaderedContentControl Header="TextBox">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <TextBox cy:TextBoxHelper.Watermark="请输入123" Text="{Binding Text, ValidatesOnNotifyDataErrors=True}" />
-                <TextBox cy:TextBoxHelper.Watermark="请输入文本。。。。" Text="Two" />
+                <TextBox cy:TextBoxHelper.HasClearButton="False" cy:TextBoxHelper.Watermark="请输入文本。。。。" Text="Two" />
                 <TextBox Text="Three" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="PasswordBox">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <PasswordBox cy:PasswordBoxHelper.HasClearButton="False" cy:PasswordBoxHelper.Password="{Binding Password}" cy:PasswordBoxHelper.Watermark="请输入密码" />
+                <PasswordBox cy:PasswordBoxHelper.HasClearButton="False" cy:PasswordBoxHelper.HasPasswordVisibilityToggle="False" />
                 <PasswordBox />
-                <PasswordBox />
+                <Button Command="{Binding ShowPasswordCommand}" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="NumberBox">

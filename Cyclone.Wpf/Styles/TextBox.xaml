@@ -32,6 +32,69 @@
         </Setter>
     </Style>
 
+    <ControlTemplate x:Key="TextBox.ControlTemplate.Basic" TargetType="{x:Type TextBox}">
+        <Border x:Name="RootBorder"
+                Padding="3,0"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                SnapsToDevicePixels="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="Watermark"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           FontSize="{TemplateBinding FontSize}"
+                           Foreground="{DynamicResource Text.Prompt}"
+                           Text="{Binding Path=(hp:TextBoxHelper.Watermark), RelativeSource={RelativeSource AncestorType=TextBox}}"
+                           Visibility="Collapsed" />
+                <ScrollViewer x:Name="PART_ContentHost"
+                              Grid.Column="0"
+                              Background="{TemplateBinding Background}"
+                              Focusable="false"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Hidden" />
+                <Button x:Name="ClearButton"
+                        Grid.Column="1"
+                        Margin="0,0,3,0"
+                        Command="{x:Static hp:TextBoxHelper.ClearCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=TextBox}}"
+                        Style="{StaticResource TextBox.ClearButtonStyle}" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(hp:TextBoxHelper.HasClearButton), RelativeSource={RelativeSource Mode=Self}}" Value="False">
+                <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Text" Value="" />
+                    <Condition Property="IsKeyboardFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
+            </MultiTrigger>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="RootBorder" Property="Opacity" Value="0.5" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
+            </Trigger>
+
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
+                <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <Style x:Key="TextBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
@@ -47,70 +110,7 @@
         <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="hp:TextBoxHelper.HasClearButton" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="RootBorder"
-                            Padding="3,0"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="Watermark"
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontSize="{TemplateBinding FontSize}"
-                                       Foreground="{DynamicResource Text.Prompt}"
-                                       Text="{Binding Path=(hp:TextBoxHelper.Watermark), RelativeSource={RelativeSource AncestorType=TextBox}}"
-                                       Visibility="Collapsed" />
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Grid.Column="0"
-                                          Background="{TemplateBinding Background}"
-                                          Focusable="false"
-                                          HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden" />
-                            <Button x:Name="ClearButton"
-                                    Grid.Column="1"
-                                    Margin="0,0,3,0"
-                                    Command="{x:Static hp:TextBoxHelper.ClearCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TextBox}}"
-                                    Style="{StaticResource TextBox.ClearButtonStyle}"
-                                    Visibility="{Binding Path=Text, Converter={x:Static conv:VisibilityConverter.VisibleWhenNotNullOrEmpty}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="Text" Value="" />
-                                <Condition Property="IsKeyboardFocused" Value="False" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
-                        </MultiTrigger>
-
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="RootBorder" Property="Opacity" Value="0.5" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
-                        </Trigger>
-
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Focused}" />
-                            <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Template" Value="{StaticResource TextBox.ControlTemplate.Basic}" />
         <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
