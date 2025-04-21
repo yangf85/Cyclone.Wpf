@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Cyclone.Wpf.Controls;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,5 +10,9 @@ namespace Cyclone.Wpf.Demo
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+        }
     }
 }

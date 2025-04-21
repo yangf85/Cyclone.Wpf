@@ -28,7 +28,6 @@ public partial class ShellWindow : AdvancedWindow
 
     private void ShellWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        Debug.WriteLine($"ShellWindow Top:{Top} \n Left:{Left} \n Bottom:{Top + ActualHeight} \n Right:{Left + ActualWidth}");
-        Debug.WriteLine($"ShellWindow Width:{ActualWidth} \n Height:{ActualHeight} ");
+        NotificationService.Instance.SetOwner(this);
     }
 }

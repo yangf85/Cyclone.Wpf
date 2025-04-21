@@ -15,26 +15,6 @@ namespace Cyclone.Wpf.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Form), new FrameworkPropertyMetadata(typeof(Form)));
         }
 
-        #region 控件属性
-
-        /// <summary>
-        /// 默认标签位置
-        /// </summary>
-        public static readonly DependencyProperty DefaultLabelPositionProperty =
-            DependencyProperty.Register(nameof(DefaultLabelPosition), typeof(LabelPosition), typeof(Form),
-                new FrameworkPropertyMetadata(LabelPosition.Left, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));
-
-        /// <summary>
-        /// 获取或设置默认标签位置
-        /// </summary>
-        public LabelPosition DefaultLabelPosition
-        {
-            get => (LabelPosition)GetValue(DefaultLabelPositionProperty);
-            set => SetValue(DefaultLabelPositionProperty, value);
-        }
-
-        #endregion 控件属性
-
         #region 附加属性
 
         #region Label
@@ -55,23 +35,16 @@ namespace Cyclone.Wpf.Controls
 
         #endregion Label
 
-        #region LabelPosition
+        #region SharedName
 
-        public static readonly DependencyProperty LabelPositionProperty =
-            DependencyProperty.RegisterAttached("LabelPosition", typeof(LabelPosition), typeof(Form),
-                new FrameworkPropertyMetadata(LabelPosition.Inherit, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static string GetSharedName(DependencyObject obj) => (string)obj.GetValue(SharedNameProperty);
 
-        public static LabelPosition GetLabelPosition(DependencyObject obj)
-        {
-            return (LabelPosition)obj.GetValue(LabelPositionProperty);
-        }
+        public static void SetSharedName(DependencyObject obj, string value) => obj.SetValue(SharedNameProperty, value);
 
-        public static void SetLabelPosition(DependencyObject obj, LabelPosition value)
-        {
-            obj.SetValue(LabelPositionProperty, value);
-        }
+        public static readonly DependencyProperty SharedNameProperty =
+                    DependencyProperty.RegisterAttached("SharedName", typeof(string), typeof(Form), new PropertyMetadata(default(string)));
 
-        #endregion LabelPosition
+        #endregion SharedName
 
         #region IsRequired
 
@@ -91,54 +64,78 @@ namespace Cyclone.Wpf.Controls
 
         #endregion IsRequired
 
+        #region Description
+
+        public static string GetDescription(DependencyObject obj) => (string)obj.GetValue(DescriptionProperty);
+
+        public static void SetDescription(DependencyObject obj, string value) => obj.SetValue(DescriptionProperty, value);
+
+        public static readonly DependencyProperty DescriptionProperty =
+                    DependencyProperty.RegisterAttached("Description", typeof(string), typeof(Form), new PropertyMetadata(default(string)));
+
+        #endregion Description
+
+        #region AttachedObject
+
+        public static object GetAttachedObject(DependencyObject obj) => (object)obj.GetValue(AttachedObjectProperty);
+
+        public static void SetAttachedObject(DependencyObject obj, object value) => obj.SetValue(AttachedObjectProperty, value);
+
+        public static readonly DependencyProperty AttachedObjectProperty =
+                    DependencyProperty.RegisterAttached("AttachedObject", typeof(object), typeof(Form), new PropertyMetadata(default(object)));
+
+        #endregion AttachedObject
+
         #endregion 附加属性
+
+        #region Override
+
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new FormItem();
+        }
+
+        protected override bool IsItemItsOwnContainerOverride(object item)
+        {
+            return item is FormItem || item is FormTitle;
+        }
+
+        protected override bool ShouldApplyItemContainerStyle(DependencyObject container, object item)
+        {
+            if (item is FormTitle) { return false; }
+            return container is FormItem;
+        }
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             base.PrepareContainerForItemOverride(element, item);
 
-            // 如果元素不是FormItem，检查是否需要应用Form附加属性
-            if (element is ContentPresenter presenter && !(item is FormItem))
+            if (element is FormItem formItem)
             {
-                // 如果项目有Label附加属性，创建一个FormItem
-                var label = GetLabel(item as DependencyObject);
-                if (label != null)
+                // 如果item是DependencyObject，从它获取附加属性并设置到formItem
+                if (item is DependencyObject depObj)
                 {
-                    var formItem = new FormItem
-                    {
-                        Label = label,
-                        Content = item
-                    };
+                    object label = GetLabel(depObj);
+                    bool isRequired = GetIsRequired(depObj);
+                    string sharedName = GetSharedName(depObj);
+                    object attachedObject = GetAttachedObject(depObj);
+                    string description = GetDescription(depObj);
 
-                    // 应用其他附加属性
-                    var labelPos = GetLabelPosition(item as DependencyObject);
-                    if (labelPos != LabelPosition.Inherit)
-                    {
-                        formItem.LabelPosition = labelPos;
-                    }
-                    else
-                    {
-                        formItem.LabelPosition = DefaultLabelPosition;
-                    }
+                    if (label != null) formItem.Label = label;
+                    formItem.IsRequired = isRequired;
+                    if (!string.IsNullOrEmpty(sharedName)) formItem.SharedName = sharedName;
+                    if (attachedObject != null) formItem.AttachedObject = attachedObject;
+                    if (!string.IsNullOrEmpty(description)) formItem.Description = description;
+                }
 
-                    formItem.IsRequired = GetIsRequired(item as DependencyObject);
-
-                    // 替换内容
-                    presenter.Content = formItem;
+                // 如果item不是FormItem，则设置为Content
+                if (item is not FormItem)
+                {
+                    formItem.Content = item;
                 }
             }
         }
-    }
 
-    /// <summary>
-    /// 标签位置枚举
-    /// </summary>
-    public enum LabelPosition
-    {
-        Inherit,
-
-        Left,
-
-        Top
+        #endregion Override
     }
 }

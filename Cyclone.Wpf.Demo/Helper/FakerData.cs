@@ -5,6 +5,7 @@ using Faker;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,25 @@ public partial class ContactInfo : ObservableObject
     public partial string LinkedInProfile { get; set; }
 }
 
-public partial class FakerData : ObservableValidator,IHintable
+public enum UserStatus
+{
+    Active,
+    Inactive,
+    Pending
+}
+
+public partial class FakerData : ObservableValidator, IHintable
 {
     [NotifyDataErrorInfo]
     [ObservableProperty]
     [Range(0, 120, ErrorMessage = "Age must be between 0 and 120")]
     public partial int Age { get; set; }
+
+    [ObservableProperty]
+    public partial UserStatus Status { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsVerified { get; set; }
 
     [NotifyDataErrorInfo]
     [ObservableProperty]
@@ -66,14 +80,12 @@ public partial class FakerData : ObservableValidator,IHintable
     public partial string Lorem { get; set; }
 
     [ObservableProperty]
-    public partial string HintText { get; set;}
-
+    public partial string HintText { get; set; }
 
     partial void OnFirstNameChanged(string value)
     {
         HintText = value;
     }
-    
 
     public FakerData()
     {
@@ -87,6 +99,8 @@ public partial class FakerData : ObservableValidator,IHintable
         ZipCode = Faker.Address.ZipCode();     // 随机生成邮政编码
         Country = Faker.Address.Country();     // 随机生成国家
         Lorem = Faker.Lorem.Sentence(5);
+        Status = Faker.Enum.Random<UserStatus>();
+        IsVerified = Faker.Boolean.Random();
         Contact = new ContactInfo
         {
             PhoneNumber = Faker.Phone.Number(), // 随机生成电话号码

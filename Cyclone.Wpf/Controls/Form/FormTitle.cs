@@ -37,4 +37,18 @@ public class FormTitle : Control
         DependencyProperty.Register(nameof(Description), typeof(string), typeof(FormTitle), new PropertyMetadata(default(string)));
 
     #endregion Description
+
+    #region DescriptionHorizontalAlignment
+
+    public HorizontalAlignment DescriptionHorizontalAlignment
+    {
+        get => (HorizontalAlignment)GetValue(DescriptionHorizontalAlignmentProperty);
+        set => SetValue(DescriptionHorizontalAlignmentProperty, value);
+    }
+
+    public static readonly DependencyProperty DescriptionHorizontalAlignmentProperty =
+        DependencyProperty.Register(nameof(DescriptionHorizontalAlignment), typeof(HorizontalAlignment), typeof(FormTitle),
+        new PropertyMetadata(default));
+
+    #endregion DescriptionHorizontalAlignment
 }

@@ -35,26 +35,6 @@ public class FormItem : ContentControl
 
     #endregion Label
 
-    #region LabelPosition
-
-    /// <summary>
-    /// 标签位置属性
-    /// </summary>
-    public static readonly DependencyProperty LabelPositionProperty =
-        DependencyProperty.Register(nameof(LabelPosition), typeof(LabelPosition), typeof(FormItem),
-            new FrameworkPropertyMetadata(LabelPosition.Left, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));
-
-    /// <summary>
-    /// 获取或设置标签位置
-    /// </summary>
-    public LabelPosition LabelPosition
-    {
-        get => (LabelPosition)GetValue(LabelPositionProperty);
-        set => SetValue(LabelPositionProperty, value);
-    }
-
-    #endregion LabelPosition
-
     #region SharedName
 
     /// <summary>
@@ -144,26 +124,6 @@ public class FormItem : ContentControl
 
     #endregion LabelHorizontalAlignment
 
-    #region LabelWidth
-
-    /// <summary>
-    /// 标签宽度属性
-    /// </summary>
-    public static readonly DependencyProperty LabelWidthProperty =
-        DependencyProperty.Register(nameof(LabelWidth), typeof(double), typeof(FormItem),
-            new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));
-
-    /// <summary>
-    /// 获取或设置标签宽度
-    /// </summary>
-    public double LabelWidth
-    {
-        get => (double)GetValue(LabelWidthProperty);
-        set => SetValue(LabelWidthProperty, value);
-    }
-
-    #endregion LabelWidth
-
     #region IsRequired
 
     /// <summary>
@@ -183,6 +143,19 @@ public class FormItem : ContentControl
     }
 
     #endregion IsRequired
+
+    #region Description
+
+    public string Description
+    {
+        get => (string)GetValue(DescriptionProperty);
+        set => SetValue(DescriptionProperty, value);
+    }
+
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(string), typeof(FormItem), new PropertyMetadata(default(string)));
+
+    #endregion Description
 
     /// <summary>
     /// 初始化共享尺寸组名称

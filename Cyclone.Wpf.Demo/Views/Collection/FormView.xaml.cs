@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,12 @@ namespace Cyclone.Wpf.Demo.Views
         public FormViewModel()
         {
             Data = FakerDataHelper.GenerateFakerDataCollection(1).FirstOrDefault()!;
+        }
+
+        [RelayCommand]
+        void Show()
+        {
+            NotificationService.Instance.Information(Data.FirstName);
         }
     }
 }

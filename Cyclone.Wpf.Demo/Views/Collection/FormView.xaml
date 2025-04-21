@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:cy="https://www.cyclone/wpf"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hp="clr-namespace:Cyclone.Wpf.Demo.Helper"
              xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DataContext="{d:DesignInstance Type=local:FormViewModel}"
@@ -11,28 +12,131 @@
              mc:Ignorable="d">
     <Grid>
         <cy:SpacingStackPanel>
-            <cy:Form>
-                <cy:FormItem IsRequired="True" Label="用户名:">
-                    <TextBox />
-                </cy:FormItem>
-                <cy:FormItem IsRequired="True" Label="密码:">
-                    <PasswordBox />
-                </cy:FormItem>
+            <GroupBox Header="Normal">
+                <cy:Form>
+                    <cy:FormItem Description="这是一个描述"
+                                 IsRequired="True"
+                                 Label="用户名:"
+                                 SharedName="FormA">
+                        <TextBox />
+                    </cy:FormItem>
+                    <cy:FormItem IsRequired="True" Label="密码:" SharedName="FormA">
+                        <PasswordBox />
+                    </cy:FormItem>
+                    <cy:FormTitle Description="描述文本">
+                        <TextBlock Text="这是一个标题" />
+                    </cy:FormTitle>
+                    <cy:FormItem Label="电子邮箱:" SharedName="FormB">
+                        <TextBox />
+                    </cy:FormItem>
+                    <cy:FormItem Label="AD" SharedName="FormB">
+                        <TextBox Text="提交" />
+                    </cy:FormItem>
+                </cy:Form>
+            </GroupBox>
 
-                <cy:FormItem Label="电子邮箱:">
-                    <TextBox />
-                </cy:FormItem>
+            <GroupBox Padding="20" Header="Attached">
+                <StackPanel>
+                    <Button Command="{Binding ShowCommand}" Content="Show" />
+                    <cy:Form DataContext="{Binding Data}">
+                        <!--  表单标题  -->
+                        <cy:FormTitle Margin="0,10" Description="Please fill in the following personal information fields" DescriptionHorizontalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Text="Form" />
+                        </cy:FormTitle>
 
-                <cy:FormItem>
-                    <Button Width="100" HorizontalAlignment="Left" Content="提交" />
-                </cy:FormItem>
-            </cy:Form>
+                        <!--  基本信息  -->
+                        <TextBox cy:Form.Description="This is first name."
+                                 cy:Form.IsRequired="True"
+                                 cy:Form.Label="FirstName:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
 
-            <cy:Form DefaultLabelPosition="Top">
-                <!--  表单项将默认使用顶部标签  -->
-                <TextBox cy:Form.IsRequired="True" cy:Form.Label="用户名:" />
-                <PasswordBox cy:Form.IsRequired="True" cy:Form.Label="密码:" />
-            </cy:Form>
+                        <TextBox cy:Form.Description="This is last name."
+                                 cy:Form.IsRequired="True"
+                                 cy:Form.Label="LastName:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+
+                        <DatePicker cy:Form.Description="Your date of birth."
+                                    cy:Form.Label="Date of Birth:"
+                                    cy:Form.SharedName="Form"
+                                    SelectedDate="{Binding DateOfBirth}" />
+
+                        <TextBox cy:Form.Description="Age must be between 0 and 120."
+                                 cy:Form.Label="Age:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+
+                        <!--  联系信息  -->
+                        <TextBox cy:Form.Description="Please enter a valid email address."
+                                 cy:Form.IsRequired="True"
+                                 cy:Form.Label="Email:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+
+                        <TextBox cy:Form.Description="Your contact phone number."
+                                 cy:Form.Label="Phone:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Contact.PhoneNumber}" />
+
+                        <TextBox cy:Form.Description="Your LinkedIn profile URL."
+                                 cy:Form.Label="LinkedIn:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Contact.LinkedInProfile}" />
+
+                        <!--  地址信息  -->
+                        <TextBox cy:Form.Description="Your street address."
+                                 cy:Form.Label="Address:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Address}" />
+
+                        <TextBox cy:Form.Description="Your city."
+                                 cy:Form.Label="City:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding City}" />
+
+                        <TextBox cy:Form.Description="Your postal/zip code."
+                                 cy:Form.Label="Zip Code:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding ZipCode}" />
+
+                        <TextBox cy:Form.Description="Your country."
+                                 cy:Form.Label="Country:"
+                                 cy:Form.SharedName="Form"
+                                 Text="{Binding Country}" />
+
+                        <!--  状态信息  -->
+                        <ComboBox cy:Form.Description="Your current status."
+                                  cy:Form.Label="Status:"
+                                  cy:Form.SharedName="Form"
+                                  ItemsSource="{cy:EnumToItemsSource EnumType={x:Type hp:UserStatus}}"
+                                  SelectedItem="{Binding Status}" />
+
+                        <CheckBox cy:Form.Description="Check if your account is verified."
+                                  cy:Form.Label="Verified:"
+                                  cy:Form.SharedName="Form"
+                                  IsChecked="{Binding IsVerified}" />
+
+                        <!--  其他信息  -->
+                        <TextBox MinHeight="60"
+                                 cy:Form.Description="Additional description."
+                                 cy:Form.Label="Description:"
+                                 cy:Form.SharedName="Form"
+                                 AcceptsReturn="True"
+                                 Text="{Binding Lorem}"
+                                 TextWrapping="Wrap" />
+
+                        <!--  操作按钮  -->
+                        <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Width="80" Margin="0,0,10,0" Content="Reset" />
+                            <Button Width="80" Command="{Binding ShowSelfCommand}" Content="Submit" />
+                        </StackPanel>
+                    </cy:Form>
+                </StackPanel>
+            </GroupBox>
         </cy:SpacingStackPanel>
     </Grid>
 </UserControl>

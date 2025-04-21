@@ -3,129 +3,94 @@
                     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
                     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="FormItem.ControlTemplate.LeftLabel" TargetType="{x:Type ctl:FormItem}">
+    <Style x:Key="FormTitle.Style.Basic" TargetType="ctl:FormTitle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctl:FormTitle">
+                    <StackPanel>
+                        <ContentPresenter Content="{TemplateBinding Title}" />
+                        <TextBlock HorizontalAlignment="{TemplateBinding DescriptionHorizontalAlignment}" Foreground="{DynamicResource Text.Prompt}" Text="{TemplateBinding Description}" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style BasedOn="{StaticResource FormTitle.Style.Basic}" TargetType="ctl:FormTitle" />
+
+    <ControlTemplate x:Key="FormItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FormItem}">
         <Grid HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Width="{TemplateBinding LabelWidth}" Margin="0,0,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0">
                 <StackPanel HorizontalAlignment="{TemplateBinding LabelHorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Orientation="Horizontal">
-                    <ContentPresenter Content="{TemplateBinding Label}" />
-                    <TextBlock Margin="2,0,0,0"
+                    <TextBlock Margin="0,0,3,0"
+                               VerticalAlignment="Center"
+                               FontSize="16"
                                Foreground="Red"
                                Text="*"
                                Visibility="{TemplateBinding IsRequired,
                                                             Converter={x:Static conv:BooleanConverter.ToVisibility}}" />
+                    <ContentPresenter Content="{TemplateBinding Label}" />
                 </StackPanel>
             </Grid>
 
-            <ContentPresenter Grid.Column="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
-
-            <ContentPresenter Grid.Column="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding AttachedObject}" />
-        </Grid>
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="FormItem.ControlTemplate.TopLabel" TargetType="{x:Type ctl:FormItem}">
-        <Grid HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Row="0"
-                        Grid.Column="0"
-                        Margin="0,0,0,4"
-                        HorizontalAlignment="{TemplateBinding LabelHorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Orientation="Horizontal">
-                <ContentPresenter Content="{TemplateBinding Label}" />
-                <TextBlock Margin="2,0,0,0"
-                           Foreground="Red"
-                           Text="*"
-                           Visibility="{TemplateBinding IsRequired,
-                                                        Converter={x:Static conv:BooleanConverter.ToVisibility}}" />
-            </StackPanel>
-            <ContentPresenter Grid.Row="1"
-                              Grid.Column="0"
+            <ContentPresenter Grid.Row="0"
+                              Grid.Column="1"
+                              Margin="5,0,0,0"
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                               Content="{TemplateBinding Content}" />
-            <ContentPresenter Grid.Row="1"
-                              Grid.Column="1"
+            <ContentPresenter Grid.Row="0"
+                              Grid.Column="2"
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                               Content="{TemplateBinding AttachedObject}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="3"
+                       Margin="5,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Text.Prompt}"
+                       Text="{TemplateBinding Description}" />
         </Grid>
     </ControlTemplate>
 
     <Style x:Key="FormItem.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ctl:FormItem}">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.LeftLabel}" />
-        <Style.Triggers>
-            <Trigger Property="LabelPosition" Value="Top">
-                <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.TopLabel}" />
-                <Setter Property="Height" Value="Auto" />
-                <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
     </Style>
 
     <Style BasedOn="{StaticResource FormItem.Style.Basic}" TargetType="ctl:FormItem" />
 
     <ControlTemplate x:Key="Form.ControlTemplate.Basic" TargetType="{x:Type ctl:Form}">
-        <Grid>
-            <Grid.Resources>
-                <Style TargetType="{x:Type ContentPresenter}">
-                    <Setter Property="Margin" Value="0,0,0,8" />
-                </Style>
-            </Grid.Resources>
-            <ItemsControl ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding EnableGrouping, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static conv:BooleanConverter.ToVisibility}}">
-                <ItemsControl.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,16,0,8" BorderBrush="#DDDDDD" BorderThickness="0,0,0,1">
-                                    <TextBlock Margin="0,0,0,4" FontWeight="Bold" Text="{Binding Name}" />
-                                </Border>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </ItemsControl.GroupStyle>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            <Grid Grid.IsSharedSizeScope="{Binding ShareLabelColumn, RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding EnableGrouping, RelativeSource={RelativeSource TemplatedParent}}">
+        <Border x:Name="RootBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+            <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ItemsPresenter />
-            </Grid>
-        </Grid>
+            </ScrollViewer>
+        </Border>
     </ControlTemplate>
 
     <!--  Form控件样式  -->
     <Style x:Key="Form.Style.Basic" TargetType="{x:Type ctl:Form}">
+        <Setter Property="Grid.IsSharedSizeScope" Value="True" />
         <Setter Property="Template" Value="{StaticResource Form.ControlTemplate.Basic}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="DefaultLabelPosition" Value="Left" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource FormItem.Style.Basic}" />
     </Style>
 
     <!--  默认样式  -->
