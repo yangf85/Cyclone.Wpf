@@ -13,7 +13,8 @@
     <Grid>
         <cy:SpacingStackPanel>
             <GroupBox Header="Normal">
-                <cy:Form IsSyncLabelHorizontalAlignment="True"
+                <cy:Form BorderThickness="0"
+                         IsSyncLabelHorizontalAlignment="True"
                          LabelHorizontalAlignment="Left">
                     <cy:FormItem Description="这是一个描述"
                                  IsRequired="True"

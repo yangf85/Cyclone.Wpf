@@ -34,20 +34,23 @@
                                         IsShowPredfine="True"
                                         SelectedDateFormat="yyyy-MM-dd"
                                         Start="{Binding Start, Mode=TwoWay}" />
-                    <Button Command="{Binding ShowStartAndEndDateCommand}" Content="ShowStartAndEnd" />
+                    <Button Command="{Binding ShowStartAndEndDateCommand}"
+                            Content="ShowStartAndEnd" />
                 </cy:SpacingUniformGrid>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="TimePicker">
                 <cy:SpacingUniformGrid Rows="1">
+                    <!--<cy:TimePicker />
                     <cy:TimePicker />
-                    <cy:TimePicker />
-                    <cy:TimePicker />
+                    <cy:TimePicker />-->
                 </cy:SpacingUniformGrid>
             </HeaderedContentControl>
 
             <GroupBox Header="aaa">
-                <UniformGrid Rows="4" Columns="1">
+                <UniformGrid Columns="1"
+                             Rows="4">
+                    <cy:TimeSelector Height="200" />
                 </UniformGrid>
             </GroupBox>
         </StackPanel>

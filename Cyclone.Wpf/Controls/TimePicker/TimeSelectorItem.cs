@@ -4,38 +4,23 @@ using System.Windows.Input;
 
 namespace Cyclone.Wpf.Controls;
 
-public class TimeSelectorItem : ListBoxItem
+public class TimeSelectorItem : Control
 {
     static TimeSelectorItem()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSelectorItem), new FrameworkPropertyMetadata(typeof(TimeSelectorItem)));
     }
 
-    #region Value Property
+    #region Value
 
     public int Value
     {
-        get { return (int)GetValue(ValueProperty); }
-        set { SetValue(ValueProperty, value); }
+        get => (int)GetValue(ValueProperty);
+        set => SetValue(ValueProperty, value);
     }
 
     public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(int), typeof(TimeSelectorItem),
-            new PropertyMetadata(-1));
+        DependencyProperty.Register(nameof(Value), typeof(int), typeof(TimeSelectorItem), new PropertyMetadata(default(int)));
 
-    #endregion Value Property
-
-    #region DisplayText Property
-
-    public string DisplayText
-    {
-        get { return (string)GetValue(DisplayTextProperty); }
-        set { SetValue(DisplayTextProperty, value); }
-    }
-
-    public static readonly DependencyProperty DisplayTextProperty =
-        DependencyProperty.Register("DisplayText", typeof(string), typeof(TimeSelectorItem),
-            new PropertyMetadata(string.Empty));
-
-    #endregion DisplayText Property
+    #endregion Value
 }

@@ -15,10 +15,9 @@ namespace Cyclone.Wpf.Controls;
 [TemplatePart(Name = "PART_SecondSelector", Type = typeof(TimeSelector))]
 [TemplatePart(Name = "PART_ConfirmButton", Type = typeof(Button))]
 [TemplatePart(Name = "PART_CancelButton", Type = typeof(Button))]
-[TemplatePart(Name = "PART_CenterMask", Type = typeof(FrameworkElement))]
 public class TimePicker : Control
 {
-    #region Private Fields
+    #region 私有字段
 
     private ToggleButton _openButton;
     private Popup _popup;
@@ -27,14 +26,10 @@ public class TimePicker : Control
     private TimeSelector _secondSelector;
     private Button _confirmButton;
     private Button _cancelButton;
-    private FrameworkElement _centerMask;
-    private TimeSpan? _tempSelectedTime;
-    private bool _isInternalUpdate;
-    private bool _isClosingPopup;
 
-    #endregion Private Fields
+    #endregion 私有字段
 
-    #region Construction
+    #region 构造函数
 
     static TimePicker()
     {
@@ -58,9 +53,22 @@ public class TimePicker : Control
         }
     }
 
-    #endregion Construction
+    #endregion 构造函数
 
-    #region Properties
+    #region 依赖属性
+
+    #region MaxContainerHeight
+
+    public double MaxContainerHeight
+    {
+        get => (double)GetValue(MaxContainerHeightProperty);
+        set => SetValue(MaxContainerHeightProperty, value);
+    }
+
+    public static readonly DependencyProperty MaxContainerHeightProperty =
+        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(TimePicker), new PropertyMetadata(300d));
+
+    #endregion MaxContainerHeight
 
     #region SelectedTime
 
@@ -77,7 +85,6 @@ public class TimePicker : Control
     private static void OnSelectedTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var timePicker = (TimePicker)d;
-        timePicker.UpdateDisplayText();
     }
 
     #endregion SelectedTime
@@ -110,7 +117,6 @@ public class TimePicker : Control
     private static void OnTimeFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var timePicker = (TimePicker)d;
-        timePicker.UpdateDisplayText();
     }
 
     #endregion TimeFormat
@@ -131,30 +137,6 @@ public class TimePicker : Control
     {
         var timePicker = (TimePicker)d;
         bool newValue = (bool)e.NewValue;
-
-        if (newValue) // 打开
-        {
-            timePicker._isClosingPopup = false;
-
-            // 保存当前选中的时间作为临时时间
-            timePicker._tempSelectedTime = timePicker.SelectedTime;
-
-            // 确保在UI更新后再更新选择器
-            timePicker.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                timePicker.UpdateTimeSelectors();
-            }), DispatcherPriority.Loaded);
-        }
-        else // 关闭
-        {
-            timePicker._isClosingPopup = true;
-
-            // 在下一个UI周期后重置标志
-            timePicker.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                timePicker._isClosingPopup = false;
-            }), DispatcherPriority.Loaded);
-        }
     }
 
     #endregion IsOpen
@@ -204,9 +186,9 @@ public class TimePicker : Control
 
     #endregion VisibleItemCount
 
-    #endregion Properties
+    #endregion 依赖属性
 
-    #region Overrides
+    #region 重写方法
 
     public override void OnApplyTemplate()
     {
@@ -246,7 +228,6 @@ public class TimePicker : Control
         _secondSelector = GetTemplateChild("PART_SecondSelector") as TimeSelector;
         _confirmButton = GetTemplateChild("PART_ConfirmButton") as Button;
         _cancelButton = GetTemplateChild("PART_CancelButton") as Button;
-        _centerMask = GetTemplateChild("PART_CenterMask") as FrameworkElement;
 
         if (_confirmButton != null)
         {
@@ -263,27 +244,27 @@ public class TimePicker : Control
         {
             _hourSelector.ValueChanged += TimeSelector_ValueChanged;
             _hourSelector.SelectorType = TimeSelectorType.Hour;
+            _hourSelector.VisibleItemCount = VisibleItemCount;
         }
 
         if (_minuteSelector != null)
         {
             _minuteSelector.ValueChanged += TimeSelector_ValueChanged;
             _minuteSelector.SelectorType = TimeSelectorType.Minute;
+            _minuteSelector.VisibleItemCount = VisibleItemCount;
         }
 
         if (_secondSelector != null)
         {
             _secondSelector.ValueChanged += TimeSelector_ValueChanged;
             _secondSelector.SelectorType = TimeSelectorType.Second;
+            _secondSelector.VisibleItemCount = VisibleItemCount;
         }
-
-        // 初始化显示文本
-        UpdateDisplayText();
     }
 
-    #endregion Overrides
+    #endregion 重写方法
 
-    #region Event Handlers
+    #region 事件处理
 
     private void ConfirmButton_Click(object sender, RoutedEventArgs e)
     {
@@ -306,7 +287,6 @@ public class TimePicker : Control
                 // 确保显示文本被更新 - 使用更高的优先级确保立即更新
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    UpdateDisplayText();
                 }), DispatcherPriority.Render);
             }
         }
@@ -328,93 +308,7 @@ public class TimePicker : Control
 
     private void TimeSelector_ValueChanged(object sender, TimeValueChangedEventArgs e)
     {
-        if (_isInternalUpdate || _isClosingPopup)
-        {
-            return;
-        }
-
-        // 立即更新临时时间
-        UpdateTempSelectedTime();
     }
 
-    #endregion Event Handlers
-
-    #region Methods
-
-    private void UpdateDisplayText()
-    {
-        if (SelectedTime.HasValue)
-        {
-            // 创建一个表示今天的DateTime，并将其时间部分设置为SelectedTime
-            DateTime dateTime = DateTime.Today.Add(SelectedTime.Value);
-            // 使用DateTime的ToString方法格式化时间
-            DisplayText = dateTime.ToString(TimeFormat);
-        }
-        else
-        {
-            DisplayText = string.Empty;
-        }
-    }
-
-    private void UpdateTimeSelectors()
-    {
-        if (_hourSelector == null || _minuteSelector == null || _secondSelector == null)
-        {
-            return;
-        }
-
-        _isInternalUpdate = true;
-        try
-        {
-            if (_tempSelectedTime.HasValue)
-            {
-                // 更新选择器的值
-                _hourSelector.ForceScrollToValueAndSelect(_tempSelectedTime.Value.Hours);
-                _minuteSelector.ForceScrollToValueAndSelect(_tempSelectedTime.Value.Minutes);
-                _secondSelector.ForceScrollToValueAndSelect(_tempSelectedTime.Value.Seconds);
-            }
-            else
-            {
-                // 默认当前时间
-                var now = DateTime.Now;
-                _hourSelector.ForceScrollToValueAndSelect(now.Hour);
-                _minuteSelector.ForceScrollToValueAndSelect(now.Minute);
-                _secondSelector.ForceScrollToValueAndSelect(now.Second);
-
-                // 更新临时选择的时间
-                _tempSelectedTime = new TimeSpan(now.Hour, now.Minute, now.Second);
-            }
-
-            // 强制更新布局
-            _hourSelector.UpdateLayout();
-            _minuteSelector.UpdateLayout();
-            _secondSelector.UpdateLayout();
-        }
-        finally
-        {
-            _isInternalUpdate = false;
-        }
-    }
-
-    private void UpdateTempSelectedTime()
-    {
-        if (_hourSelector == null || _minuteSelector == null || _secondSelector == null)
-        {
-            return;
-        }
-
-        if (_isInternalUpdate || _isClosingPopup)
-        {
-            return;
-        }
-
-        int hour = _hourSelector.SelectedTimeValue;
-        int minute = _minuteSelector.SelectedTimeValue;
-        int second = _secondSelector.SelectedTimeValue;
-
-        // 更新临时选择的时间
-        _tempSelectedTime = new TimeSpan(hour, minute, second);
-    }
-
-    #endregion Methods
+    #endregion 事件处理
 }

@@ -6,59 +6,103 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--  TimeSelectorItem 样式  -->
-    <Style TargetType="{x:Type ctl:TimeSelectorItem}">
+    <Style x:Key="TimeSelectorItem.Style.Basic"
+           TargetType="{x:Type ctl:TimeSelectorItem}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:TimeSelectorItem}">
-                    <Border x:Name="Border"
-                            Height="30"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <TextBlock Margin="0,5"
+                    <Border x:Name="RootBorder"
+                            Background="Transparent"
+                            BorderBrush="DarkBlue"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="true">
+                        <TextBlock x:Name="DisplayText"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
-                                   FontWeight="{TemplateBinding FontWeight}"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   Text="{TemplateBinding DisplayText}" />
+                                   Text="{Binding Path=Value, StringFormat={}{0:D2}, RelativeSource={RelativeSource AncestorType=ctl:TimeSelectorItem}}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!--  TimeSelector 样式  -->
+    <Style BasedOn="{StaticResource TimeSelectorItem.Style.Basic}"
+           TargetType="ctl:TimeSelectorItem" />
+
     <Style TargetType="{x:Type ctl:TimeSelector}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ctl:TimeSelector">
-                    <ScrollViewer x:Name="PART_ScrollViewer"
-                                  CanContentScroll="True"
-                                  HorizontalScrollBarVisibility="Hidden"
-                                  VerticalScrollBarVisibility="Hidden">
-                        <ItemsPresenter />
-                        <!--  使用默认的ItemsPresenter  -->
-                    </ScrollViewer>
+                <ControlTemplate TargetType="{x:Type ctl:TimeSelector}">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <!--  背景和蒙版区域  -->
+                            <Border Name="PART_MaskBackground"
+                                    Opacity="0.05">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Offset="0" Color="Transparent" />
+                                        <GradientStop Offset="0.3" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                                        <GradientStop Offset="0.7" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                                        <GradientStop Offset="1" Color="Transparent" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <!--  中间指示器  -->
+                            <Border Name="PART_CenterIndicator"
+                                    Height="30"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    BorderBrush="{DynamicResource Foreground.Error}"
+                                    BorderThickness="1"
+                                    Opacity="0.5" />
+
+                            <!--  主要内容区域  -->
+                            <ScrollViewer x:Name="PART_ScrollViewer"
+                                          CanContentScroll="True"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          IsDeferredScrollingEnabled="False"
+                                          PanningMode="VerticalOnly"
+                                          VerticalScrollBarVisibility="Hidden">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemsPanel">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="BorderBrush" Value="Red" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Height" Value="{Binding Path=MaxContainerHeight, RelativeSource={RelativeSource AncestorType=ctl:TimePicker}}" />
+        <!--<Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <ctl:CyclePanel x:Name="PART_ItemsPanel" VisibleItemCount="5" />
+                    <VirtualizingStackPanel IsVirtualizing="True"
+                                            Orientation="Vertical"
+                                            VirtualizationMode="Recycling" />
                 </ItemsPanelTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
     <!--  TimePicker.OpenButton 样式  -->
-    <Style x:Key="TimePicker.OpenButtonStyle" TargetType="ToggleButton">
+    <Style x:Key="TimePicker.OpenButtonStyle"
+           TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding Path=Background, RelativeSource={RelativeSource AncestorType=ctl:TimePicker}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid"
+                          Background="{TemplateBinding Background}">
                         <Path x:Name="Indicator"
                               Width="16"
                               Height="16"
@@ -82,14 +126,17 @@
     </Style>
 
     <!--  TimePicker.TextBox 样式  -->
-    <Style x:Key="TimePicker.TextBoxStyle" TargetType="{x:Type TextBox}">
+    <Style x:Key="TimePicker.TextBoxStyle"
+           TargetType="{x:Type TextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="RootBorder" Background="Transparent" BorderThickness="0">
+                    <Border x:Name="RootBorder"
+                            Background="Transparent"
+                            BorderThickness="0">
                         <Grid>
                             <ScrollViewer x:Name="PART_ContentHost"
                                           Padding="2"
@@ -142,7 +189,8 @@
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                            <DataTrigger Binding="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                                         Value="">
                                                 <Setter Property="Visibility" Value="Visible" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -203,7 +251,8 @@
                                                    Fill="{DynamicResource Border.Default}" />
 
                                         <!--  选择器区域  -->
-                                        <Grid Grid.Row="2" Height="150">
+                                        <Grid Grid.Row="2"
+                                              Height="150">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
@@ -211,9 +260,13 @@
                                             </Grid.ColumnDefinitions>
 
                                             <!--  各个时间选择器  -->
-                                            <ctl:TimeSelector x:Name="PART_HourSelector" Grid.Column="0" />
-                                            <ctl:TimeSelector x:Name="PART_MinuteSelector" Grid.Column="1" Margin="5,0" />
-                                            <ctl:TimeSelector x:Name="PART_SecondSelector" Grid.Column="2" />
+                                            <ctl:TimeSelector x:Name="PART_HourSelector"
+                                                              Grid.Column="0" />
+                                            <ctl:TimeSelector x:Name="PART_MinuteSelector"
+                                                              Grid.Column="1"
+                                                              Margin="5,0" />
+                                            <ctl:TimeSelector x:Name="PART_SecondSelector"
+                                                              Grid.Column="2" />
 
                                             <!--  中间遮罩区域  -->
                                             <Border x:Name="PART_CenterMask"
@@ -228,7 +281,9 @@
                                         </Grid>
 
                                         <!--  按钮区域  -->
-                                        <UniformGrid Grid.Row="3" Margin="0,5,0,0" Rows="1">
+                                        <UniformGrid Grid.Row="3"
+                                                     Margin="0,5,0,0"
+                                                     Rows="1">
                                             <Rectangle />
                                             <Rectangle />
                                             <Button x:Name="PART_CancelButton"
