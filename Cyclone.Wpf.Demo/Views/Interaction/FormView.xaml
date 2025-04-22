@@ -13,41 +13,64 @@
     <Grid>
         <cy:SpacingStackPanel>
             <GroupBox Header="Normal">
-                <cy:Form>
+                <cy:Form IsSyncLabelHorizontalAlignment="True"
+                         LabelHorizontalAlignment="Left">
                     <cy:FormItem Description="这是一个描述"
                                  IsRequired="True"
                                  Label="用户名:"
                                  SharedName="FormA">
                         <TextBox />
                     </cy:FormItem>
-                    <cy:FormItem IsRequired="True" Label="密码:" SharedName="FormA">
+                    <cy:FormItem IsRequired="True"
+                                 Label="密码:"
+                                 LabelHorizontalAlignment="Right"
+                                 SharedName="FormA">
                         <PasswordBox />
                     </cy:FormItem>
-                    <cy:FormTitle Description="描述文本">
+                    <cy:FormSeperater Description="描述文本">
                         <TextBlock Text="这是一个标题" />
-                    </cy:FormTitle>
-                    <cy:FormItem Label="电子邮箱:" SharedName="FormB">
+                    </cy:FormSeperater>
+                    <cy:FormItem Label="电子邮箱:"
+                                 SharedName="FormB">
                         <TextBox />
                     </cy:FormItem>
-                    <cy:FormItem Label="AD" SharedName="FormB">
+                    <cy:FormItem Label="测试:"
+                                 SharedName="FormB">
                         <TextBox Text="提交" />
                     </cy:FormItem>
                 </cy:Form>
             </GroupBox>
 
-            <GroupBox Padding="20" Header="Attached">
+            <GroupBox Padding="20"
+                      Header="Attached">
                 <StackPanel>
-                    <Button Command="{Binding ShowCommand}" Content="Show" />
-                    <cy:Form DataContext="{Binding Data}">
-                        <!--  表单标题  -->
-                        <cy:FormTitle Margin="0,10" Description="Please fill in the following personal information fields" DescriptionHorizontalAlignment="Center">
-                            <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Text="Form" />
-                        </cy:FormTitle>
+                    <cy:Form Height="320"
+                             DataContext="{Binding Data}"
+                             IsSyncLabelHorizontalAlignment="True"
+                             LabelHorizontalAlignment="Right">
+                        <cy:Form.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <cy:SpacingStackPanel Spacing="10" />
+                            </ItemsPanelTemplate>
+                        </cy:Form.ItemsPanel>
+                        <cy:Form.Header>
+                            <StackPanel Margin="0,20">
+                                <TextBlock HorizontalAlignment="Center"
+                                           FontSize="20"
+                                           Foreground="{DynamicResource Text.Title}"
+                                           Text="Form" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           FontSize="16"
+                                           Foreground="{DynamicResource Text.Prompt}"
+                                           Text="Please fill in the following personal information fields" />
+                                <Rectangle Height="2"
+                                           Margin="0,10,0,0"
+                                           Fill="{DynamicResource Background.Checked}" />
+                            </StackPanel>
+                        </cy:Form.Header>
 
-                        <!--  基本信息  -->
+                        <cy:FormSeperater Title="Basic Info"
+                                          Description="basic" />
                         <TextBox cy:Form.Description="This is first name."
                                  cy:Form.IsRequired="True"
                                  cy:Form.Label="FirstName:"
@@ -70,7 +93,8 @@
                                  cy:Form.SharedName="Form"
                                  Text="{Binding Age, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
 
-                        <!--  联系信息  -->
+                        <cy:FormSeperater Title="Contact Info"
+                                          Description="contact info" />
                         <TextBox cy:Form.Description="Please enter a valid email address."
                                  cy:Form.IsRequired="True"
                                  cy:Form.Label="Email:"
@@ -87,7 +111,7 @@
                                  cy:Form.SharedName="Form"
                                  Text="{Binding Contact.LinkedInProfile}" />
 
-                        <!--  地址信息  -->
+                        <cy:FormSeperater Title="Address Info" />
                         <TextBox cy:Form.Description="Your street address."
                                  cy:Form.Label="Address:"
                                  cy:Form.SharedName="Form"
@@ -108,7 +132,6 @@
                                  cy:Form.SharedName="Form"
                                  Text="{Binding Country}" />
 
-                        <!--  状态信息  -->
                         <ComboBox cy:Form.Description="Your current status."
                                   cy:Form.Label="Status:"
                                   cy:Form.SharedName="Form"
@@ -120,7 +143,8 @@
                                   cy:Form.SharedName="Form"
                                   IsChecked="{Binding IsVerified}" />
 
-                        <!--  其他信息  -->
+                        <cy:FormSeperater Title="Other"
+                                          Description="other info." />
                         <TextBox MinHeight="60"
                                  cy:Form.Description="Additional description."
                                  cy:Form.Label="Description:"
@@ -128,12 +152,10 @@
                                  AcceptsReturn="True"
                                  Text="{Binding Lorem}"
                                  TextWrapping="Wrap" />
-
-                        <!--  操作按钮  -->
-                        <StackPanel Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Width="80" Margin="0,0,10,0" Content="Reset" />
-                            <Button Width="80" Command="{Binding ShowSelfCommand}" Content="Submit" />
-                        </StackPanel>
+                        <cy:Form.Footer>
+                            <Button Command="{Binding ShowCommand}"
+                                    Content="Show" />
+                        </cy:Form.Footer>
                     </cy:Form>
                 </StackPanel>
             </GroupBox>

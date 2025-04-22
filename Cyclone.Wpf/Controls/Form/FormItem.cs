@@ -111,7 +111,7 @@ public class FormItem : ContentControl
     /// </summary>
     public static readonly DependencyProperty LabelHorizontalAlignmentProperty =
         DependencyProperty.Register(nameof(LabelHorizontalAlignment), typeof(HorizontalAlignment), typeof(FormItem),
-            new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsRender));
+            new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsArrange));
 
     /// <summary>
     /// 获取或设置标签水平对齐方式

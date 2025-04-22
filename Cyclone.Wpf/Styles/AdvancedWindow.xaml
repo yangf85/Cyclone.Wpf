@@ -7,7 +7,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="Window.CaptionButtonStyle" TargetType="Button">
+    <Style x:Key="Window.CaptionButtonStyle"
+           TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
@@ -17,8 +18,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
+                    <Grid x:Name="RootGrid"
+                          Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -33,7 +37,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Window.CaptionCloseButtonStyle" TargetType="Button">
+    <Style x:Key="Window.CaptionCloseButtonStyle"
+           TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Width" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
@@ -44,8 +49,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
+                    <Grid x:Name="RootGrid"
+                          Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
@@ -60,12 +68,14 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Window.TopmostButtonStyle" TargetType="ToggleButton">
+    <Style x:Key="Window.TopmostButtonStyle"
+           TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid"
+                          Background="{TemplateBinding Background}">
                         <Path x:Name="IndicatorTopmost"
                               Width="16"
                               Height="16"
@@ -87,14 +97,16 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="BasicWindowControlTemplate" TargetType="ctl:AdvancedWindow">
+    <ControlTemplate x:Key="BasicWindowControlTemplate"
+                     TargetType="ctl:AdvancedWindow">
         <Border x:Name="RootBorder"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 SnapsToDevicePixels="True"
                 UseLayoutRounding="True">
-            <Grid x:Name="LayoutRoot" Background="{TemplateBinding Background}">
+            <Grid x:Name="LayoutRoot"
+                  Background="{TemplateBinding Background}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -111,7 +123,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <ContentPresenter Grid.Column="0"
-                                      Margin="5,0,0,0"
+                                      Margin="5 0 0 0"
                                       VerticalAlignment="Center"
                                       Content="{TemplateBinding Icon}" />
                     <Label Grid.Column="1"
@@ -120,14 +132,19 @@
                            FontSize="15"
                            FontWeight="Regular"
                            Foreground="{TemplateBinding TitleBrush}" />
-                    <ContentPresenter Grid.Column="2" Content="{TemplateBinding FunctionalZone}" />
+                    <ContentPresenter Grid.Column="2"
+                                      Content="{TemplateBinding FunctionalZone}" />
 
-                    <UniformGrid Grid.Column="3" Rows="1" WindowChrome.IsHitTestVisibleInChrome="True">
+                    <UniformGrid Grid.Column="3"
+                                 Rows="1"
+                                 WindowChrome.IsHitTestVisibleInChrome="True">
                         <ToggleButton x:Name="PART_TopmostButton"
                                       Command="{x:Static ctl:CaptionButtonCommand.TopmostCommand}"
                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}}"
                                       Style="{StaticResource Window.TopmostButtonStyle}" />
-                        <Button x:Name="PART_MinimizeButton" Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
+                        <Button x:Name="PART_MinimizeButton"
+                                Command="{x:Static ctl:CaptionButtonCommand.MinimizeCommand}"
+                                Style="{StaticResource Window.CaptionButtonStyle}">
                             <Path Width="16"
                                   Height="16"
                                   Data="M 0,5 L 8,5"
@@ -135,7 +152,9 @@
                                   Stroke="White"
                                   StrokeThickness="1" />
                         </Button>
-                        <Button x:Name="PART_MaximizeButton" Command="{x:Static ctl:CaptionButtonCommand.MaximizeCommand}" Style="{StaticResource Window.CaptionButtonStyle}">
+                        <Button x:Name="PART_MaximizeButton"
+                                Command="{x:Static ctl:CaptionButtonCommand.MaximizeCommand}"
+                                Style="{StaticResource Window.CaptionButtonStyle}">
                             <Path Width="16"
                                   Height="16"
                                   Data="M 1,1 L 1,7 L 7,7 L 7,1 Z"
@@ -154,7 +173,9 @@
                                   Stroke="White"
                                   StrokeThickness="1" />
                         </Button>
-                        <Button x:Name="PART_CloseButton" Command="{x:Static ctl:CaptionButtonCommand.CloseCommand}" Style="{StaticResource Window.CaptionCloseButtonStyle}">
+                        <Button x:Name="PART_CloseButton"
+                                Command="{x:Static ctl:CaptionButtonCommand.CloseCommand}"
+                                Style="{StaticResource Window.CaptionCloseButtonStyle}">
                             <Path Width="18"
                                   Height="18"
                                   Data="M 0,0 L 8,8 M 8,0 L 0,8"
@@ -165,9 +186,12 @@
                     </UniformGrid>
                 </Grid>
                 <!--  ClientArea  -->
-                <AdornerDecorator Grid.Row="1" KeyboardNavigation.IsTabStop="False">
+                <AdornerDecorator Grid.Row="1"
+                                  KeyboardNavigation.IsTabStop="False">
                     <Grid Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="MainContentPresenter" Content="{TemplateBinding Content}" KeyboardNavigation.TabNavigation="Cycle" />
+                        <ContentPresenter x:Name="MainContentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          KeyboardNavigation.TabNavigation="Cycle" />
                     </Grid>
                 </AdornerDecorator>
                 <ResizeGrip x:Name="ResizeGrip"
@@ -219,7 +243,8 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="AdvacedWindow.Style.Basic" TargetType="{x:Type ctl:AdvancedWindow}">
+    <Style x:Key="AdvacedWindow.Style.Basic"
+           TargetType="{x:Type ctl:AdvancedWindow}">
         <Setter Property="Template" Value="{DynamicResource BasicWindowControlTemplate}" />
         <Setter Property="CaptionHeight" Value="32" />
         <Setter Property="Background" Value="White" />
@@ -241,5 +266,6 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource AdvacedWindow.Style.Basic}" TargetType="ctl:AdvancedWindow" />
+    <Style BasedOn="{StaticResource AdvacedWindow.Style.Basic}"
+           TargetType="ctl:AdvancedWindow" />
 </ResourceDictionary>

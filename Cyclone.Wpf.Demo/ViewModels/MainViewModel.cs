@@ -108,6 +108,12 @@ public partial class SideMenuViewModel : ObservableObject
                     Icon= "\xe78a",
                 },
 
+                new SideMenuItemViewModel()
+                {
+                    Header="Form",
+                    Icon= "\xe60b",
+                },
+
             ]
         });
         Items.Add(new SideMenuItemViewModel()
@@ -116,11 +122,6 @@ public partial class SideMenuViewModel : ObservableObject
             Icon = "\xe6d5",
             Items =
             [
-                new SideMenuItemViewModel()
-                {
-                    Header="Form",
-                    Icon= "\xe60b",
-                },
 
                 new SideMenuItemViewModel()
                 {
