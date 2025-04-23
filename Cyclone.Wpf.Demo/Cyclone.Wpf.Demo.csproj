@@ -48,4 +48,8 @@
     <Resource Include="Assets\Logo.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Other\" />
+  </ItemGroup>
+
 </Project>

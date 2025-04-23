@@ -12,11 +12,14 @@ using System.ComponentModel;
 namespace Cyclone.Wpf.Controls;
 
 [TemplatePart(Name = "PART_ScrollViewer", Type = typeof(ScrollViewer))]
+[TemplatePart(Name = "PART_CyclicPanel", Type = typeof(CyclicPanel))]
 public class TimeSelector : Selector
 {
     #region 私有字段
 
     private ScrollViewer _scrollViewer;
+    private CyclicPanel _cyclicPanel;
+    private DependencyPropertyDescriptor _dpd;
 
     #endregion 私有字段
 
@@ -37,10 +40,46 @@ public class TimeSelector : Selector
     {
         GenerateItems();
         Loaded += TimeSelector_Loaded;
+        Unloaded += TimeSelector_Unloaded;
+    }
+
+    private void TimeSelector_Unloaded(object sender, RoutedEventArgs e)
+    {
+        if (_cyclicPanel != null && _dpd != null)
+        {
+            _dpd.RemoveValueChanged(_cyclicPanel, HandlePanelVisbleIndicesChanged);
+        }
+        if (Items.Count > VisibleItemCount && _cyclicPanel.VisibleItemIndices.Count > 0)
+        {
+            SelectedIndex = _cyclicPanel.VisibleItemIndices[VisibleItemCount / 2];
+        }
+    }
+
+    void UpdateSelectedIndex()
+    {
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (ItemContainerGenerator.ContainerFromIndex(i) is TimeSelectorItem item)
+            {
+                item.IsSelected = i == SelectedIndex;
+            }
+        }
+    }
+
+    private void HandlePanelVisbleIndicesChanged(object? sender, EventArgs e)
+    {
+        var t = VisibleItemCount / 2d;
+        var t1 = (int)Math.Floor(VisibleItemCount / 2d);
+        SelectedIndex = _cyclicPanel.VisibleItemIndices[t1];
+        UpdateSelectedIndex();
     }
 
     private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
     {
+        if (_cyclicPanel == null) { return; }
+
+        _dpd = DependencyPropertyDescriptor.FromProperty(CyclicPanel.VisibleItemIndicesProperty, typeof(CyclicPanel));
+        _dpd.AddValueChanged(_cyclicPanel, HandlePanelVisbleIndicesChanged);
     }
 
     #endregion 构造函数
@@ -176,60 +215,7 @@ public class TimeSelector : Selector
 
         // 获取ScrollViewer
         _scrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
-
-        if (_scrollViewer != null)
-        {
-            _scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
-        }
-    }
-
-    private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-    {
-        if (_scrollViewer == null) return;
-        var items = Items.OfType<TimeSelectorItem>().Where(i => i.IsVisible);
-
-        var box = new ListBox();
-
-        // 获取总高度和当前偏移
-        double totalHeight = _scrollViewer.ExtentHeight;
-        double currentOffset = _scrollViewer.VerticalOffset;
-
-        if (totalHeight <= 0) return;
-
-        // 计算偏移比例
-        double ratio = currentOffset / totalHeight;
-
-        // 计算索引
-        int totalCount = Items.Count;
-        int index = (int)(ratio * totalCount);
-
-        // 确保索引在有效范围内
-        index = Math.Max(0, Math.Min(index, totalCount - 1)) + 2;
-
-        // 设置选中索引
-        SelectedIndex = index;
-
-        // 更新选中项的值
-        if (Items[index] is TimeSelectorItem item)
-        {
-            SelectedTimeValue = item.Value;
-            ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(item.Value));
-        }
-
-        // 更新项的选中状态
-        UpdateSelectedState(index);
-    }
-
-    private void UpdateSelectedState(int selectedIndex)
-    {
-        // 根据项的索引位置设置 IsSelected 属性
-        for (int i = 0; i < Items.Count; i++)
-        {
-            if (ItemContainerGenerator.ContainerFromIndex(i) is TimeSelectorItem container)
-            {
-                container.IsSelected = (i == selectedIndex);
-            }
-        }
+        _cyclicPanel = GetTemplateChild("PART_CyclicPanel") as CyclicPanel;
     }
 
     protected override DependencyObject GetContainerForItemOverride()

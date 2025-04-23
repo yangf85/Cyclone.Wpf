@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Cyclone.Wpf.Demo.Helper;
 
@@ -82,6 +83,9 @@ public partial class FakerData : ObservableValidator, IHintable
     [ObservableProperty]
     public partial string HintText { get; set; }
 
+    [ObservableProperty]
+    public partial Brush Background { get; set; }
+
     partial void OnFirstNameChanged(string value)
     {
         HintText = value;
@@ -106,6 +110,16 @@ public partial class FakerData : ObservableValidator, IHintable
             PhoneNumber = Faker.Phone.Number(), // 随机生成电话号码
             LinkedInProfile = Faker.Internet.Url() // 随机生成 LinkedIn URL
         };
+
+        // 添加随机颜色生成代码
+        // 生成随机的RGB值
+        byte r = (byte)Faker.RandomNumber.Next(0, 256);
+        byte g = (byte)Faker.RandomNumber.Next(0, 256);
+        byte b = (byte)Faker.RandomNumber.Next(0, 256);
+
+        // 创建颜色和画刷
+        Color randomColor = Color.FromRgb(r, g, b);
+        Background = new SolidColorBrush(randomColor);
     }
 
     [RelayCommand]

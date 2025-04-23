@@ -15,8 +15,8 @@
                 <ControlTemplate TargetType="{x:Type ctl:TimeSelectorItem}">
                     <Border x:Name="RootBorder"
                             Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
                             SnapsToDevicePixels="true">
                         <TextBlock x:Name="DisplayText"
                                    HorizontalAlignment="Center"
@@ -70,19 +70,27 @@
 
                             <!--  主要内容区域  -->
                             <ScrollViewer x:Name="PART_ScrollViewer"
-                                          Height="{TemplateBinding Height}"
                                           CanContentScroll="True"
                                           HorizontalScrollBarVisibility="Disabled"
-                                          IsDeferredScrollingEnabled="False"
                                           PanningMode="VerticalOnly"
                                           VerticalScrollBarVisibility="Hidden">
-                                <ItemsPresenter />
+                                <ctl:CyclicPanel x:Name="PART_CyclicPanel"
+                                                 IsItemsHost="True"
+                                                 VisibleItemCount="{TemplateBinding VisibleItemCount}" />
                             </ScrollViewer>
                         </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <!--<Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ctl:CyclicPanel Orientation="Vertical"
+                                     VisibleItemCount="{Binding Path=VisibleItemCount, RelativeSource={RelativeSource AncestorType=ctl:TimeSelector}}" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>-->
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />

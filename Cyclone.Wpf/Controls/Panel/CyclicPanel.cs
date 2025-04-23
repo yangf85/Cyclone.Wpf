@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using Cyclone.Wpf.Helpers;
 
 namespace Cyclone.Wpf.Controls
 {
@@ -22,6 +24,7 @@ namespace Cyclone.Wpf.Controls
         private Point _offset = new Point(0, 0);
         private bool _isInMeasure;
         private double _itemSize;
+        private bool _isAnimating = false;
 
         #endregion Private Fields
 
@@ -46,7 +49,7 @@ namespace Cyclone.Wpf.Controls
 
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register("Orientation", typeof(Orientation), typeof(CyclicPanel),
-                new FrameworkPropertyMetadata(Orientation.Horizontal,
+                new FrameworkPropertyMetadata(Orientation.Vertical,
                     FrameworkPropertyMetadataOptions.AffectsMeasure |
                     FrameworkPropertyMetadataOptions.AffectsArrange));
 
@@ -63,12 +66,55 @@ namespace Cyclone.Wpf.Controls
         public static readonly DependencyProperty VisibleItemIndicesProperty =
             VisibleItemIndicesPropertyKey.DependencyProperty;
 
+        /// <summary>
+        /// 动画持续时间
+        /// </summary>
+        public Duration AnimationDuration
+        {
+            get { return (Duration)GetValue(AnimationDurationProperty); }
+            set { SetValue(AnimationDurationProperty, value); }
+        }
+
+        public static readonly DependencyProperty AnimationDurationProperty =
+            DependencyProperty.Register("AnimationDuration", typeof(Duration), typeof(CyclicPanel),
+                new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(75))));
+
+        /// <summary>
+        /// 缓动函数类型
+        /// </summary>
+        public EasingMode EasingMode
+        {
+            get { return (EasingMode)GetValue(EasingModeProperty); }
+            set { SetValue(EasingModeProperty, value); }
+        }
+
+        public static readonly DependencyProperty EasingModeProperty =
+            DependencyProperty.Register("EasingMode", typeof(EasingMode), typeof(CyclicPanel),
+                new PropertyMetadata(EasingMode.EaseInOut));
+
+        /// <summary>
+        /// 是否启用动画效果
+        /// </summary>
+        public bool IsAnimationEnabled
+        {
+            get { return (bool)GetValue(IsAnimationEnabledProperty); }
+            set { SetValue(IsAnimationEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsAnimationEnabledProperty =
+            DependencyProperty.Register("IsAnimationEnabled", typeof(bool), typeof(CyclicPanel),
+                new PropertyMetadata(false));
+
         #endregion Dependency Properties
 
         #region Constructors
 
         public CyclicPanel()
         {
+            // 设置默认属性
+            AnimationDuration = new Duration(TimeSpan.FromMilliseconds(200));
+            EasingMode = EasingMode.EaseOut;
+            IsAnimationEnabled = true;
         }
 
         #endregion Constructors
@@ -328,10 +374,11 @@ namespace Cyclone.Wpf.Controls
         #endregion Layout Overrides
 
         /// <summary>
-        /// 滚动到指定索引位置，使该项目居中显示
+        /// 滚动到指定索引位置，使该项目居中显示（带动画效果）
         /// </summary>
         /// <param name="index">要滚动到的项目索引</param>
-        public void ScrollToIndex(int index)
+        /// <param name="animated">是否使用动画效果，默认为 true</param>
+        public void ScrollToIndex(int index, bool animated = true)
         {
             if (index < 0 || index >= InternalChildren.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), "索引超出范围");
@@ -347,8 +394,15 @@ namespace Cyclone.Wpf.Controls
                 // 确保偏移量在有效范围内
                 centeredOffset = Math.Max(0, Math.Min(centeredOffset, _extent.Height - _viewport.Height));
 
-                // 设置垂直偏移量
-                SetVerticalOffset(centeredOffset);
+                // 设置垂直偏移量（根据参数决定是否使用动画效果）
+                if (animated && IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(centeredOffset);
+                }
+                else
+                {
+                    SetVerticalOffset(centeredOffset);
+                }
             }
             else // Orientation.Horizontal
             {
@@ -361,10 +415,231 @@ namespace Cyclone.Wpf.Controls
                 // 确保偏移量在有效范围内
                 centeredOffset = Math.Max(0, Math.Min(centeredOffset, _extent.Width - _viewport.Width));
 
-                // 设置水平偏移量
-                SetHorizontalOffset(centeredOffset);
+                // 设置水平偏移量（根据参数决定是否使用动画效果）
+                if (animated && IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(centeredOffset);
+                }
+                else
+                {
+                    SetHorizontalOffset(centeredOffset);
+                }
             }
         }
+
+        #region 动画辅助方法
+
+        /// <summary>
+        /// 设置水平偏移量并应用动画效果
+        /// </summary>
+        /// <param name="offset">目标偏移量</param>
+        /// <param name="forceUpdate">是否强制更新，即使当前正在动画</param>
+        private void AnimateHorizontalOffset(double offset, bool forceUpdate = false)
+        {
+            if (_isInMeasure || InternalChildren.Count == 0 || Orientation != Orientation.Horizontal || (_isAnimating && !forceUpdate))
+                return;
+
+            double totalWidth = InternalChildren.Count * _itemSize;
+
+            // 循环滚动处理
+            if (totalWidth > 0)
+            {
+                // 实现循环效果：当滚动超过内容宽度时，回到开始
+                offset = ((offset % totalWidth) + totalWidth) % totalWidth;
+            }
+
+            if (_offset.X == offset)
+                return;
+
+            if (_owner == null)
+            {
+                SetHorizontalOffset(offset);
+                return;
+            }
+
+            // 如果不使用动画，直接设置偏移量
+            if (!IsAnimationEnabled)
+            {
+                SetHorizontalOffset(offset);
+                return;
+            }
+
+            // 创建动画
+            _isAnimating = true;
+            double startOffset = _offset.X;
+            double targetOffset = offset;
+
+            // 计算动画路径
+            double animationDistance = targetOffset - startOffset;
+
+            // 如果距离太远，考虑从另一端循环滚动
+            if (Math.Abs(animationDistance) > totalWidth / 2 && totalWidth > 0)
+            {
+                if (animationDistance > 0)
+                {
+                    targetOffset -= totalWidth;
+                }
+                else
+                {
+                    targetOffset += totalWidth;
+                }
+            }
+
+            // 创建动画
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = startOffset,
+                To = targetOffset,
+                Duration = AnimationDuration,
+                FillBehavior = FillBehavior.Stop
+            };
+
+            // 设置缓动函数
+            switch (EasingMode)
+            {
+                case EasingMode.EaseIn:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn };
+                    break;
+
+                case EasingMode.EaseOut:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut };
+                    break;
+
+                case EasingMode.EaseInOut:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut };
+                    break;
+            }
+
+            // 注意：动画完成的处理已移至下方 BeginAnimation 之后
+
+            // 使用附加属性进行动画
+            ScrollViewerHelper.SetHorizontalOffset(_owner, startOffset);
+
+            // 设置动画完成后的处理
+            animation.Completed += (s, e) =>
+            {
+                // 更新实际偏移量（需要处理可能的循环情况）
+                double finalOffset = ((targetOffset % totalWidth) + totalWidth) % totalWidth;
+                _offset.X = finalOffset;
+
+                // 确保 ScrollViewer 显示的偏移量与 Panel 内部状态一致
+                ScrollViewerHelper.SetHorizontalOffset(_owner, finalOffset);
+
+                _owner.InvalidateScrollInfo();
+                InvalidateArrange();
+                _isAnimating = false;
+            };
+
+            // 开始动画
+            _owner.BeginAnimation(ScrollViewerHelper.HorizontalOffsetProperty, animation);
+        }
+
+        /// <summary>
+        /// 设置垂直偏移量并应用动画效果
+        /// </summary>
+        /// <param name="offset">目标偏移量</param>
+        /// <param name="forceUpdate">是否强制更新，即使当前正在动画</param>
+        private void AnimateVerticalOffset(double offset, bool forceUpdate = false)
+        {
+            if (_isInMeasure || InternalChildren.Count == 0 || Orientation != Orientation.Vertical || (_isAnimating && !forceUpdate))
+                return;
+
+            double totalHeight = InternalChildren.Count * _itemSize;
+
+            // 循环滚动处理
+            if (totalHeight > 0)
+            {
+                // 实现循环效果：当滚动超过内容高度时，回到顶部
+                offset = ((offset % totalHeight) + totalHeight) % totalHeight;
+            }
+
+            if (_offset.Y == offset)
+                return;
+
+            if (_owner == null)
+            {
+                SetVerticalOffset(offset);
+                return;
+            }
+
+            // 如果不使用动画，直接设置偏移量
+            if (!IsAnimationEnabled)
+            {
+                SetVerticalOffset(offset);
+                return;
+            }
+
+            // 创建动画
+            _isAnimating = true;
+            double startOffset = _offset.Y;
+            double targetOffset = offset;
+
+            // 计算动画路径
+            double animationDistance = targetOffset - startOffset;
+
+            // 如果距离太远，考虑从另一端循环滚动
+            if (Math.Abs(animationDistance) > totalHeight / 2 && totalHeight > 0)
+            {
+                if (animationDistance > 0)
+                {
+                    targetOffset -= totalHeight;
+                }
+                else
+                {
+                    targetOffset += totalHeight;
+                }
+            }
+
+            // 创建动画
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = startOffset,
+                To = targetOffset,
+                Duration = AnimationDuration,
+                FillBehavior = FillBehavior.Stop
+            };
+
+            // 设置缓动函数
+            switch (EasingMode)
+            {
+                case EasingMode.EaseIn:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn };
+                    break;
+
+                case EasingMode.EaseOut:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut };
+                    break;
+
+                case EasingMode.EaseInOut:
+                    animation.EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut };
+                    break;
+            }
+
+            // 注意：动画完成的处理已移至下方 BeginAnimation 之后
+
+            // 使用附加属性进行动画
+            ScrollViewerHelper.SetVerticalOffset(_owner, startOffset);
+
+            // 设置动画完成后的处理
+            animation.Completed += (s, e) =>
+            {
+                // 更新实际偏移量（需要处理可能的循环情况）
+                double finalOffset = ((targetOffset % totalHeight) + totalHeight) % totalHeight;
+                _offset.Y = finalOffset;
+
+                // 确保 ScrollViewer 显示的偏移量与 Panel 内部状态一致
+                ScrollViewerHelper.SetVerticalOffset(_owner, finalOffset);
+
+                _owner.InvalidateScrollInfo();
+                InvalidateArrange();
+                _isAnimating = false;
+            };
+
+            // 开始动画
+            _owner.BeginAnimation(ScrollViewerHelper.VerticalOffsetProperty, animation);
+        }
+
+        #endregion 动画辅助方法
 
         #region IScrollInfo Implementation
 
@@ -413,14 +688,31 @@ namespace Cyclone.Wpf.Controls
         public ScrollViewer ScrollOwner
         {
             get { return _owner; }
-            set { _owner = value; }
+            set
+            {
+                _owner = value;
+
+                // 设置滚动条为隐藏，因为循环面板不需要显示滚动条
+                if (_owner != null)
+                {
+                    _owner.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    _owner.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+            }
         }
 
         public void LineUp()
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset - _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset - _itemSize, true);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset - _itemSize);
+                }
             }
         }
 
@@ -428,7 +720,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset + _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset + _itemSize, true);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset + _itemSize);
+                }
             }
         }
 
@@ -436,7 +735,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset - _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset - _itemSize, true);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset - _itemSize);
+                }
             }
         }
 
@@ -444,7 +750,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset + _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset + _itemSize, true);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset + _itemSize);
+                }
             }
         }
 
@@ -452,7 +765,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset - _viewport.Height);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset - _viewport.Height);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset - _viewport.Height);
+                }
             }
         }
 
@@ -460,7 +780,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset + _viewport.Height);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset + _viewport.Height);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset + _viewport.Height);
+                }
             }
         }
 
@@ -468,7 +795,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset - _viewport.Width);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset - _viewport.Width);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset - _viewport.Width);
+                }
             }
         }
 
@@ -476,7 +810,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset + _viewport.Width);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset + _viewport.Width);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset + _viewport.Width);
+                }
             }
         }
 
@@ -484,11 +825,25 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset - _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset - _itemSize);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset - _itemSize);
+                }
             }
             else
             {
-                SetHorizontalOffset(HorizontalOffset - _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset - _itemSize);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset - _itemSize);
+                }
             }
         }
 
@@ -496,11 +851,25 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                SetVerticalOffset(VerticalOffset + _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateVerticalOffset(VerticalOffset + _itemSize);
+                }
+                else
+                {
+                    SetVerticalOffset(VerticalOffset + _itemSize);
+                }
             }
             else
             {
-                SetHorizontalOffset(HorizontalOffset + _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset + _itemSize);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset + _itemSize);
+                }
             }
         }
 
@@ -508,7 +877,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset - _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset - _itemSize);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset - _itemSize);
+                }
             }
         }
 
@@ -516,7 +892,14 @@ namespace Cyclone.Wpf.Controls
         {
             if (Orientation == Orientation.Horizontal)
             {
-                SetHorizontalOffset(HorizontalOffset + _itemSize);
+                if (IsAnimationEnabled)
+                {
+                    AnimateHorizontalOffset(HorizontalOffset + _itemSize);
+                }
+                else
+                {
+                    SetHorizontalOffset(HorizontalOffset + _itemSize);
+                }
             }
         }
 
@@ -551,12 +934,26 @@ namespace Cyclone.Wpf.Controls
                 if (itemTop < VerticalOffset)
                 {
                     // 项目在可视区域上方，滚动到使其可见
-                    SetVerticalOffset(itemTop);
+                    if (IsAnimationEnabled)
+                    {
+                        AnimateVerticalOffset(itemTop);
+                    }
+                    else
+                    {
+                        SetVerticalOffset(itemTop);
+                    }
                 }
                 else if (itemBottom > VerticalOffset + _viewport.Height)
                 {
                     // 项目在可视区域下方，滚动到使其可见
-                    SetVerticalOffset(itemBottom - _viewport.Height);
+                    if (IsAnimationEnabled)
+                    {
+                        AnimateVerticalOffset(itemBottom - _viewport.Height);
+                    }
+                    else
+                    {
+                        SetVerticalOffset(itemBottom - _viewport.Height);
+                    }
                 }
 
                 // 返回项目在视口中的可见区域
@@ -573,12 +970,26 @@ namespace Cyclone.Wpf.Controls
                 if (itemLeft < HorizontalOffset)
                 {
                     // 项目在可视区域左侧，滚动到使其可见
-                    SetHorizontalOffset(itemLeft);
+                    if (IsAnimationEnabled)
+                    {
+                        AnimateHorizontalOffset(itemLeft);
+                    }
+                    else
+                    {
+                        SetHorizontalOffset(itemLeft);
+                    }
                 }
                 else if (itemRight > HorizontalOffset + _viewport.Width)
                 {
                     // 项目在可视区域右侧，滚动到使其可见
-                    SetHorizontalOffset(itemRight - _viewport.Width);
+                    if (IsAnimationEnabled)
+                    {
+                        AnimateHorizontalOffset(itemRight - _viewport.Width);
+                    }
+                    else
+                    {
+                        SetHorizontalOffset(itemRight - _viewport.Width);
+                    }
                 }
 
                 // 返回项目在视口中的可见区域

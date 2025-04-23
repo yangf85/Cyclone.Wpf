@@ -43,7 +43,7 @@ public partial class MainViewModel : ObservableObject
             "Notification" => new MessageBoxView(),
             "TransferBox" => new TransferBoxView(),
             "HintBox" => new HintBoxView(),
-            "Panel" => new PanelView(),
+            "CyclicPanel" => new CyclicPanelView(),
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
@@ -231,38 +231,33 @@ public partial class SideMenuViewModel : ObservableObject
         });
         Items.Add(new SideMenuItemViewModel()
         {
+            Header = "Panel",
+            Icon = "\xe614",
+            Items =
+                    [
+                        new SideMenuItemViewModel()
+                        {
+                            Header="CyclicPanel",
+                            Icon= "\xe614",
+                        },
+                        new SideMenuItemViewModel()
+                        {
+                            Header="SpacingStackPanel",
+                            Icon= "\xe614",
+                        },
+                        new SideMenuItemViewModel()
+                        {
+                            Header="SpacingUniformPanel",
+                            Icon= "\xe614",
+                        },
+                    ]
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
             Header = "Other",
             Icon = "\xe61a",
             Items =
             [
-                new SideMenuItemViewModel()
-                {
-                    Header="Panel",
-                    Icon= "\xe614",
-                    Items =
-                    [
-                        new SideMenuItemViewModel()
-                        {
-                            Header="Card",
-                            Icon= "\xe614",
-                        },
-                        new SideMenuItemViewModel()
-                        {
-                            Header="Dialog",
-                            Icon= "\xe614",
-                        },
-                        new SideMenuItemViewModel()
-                        {
-                            Header="Popover",
-                            Icon= "\xe614",
-                        },
-                        new SideMenuItemViewModel()
-                        {
-                            Header="Tooltip",
-                            Icon= "\xe614",
-                        },
-                    ]
-                },
 
             ]
         });
