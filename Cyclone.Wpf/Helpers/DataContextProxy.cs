@@ -22,13 +22,13 @@ namespace Cyclone.Wpf.Helpers;
 ///   - 需通过 Resources 声明并绑定 Data 属性
 ///   - 若代理对象需要跨线程使用，需调用 Freeze() 冻结实例
 /// </summary>
-public class BindingProxy : Freezable
+public class DataContextProxy : Freezable
 {
     #region Overrides
 
     protected override Freezable CreateInstanceCore()
     {
-        return new BindingProxy();
+        return new DataContextProxy();
     }
 
     #endregion Overrides
@@ -40,5 +40,5 @@ public class BindingProxy : Freezable
     }
 
     public static readonly DependencyProperty DataProperty =
-        DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+        DependencyProperty.Register("Data", typeof(object), typeof(DataContextProxy), new UIPropertyMetadata(null));
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Cyclone.Wpf.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,16 @@ namespace Cyclone.Wpf.Demo.Views
         public PanelView()
         {
             InitializeComponent();
+            Loaded += PanelView_Loaded;
+        }
+
+        private void PanelView_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NotificationService.Instance.Information(string.Join(',', cycle.VisibleItemIndices));
         }
     }
 }

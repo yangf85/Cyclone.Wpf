@@ -49,8 +49,9 @@
 
             <GroupBox Header="aaa">
                 <UniformGrid Columns="1"
-                             Rows="4">
-                    <cy:TimeSelector Height="200" />
+                             Rows="5">
+                    <cy:TimeSelector Height="150"
+                                     VisibleItemCount="5" />
                 </UniformGrid>
             </GroupBox>
         </StackPanel>

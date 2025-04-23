@@ -23,4 +23,17 @@ public class TimeSelectorItem : Control
         DependencyProperty.Register(nameof(Value), typeof(int), typeof(TimeSelectorItem), new PropertyMetadata(default(int)));
 
     #endregion Value
+
+    #region IsSelected
+
+    public bool IsSelected
+    {
+        get => (bool)GetValue(IsSelectedProperty);
+        set => SetValue(IsSelectedProperty, value);
+    }
+
+    public static readonly DependencyProperty IsSelectedProperty =
+        DependencyProperty.Register(nameof(IsSelected), typeof(bool), typeof(TimeSelectorItem), new PropertyMetadata(default(bool)));
+
+    #endregion IsSelected
 }

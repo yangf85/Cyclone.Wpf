@@ -35,9 +35,12 @@ public class TimeSelector : Selector
 
     public TimeSelector()
     {
-        // 设置默认值
-        VisibleItemCount = 5;
         GenerateItems();
+        Loaded += TimeSelector_Loaded;
+    }
+
+    private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
+    {
     }
 
     #endregion 构造函数
@@ -54,7 +57,18 @@ public class TimeSelector : Selector
 
     public static readonly DependencyProperty VisibleItemCountProperty =
         DependencyProperty.Register(nameof(VisibleItemCount), typeof(int), typeof(TimeSelector),
-            new PropertyMetadata(5, OnVisibleItemCountChanged));
+            new PropertyMetadata(5, OnVisibleItemCountChanged, OnCoerceVisibleItemCount));
+
+    private static object OnCoerceVisibleItemCount(DependencyObject d, object baseValue)
+    {
+        var value = (int)baseValue;
+        var selector = (TimeSelector)d;
+        if (value >= selector.Items.Count) { throw new ArgumentException("VisibleItemCount must be <= Items.Count."); }
+        if (value <= 0) { throw new ArgumentException("VisibleItemCount must be > 0."); }
+        if (value % 2 == 0) { throw new ArgumentException("VisibleItemCount must be an odd number."); }
+
+        return baseValue;
+    }
 
     private static void OnVisibleItemCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -83,9 +97,6 @@ public class TimeSelector : Selector
 
     #region SelectedTimeValue
 
-    /// <summary>
-    /// 获取或设置所选时间值
-    /// </summary>
     public int SelectedTimeValue
     {
         get { return (int)GetValue(SelectedTimeValueProperty); }
@@ -138,18 +149,13 @@ public class TimeSelector : Selector
 
     IEnumerable<int> GetValues(TimeSelectorType type)
     {
-        var times = 10;
         if (type == TimeSelectorType.Hour)
         {
-            return Enumerable.Repeat(Enumerable.Range(0, 24), times).SelectMany(x => x);
-        }
-        else if (type == TimeSelectorType.Minute)
-        {
-            return Enumerable.Repeat(Enumerable.Range(0, 60), times).SelectMany(x => x);
+            return Enumerable.Range(0, 24);
         }
         else
         {
-            return Enumerable.Repeat(Enumerable.Range(0, 60), times).SelectMany(x => x);
+            return Enumerable.Range(0, 60);
         }
     }
 
@@ -173,11 +179,56 @@ public class TimeSelector : Selector
 
         if (_scrollViewer != null)
         {
-            // 禁用自动滚动到选中项
-            ScrollViewer.SetCanContentScroll(this, true);
+            _scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+        }
+    }
 
-            // 监听滚动事件
-            //_scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+    private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (_scrollViewer == null) return;
+        var items = Items.OfType<TimeSelectorItem>().Where(i => i.IsVisible);
+
+        var box = new ListBox();
+
+        // 获取总高度和当前偏移
+        double totalHeight = _scrollViewer.ExtentHeight;
+        double currentOffset = _scrollViewer.VerticalOffset;
+
+        if (totalHeight <= 0) return;
+
+        // 计算偏移比例
+        double ratio = currentOffset / totalHeight;
+
+        // 计算索引
+        int totalCount = Items.Count;
+        int index = (int)(ratio * totalCount);
+
+        // 确保索引在有效范围内
+        index = Math.Max(0, Math.Min(index, totalCount - 1)) + 2;
+
+        // 设置选中索引
+        SelectedIndex = index;
+
+        // 更新选中项的值
+        if (Items[index] is TimeSelectorItem item)
+        {
+            SelectedTimeValue = item.Value;
+            ValueChanged?.Invoke(this, new TimeValueChangedEventArgs(item.Value));
+        }
+
+        // 更新项的选中状态
+        UpdateSelectedState(index);
+    }
+
+    private void UpdateSelectedState(int selectedIndex)
+    {
+        // 根据项的索引位置设置 IsSelected 属性
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (ItemContainerGenerator.ContainerFromIndex(i) is TimeSelectorItem container)
+            {
+                container.IsSelected = (i == selectedIndex);
+            }
         }
     }
 
