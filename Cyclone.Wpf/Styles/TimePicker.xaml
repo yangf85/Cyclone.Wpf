@@ -83,14 +83,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <!--<Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <ctl:CyclicPanel Orientation="Vertical"
-                                     VisibleItemCount="{Binding Path=VisibleItemCount, RelativeSource={RelativeSource AncestorType=ctl:TimeSelector}}" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>-->
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />

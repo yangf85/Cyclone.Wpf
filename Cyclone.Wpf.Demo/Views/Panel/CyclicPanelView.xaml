@@ -76,7 +76,8 @@
                 </ItemsControl.Template>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <cy:CyclicPanel x:Name="cycle" IsAnimationEnabled="True"
+                        <cy:CyclicPanel x:Name="cycle"
+                                        IsAnimationEnabled="True"
                                         Orientation="Vertical"
                                         VisibleItemCount="8" />
                     </ItemsPanelTemplate>
