@@ -28,7 +28,7 @@
                             <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Background.Selected}" />
+                            <Setter TargetName="DisplayText" Property="Foreground" Value="DarkBlue" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -47,38 +47,15 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid>
-                            <!--  背景和蒙版区域  -->
-                            <Border Name="PART_MaskBackground"
-                                    Opacity="0.05">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Offset="0" Color="Transparent" />
-                                        <GradientStop Offset="0.3" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
-                                        <GradientStop Offset="0.7" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
-                                        <GradientStop Offset="1" Color="Transparent" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-
-                            <!--  中间指示器  -->
-                            <!--<Border Name="PART_CenterIndicator"
-                                    Height="30"
-                                    VerticalAlignment="Center"
-                                    Background="LightSkyBlue"
-                                    Opacity="0.5" />-->
-
-                            <!--  主要内容区域  -->
-                            <ScrollViewer x:Name="PART_ScrollViewer"
-                                          CanContentScroll="True"
-                                          HorizontalScrollBarVisibility="Disabled"
-                                          PanningMode="VerticalOnly"
-                                          VerticalScrollBarVisibility="Hidden">
-                                <ctl:CyclicPanel x:Name="PART_CyclicPanel"
-                                                 IsItemsHost="True"
-                                                 VisibleItemCount="{TemplateBinding VisibleItemCount}" />
-                            </ScrollViewer>
-                        </Grid>
+                        <ScrollViewer x:Name="PART_ScrollViewer"
+                                      CanContentScroll="True"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      PanningMode="VerticalOnly"
+                                      VerticalScrollBarVisibility="Hidden">
+                            <ctl:CyclicPanel x:Name="PART_CyclicPanel"
+                                             IsItemsHost="True"
+                                             VisibleItemCount="{TemplateBinding VisibleItemCount}" />
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -249,8 +226,7 @@
                                                    Fill="{DynamicResource Border.Default}" />
 
                                         <!--  选择器区域  -->
-                                        <Grid Grid.Row="2"
-                                              Height="150">
+                                        <Grid Grid.Row="2">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />

@@ -66,7 +66,7 @@ public class TimePicker : Control
     }
 
     public static readonly DependencyProperty MaxContainerHeightProperty =
-        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(TimePicker), new PropertyMetadata(300d));
+        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(TimePicker), new PropertyMetadata(150d));
 
     #endregion MaxContainerHeight
 

@@ -37,6 +37,18 @@
                 <Button Height="Auto"
                         Content="Item 10" />
             </cy:SpacingStackPanel>
+            <cy:SpacingStackPanel Orientation="Horizontal">
+                <Button Content="Auto尺寸按钮" />
+                <TextBlock VerticalAlignment="Center"
+                           cy:SpacingStackPanel.Weight="100"
+                           Text="固定尺寸文本" />
+                <Rectangle Height="Auto"
+                           cy:SpacingStackPanel.Weight="1*"
+                           Fill="Blue" />
+                <Rectangle Height="Auto"
+                           cy:SpacingStackPanel.Weight="2*"
+                           Fill="Red" />
+            </cy:SpacingStackPanel>
 
             <ItemsControl x:Name="items"
                           Height="320"

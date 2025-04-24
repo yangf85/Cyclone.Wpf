@@ -46,6 +46,8 @@ public partial class MainViewModel : ObservableObject
             "CyclicPanel" => new CyclicPanelView(),
             "SpacingUniformGrid" => new SpacingUniformGridView(),
             "SpacingStackPanel" => new SpacingStackPanelView(),
+            "FisheyePanel" => new FisheyePanelView(),
+            "WaterfallPanel" => new WaterfallPanelView(),
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
@@ -236,24 +238,34 @@ public partial class SideMenuViewModel : ObservableObject
             Header = "Panel",
             Icon = "\xe614",
             Items =
-                    [
-                        new SideMenuItemViewModel()
-                        {
-                            Header="CyclicPanel",
-                            Icon= "\xe614",
-                        },
-                        new SideMenuItemViewModel()
-                        {
-                            Header="SpacingUniformGrid",
-                            Icon= "\xe614",
-                        },
-                        new SideMenuItemViewModel()
-                        {
-                            Header="SpacingStackPanel",
-                            Icon= "\xe614",
-                        },
+            [
+                new SideMenuItemViewModel()
+                {
+                    Header="CyclicPanel",
+                    Icon= "\xe614",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="SpacingUniformGrid",
+                    Icon= "\xe614",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="SpacingStackPanel",
+                    Icon= "\xe614",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="FisheyePanel",
+                    Icon= "\xe614",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="WaterfallPanel",
+                    Icon= "\xe614",
+                },
 
-                    ]
+            ]
         });
         Items.Add(new SideMenuItemViewModel()
         {

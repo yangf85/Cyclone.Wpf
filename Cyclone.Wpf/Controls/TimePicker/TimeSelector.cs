@@ -68,16 +68,15 @@ public class TimeSelector : Selector
 
     private void HandlePanelVisbleIndicesChanged(object? sender, EventArgs e)
     {
-        var t = VisibleItemCount / 2d;
-        var t1 = (int)Math.Floor(VisibleItemCount / 2d);
-        SelectedIndex = _cyclicPanel.VisibleItemIndices[t1];
+        SelectedIndex = _cyclicPanel.VisibleItemIndices[(int)Math.Floor(VisibleItemCount / 2d)];
         UpdateSelectedIndex();
     }
 
     private void TimeSelector_Loaded(object sender, RoutedEventArgs e)
     {
         if (_cyclicPanel == null) { return; }
-
+        SelectedIndex = VisibleItemCount / 2;
+        UpdateSelectedIndex();
         _dpd = DependencyPropertyDescriptor.FromProperty(CyclicPanel.VisibleItemIndicesProperty, typeof(CyclicPanel));
         _dpd.AddValueChanged(_cyclicPanel, HandlePanelVisbleIndicesChanged);
     }
@@ -149,7 +148,11 @@ public class TimeSelector : Selector
     private static void OnSelectedTimeValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var selector = (TimeSelector)d;
-        int newValue = (int)e.NewValue;
+        int value = (int)e.NewValue;
+        if (selector.Items.Count > 0)
+        {
+            selector.SelectedIndex = selector.Items.OfType<TimeSelectorItem>().First(i => i.Value == value).Value;
+        }
     }
 
     #endregion SelectedTimeValue
@@ -207,6 +210,11 @@ public class TimeSelector : Selector
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
     {
         base.OnSelectionChanged(e);
+        if (SelectedIndex >= 0)
+        {
+            SelectedTimeValue = Items.OfType<TimeSelectorItem>().First(i => i.Value == SelectedIndex).Value;
+            de
+        }
     }
 
     public override void OnApplyTemplate()
