@@ -29,7 +29,16 @@ public class SideMenu : ItemsControl
     }
 
     public static readonly DependencyProperty IsCompactProperty =
-        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu), new PropertyMetadata(false));
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(SideMenu),
+        new PropertyMetadata(false, OnIsCompactChanged));
+
+    private static void OnIsCompactChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is SideMenu menu)
+        {
+            menu.AnimateWidthChange((bool)e.NewValue);
+        }
+    }
 
     #endregion IsCompact
 
@@ -98,16 +107,67 @@ public class SideMenu : ItemsControl
 
     #endregion Footer
 
+    #region AnimationDuration
+
+    public Duration AnimationDuration
+    {
+        get => (Duration)GetValue(AnimationDurationProperty);
+        set => SetValue(AnimationDurationProperty, value);
+    }
+
+    public static readonly DependencyProperty AnimationDurationProperty =
+        DependencyProperty.Register(nameof(AnimationDuration), typeof(Duration), typeof(SideMenu),
+        new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(250))));
+
+    #endregion AnimationDuration
+
+    #region Indent
+
+    public double Indent
+    {
+        get => (double)GetValue(IndentProperty);
+        set => SetValue(IndentProperty, value);
+    }
+
+    public static readonly DependencyProperty IndentProperty =
+        DependencyProperty.Register(nameof(Indent), typeof(double), typeof(SideMenu),
+        new PropertyMetadata(20d, OnIndentChanged));
+
+    private static void OnIndentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is SideMenu menu)
+        {
+            menu.UpdateChildrenIndent();
+        }
+    }
+
+    #endregion Indent
+
     #region Override
 
     protected override DependencyObject GetContainerForItemOverride()
     {
-        return new SideMenuItem();
+        var item = new SideMenuItem();
+        item.Level = 0; // 顶级菜单项Level为0
+        item.UpdateIndent(this.Indent);
+        return item;
     }
 
     protected override bool IsItemItsOwnContainerOverride(object item)
     {
         return item is SideMenuItem;
+    }
+
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        if (element is SideMenuItem menuItem)
+        {
+            // 为顶级菜单项设置Level为0
+            menuItem.Level = 0;
+            menuItem.UpdateIndent(this.Indent);
+        }
     }
 
     #endregion Override
@@ -139,5 +199,44 @@ public class SideMenu : ItemsControl
                 }
             }
         }
+    }
+
+    // 动画宽度变化的方法
+    private void AnimateWidthChange(bool isCompact)
+    {
+        if (!IsLoaded)
+            return;
+
+        Border rootBorder = GetTemplateChild("RootBorder") as Border;
+        if (rootBorder == null)
+            return;
+
+        double targetWidth = isCompact ? CollapseWidth : ExpansionWidth;
+
+        DoubleAnimation widthAnimation = new DoubleAnimation
+        {
+            To = targetWidth,
+            Duration = AnimationDuration,
+            FillBehavior = FillBehavior.HoldEnd,
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        rootBorder.BeginAnimation(FrameworkElement.WidthProperty, widthAnimation);
+    }
+
+    private void UpdateChildrenIndent()
+    {
+        foreach (var item in Items)
+        {
+            if (ItemContainerGenerator.ContainerFromItem(item) is SideMenuItem menuItem)
+            {
+                menuItem.UpdateIndent(this.Indent);
+            }
+        }
+    }
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
     }
 }

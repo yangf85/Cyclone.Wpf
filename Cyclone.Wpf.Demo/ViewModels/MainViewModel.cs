@@ -273,7 +273,19 @@ public partial class SideMenuViewModel : ObservableObject
             Icon = "\xe61a",
             Items =
             [
-
+                new SideMenuItemViewModel()
+                {
+                    Header="ProgressBar",
+                    Icon= "\xe6d5",
+                    Items=
+                    [
+                        new SideMenuItemViewModel()
+                        {
+                            Header="CircleProgressBar",
+                            Icon= "\xe6d5",
+                        }
+                    ]
+                },
             ]
         });
     }
