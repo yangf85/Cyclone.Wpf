@@ -530,11 +530,44 @@ public class CyclicPanel : Panel, IScrollInfo
     #region 公共方法
 
     /// <summary>
+    /// 滚动到指定索引位置，强制使该项目在视口中居中显示
+    /// </summary>
+    /// <param name="index">要滚动到的项目索引</param>
+    /// <param name="animated">是否使用动画效果，默认为 true</param>
+    public void ScrollToIndexCentered(int index, bool animated = true)
+    {
+        if (index < 0 || index >= InternalChildren.Count)
+            throw new ArgumentOutOfRangeException(nameof(index), "索引超出范围");
+
+        bool isVertical = Orientation == Orientation.Vertical;
+        double viewportLength = isVertical ? _viewport.Height : _viewport.Width;
+        double itemPosition = index * _itemSize;
+
+        // 精确计算项目居中的偏移量
+        double centeredOffset = itemPosition - (viewportLength - _itemSize) / 2;
+
+        // 循环面板不需要限制最大偏移量，因为它允许无限滚动
+        double totalLength = InternalChildren.Count * _itemSize;
+        if (totalLength > 0)
+            centeredOffset = ((centeredOffset % totalLength) + totalLength) % totalLength;
+
+        // 根据参数决定是否使用动画效果
+        if (animated && IsAnimationEnabled)
+        {
+            AnimateOffset(centeredOffset, isVertical, true);
+        }
+        else
+        {
+            SetOffset(centeredOffset, isVertical);
+        }
+    }
+
+    /// <summary>
     /// 滚动到指定索引位置，使该项目居中显示（带动画效果）
     /// </summary>
     /// <param name="index">要滚动到的项目索引</param>
     /// <param name="animated">是否使用动画效果，默认为 true</param>
-    public void ScrollToIndex(int index, bool animated = true)
+    public void ScrollToIndex(int index, bool animated = false)
     {
         if (index < 0 || index >= InternalChildren.Count)
             throw new ArgumentOutOfRangeException(nameof(index), "索引超出范围");

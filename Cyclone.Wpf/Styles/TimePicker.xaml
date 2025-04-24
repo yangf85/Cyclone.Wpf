@@ -26,9 +26,11 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
+                            <Setter TargetName="DisplayText" Property="Foreground" Value="{DynamicResource Foreground.Invert}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="DisplayText" Property="Foreground" Value="DarkBlue" />
+                            <Setter TargetName="DisplayText" Property="Foreground" Value="{DynamicResource Foreground.Focused}" />
+                            <Setter TargetName="DisplayText" Property="FontSize" Value="16" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -53,6 +55,7 @@
                                       PanningMode="VerticalOnly"
                                       VerticalScrollBarVisibility="Hidden">
                             <ctl:CyclicPanel x:Name="PART_CyclicPanel"
+                                             IsAnimationEnabled="False"
                                              IsItemsHost="True"
                                              VisibleItemCount="{TemplateBinding VisibleItemCount}" />
                         </ScrollViewer>

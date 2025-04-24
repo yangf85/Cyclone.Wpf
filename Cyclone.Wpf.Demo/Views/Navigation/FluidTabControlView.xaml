@@ -15,10 +15,13 @@
             <!--  社交媒体动态  -->
             <cy:FluidTabItem Header="社交动态">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Width="400" Margin="10">
+                    <StackPanel Width="400"
+                                Margin="10">
                         <!--  用户信息  -->
-                        <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
-                            <Ellipse Width="40" Height="40">
+                        <StackPanel Margin="0,0,0,10"
+                                    Orientation="Horizontal">
+                            <Ellipse Width="40"
+                                     Height="40">
                                 <!--<Ellipse.Fill>
                                     <ImageBrush ImageSource="/Assets/avatar_sample.jpg" />
                                 </Ellipse.Fill>-->
@@ -30,20 +33,23 @@
                         </StackPanel>
 
                         <!--  动态内容  -->
-                        <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">
+                        <TextBlock Margin="0,0,0,10"
+                                   TextWrapping="Wrap">
                             最新科技趋势：量子计算领域取得突破性进展，新型量子芯片运算速度提升100倍！
                         </TextBlock>
 
                         <!--  互动统计  -->
                         <Grid Margin="0,0,0,10">
-                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
                                 <Button Content="❤"
                                         Foreground="Red"
                                         ToolTip="点赞" />
                                 <Button Margin="10,0"
                                         Content="💬"
                                         ToolTip="评论" />
-                                <Button Content="↻" ToolTip="转发" />
+                                <Button Content="↻"
+                                        ToolTip="转发" />
                             </StackPanel>
                         </Grid>
 
@@ -57,20 +63,24 @@
 
             <!--  数据仪表盘  -->
             <cy:FluidTabItem Header="数据分析">
-                <Grid Height="350" Margin="10">
+                <Grid Height="350"
+                      Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <!--  数据筛选  -->
-                    <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
-                        <ComboBox Width="120" SelectedIndex="0">
+                    <StackPanel Margin="0,0,0,10"
+                                Orientation="Horizontal">
+                        <ComboBox Width="120"
+                                  SelectedIndex="0">
                             <ComboBoxItem>本月数据</ComboBoxItem>
                             <ComboBoxItem>季度数据</ComboBoxItem>
                             <ComboBoxItem>年度数据</ComboBoxItem>
                         </ComboBox>
-                        <DatePicker Width="150" Margin="10,0" />
+                        <DatePicker Width="150"
+                                    Margin="10,0" />
                     </StackPanel>
                 </Grid>
             </cy:FluidTabItem>
@@ -98,15 +108,18 @@
                                                Source="{Binding Thumbnail}"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Grid.Column="1" Margin="10,0">
-                                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                                        <StackPanel Grid.Column="1"
+                                                    Margin="10,0">
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="{Binding Name}" />
                                             <TextBlock MaxWidth="300"
                                                        Foreground="#666"
                                                        Text="{Binding Description}"
                                                        TextWrapping="Wrap" />
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <StackPanel Grid.Column="2"
+                                                    VerticalAlignment="Center">
                                             <TextBlock FontSize="16"
                                                        Foreground="Red"
                                                        Text="{Binding Price}" />
@@ -124,14 +137,16 @@
 
             <!--  实时监控  -->
             <cy:FluidTabItem Header="实时监控">
-                <Grid Height="350" Background="LightGreen">
+                <Grid Height="350"
+                      Background="LightGreen">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <!--  状态指示  -->
-                    <StackPanel Margin="10" Orientation="Horizontal">
+                    <StackPanel Margin="10"
+                                Orientation="Horizontal">
                         <Ellipse Width="12"
                                  Height="12"
                                  VerticalAlignment="Center"
@@ -139,7 +154,8 @@
                         <TextBlock Margin="5,0"
                                    VerticalAlignment="Center"
                                    Text=" 运行中" />
-                        <TextBlock Margin="20,0" Text="CPU使用率：" />
+                        <TextBlock Margin="20,0"
+                                   Text="CPU使用率：" />
                         <ProgressBar Width="200"
                                      Height="20"
                                      Margin="5,0"
@@ -171,7 +187,8 @@
 
             <!--  多媒体中心  -->
             <cy:FluidTabItem Header="多媒体">
-                <Grid Height="350" Background="LightCyan">
+                <Grid Height="350"
+                      Background="LightCyan">
 
                     <!--  播放控制  -->
                     <StackPanel Margin="10"

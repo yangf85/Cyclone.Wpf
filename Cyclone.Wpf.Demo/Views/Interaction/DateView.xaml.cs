@@ -44,6 +44,12 @@ public partial class DateModel : ObservableObject
     [ObservableProperty]
     public partial DateTime End { get; set; } = DateTime.Now.AddDays(5);
 
+    [ObservableProperty]
+    public partial int TimeValue { get; set; } = 21;
+
+    [ObservableProperty]
+    public partial TimeSpan? TimeSpan { get; set; } = new TimeSpan(1, 20, 30);
+
     public DateModel()
     {
         BlockoutDates.Add(DateTime.Now.AddDays(1));

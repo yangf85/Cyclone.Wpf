@@ -242,27 +242,27 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="CyclicPanel",
-                    Icon= "\xe614",
+                    Icon= "\xe863",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="SpacingUniformGrid",
-                    Icon= "\xe614",
+                    Icon= "\xed7e",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="SpacingStackPanel",
-                    Icon= "\xe614",
+                    Icon= "\xe668",
                 },
                  new SideMenuItemViewModel()
                 {
                     Header="FisheyePanel",
-                    Icon= "\xe614",
+                    Icon= "\xe8f1",
                 },
                  new SideMenuItemViewModel()
                 {
                     Header="WaterfallPanel",
-                    Icon= "\xe614",
+                    Icon= "\xe607",
                 },
 
             ]
