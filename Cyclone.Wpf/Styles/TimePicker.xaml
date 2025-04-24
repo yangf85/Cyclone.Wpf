@@ -100,7 +100,6 @@
         </Setter>
     </Style>
 
-    <!--  TimePicker.TextBox 样式  -->
     <Style x:Key="TimePicker.TextBoxStyle"
            TargetType="{x:Type TextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center" />

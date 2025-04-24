@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -213,7 +214,6 @@ public class TimeSelector : Selector
         if (SelectedIndex >= 0)
         {
             SelectedTimeValue = Items.OfType<TimeSelectorItem>().First(i => i.Value == SelectedIndex).Value;
-            de
         }
     }
 
