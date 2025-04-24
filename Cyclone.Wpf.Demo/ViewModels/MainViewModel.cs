@@ -44,6 +44,8 @@ public partial class MainViewModel : ObservableObject
             "TransferBox" => new TransferBoxView(),
             "HintBox" => new HintBoxView(),
             "CyclicPanel" => new CyclicPanelView(),
+            "SpacingUniformGrid" => new SpacingUniformGridView(),
+            "SpacingStackPanel" => new SpacingStackPanelView(),
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
@@ -242,14 +244,15 @@ public partial class SideMenuViewModel : ObservableObject
                         },
                         new SideMenuItemViewModel()
                         {
-                            Header="SpacingStackPanel",
+                            Header="SpacingUniformGrid",
                             Icon= "\xe614",
                         },
                         new SideMenuItemViewModel()
                         {
-                            Header="SpacingUniformPanel",
+                            Header="SpacingStackPanel",
                             Icon= "\xe614",
                         },
+
                     ]
         });
         Items.Add(new SideMenuItemViewModel()
