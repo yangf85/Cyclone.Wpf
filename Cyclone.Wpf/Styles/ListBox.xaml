@@ -7,7 +7,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ListBoxItem.Style.Default" TargetType="ListBoxItem">
+    <Style x:Key="ListBoxItem.Style.Default"
+           TargetType="ListBoxItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -21,7 +22,8 @@
                             SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="ListBoxItem" />
+                                <ColumnDefinition Width="Auto"
+                                                  SharedSizeGroup="ListBoxItem" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <CheckBox x:Name="SelectedCheckBox"
@@ -51,9 +53,12 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource ListBoxItem.Style.Default}" TargetType="ListBoxItem" />
+    <Style BasedOn="{StaticResource ListBoxItem.Style.Default}"
+           TargetType="ListBoxItem" />
 
-    <Style x:Key="ListBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ListBox">
+    <Style x:Key="ListBox.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="ListBox">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItem.Style.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -61,8 +66,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <Border x:Name="Root" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Border x:Name="Root"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -74,7 +82,9 @@
                                           Content="选择全部"
                                           IsChecked="{Binding Path=(hp:ListBoxHelper.IsSelectedAll), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}"
                                           Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
-                                <ItemsPresenter Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                                <ItemsPresenter Grid.Row="1"
+                                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             </Grid>
                         </ScrollViewer>
                     </Border>
@@ -82,5 +92,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style BasedOn="{StaticResource ListBox.Style.Basic}" TargetType="ListBox" />
+
+    <Style BasedOn="{StaticResource ListBox.Style.Basic}"
+           TargetType="ListBox" />
 </ResourceDictionary>

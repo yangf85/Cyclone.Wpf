@@ -48,6 +48,7 @@ public partial class MainViewModel : ObservableObject
             "SpacingStackPanel" => new SpacingStackPanelView(),
             "FisheyePanel" => new FisheyePanelView(),
             "WaterfallPanel" => new WaterfallPanelView(),
+            "TilePanel" => new TilePanelView(),
             "TransitionBox" => new TransitionBoxView(),
             "Form" => new FormView(),
             "Expander" => new ExpanderView(),
@@ -262,6 +263,11 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="WaterfallPanel",
+                    Icon= "\xe607",
+                },
+                 new SideMenuItemViewModel()
+                {
+                    Header="TilePanel",
                     Icon= "\xe607",
                 },
 

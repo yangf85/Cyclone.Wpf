@@ -77,7 +77,7 @@ public class SideMenu : ItemsControl
     }
 
     public static readonly DependencyProperty ExpansionWidthProperty =
-        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(180d));
+        DependencyProperty.Register(nameof(ExpansionWidth), typeof(double), typeof(SideMenu), new PropertyMetadata(150d));
 
     #endregion ExpansionWidth
 
@@ -131,7 +131,7 @@ public class SideMenu : ItemsControl
 
     public static readonly DependencyProperty IndentProperty =
         DependencyProperty.Register(nameof(Indent), typeof(double), typeof(SideMenu),
-        new PropertyMetadata(20d, OnIndentChanged));
+        new PropertyMetadata(10d, OnIndentChanged));
 
     private static void OnIndentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
