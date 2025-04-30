@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
 
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(SideMenuItem))]
-public class SideMenuItem : HeaderedItemsControl, ICommandSource
+public class SideMenuItem : HeaderedItemsControl
 {
     static SideMenuItem()
     {
@@ -121,49 +122,6 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
 
     #endregion IconTemplate
 
-    #region Impl CommandSource
-
-    #region Command
-
-    public ICommand Command
-    {
-        get => (ICommand)GetValue(CommandProperty);
-        set => SetValue(CommandProperty, value);
-    }
-
-    public static readonly DependencyProperty CommandProperty =
-        DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(SideMenuItem), new PropertyMetadata(default(ICommand)));
-
-    #endregion Command
-
-    #region CommandParameter
-
-    public object CommandParameter
-    {
-        get => (object)GetValue(CommandParameterProperty);
-        set => SetValue(CommandParameterProperty, value);
-    }
-
-    public static readonly DependencyProperty CommandParameterProperty =
-        DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(SideMenuItem), new PropertyMetadata(default(object)));
-
-    #endregion CommandParameter
-
-    #region CommandTarget
-
-    public IInputElement CommandTarget
-    {
-        get => (IInputElement)GetValue(CommandTargetProperty);
-        set => SetValue(CommandTargetProperty, value);
-    }
-
-    public static readonly DependencyProperty CommandTargetProperty =
-        DependencyProperty.Register(nameof(CommandTarget), typeof(IInputElement), typeof(SideMenuItem), new PropertyMetadata(default(IInputElement)));
-
-    #endregion CommandTarget
-
-    #endregion Impl CommandSource
-
     #region Override
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
@@ -174,12 +132,32 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
         if (element is SideMenuItem childItem)
         {
             // 子菜单项的Level是父菜单项的Level+1
-            childItem.Level = this.Level + 1;
+            childItem.Level = Level + 1;
 
             // 获取SideMenu的缩进大小
             if (_root != null)
             {
                 childItem.UpdateIndent(_root.Indent);
+
+                // 如果根菜单设置了DisplayMemberIcon，也应用到子项
+                if (!string.IsNullOrEmpty(_root.DisplayMemberIcon))
+                {
+                    // 创建绑定到指定属性的Binding
+                    Binding iconBinding = new Binding(_root.DisplayMemberIcon)
+                    {
+                        Source = item,
+                        Mode = BindingMode.OneWay
+                    };
+
+                    // 将绑定应用到SideMenuItem的Icon属性
+                    childItem.SetBinding(IconProperty, iconBinding);
+                }
+
+                // 应用IconTemplate
+                if (_root.DisplayMemberIconTemplate != null)
+                {
+                    childItem.IconTemplate = _root.DisplayMemberIconTemplate;
+                }
             }
         }
     }
@@ -188,11 +166,6 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
     {
         base.OnMouseLeftButtonUp(e);
 
-        if (Command != null && Command.CanExecute(CommandParameter))
-        {
-            Command.Execute(CommandParameter);
-        }
-
         // 获取当前点击的 SideMenuItem
         var source = e.OriginalSource as DependencyObject;
         var clickedItem = VisualTreeHelperExtension.TryFindVisualParent<SideMenuItem>(source);
@@ -200,13 +173,19 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
         // 如果点击的是当前的 SideMenuItem
         if (clickedItem == this)
         {
+            // 切换展开状态
             SetValue(IsExpandedProperty, !IsExpanded);
+
+            // 处理激活状态
             var flag = IsActived;
             if (!flag)
             {
                 _root?.DeactivateItems();
                 SetValue(IsActivedPropertyKey, !flag);
             }
+
+            // 通知根菜单项被点击，用于触发命令和事件
+            _root?.OnItemClicked(this);
         }
     }
 
@@ -219,7 +198,7 @@ public class SideMenuItem : HeaderedItemsControl, ICommandSource
     {
         var item = new SideMenuItem();
         // 新创建的子菜单项，Level是当前菜单项的Level+1
-        item.Level = this.Level + 1;
+        item.Level = Level + 1;
 
         // 获取SideMenu的缩进大小
         if (_root != null)

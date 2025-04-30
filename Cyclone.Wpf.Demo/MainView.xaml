@@ -19,6 +19,8 @@
         <cy:SideMenu x:Name="SideMenu"
                      Grid.Column="0"
                      CollapseWidth="60"
+                     DisplayMemberIcon="Icon"
+                     ItemClickCommand="{Binding SwitchViewCommand}"
                      ItemsSource="{Binding SideMenu.Items}">
             <cy:SideMenu.Header>
                 <StackPanel Height="50"
@@ -36,28 +38,19 @@
                                Visibility="{Binding IsCompact, ElementName=SideMenu, Converter={x:Static cy:VisibilityConverter.VisibleWhenFalse}}" />
                 </StackPanel>
             </cy:SideMenu.Header>
+            <cy:SideMenu.DisplayMemberIconTemplate>
+                <DataTemplate>
+                    <TextBlock Margin="10,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{DynamicResource IconFont}"
+                               FontSize="20"
+                               Text="{Binding}" />
+                </DataTemplate>
+            </cy:SideMenu.DisplayMemberIconTemplate>
+
             <cy:SideMenu.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                    <Grid>
-                        <StackPanel Background="Transparent"
-                                    IsHitTestVisible="True"
-                                    Orientation="Horizontal">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonUp">
-                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                           CommandParameter="{Binding}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <TextBlock VerticalAlignment="Center"
-                                       FontFamily="{DynamicResource IconFont}"
-                                       FontSize="20"
-                                       Text="{Binding Icon}" />
-                            <TextBlock Margin="5,0,0,0"
-                                       HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Center"
-                                       Text="{Binding Header}" />
-                        </StackPanel>
-                    </Grid>
+                    <TextBlock Text="{Binding Header}" />
                 </HierarchicalDataTemplate>
             </cy:SideMenu.ItemTemplate>
             <cy:SideMenu.Footer>

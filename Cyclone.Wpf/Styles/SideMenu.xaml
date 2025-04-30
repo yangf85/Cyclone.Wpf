@@ -7,8 +7,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <!--  Toggle Button Style for SideMenu  -->
-    <Style x:Key="SideMenu.ToggleButtonStyle" TargetType="ToggleButton">
+    <Style x:Key="SideMenu.ToggleButtonStyle"
+           TargetType="ToggleButton">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
@@ -45,46 +45,35 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SideMenuItem.Style.Basic" TargetType="ctl:SideMenuItem">
+    <Style x:Key="SideMenuItem.Style.Basic"
+           TargetType="ctl:SideMenuItem">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ctl:SideMenuItem}">
+                <ControlTemplate TargetType="ctl:SideMenuItem">
                     <Border x:Name="RootBorder">
                         <StackPanel>
-                            <!-- 使用专门的缩进列 -->
                             <Grid x:Name="HeaderRoot"
                                   Height="{TemplateBinding RowHeight}"
                                   HorizontalAlignment="Stretch"
                                   Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
-                                    <!-- 缩进列 -->
                                     <ColumnDefinition Width="{Binding Indent, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <!-- 图标列 -->
-                                    <ColumnDefinition Width="32" />
-                                    <!-- 标题列 -->
-                                    <ColumnDefinition Width="*" />
-                                    <!-- 箭头列 -->
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" x:Name="IconColumn" />
+                                    <ColumnDefinition Width="*" x:Name="HeaderColumn" />
+                                    <ColumnDefinition Width="Auto" x:Name="ArrowColumn" />
                                 </Grid.ColumnDefinitions>
-
-                                <!-- 图标容器 -->
                                 <ContentPresenter x:Name="IconContainer"
                                                   Grid.Column="1"
                                                   HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
                                                   Content="{TemplateBinding Icon}"
                                                   ContentTemplate="{TemplateBinding IconTemplate}" />
-
-                                <!-- 标题容器 -->
                                 <ContentPresenter x:Name="HeaderContainer"
                                                   Grid.Column="2"
                                                   Margin="5,0,0,0"
                                                   VerticalAlignment="Center"
                                                   Content="{TemplateBinding Header}"
-                                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                                  Visibility="{Binding Path=IsCompact, Converter={x:Static conv:VisibilityConverter.VisibleWhenFalse}, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" />
-
-                                <!-- 箭头指示器 -->
+                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
                                 <Path x:Name="Arrow"
                                       Grid.Column="3"
                                       Width="12"
@@ -94,12 +83,10 @@
                                       Data="M512 606.29333299L790.698667 341.333333 853.333333 400.853333 512 725.333333l-341.333333-324.48L233.301333 341.333333z"
                                       Fill="{DynamicResource Icon.Foreground.Default}"
                                       Stretch="Uniform"
-                                      StrokeThickness="0"
-                                      Visibility="{Binding Path=IsCompact, Converter={x:Static conv:VisibilityConverter.VisibleWhenFalse}, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" />
+                                      StrokeThickness="0" />
                             </Grid>
-
-                            <!-- 子项容器 -->
-                            <ItemsPresenter x:Name="ItemsContainer" Visibility="Collapsed" />
+                            <ItemsPresenter x:Name="ItemsContainer"
+                                            Visibility="Collapsed" />
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -119,18 +106,29 @@
                             <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="True">
-                            <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
+                            <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                         </Trigger>
+
+                        <!-- 新增的触发器，检测父级 SideMenu 的 IsCompact 属性 -->
+                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" Value="True">
+                            <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IconContainer" Property="HorizontalAlignment" Value="Center" />
+                            <Setter TargetName="IconColumn" Property="Width" Value="*" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}" TargetType="ctl:SideMenuItem" />
+    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}"
+           TargetType="ctl:SideMenuItem" />
 
-    <Style x:Key="SideMenu.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:SideMenu">
+    <Style x:Key="SideMenu.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="ctl:SideMenu">
         <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -148,8 +146,10 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <DockPanel x:Name="HeaderContainer" Grid.Row="0">
-                                <ContentPresenter Grid.Column="0" Content="{TemplateBinding Header}" />
+                            <DockPanel x:Name="HeaderContainer"
+                                       Grid.Row="0">
+                                <ContentPresenter Grid.Column="0"
+                                                  Content="{TemplateBinding Header}" />
                                 <ToggleButton x:Name="ToggleCompactButton"
                                               Grid.Column="1"
                                               HorizontalAlignment="Right"
@@ -160,22 +160,15 @@
                             </DockPanel>
 
                             <ItemsPresenter Grid.Row="1" />
-                            <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}" />
+                            <ContentPresenter Grid.Row="2"
+                                              Content="{TemplateBinding Footer}" />
                         </Grid>
                     </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsCompact" Value="True">
-                            <Setter TargetName="RootBorder" Property="Width" Value="{Binding Path=CollapseWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Trigger>
-                        <Trigger Property="IsCompact" Value="False">
-                            <Setter TargetName="RootBorder" Property="Width" Value="{Binding Path=ExpansionWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource SideMenu.Style.Basic}" TargetType="ctl:SideMenu" />
+    <Style BasedOn="{StaticResource SideMenu.Style.Basic}"
+           TargetType="ctl:SideMenu" />
 </ResourceDictionary>

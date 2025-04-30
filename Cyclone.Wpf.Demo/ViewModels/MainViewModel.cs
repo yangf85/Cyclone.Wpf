@@ -20,11 +20,13 @@ public partial class MainViewModel : ObservableObject
     public partial object CurrentView { get; set; } = new object();
 
     [RelayCommand]
-    private void SwitchView(SideMenuItemViewModel item)
+    private void SwitchView(object item)
     {
-        if (item == null) { return; }
+        // 处理传入的参数，统一为SideMenuItemViewModel
+        var menuItem = item as SideMenuItemViewModel;
+        if (menuItem == null) { return; }
 
-        CurrentView = item.Header switch
+        CurrentView = menuItem.Header switch
         {
             "Button" => new ButtonView(),
             "Input" => new InputView(),
