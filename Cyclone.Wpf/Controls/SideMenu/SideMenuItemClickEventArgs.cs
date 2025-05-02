@@ -7,19 +7,19 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 /// <param name="sender">事件发送者</param>
 /// <param name="e">事件参数</param>
-public delegate void ItemClickEventHandler(object sender, ItemClickEventArgs e);
+public delegate void SideMenuItemClickEventHandler(object sender, SideMenuItemClickEventArgs e);
 
 /// <summary>
 /// ItemClick事件的参数类
 /// </summary>
-public class ItemClickEventArgs : RoutedEventArgs
+public class SideMenuItemClickEventArgs : RoutedEventArgs
 {
     /// <summary>
     /// 被点击的菜单项
     /// </summary>
     public SideMenuItem ClickedItem { get; }
 
-    public ItemClickEventArgs(SideMenuItem clickedItem)
+    public SideMenuItemClickEventArgs(SideMenuItem clickedItem)
     {
         ClickedItem = clickedItem;
     }

@@ -59,7 +59,7 @@ public partial class MainViewModel : ObservableObject
             "Description" => new DescriptionBoxView(),
             "Stepper" => new StepperView(),
             "Breadcrumb" => new BreadcrumbView(),
-
+            "ColorPicker" => new ColorPickerView(),
             _ => new object(),
         };
     }
@@ -119,6 +119,11 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header="Form",
                     Icon= "\xe60b",
+                },
+                new SideMenuItemViewModel()
+                {
+                    Header="ColorPicker",
+                    Icon= "\xe660",
                 },
 
             ]
@@ -250,7 +255,7 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="SpacingUniformGrid",
-                    Icon= "\xed7e",
+                    Icon= "\xe608",
                 },
                 new SideMenuItemViewModel()
                 {
@@ -270,7 +275,7 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="TilePanel",
-                    Icon= "\xe607",
+                    Icon= "\xe62b",
                 },
 
             ]

@@ -248,9 +248,9 @@ public class SideMenu : ItemsControl
     #region ItemClick Event
 
     public static readonly RoutedEvent ItemClickEvent =
-        EventManager.RegisterRoutedEvent(nameof(ItemClick), RoutingStrategy.Bubble, typeof(ItemClickEventHandler), typeof(SideMenu));
+        EventManager.RegisterRoutedEvent(nameof(ItemClick), RoutingStrategy.Bubble, typeof(SideMenuItemClickEventHandler), typeof(SideMenu));
 
-    public event ItemClickEventHandler ItemClick
+    public event SideMenuItemClickEventHandler ItemClick
     {
         add { AddHandler(ItemClickEvent, value); }
         remove { RemoveHandler(ItemClickEvent, value); }
@@ -408,7 +408,7 @@ public class SideMenu : ItemsControl
 
         // 初始化宽度
         _currentWidth = IsCompact ? CollapseWidth : ExpansionWidth;
-        this.Width = _currentWidth;
+        Width = _currentWidth;
     }
 
     /// <summary>
@@ -418,7 +418,7 @@ public class SideMenu : ItemsControl
     internal void OnItemClicked(SideMenuItem menuItem)
     {
         // 触发路由事件
-        ItemClickEventArgs args = new ItemClickEventArgs(menuItem);
+        SideMenuItemClickEventArgs args = new SideMenuItemClickEventArgs(menuItem);
         args.RoutedEvent = ItemClickEvent;
         RaiseEvent(args);
 
@@ -432,7 +432,7 @@ public class SideMenu : ItemsControl
             if (parameter == null)
             {
                 // 如果菜单项有数据上下文，使用数据上下文作为参数
-                if (menuItem.DataContext != null && menuItem.DataContext != this.DataContext)
+                if (menuItem.DataContext != null && menuItem.DataContext != DataContext)
                 {
                     parameter = menuItem.DataContext;
                 }
