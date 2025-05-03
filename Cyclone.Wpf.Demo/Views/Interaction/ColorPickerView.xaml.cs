@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Cyclone.Wpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,5 +40,13 @@ namespace Cyclone.Wpf.Demo.Views
 
         [ObservableProperty]
         public partial double Saturation { get; set; }
+
+        [RelayCommand]
+        void ShowColorPaletteColor(Color? color)
+        {
+            var service = Cyclone.Wpf.Controls.AlertService.Instance;
+            service.SetOwner(App.Current.MainWindow);
+            service.Information($"{color}");
+        }
     }
 }

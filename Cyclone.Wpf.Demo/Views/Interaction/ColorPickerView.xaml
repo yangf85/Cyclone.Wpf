@@ -9,7 +9,7 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid>
+    <StackPanel>
         <GroupBox Padding="20"
                   Header="Slider">
             <StackPanel>
@@ -31,8 +31,13 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Padding="20"
-                  Header="StandardPalette">
-            <cy:StandardColorPalette />
+                  Header="ColorPalette">
+            <StackPanel>
+                <cy:ColorPalette x:Name="ColorPalette" />
+                <Button Command="{Binding ShowColorPaletteColorCommand}"
+                        CommandParameter="{Binding ElementName=ColorPalette, Path=SelectedColor}"
+                        Content="Show ColorPalette SelectedColor" />
+            </StackPanel>
         </GroupBox>
-    </Grid>
+    </StackPanel>
 </UserControl>

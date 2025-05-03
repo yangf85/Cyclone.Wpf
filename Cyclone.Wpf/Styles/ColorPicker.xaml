@@ -212,13 +212,9 @@
     </Style>
 
     <!--  颜色项数据模板  -->
-    <DataTemplate x:Key="ColorItemTemplate">
-        <Border x:Name="ColorItemBorder"
-                Width="20"
-                Height="20"
-                Margin="1"
-                BorderBrush="#666666"
-                BorderThickness="1"
+    <DataTemplate x:Key="ColorPalette.ItemTemplate">
+        <Border x:Name="RootBorder"
+                BorderThickness="0"
                 Cursor="Hand"
                 ToolTipService.BetweenShowDelay="0"
                 ToolTipService.InitialShowDelay="500">
@@ -240,33 +236,31 @@
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
                          Value="True">
-                <Setter TargetName="ColorItemBorder" Property="BorderBrush" Value="White" />
-                <Setter TargetName="ColorItemBorder" Property="BorderThickness" Value="2" />
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
+                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
     <!--  ListBoxItem 样式  -->
-    <Style x:Key="ColorItemContainerStyle"
-           TargetType="ListBoxItem">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
+    <Style TargetType="ctl:ColorPaletteItem">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Border"
-                            Padding="0"
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="0">
+                    <Border x:Name="RootBorder"
+                            Padding="1">
                         <ContentPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Selected}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                            <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -275,26 +269,18 @@
     </Style>
 
     <!--  标准颜色面板样式  -->
-    <Style TargetType="{x:Type ctl:StandardColorPalette}">
+    <Style TargetType="{x:Type ctl:ColorPalette}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="#CCCCCC" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="ItemTemplate" Value="{StaticResource ColorItemTemplate}" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ColorItemContainerStyle}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ItemTemplate" Value="{StaticResource ColorPalette.ItemTemplate}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ctl:StandardColorPalette}">
-                    <Border Padding="2"
-                            Background="{TemplateBinding Background}"
+                <ControlTemplate TargetType="{x:Type ctl:ColorPalette}">
+                    <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer Focusable="False"
-                                      HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                                      VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                            <ItemsPresenter />
-                        </ScrollViewer>
+                        <ItemsPresenter />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -302,8 +288,8 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:StandardColorPalette}}, Path=Columns}"
-                                 Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:StandardColorPalette}}, Path=Rows}" />
+                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}"
+                                 Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
