@@ -1,43 +1,46 @@
-﻿<UserControl x:Class="Cyclone.Wpf.Demo.Views.ColorPickerView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cy="https://www.cyclone/wpf"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DataContext="{d:DesignInstance Type=local:ColorPickerViewModel}"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
-             mc:Ignorable="d">
-    <StackPanel>
-        <GroupBox Padding="20"
-                  Header="Slider">
+﻿<UserControl
+    x:Class="Cyclone.Wpf.Demo.Views.ColorPickerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cy="https://www.cyclone/wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=local:ColorPickerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <StackPanel Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <GroupBox Padding="20" Header="Slider">
             <StackPanel>
-                <cy:FormItem Label="Alpha"
-                             SharedName="Slier">
-                    <cy:ColorOpacitySlider IndicatorColor="Red"
-                                           Value="{Binding Alpha}" />
+                <cy:FormItem Label="Alpha" SharedName="Slier">
+                    <cy:ColorOpacitySlider IndicatorColor="Red" Value="{Binding Alpha}" />
                 </cy:FormItem>
-                <cy:FormItem Label="Bright"
-                             SharedName="Slier">
-                    <cy:ColorBrightSlider IndicatorColor="Yellow"
-                                          Value="{Binding Bright}" />
+                <cy:FormItem Label="Bright" SharedName="Slier">
+                    <cy:ColorBrightSlider IndicatorColor="Yellow" Value="{Binding Bright}" />
                 </cy:FormItem>
-                <cy:FormItem Label="Saturation"
-                             SharedName="Slier">
-                    <cy:ColorBrightSlider IndicatorColor="Blue"
-                                          Value="{Binding Saturation}" />
+                <cy:FormItem Label="Saturation" SharedName="Slier">
+                    <cy:ColorBrightSlider IndicatorColor="Blue" Value="{Binding Saturation}" />
+                </cy:FormItem>
+
+                <cy:FormItem Label="Hue" SharedName="Slier">
+                    <cy:ColorHueSlider Value="{Binding Hue}" />
                 </cy:FormItem>
             </StackPanel>
         </GroupBox>
-        <GroupBox Padding="20"
-                  Header="ColorPalette">
+        <GroupBox Padding="20" Header="ColorSelector">
+            <cy:ColorSelector />
+        </GroupBox>
+
+        <GroupBox Padding="20" Header="ColorPalette">
             <StackPanel>
                 <cy:ColorPalette x:Name="ColorPalette" />
-                <Button Command="{Binding ShowColorPaletteColorCommand}"
-                        CommandParameter="{Binding ElementName=ColorPalette, Path=SelectedColor}"
-                        Content="Show ColorPalette SelectedColor" />
+                <Button
+                    Command="{Binding ShowColorPaletteColorCommand}"
+                    CommandParameter="{Binding ElementName=ColorPalette, Path=SelectedColor}"
+                    Content="Show ColorPalette SelectedColor" />
             </StackPanel>
         </GroupBox>
+
     </StackPanel>
 </UserControl>

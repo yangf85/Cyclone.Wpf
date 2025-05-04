@@ -41,6 +41,9 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial double Saturation { get; set; }
 
+        [ObservableProperty]
+        public partial double Hue { get; set; }
+
         [RelayCommand]
         void ShowColorPaletteColor(Color? color)
         {
