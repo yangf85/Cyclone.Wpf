@@ -250,7 +250,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ctl:ColorSelector}">
+    <Style TargetType="{x:Type ctl:ColorRegion}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="MinHeight" Value="200" />
         <Setter Property="MinWidth" Value="200" />
@@ -258,44 +258,28 @@
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Thin}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ctl:ColorSelector}">
+                <ControlTemplate TargetType="{x:Type ctl:ColorRegion}">
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <!--  颜色选择区域  -->
-                            <Border x:Name="PART_ColorArea">
+                            <Border x:Name="PART_ColorArea" ClipToBounds="True">
                                 <Border.Background>
-                                    <VisualBrush>
-                                        <VisualBrush.Visual>
-                                            <Grid>
-                                                <!--  饱和度渐变 (水平)  -->
-                                                <Rectangle>
-                                                    <Rectangle.Fill>
-                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                            <GradientStop Offset="0" Color="White" />
-                                                            <GradientStop x:Name="PART_HueGradient" Offset="1" Color="Red" />
-                                                        </LinearGradientBrush>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-
-                                                <!--  明度渐变 (垂直)  -->
-                                                <Rectangle>
-                                                    <Rectangle.Fill>
-                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                            <GradientStop Offset="0" Color="Transparent" />
-                                                            <GradientStop Offset="1" Color="Black" />
-                                                        </LinearGradientBrush>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </Grid>
-                                        </VisualBrush.Visual>
-                                    </VisualBrush>
+                                    <LinearGradientBrush x:Name="SaturationGradient" StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Offset="0" Color="White" />
+                                        <GradientStop x:Name="PART_HueGradient" Offset="1" Color="Red" />
+                                    </LinearGradientBrush>
                                 </Border.Background>
+                                <Rectangle>
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Offset="0" Color="Transparent" />
+                                            <GradientStop Offset="1" Color="Black" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
                             </Border>
-
-                            <!--  选择器指示器  -->
                             <Canvas>
                                 <Ellipse
                                     x:Name="PART_Selector"
@@ -310,6 +294,29 @@
                             </Canvas>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ctl:ColorEyedropper}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctl:ColorEyedropper}">
+                    <Button
+                        Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                        Height="{StaticResource Height.Horizontal.Control}"
+                        Background="{StaticResource Background.Default}"
+                        BorderBrush="{StaticResource Border.Default}"
+                        Command="{x:Static ctl:ColorEyedropper.PickColorCommand}"
+                        Foreground="{StaticResource Foreground.Default}">
+                        <Path
+                            Margin="3"
+                            Data="M883.34331703 140.80691492A167.59875575 167.59875575 0 0 0 763.96901502 91.35055923c-45.06958293 0-87.43499091 17.54709096-119.25411646 49.39626291l-137.13171769 137.22185685-56.75762811-56.78767451a30.6473164 30.6473164 0 1 0-43.32689241 43.35693879l78.18070321 78.2107496 0.24037112 0.30046389 7.12099409 7.09094771-297.1587835 297.36910824a127.09622388 127.09622388 0 0 0-35.84534164 110.6908957L113.28442293 805.01238188A74.27467268 74.27467268 0 0 0 91.35055923 857.86397947c-0.06009278 19.83061649 7.81206104 38.88002689 21.87377093 52.8515976a74.21457992 74.21457992 0 0 0 52.88164397 21.9338637h0.0300464c19.83061649 0.06009278 38.81993411-7.81206104 52.76145842-21.90381731l46.57190237-46.5118096a127.33659501 127.33659501 0 0 0 111.32186987-35.72515608l297.18882989-297.33906184 7.15104049 7.1510405c0.09013917 0.12018555 0.24037111 0.21032472 0.36055667 0.30046389l78.12061042 78.12061042a30.58722362 30.58722362 0 0 0 52.28071621-21.6634462c0-8.11252493-3.21496358-15.92458597-8.98387018-21.6634462l-56.75762813-56.7876745 137.19181047-137.19181047a168.98088964 168.98088964 0 0 0 0-238.62841846zM333.46435879 785.151719a66.40251885 66.40251885 0 0 1-64.50959639 17.06634874 30.58722362 30.58722362 0 0 0-31.18815139 3.57552024c-1.0516236 0.8112525-2.1032472 1.65255138-3.12482442 2.55394305L175.54054016 867.44877744a13.28050377 13.28050377 0 0 1-9.40451963 3.90603053 13.4607821 13.4607821 0 0 1-9.5247052-22.9854873l57.08813839-57.14823117c0.39060305-0.33051028 4.35672634-4.68723663 5.2881644-6.03932411 0.42064944-0.60092777 2.16333998-3.63561302 2.61403581-4.59709746a56.18674673 56.18674673 0 0 0 1.80278332-4.95765412c0.42064944-1.56241221 0.90139166-5.10788607 0.93143804-5.25811801a30.6473164 30.6473164 0 0 0-1.98306164-14.33212739 66.22224053 66.22224053 0 0 1 16.85602401-65.2006633l297.15878352-297.30901546 94.2855675 94.28556751-297.18882989 297.33906184z m506.52201945-449.1033708l-137.16176407 137.22185686-151.88449451-151.94458728 137.13171769-137.22185685c40.56262465-40.56262465 111.32186985-40.53257825 151.91454089 0.06009276a107.56607128 107.56607128 0 0 1 0 151.88449451z"
+                            Fill="Red"
+                            Stretch="Uniform" />
+                    </Button>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

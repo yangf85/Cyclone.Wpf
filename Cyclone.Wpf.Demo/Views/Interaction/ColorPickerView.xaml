@@ -13,6 +13,9 @@
     <StackPanel Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <GroupBox Padding="20" Header="Slider">
             <StackPanel>
+                <cy:FormItem Label="Eyedropper">
+                    <cy:ColorEyedropper x:Name="ColorEyedropper"  />
+                </cy:FormItem>
                 <cy:FormItem Label="Alpha" SharedName="Slier">
                     <cy:ColorOpacitySlider IndicatorColor="Red" Value="{Binding Alpha}" />
                 </cy:FormItem>
@@ -29,7 +32,10 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Padding="20" Header="ColorSelector">
-            <cy:ColorSelector />
+            <cy:ColorRegion
+                Hue="{Binding Hue}"
+                Saturation="{Binding Saturation}"
+                Value="{Binding Bright}" />
         </GroupBox>
 
         <GroupBox Padding="20" Header="ColorPalette">

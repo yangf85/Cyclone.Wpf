@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -13,12 +15,12 @@ namespace Cyclone.Wpf.Controls;
 [TemplatePart(Name = "PART_ColorArea", Type = typeof(FrameworkElement))]
 [TemplatePart(Name = "PART_Selector", Type = typeof(FrameworkElement))]
 [TemplatePart(Name = "PART_HueGradient", Type = typeof(GradientStop))]
-public class ColorSelector : Control
+public class ColorRegion : Control
 {
-    static ColorSelector()
+    static ColorRegion()
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorSelector),
-            new FrameworkPropertyMetadata(typeof(ColorSelector)));
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorRegion),
+            new FrameworkPropertyMetadata(typeof(ColorRegion)));
     }
 
     #region Hue
@@ -29,12 +31,12 @@ public class ColorSelector : Control
     }
 
     public static readonly DependencyProperty HueProperty =
-        DependencyProperty.Register(nameof(Hue), typeof(double), typeof(ColorSelector),
-            new PropertyMetadata(0.0, OnHueChanged));
+        DependencyProperty.Register(nameof(Hue), typeof(double), typeof(ColorRegion),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnHueChanged));
 
     private static void OnHueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is ColorSelector selector)
+        if (d is ColorRegion selector)
         {
             selector.OnHueChanged((double)e.OldValue, (double)e.NewValue);
         }
@@ -55,12 +57,12 @@ public class ColorSelector : Control
     }
 
     public static readonly DependencyProperty SaturationProperty =
-        DependencyProperty.Register(nameof(Saturation), typeof(double), typeof(ColorSelector),
-            new PropertyMetadata(0.0, OnSaturationChanged));
+        DependencyProperty.Register(nameof(Saturation), typeof(double), typeof(ColorRegion),
+            new FrameworkPropertyMetadata(1.0,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSaturationChanged)); // 将初始值改为1.0
 
     private static void OnSaturationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is ColorSelector selector)
+        if (d is ColorRegion selector)
         {
             selector.OnSaturationChanged((double)e.OldValue, (double)e.NewValue);
         }
@@ -81,12 +83,12 @@ public class ColorSelector : Control
     }
 
     public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register(nameof(Value), typeof(double), typeof(ColorSelector),
-            new PropertyMetadata(1.0, OnValueChanged));
+        DependencyProperty.Register(nameof(Value), typeof(double), typeof(ColorRegion),
+            new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValueChanged));
 
     private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is ColorSelector selector)
+        if (d is ColorRegion selector)
         {
             selector.OnValueChanged((double)e.OldValue, (double)e.NewValue);
         }
@@ -99,6 +101,8 @@ public class ColorSelector : Control
     }
     #endregion
 
+
+
     #region SelectedColor
     public Color SelectedColor
     {
@@ -107,7 +111,7 @@ public class ColorSelector : Control
     }
 
     private static readonly DependencyPropertyKey SelectedColorPropertyKey =
-        DependencyProperty.RegisterReadOnly(nameof(SelectedColor), typeof(Color), typeof(ColorSelector),
+        DependencyProperty.RegisterReadOnly(nameof(SelectedColor), typeof(Color), typeof(ColorRegion),
             new PropertyMetadata(Colors.Red));
 
     public static readonly DependencyProperty SelectedColorProperty = SelectedColorPropertyKey.DependencyProperty;
@@ -119,6 +123,8 @@ public class ColorSelector : Control
     private FrameworkElement _colorArea;
     private FrameworkElement _selector;
     private GradientStop _hueGradient;
+    private Border _colorAreaBorder;
+    private LinearGradientBrush _saturationGradient;
 
     public override void OnApplyTemplate()
     {
@@ -137,6 +143,13 @@ public class ColorSelector : Control
         _colorArea = GetTemplateChild("PART_ColorArea") as FrameworkElement;
         _selector = GetTemplateChild("PART_Selector") as FrameworkElement;
         _hueGradient = GetTemplateChild("PART_HueGradient") as GradientStop;
+        _colorAreaBorder = _colorArea as Border;
+
+        // 如果使用了新的模板结构，获取LinearGradientBrush
+        if (_colorAreaBorder != null)
+        {
+            _saturationGradient = _colorAreaBorder.Background as LinearGradientBrush;
+        }
 
         // 绑定新元素的事件
         if (_colorArea != null)
@@ -146,12 +159,17 @@ public class ColorSelector : Control
             _colorArea.MouseLeftButtonUp += ColorArea_MouseLeftButtonUp;
             _colorArea.SizeChanged += ColorArea_SizeChanged;
         }
-        
 
-        // 初始更新
-        UpdateHueGradient();
-        UpdateSelectorPosition();
-        UpdateSelectedColor();
+        Debug.WriteLine($"OnApplyTemplate: _colorArea={_colorArea}, _selector={_selector}, _hueGradient={_hueGradient}");
+
+        // 延迟初始化以确保UI元素加载完成
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            // 初始更新
+            UpdateHueGradient();
+            UpdateSelectorPosition();
+            UpdateSelectedColor();
+        }), DispatcherPriority.Loaded);
     }
 
     // 更新方法
@@ -159,9 +177,34 @@ public class ColorSelector : Control
     {
         if (_hueGradient != null)
         {
+            // 计算当前色相对应的纯色（饱和度和明度均为1）
             ColorHelper.HsvToRgb(Hue, 1, 1, out byte r, out byte g, out byte b);
-            _hueGradient.Color = Color.FromRgb(r, g, b);
+            Color color = Color.FromRgb(r, g, b);
+
+            // 更新渐变色
+            _hueGradient.Color = color;
+
+            // 强制刷新背景
+            if (_colorAreaBorder != null)
+            {
+                // 如果使用新模板方式，刷新LinearGradientBrush
+                if (_saturationGradient != null)
+                {
+                    var stop = _saturationGradient.GradientStops[1];
+                    stop.Color = color;
+                    _saturationGradient.GradientStops[1] = stop;
+                }
+
+                // 强制刷新视觉元素
+                _colorAreaBorder.InvalidateVisual();
+            }
+            else if (_colorArea != null)
+            {
+                // 原模板方式，刷新整个元素
+                _colorArea.InvalidateVisual();
+            }
         }
+       
     }
 
     private void UpdateSelectorPosition()
@@ -176,6 +219,7 @@ public class ColorSelector : Control
             Canvas.SetLeft(_selector, x - _selector.ActualWidth / 2);
             Canvas.SetTop(_selector, y - _selector.ActualHeight / 2);
         }
+       
     }
 
     private void UpdateSelectedColor()
@@ -183,7 +227,8 @@ public class ColorSelector : Control
         ColorHelper.HsvToRgb(Hue, Saturation, Value, out byte r, out byte g, out byte b);
         Color color = Color.FromRgb(r, g, b);
         SelectedColor = color;
-        ColorChanged?.Invoke(this, new ColorChangedEventArgs(color));
+
+        ColorChanged?.Invoke(this, new ColorChangedEventArgs(SelectedColor, color));
     }
 
     // 鼠标交互处理
@@ -227,14 +272,29 @@ public class ColorSelector : Control
         Saturation = s;
         Value = v;
     }
+
+    // 覆盖渲染方法，确保更新正确显示
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        base.OnRender(drawingContext);
+
+        // 强制更新一次，以防止渲染问题
+        if (_hueGradient != null)
+        {
+            ColorHelper.HsvToRgb(Hue, 1, 1, out byte r, out byte g, out byte b);
+            _hueGradient.Color = Color.FromRgb(r, g, b);
+        }
+    }
 }
 
 public class ColorChangedEventArgs : EventArgs
 {
     public Color NewColor { get; }
 
-    public ColorChangedEventArgs(Color newColor)
+    public Color OldColor { get; }
+    public ColorChangedEventArgs(Color oldColor, Color newColor)
     {
+        OldColor = oldColor;
         NewColor = newColor;
     }
 }
