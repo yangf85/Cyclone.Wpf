@@ -21,22 +21,22 @@ namespace Cyclone.Wpf.Demo.Views
     /// <summary>
     /// BreadcrumbView.xaml 的交互逻辑
     /// </summary>
-    public partial class BreadcrumbView : UserControl
+    public partial class BreadcrumbBarView : UserControl
     {
-        public BreadcrumbView()
+        public BreadcrumbBarView()
         {
             InitializeComponent();
-            DataContext = new BreadcrumbViewModel();
+            DataContext = new BreadcrumbBarViewModel();
         }
     }
 
-    public partial class BreadcrumbViewModel : ObservableObject
+    public partial class BreadcrumbBarViewModel : ObservableObject
     {
         public ObservableCollection<BreadcrumbItemViewModel> NavigationPath { get; }
 
         public ICommand NavigateCommand { get; }
 
-        public BreadcrumbViewModel()
+        public BreadcrumbBarViewModel()
         {
             // 创建导航路径
             NavigationPath = new ObservableCollection<BreadcrumbItemViewModel>

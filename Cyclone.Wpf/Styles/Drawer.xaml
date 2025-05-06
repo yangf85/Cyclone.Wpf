@@ -1,61 +1,60 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="Drawer.ControlTemplate.Basic"
-                     TargetType="{x:Type ctl:Drawer}">
-        <Grid>
-            <ContentPresenter Content="{TemplateBinding Content}" />
-            <Border x:Name="PART_Overlay"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Panel.ZIndex="998"
-                    Background="{DynamicResource Background.TransparentLight}"
-                    Opacity="0"
-                    Visibility="Collapsed" />
-            <Border x:Name="PART_DrawerPanel"
-                    Panel.ZIndex="999"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}">
-                <ContentPresenter Margin="{TemplateBinding Padding}"
-                                  Content="{TemplateBinding DrawerContent}" />
-            </Border>
-        </Grid>
+	<ControlTemplate x:Key="Drawer.ControlTemplate.Basic" TargetType="{x:Type ctl:Drawer}">
+		<Grid>
+			<ContentPresenter Content="{TemplateBinding Content}" />
+			<Border
+				x:Name="PART_Overlay"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				Panel.ZIndex="998"
+				Background="{DynamicResource Background.TransparentLight}"
+				Opacity="0"
+				Visibility="Collapsed" />
+			<Border
+				x:Name="PART_DrawerPanel"
+				Panel.ZIndex="999"
+				Background="{TemplateBinding Background}"
+				BorderBrush="{TemplateBinding BorderBrush}"
+				BorderThickness="{TemplateBinding BorderThickness}">
+				<ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding DrawerContent}" />
+			</Border>
+		</Grid>
 
-        <ControlTemplate.Triggers>
-            <Trigger Property="Placement" Value="Left">
-                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Left" />
-                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
-            </Trigger>
-            <Trigger Property="Placement" Value="Right">
-                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Right" />
-                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
-            </Trigger>
-            <Trigger Property="Placement" Value="Top">
-                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
-                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Top" />
-            </Trigger>
-            <Trigger Property="Placement" Value="Bottom">
-                <Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
-                <Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Bottom" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+		<ControlTemplate.Triggers>
+			<Trigger Property="Placement" Value="Left">
+				<Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Left" />
+				<Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
+			</Trigger>
+			<Trigger Property="Placement" Value="Right">
+				<Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Right" />
+				<Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Stretch" />
+			</Trigger>
+			<Trigger Property="Placement" Value="Top">
+				<Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
+				<Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Top" />
+			</Trigger>
+			<Trigger Property="Placement" Value="Bottom">
+				<Setter TargetName="PART_DrawerPanel" Property="HorizontalAlignment" Value="Stretch" />
+				<Setter TargetName="PART_DrawerPanel" Property="VerticalAlignment" Value="Bottom" />
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
 
-    <Style x:Key="Drawer.Style.Basic"
-           TargetType="{x:Type ctl:Drawer}">
-        <Setter Property="Background" Value="{DynamicResource Background.Container}" />
+	<Style x:Key="Drawer.Style.Basic" TargetType="{x:Type ctl:Drawer}">
+		<Setter Property="Background" Value="{DynamicResource Background.Container}" />
 
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="CloseOnOverlayClick" Value="True" />
-        <Setter Property="Panel.ZIndex" Value="1000" />
-        <Setter Property="Template" Value="{StaticResource Drawer.ControlTemplate.Basic}" />
-    </Style>
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="CloseOnOverlayClick" Value="True" />
+		<Setter Property="Panel.ZIndex" Value="1000" />
+		<Setter Property="Template" Value="{StaticResource Drawer.ControlTemplate.Basic}" />
+	</Style>
 
-    <Style BasedOn="{StaticResource Drawer.Style.Basic}"
-           TargetType="ctl:Drawer" />
+	<Style BasedOn="{StaticResource Drawer.Style.Basic}" TargetType="ctl:Drawer" />
 </ResourceDictionary>

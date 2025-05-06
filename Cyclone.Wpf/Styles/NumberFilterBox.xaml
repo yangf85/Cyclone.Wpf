@@ -1,94 +1,98 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
-                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CheckBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
+	xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CheckBox.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/NumberBox.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="NumberFilterBox.ActiveCheckBoxStyle"
-           BasedOn="{StaticResource CheckBox.Style.Basic}"
-           TargetType="CheckBox">
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-    </Style>
+	<Style
+		x:Key="NumberFilterBox.ActiveCheckBoxStyle"
+		BasedOn="{StaticResource CheckBox.Style.Basic}"
+		TargetType="CheckBox">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Focusable" Value="False" />
+	</Style>
 
-    <Style x:Key="NumberFilterBox.OperatorComboBox"
-           BasedOn="{StaticResource ComboBox.Style.Basic}"
-           TargetType="ComboBox">
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-    </Style>
+	<Style
+		x:Key="NumberFilterBox.OperatorComboBox"
+		BasedOn="{StaticResource ComboBox.Style.Basic}"
+		TargetType="ComboBox">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Focusable" Value="False" />
+	</Style>
 
-    <Style x:Key="NumberFilterBox.ValueNumberBox"
-           BasedOn="{StaticResource NumberBox.Style.Basic}"
-           TargetType="ctl:NumberBox">
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-    </Style>
+	<Style
+		x:Key="NumberFilterBox.ValueNumberBox"
+		BasedOn="{StaticResource NumberBox.Style.Basic}"
+		TargetType="ctl:NumberBox">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Focusable" Value="False" />
+	</Style>
 
-    <ControlTemplate x:Key="NumberFilterBox.ControlTemplate.Basic"
-                     TargetType="ctl:NumberFilterBox">
-        <Border x:Name="RootBorder"
-                Margin="{TemplateBinding Padding}"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                SnapsToDevicePixels="True">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"
-                                      SharedSizeGroup="{TemplateBinding SharedName}" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <CheckBox x:Name="PART_ActivedCheckBox"
-                          Grid.Column="0"
-                          VerticalContentAlignment="Center"
-                          Content="{TemplateBinding Label}"
-                          Focusable="False"
-                          IsChecked="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                          Style="{StaticResource NumberFilterBox.ActiveCheckBoxStyle}" />
-                <ComboBox x:Name="PART_OperatorComboBox"
-                          Grid.Column="1"
-                          MinWidth="50"
-                          Margin="5,0"
-                          IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                          ItemsSource="{hp:EnumToItemsSource EnumType=ctl:NumberOperator}"
-                          SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}"
-                          Style="{StaticResource NumberFilterBox.OperatorComboBox}" />
-                <ctl:NumberBox x:Name="PART_ValueNumberBox"
-                               Grid.Column="2"
-                               DecimalPlaces="{Binding DecimalPlaces, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                               IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                               IsVisibleButton="False"
-                               IsVisibleSlider="False"
-                               Maximum="{TemplateBinding Maximum}"
-                               Minimum="{TemplateBinding Minimum}"
-                               NumberStyle="{TemplateBinding NumberStyle}"
-                               Value="{Binding Path=Value, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-            </Grid>
-        </Border>
-        <ControlTemplate.Triggers />
-    </ControlTemplate>
+	<ControlTemplate x:Key="NumberFilterBox.ControlTemplate.Basic" TargetType="ctl:NumberFilterBox">
+		<Border
+			x:Name="RootBorder"
+			Margin="{TemplateBinding Padding}"
+			Background="{TemplateBinding Background}"
+			BorderBrush="{TemplateBinding BorderBrush}"
+			BorderThickness="{TemplateBinding BorderThickness}"
+			SnapsToDevicePixels="True">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<CheckBox
+					x:Name="PART_ActivedCheckBox"
+					Grid.Column="0"
+					VerticalContentAlignment="Center"
+					Content="{TemplateBinding Label}"
+					Focusable="False"
+					IsChecked="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+					Style="{StaticResource NumberFilterBox.ActiveCheckBoxStyle}" />
+				<ComboBox
+					x:Name="PART_OperatorComboBox"
+					Grid.Column="1"
+					MinWidth="50"
+					Margin="5,0"
+					IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+					ItemsSource="{hp:EnumToItemsSource EnumType=ctl:NumberOperator}"
+					SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}"
+					Style="{StaticResource NumberFilterBox.OperatorComboBox}" />
+				<ctl:NumberBox
+					x:Name="PART_ValueNumberBox"
+					Grid.Column="2"
+					DecimalPlaces="{Binding DecimalPlaces, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+					IsEnabled="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+					IsVisibleButton="False"
+					IsVisibleSlider="False"
+					Maximum="{TemplateBinding Maximum}"
+					Minimum="{TemplateBinding Minimum}"
+					NumberStyle="{TemplateBinding NumberStyle}"
+					Value="{Binding Path=Value, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+			</Grid>
+		</Border>
+		<ControlTemplate.Triggers />
+	</ControlTemplate>
 
-    <Style x:Key="NumberFilterBox.Style.Basic"
-           TargetType="ctl:NumberFilterBox">
-        <Setter Property="Template" Value="{StaticResource NumberFilterBox.ControlTemplate.Basic}" />
-        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Style.Triggers>
-            <Trigger Property="IsActived" Value="False">
-                <Setter Property="Opacity" Value="0.5" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+	<Style x:Key="NumberFilterBox.Style.Basic" TargetType="ctl:NumberFilterBox">
+		<Setter Property="Template" Value="{StaticResource NumberFilterBox.ControlTemplate.Basic}" />
+		<Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Style.Triggers>
+			<Trigger Property="IsActived" Value="False">
+				<Setter Property="Opacity" Value="0.5" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 
-    <Style BasedOn="{StaticResource NumberFilterBox.Style.Basic}"
-           TargetType="ctl:NumberFilterBox" />
+	<Style BasedOn="{StaticResource NumberFilterBox.Style.Basic}" TargetType="ctl:NumberFilterBox" />
 </ResourceDictionary>

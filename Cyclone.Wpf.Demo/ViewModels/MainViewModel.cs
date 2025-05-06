@@ -58,7 +58,7 @@ public partial class MainViewModel : ObservableObject
             "Drawer" => new DrawerView(),
             "Description" => new DescriptionBoxView(),
             "Stepper" => new StepperView(),
-            "Breadcrumb" => new BreadcrumbView(),
+            "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
             _ => new object(),
         };
