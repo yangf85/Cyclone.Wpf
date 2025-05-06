@@ -9,7 +9,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
+    <Style x:Key="NumberBox.SpinButtonStyle"
+           TargetType="RepeatButton">
         <Setter Property="Width" Value="Auto" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
@@ -18,7 +19,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid x:Name="RootGrid"
+                          Background="Transparent">
                         <ContentPresenter x:Name="ContentContainer"
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
@@ -37,14 +39,16 @@
         </Setter>
     </Style>
 
-    <Style x:Key="NumberBox.SliderStyle" TargetType="Slider">
+    <Style x:Key="NumberBox.SliderStyle"
+           TargetType="Slider">
         <Setter Property="MinWidth" Value="25" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic" TargetType="ctl:NumberBox">
+    <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic"
+                     TargetType="ctl:NumberBox">
         <Border x:Name="RootBorder"
                 Margin="{TemplateBinding Padding}"
                 Background="{TemplateBinding Background}"
@@ -55,7 +59,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" MinWidth="24" />
+                    <ColumnDefinition Width="Auto"
+                                      MinWidth="24" />
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="PART_InputTextBox"
                          Grid.Column="0"
@@ -77,8 +82,10 @@
                        PopupAnimation="Slide"
                        VerticalOffset="5"
                        Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                    <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}" Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                        <Border Margin="5" Focusable="True">
+                    <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                          Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                        <Border Margin="5"
+                                Focusable="True">
                             <Slider x:Name="PART_ValueSlider"
                                     IsMoveToPointEnabled="True"
                                     IsSnapToTickEnabled="True"
@@ -89,7 +96,9 @@
                                     TickFrequency="{TemplateBinding Step}"
                                     Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="5" Opacity="0.5" ShadowDepth="0" />
+                                <DropShadowEffect BlurRadius="5"
+                                                  Opacity="0.5"
+                                                  ShadowDepth="0" />
                             </Border.Effect>
                         </Border>
                     </Grid>
@@ -149,7 +158,9 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="NumberBox.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:NumberBox">
+    <Style x:Key="NumberBox.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="ctl:NumberBox">
         <Setter Property="Template" Value="{StaticResource NumberBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
@@ -157,5 +168,6 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
-    <Style BasedOn="{StaticResource NumberBox.Style.Basic}" TargetType="ctl:NumberBox" />
+    <Style BasedOn="{StaticResource NumberBox.Style.Basic}"
+           TargetType="ctl:NumberBox" />
 </ResourceDictionary>

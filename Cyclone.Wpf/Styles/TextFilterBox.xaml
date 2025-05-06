@@ -10,19 +10,26 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="TextFilterBox.ActiveCheckBoxStyle" BasedOn="{StaticResource CheckBox.Style.Basic}" TargetType="CheckBox">
+    <Style x:Key="TextFilterBox.ActiveCheckBoxStyle"
+           BasedOn="{StaticResource CheckBox.Style.Basic}"
+           TargetType="CheckBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style x:Key="TextFilterBox.OperatorComboBoxStyle" BasedOn="{StaticResource ComboBox.Style.Basic}" TargetType="ComboBox">
+    <Style x:Key="TextFilterBox.OperatorComboBoxStyle"
+           BasedOn="{StaticResource ComboBox.Style.Basic}"
+           TargetType="ComboBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style x:Key="TextFilterBox.TextBoxStyle" BasedOn="{StaticResource TextBox.Style.Basic}" TargetType="TextBox" />
+    <Style x:Key="TextFilterBox.TextBoxStyle"
+           BasedOn="{StaticResource TextBox.Style.Basic}"
+           TargetType="TextBox" />
 
-    <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
+    <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic"
+                     TargetType="ctl:TextFilterBox">
         <Border x:Name="RootBorder"
                 Margin="{TemplateBinding Padding}"
                 Background="{TemplateBinding Background}"
@@ -31,7 +38,8 @@
                 SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+                    <ColumnDefinition Width="Auto"
+                                      SharedSizeGroup="{TemplateBinding SharedName}" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -63,7 +71,8 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TextFilterBox.Style.Basic" TargetType="ctl:TextFilterBox">
+    <Style x:Key="TextFilterBox.Style.Basic"
+           TargetType="ctl:TextFilterBox">
         <Setter Property="Template" Value="{StaticResource TextFilterBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
@@ -73,5 +82,6 @@
         <Style.Triggers />
     </Style>
 
-    <Style BasedOn="{StaticResource TextFilterBox.Style.Basic}" TargetType="ctl:TextFilterBox" />
+    <Style BasedOn="{StaticResource TextFilterBox.Style.Basic}"
+           TargetType="ctl:TextFilterBox" />
 </ResourceDictionary>

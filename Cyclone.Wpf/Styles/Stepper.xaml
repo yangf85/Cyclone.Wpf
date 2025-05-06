@@ -6,8 +6,10 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Vertical" TargetType="{x:Type ctl:StepperItem}">
-        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
+    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Vertical"
+                     TargetType="{x:Type ctl:StepperItem}">
+        <Grid x:Name="RootGrid"
+              SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -55,7 +57,9 @@
                            HorizontalAlignment="Center"
                            Fill="{DynamicResource Border.Default}" />
             </Grid>
-            <Grid Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+            <Grid Grid.Column="1"
+                  Margin="10,0,0,0"
+                  VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -100,8 +104,10 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Horizontal" TargetType="{x:Type ctl:StepperItem}">
-        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
+    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Horizontal"
+                     TargetType="{x:Type ctl:StepperItem}">
+        <Grid x:Name="RootGrid"
+              SnapsToDevicePixels="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -147,7 +153,8 @@
                            Height="5"
                            Fill="{DynamicResource Border.Default}" />
             </Grid>
-            <Grid Grid.Row="1" HorizontalAlignment="Center">
+            <Grid Grid.Row="1"
+                  HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -192,19 +199,23 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="StepperItem.Style.Basic" TargetType="ctl:StepperItem">
+    <Style x:Key="StepperItem.Style.Basic"
+           TargetType="ctl:StepperItem">
         <Setter Property="MinWidth" Value="100" />
         <Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Horizontal}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}" Value="Vertical">
+            <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}"
+                         Value="Vertical">
                 <Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Vertical}" />
                 <Setter Property="MinHeight" Value="100" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    <Style BasedOn="{StaticResource StepperItem.Style.Basic}" TargetType="ctl:StepperItem" />
+    <Style BasedOn="{StaticResource StepperItem.Style.Basic}"
+           TargetType="ctl:StepperItem" />
 
-    <Style x:Key="Stepper.Style.Basic" TargetType="{x:Type ctl:Stepper}">
+    <Style x:Key="Stepper.Style.Basic"
+           TargetType="{x:Type ctl:Stepper}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:Stepper}">
@@ -226,5 +237,6 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource Stepper.Style.Basic}" TargetType="ctl:Stepper" />
+    <Style BasedOn="{StaticResource Stepper.Style.Basic}"
+           TargetType="ctl:Stepper" />
 </ResourceDictionary>

@@ -131,24 +131,24 @@ public class TransitionBox : ContentControl
             return;
         }
 
-        // 准备新旧内容
+        // 准备新旧内容 - 这里是关键修改点
         _oldContentPresenter.Content = oldContent;
         _oldContentPresenter.Visibility = Visibility.Visible;
         _oldContentPresenter.Opacity = 1.0;
 
-        // 预先准备新内容，但先保持不可见
+        // 预先准备新内容，但保持不可见状态
         _newContentPresenter.Content = newContent;
+        // 先将新内容设为不可见，避免布局时出现闪烁
+        _newContentPresenter.Visibility = Visibility.Hidden;
+
+        // 强制一次布局更新
+        this.UpdateLayout();
+
+        // 设置新内容的起始状态，但仍保持在视觉树中
         _newContentPresenter.Visibility = Visibility.Visible;
         _newContentPresenter.Opacity = 0;
 
-        // 强制一次布局更新，确保所有内容都被正确测量
-        this.UpdateLayout();
-
-        // 在布局更新后，使用Dispatcher延迟一帧开始动画
-        Dispatcher.BeginInvoke(new Action(() =>
-        {
-            // 执行过渡动画
-            Transition.StartTransition(this, _oldContentPresenter, _newContentPresenter, TransitionDuration);
-        }), System.Windows.Threading.DispatcherPriority.Render);
+        // 立即开始动画，不使用 Dispatcher 延迟
+        Transition.StartTransition(this, _oldContentPresenter, _newContentPresenter, TransitionDuration);
     }
 }

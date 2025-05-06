@@ -10,30 +10,37 @@
     <Style x:Key="SideMenu.ToggleButtonStyle"
            TargetType="ToggleButton">
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Border x:Name="RootBorder"
-                            Padding="1"
-                            Background="Transparent"
-                            BorderThickness="0">
-                        <Path x:Name="Arrow"
-                              Width="16"
-                              Height="16"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Data="M908.70574649 831.22148693H134.16925867v-52.07344924h774.54813867v52.07344924zM531.80092872 442.96292125H130.86041885V390.889472h400.94050987zM531.80092872 634.17075485H130.86041885v-52.05597298h400.94050987zM901.4996992 245.91801458H126.9690368v-52.06762383h774.54231325v52.06762383zM669.95081672 518.02348658l225.4205383-150.2609408v300.53353244z"
-                              Fill="{DynamicResource Icon.Foreground.Default}"
-                              SnapsToDevicePixels="True"
-                              Stretch="Uniform" />
+                            Padding="3"
+                            CornerRadius="60"
+                            BorderBrush="{DynamicResource Border.Default}"
+                            SnapsToDevicePixels="True"
+                            Background="{DynamicResource Background.Default}"
+                            BorderThickness="1.5">
+                        <Grid>
+                            <Path x:Name="Arrow"
+                                  Width="16"
+                                  Height="16"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M461.994667 512l211.2 211.2-60.330667 60.373333L341.333333 512l271.530667-271.530667 60.330667 60.330667-211.2 211.2z"
+                                  Fill="{DynamicResource Icon.Foreground.Default}"
+                                  SnapsToDevicePixels="True"
+                                  Stretch="Uniform" />
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Arrow" Property="Data" Value="M908.70574649 831.22148693H134.16925867v-52.07344924h774.54813867v52.07344924zM531.80092872 442.96292125H130.86041885V390.889472h400.94050987zM531.80092872 634.17075485H130.86041885v-52.05597298h400.94050987zM901.4996992 245.91801458H126.9690368v-52.06762383h774.54231325v52.06762383zM669.95081672 668.29607822V367.76254578l225.4205383 150.2609408z" />
+                            <Setter TargetName="Arrow" Property="Data" Value="M562.005333 512l-211.2-211.2 60.330667-60.288L682.666667 512l-271.530667 271.530667-60.330667-60.373334 211.2-211.2z" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.TransparentLight}" />
-                            <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Foreground.Hover}" />
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Active}" />
+                            <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Foreground.Invert}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Pressed}" />
@@ -58,9 +65,12 @@
                                   Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{Binding Indent, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <ColumnDefinition Width="Auto" x:Name="IconColumn" />
-                                    <ColumnDefinition Width="*" x:Name="HeaderColumn" />
-                                    <ColumnDefinition Width="Auto" x:Name="ArrowColumn" />
+                                    <ColumnDefinition x:Name="IconColumn"
+                                                      Width="Auto" />
+                                    <ColumnDefinition x:Name="HeaderColumn"
+                                                      Width="*" />
+                                    <ColumnDefinition x:Name="ArrowColumn"
+                                                      Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter x:Name="IconContainer"
                                                   Grid.Column="1"
@@ -110,8 +120,9 @@
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                         </Trigger>
 
-                        <!-- 新增的触发器，检测父级 SideMenu 的 IsCompact 属性 -->
-                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" Value="True">
+                        <!--  新增的触发器，检测父级 SideMenu 的 IsCompact 属性  -->
+                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}"
+                                     Value="True">
                             <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="IconContainer" Property="HorizontalAlignment" Value="Center" />
@@ -150,18 +161,19 @@
                                        Grid.Row="0">
                                 <ContentPresenter Grid.Column="0"
                                                   Content="{TemplateBinding Header}" />
-                                <ToggleButton x:Name="ToggleCompactButton"
-                                              Grid.Column="1"
-                                              HorizontalAlignment="Right"
-                                              VerticalAlignment="Center"
-                                              IsChecked="{Binding IsCompact, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                              Style="{StaticResource SideMenu.ToggleButtonStyle}"
-                                              Visibility="{Binding Path=IsShowOpenButton, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             </DockPanel>
 
                             <ItemsPresenter Grid.Row="1" />
                             <ContentPresenter Grid.Row="2"
                                               Content="{TemplateBinding Footer}" />
+                            <ToggleButton x:Name="ToggleCompactButton"
+                                          Grid.RowSpan="3"
+                                          Margin="0,0,-15,0"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{Binding IsCompact, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                          Style="{StaticResource SideMenu.ToggleButtonStyle}"
+                                          Visibility="{Binding Path=IsShowOpenButton, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

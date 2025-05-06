@@ -1,9 +1,12 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="Card.Style.Basic.Shadow" TargetType="{x:Type ctl:Card}">
+    <Style x:Key="Card.Style.Basic.Shadow"
+           TargetType="{x:Type ctl:Card}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
@@ -17,8 +20,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:Card}">
                     <Grid>
-                        <Border x:Name="PART_Shadow" Margin="0,0,5,5" Background="{DynamicResource Shadow.Default}" />
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border x:Name="PART_Shadow"
+                                Margin="0,0,5,5"
+                                Background="{DynamicResource Shadow.Default}" />
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -72,11 +79,15 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Card.Style.Basic" BasedOn="{StaticResource Card.Style.Basic.Shadow}" TargetType="{x:Type ctl:Card}">
+    <Style x:Key="Card.Style.Basic"
+           BasedOn="{StaticResource Card.Style.Basic.Shadow}"
+           TargetType="{x:Type ctl:Card}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:Card}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -129,5 +140,6 @@
     </Style>
 
     <!--  Default Style  -->
-    <Style BasedOn="{StaticResource Card.Style.Basic.Shadow}" TargetType="{x:Type ctl:Card}" />
+    <Style BasedOn="{StaticResource Card.Style.Basic.Shadow}"
+           TargetType="{x:Type ctl:Card}" />
 </ResourceDictionary>

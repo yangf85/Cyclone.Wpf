@@ -7,7 +7,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="RadioButton.ControlTemplate.Basic" TargetType="RadioButton">
+    <ControlTemplate x:Key="RadioButton.ControlTemplate.Basic"
+                     TargetType="RadioButton">
         <StackPanel Margin="{TemplateBinding Padding}"
                     Background="Transparent"
                     Orientation="Horizontal"
@@ -28,8 +29,12 @@
                          Fill="{DynamicResource Icon.Foreground.Checked}"
                          Visibility="{Binding Path=IsChecked, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
             </Grid>
-            <Grid Name="ContentGrid" Margin="5,0,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                <ContentPresenter x:Name="PART_Content" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
+            <Grid Name="ContentGrid"
+                  Margin="5,0,0,0"
+                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentPresenter x:Name="PART_Content"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Content="{TemplateBinding Content}" />
             </Grid>
         </StackPanel>
         <ControlTemplate.Triggers>
@@ -60,10 +65,13 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="RadioButton.Style.Basic" BasedOn="{StaticResource Control.Style.Basic}" TargetType="RadioButton">
+    <Style x:Key="RadioButton.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="RadioButton">
         <Setter Property="Template" Value="{StaticResource RadioButton.ControlTemplate.Basic}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
-    <Style BasedOn="{StaticResource RadioButton.Style.Basic}" TargetType="RadioButton" />
+    <Style BasedOn="{StaticResource RadioButton.Style.Basic}"
+           TargetType="RadioButton" />
 </ResourceDictionary>

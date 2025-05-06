@@ -10,12 +10,16 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <cy:FadeTransition x:Key="FadeTransition" />
-        <cy:SlideTransition x:Key="SlideLeftToRight" Direction="LeftToRight" />
-        <cy:SlideTransition x:Key="SlideRightToLeft" Direction="RightToLeft" />
-        <cy:SlideTransition x:Key="SlideTopToBottom" Direction="TopToBottom" />
-        <cy:SlideTransition x:Key="SlideBottomToTop" Direction="BottomToTop" />
+        <cy:SlideTransition x:Key="SlideLeftToRight"
+                            Direction="LeftToRight" />
+        <cy:SlideTransition x:Key="SlideRightToLeft"
+                            Direction="RightToLeft" />
+        <cy:SlideTransition x:Key="SlideTopToBottom"
+                            Direction="TopToBottom" />
+        <cy:SlideTransition x:Key="SlideBottomToTop"
+                            Direction="BottomToTop" />
         <cy:ScaleTransition x:Key="ScaleTransition" />
-        <cy:ScaleTransition x:Key="FilpTransition" />
+        <cy:FlipTransition x:Key="FlipTransition" />
 
         <!--  页面内容  -->
         <Border x:Key="Page1"
@@ -85,29 +89,48 @@
                     Margin="20,0,20,20"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-            <GroupBox Padding="10,5" Header="Content">
+            <GroupBox Padding="10,5"
+                      Header="Content">
                 <StackPanel Orientation="Horizontal">
                     <RadioButton Margin="0,0,10,0"
                                  Checked="Page1_Checked"
                                  Content="Page 1"
                                  IsChecked="True" />
-                    <RadioButton Margin="0,0,10,0" Checked="Page2_Checked" Content="Page 2" />
-                    <RadioButton Checked="Page3_Checked" Content="Page 3" />
+                    <RadioButton Margin="0,0,10,0"
+                                 Checked="Page2_Checked"
+                                 Content="Page 2" />
+                    <RadioButton Checked="Page3_Checked"
+                                 Content="Page 3" />
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Margin="20,0,0,0" Padding="10,5" Header="Transition Effect">
-                <ComboBox x:Name="TransitionSelector" Width="150" SelectionChanged="TransitionSelector_SelectionChanged">
-                    <ComboBoxItem Content="Fade" IsSelected="True" Tag="{StaticResource FadeTransition}" />
-                    <ComboBoxItem Content="Slide (Left → Right)" Tag="{StaticResource SlideLeftToRight}" />
-                    <ComboBoxItem Content="Slide (Right → Left)" Tag="{StaticResource SlideRightToLeft}" />
-                    <ComboBoxItem Content="Slide (Top → Bottom)" Tag="{StaticResource SlideTopToBottom}" />
-                    <ComboBoxItem Content="Slide (Bottom → Top)" Tag="{StaticResource SlideBottomToTop}" />
-                    <ComboBoxItem Content="Filp" Tag="{StaticResource FilpTransition}" />
+            <GroupBox Margin="20,0,0,0"
+                      Padding="10,5"
+                      Header="Transition Effect">
+                <ComboBox x:Name="TransitionSelector"
+                          Width="150"
+                          SelectionChanged="TransitionSelector_SelectionChanged">
+                    <ComboBoxItem Content="Fade"
+                                  IsSelected="True"
+                                  Tag="{StaticResource FadeTransition}" />
+                    <ComboBoxItem Content="Slide (Left → Right)"
+                                  Tag="{StaticResource SlideLeftToRight}" />
+                    <ComboBoxItem Content="Slide (Right → Left)"
+                                  Tag="{StaticResource SlideRightToLeft}" />
+                    <ComboBoxItem Content="Slide (Top → Bottom)"
+                                  Tag="{StaticResource SlideTopToBottom}" />
+                    <ComboBoxItem Content="Slide (Bottom → Top)"
+                                  Tag="{StaticResource SlideBottomToTop}" />
+                    <ComboBoxItem Content="Filp"
+                                  Tag="{StaticResource FlipTransition}" />
+                    <ComboBoxItem Content="Scale"
+                                  Tag="{StaticResource ScaleTransition}" />
                 </ComboBox>
             </GroupBox>
 
-            <GroupBox Margin="20,0,0,0" Padding="10,5" Header="Duration (ms)">
+            <GroupBox Margin="20,0,0,0"
+                      Padding="10,5"
+                      Header="Duration (ms)">
                 <Slider x:Name="DurationSlider"
                         Width="150"
                         IsSnapToTickEnabled="True"
