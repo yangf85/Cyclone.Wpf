@@ -1,16 +1,17 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ColorPicker.Slider.Track.RepeatButton.Style" TargetType="RepeatButton">
+    <Style x:Key="ColorPicker.Slider.Track.RepeatButton.Style"
+           TargetType="RepeatButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid x:Name="RootBorder" Background="Transparent">
+                    <Grid x:Name="RootBorder"
+                          Background="Transparent">
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -23,15 +24,15 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ColorPicker.Slider.Track.Thumb.Style" TargetType="Thumb">
+    <Style x:Key="ColorPicker.Slider.Track.Thumb.Style"
+           TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{DynamicResource Background.Default}"
-                        BorderBrush="{DynamicResource Border.Active}"
-                        BorderThickness="{DynamicResource BorderThickness.Thin}" />
+                    <Border x:Name="RootBorder"
+                            Background="{DynamicResource Background.Default}"
+                            BorderBrush="{DynamicResource Border.Active}"
+                            BorderThickness="{DynamicResource BorderThickness.Thin}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
@@ -50,23 +51,19 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="AutoToolTipPlacement" Value="BottomRight" />
         <Setter Property="AutoToolTipPrecision" Value="2" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorOpacitySlider}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
-                                    <DrawingBrush
-                                        TileMode="Tile"
-                                        Viewport="0,0,8,8"
-                                        ViewportUnits="Absolute">
+                                    <DrawingBrush TileMode="Tile"
+                                                  Viewport="0,0,8,8"
+                                                  ViewportUnits="Absolute">
                                         <DrawingBrush.Drawing>
                                             <DrawingGroup>
                                                 <GeometryDrawing Brush="{DynamicResource Alternation.Dark}">
@@ -95,15 +92,19 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track x:Name="PART_Track"
+                                   Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.DecreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.IncreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
+                                    <Thumb Width="12"
+                                           Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -124,12 +125,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorBrightSlider}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -140,15 +139,19 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track x:Name="PART_Track"
+                                   Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.DecreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.IncreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
+                                    <Thumb Width="12"
+                                           Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -169,12 +172,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorSaturationSlider}">
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -184,15 +185,19 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track x:Name="PART_Track"
+                                   Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.DecreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.IncreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
+                                    <Thumb Width="12"
+                                           Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -201,7 +206,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <Style TargetType="{x:Type ctl:ColorHueSlider}">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
@@ -214,10 +218,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorHueSlider}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -232,15 +235,19 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track x:Name="PART_Track"
+                                   Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.DecreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
+                                    <RepeatButton Command="Slider.IncreaseLarge"
+                                                  Style="{StaticResource ColorPicker.Slider.Track.RepeatButton.Style}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
+                                    <Thumb Width="12"
+                                           Style="{StaticResource ColorPicker.Slider.Track.Thumb.Style}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -259,12 +266,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorRegion}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Border x:Name="PART_ColorArea" ClipToBounds="True">
+                            <Border x:Name="PART_ColorArea"
+                                    ClipToBounds="True">
                                 <Border.Background>
                                     <LinearGradientBrush x:Name="SaturationGradient" StartPoint="0,0" EndPoint="1,0">
                                         <GradientStop Offset="0" Color="White" />
@@ -281,14 +288,14 @@
                                 </Rectangle>
                             </Border>
                             <Canvas>
-                                <Ellipse
-                                    x:Name="PART_Selector"
-                                    Width="12"
-                                    Height="12"
-                                    Stroke="White"
-                                    StrokeThickness="1">
+                                <Ellipse x:Name="PART_Selector"
+                                         Width="12"
+                                         Height="12"
+                                         Stroke="White"
+                                         StrokeThickness="1">
                                     <Ellipse.Effect>
-                                        <DropShadowEffect Opacity="0.5" ShadowDepth="1" />
+                                        <DropShadowEffect Opacity="0.5"
+                                                          ShadowDepth="1" />
                                     </Ellipse.Effect>
                                 </Ellipse>
                             </Canvas>
@@ -301,53 +308,84 @@
     </Style>
 
     <Style TargetType="{x:Type ctl:ColorEyedropper}">
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorEyedropper}">
-                    <Button
-                        Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                        Height="{StaticResource Height.Horizontal.Control}"
-                        Background="{StaticResource Background.Default}"
-                        BorderBrush="{StaticResource Border.Default}"
-                        Command="{x:Static ctl:ColorEyedropper.PickColorCommand}"
-                        Foreground="{StaticResource Foreground.Default}">
-                        <Path
-                            Margin="3"
-                            Data="M883.34331703 140.80691492A167.59875575 167.59875575 0 0 0 763.96901502 91.35055923c-45.06958293 0-87.43499091 17.54709096-119.25411646 49.39626291l-137.13171769 137.22185685-56.75762811-56.78767451a30.6473164 30.6473164 0 1 0-43.32689241 43.35693879l78.18070321 78.2107496 0.24037112 0.30046389 7.12099409 7.09094771-297.1587835 297.36910824a127.09622388 127.09622388 0 0 0-35.84534164 110.6908957L113.28442293 805.01238188A74.27467268 74.27467268 0 0 0 91.35055923 857.86397947c-0.06009278 19.83061649 7.81206104 38.88002689 21.87377093 52.8515976a74.21457992 74.21457992 0 0 0 52.88164397 21.9338637h0.0300464c19.83061649 0.06009278 38.81993411-7.81206104 52.76145842-21.90381731l46.57190237-46.5118096a127.33659501 127.33659501 0 0 0 111.32186987-35.72515608l297.18882989-297.33906184 7.15104049 7.1510405c0.09013917 0.12018555 0.24037111 0.21032472 0.36055667 0.30046389l78.12061042 78.12061042a30.58722362 30.58722362 0 0 0 52.28071621-21.6634462c0-8.11252493-3.21496358-15.92458597-8.98387018-21.6634462l-56.75762813-56.7876745 137.19181047-137.19181047a168.98088964 168.98088964 0 0 0 0-238.62841846zM333.46435879 785.151719a66.40251885 66.40251885 0 0 1-64.50959639 17.06634874 30.58722362 30.58722362 0 0 0-31.18815139 3.57552024c-1.0516236 0.8112525-2.1032472 1.65255138-3.12482442 2.55394305L175.54054016 867.44877744a13.28050377 13.28050377 0 0 1-9.40451963 3.90603053 13.4607821 13.4607821 0 0 1-9.5247052-22.9854873l57.08813839-57.14823117c0.39060305-0.33051028 4.35672634-4.68723663 5.2881644-6.03932411 0.42064944-0.60092777 2.16333998-3.63561302 2.61403581-4.59709746a56.18674673 56.18674673 0 0 0 1.80278332-4.95765412c0.42064944-1.56241221 0.90139166-5.10788607 0.93143804-5.25811801a30.6473164 30.6473164 0 0 0-1.98306164-14.33212739 66.22224053 66.22224053 0 0 1 16.85602401-65.2006633l297.15878352-297.30901546 94.2855675 94.28556751-297.18882989 297.33906184z m506.52201945-449.1033708l-137.16176407 137.22185686-151.88449451-151.94458728 137.13171769-137.22185685c40.56262465-40.56262465 111.32186985-40.53257825 151.91454089 0.06009276a107.56607128 107.56607128 0 0 1 0 151.88449451z"
-                            Fill="Red"
-                            Stretch="Uniform" />
-                    </Button>
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle x:Name="SelectedColorIndicator"
+                                       MinWidth="64"
+                                       Visibility="Collapsed">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Path=SelectedColor, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Button x:Name="PART_ExecuteButton"
+                                    Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                                    Height="{TemplateBinding Height}"
+                                    Command="{x:Static ctl:ColorEyedropper.PickColorCommand}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid x:Name="RootGrid"
+                                              Background="{TemplateBinding Background}">
+                                            <ContentPresenter />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource Background.Hover}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Path Margin="5"
+                                      Data="M883.34331703 140.80691492A167.59875575 167.59875575 0 0 0 763.96901502 91.35055923c-45.06958293 0-87.43499091 17.54709096-119.25411646 49.39626291l-137.13171769 137.22185685-56.75762811-56.78767451a30.6473164 30.6473164 0 1 0-43.32689241 43.35693879l78.18070321 78.2107496 0.24037112 0.30046389 7.12099409 7.09094771-297.1587835 297.36910824a127.09622388 127.09622388 0 0 0-35.84534164 110.6908957L113.28442293 805.01238188A74.27467268 74.27467268 0 0 0 91.35055923 857.86397947c-0.06009278 19.83061649 7.81206104 38.88002689 21.87377093 52.8515976a74.21457992 74.21457992 0 0 0 52.88164397 21.9338637h0.0300464c19.83061649 0.06009278 38.81993411-7.81206104 52.76145842-21.90381731l46.57190237-46.5118096a127.33659501 127.33659501 0 0 0 111.32186987-35.72515608l297.18882989-297.33906184 7.15104049 7.1510405c0.09013917 0.12018555 0.24037111 0.21032472 0.36055667 0.30046389l78.12061042 78.12061042a30.58722362 30.58722362 0 0 0 52.28071621-21.6634462c0-8.11252493-3.21496358-15.92458597-8.98387018-21.6634462l-56.75762813-56.7876745 137.19181047-137.19181047a168.98088964 168.98088964 0 0 0 0-238.62841846zM333.46435879 785.151719a66.40251885 66.40251885 0 0 1-64.50959639 17.06634874 30.58722362 30.58722362 0 0 0-31.18815139 3.57552024c-1.0516236 0.8112525-2.1032472 1.65255138-3.12482442 2.55394305L175.54054016 867.44877744a13.28050377 13.28050377 0 0 1-9.40451963 3.90603053 13.4607821 13.4607821 0 0 1-9.5247052-22.9854873l57.08813839-57.14823117c0.39060305-0.33051028 4.35672634-4.68723663 5.2881644-6.03932411 0.42064944-0.60092777 2.16333998-3.63561302 2.61403581-4.59709746a56.18674673 56.18674673 0 0 0 1.80278332-4.95765412c0.42064944-1.56241221 0.90139166-5.10788607 0.93143804-5.25811801a30.6473164 30.6473164 0 0 0-1.98306164-14.33212739 66.22224053 66.22224053 0 0 1 16.85602401-65.2006633l297.15878352-297.30901546 94.2855675 94.28556751-297.18882989 297.33906184z m506.52201945-449.1033708l-137.16176407 137.22185686-151.88449451-151.94458728 137.13171769-137.22185685c40.56262465-40.56262465 111.32186985-40.53257825 151.91454089 0.06009276a107.56607128 107.56607128 0 0 1 0 151.88449451z"
+                                      Fill="{DynamicResource Icon.Foreground.Default}"
+                                      Stretch="Uniform" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsShowSelectedColor" Value="True">
+                            <Setter TargetName="SelectedColorIndicator" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-
     <!--  颜色项数据模板  -->
     <DataTemplate x:Key="ColorPalette.ItemTemplate">
-        <Border
-            x:Name="RootBorder"
-            BorderThickness="0"
-            Cursor="Hand"
-            ToolTipService.BetweenShowDelay="0"
-            ToolTipService.InitialShowDelay="500">
+        <Border x:Name="RootBorder"
+                BorderThickness="0"
+                Cursor="Hand"
+                ToolTipService.BetweenShowDelay="0"
+                ToolTipService.InitialShowDelay="500">
             <Border.Background>
                 <SolidColorBrush Color="{Binding Color}" />
             </Border.Background>
             <Border.ToolTip>
                 <StackPanel>
-                    <TextBlock
-                        Margin="0,0,0,4"
-                        FontStyle="Italic"
-                        Text="{Binding Category}" />
+                    <TextBlock Margin="0,0,0,4"
+                               FontStyle="Italic"
+                               Text="{Binding Category}" />
                     <TextBlock Text="{Binding RGB}" />
-                    <TextBlock FontFamily="Consolas" Text="{Binding HEX}" />
+                    <TextBlock FontFamily="Consolas"
+                               Text="{Binding HEX}" />
                     <TextBlock Text="{Binding HSL}" />
                 </StackPanel>
             </Border.ToolTip>
         </Border>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
+                         Value="True">
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
                 <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
             </DataTrigger>
@@ -361,7 +399,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="RootBorder" Padding="1">
+                    <Border x:Name="RootBorder"
+                            Padding="1">
                         <ContentPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -388,10 +427,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorPalette}">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <ItemsPresenter />
                     </Border>
                 </ControlTemplate>
@@ -400,13 +438,10 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}" Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
+                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}"
+                                 Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-
 </ResourceDictionary>

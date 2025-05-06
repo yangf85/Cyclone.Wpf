@@ -25,6 +25,15 @@ public class AdvancedWindow : System.Windows.Window
         DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedWindow), new FrameworkPropertyMetadata(typeof(AdvancedWindow)));
     }
 
+    public AdvancedWindow()
+    {
+        CommandBindings.Add(new CommandBinding(CloseCommand, OnClose, OnCanClose));
+        CommandBindings.Add(new CommandBinding(MaximizeCommand, OnMaximize, OnCanMaximize));
+        CommandBindings.Add(new CommandBinding(RestoreCommand, OnRestore, OnCanRestore));
+        CommandBindings.Add(new CommandBinding(MinimizeCommand, OnMinimize, OnCanMinimize));
+        CommandBindings.Add(new CommandBinding(TopmostCommand, OnTopmost, OnCanTopmost));
+    }
+
     private const string PART_CloseButton = nameof(PART_CloseButton);
 
     private const string PART_RestoreButton = nameof(PART_RestoreButton);
@@ -123,17 +132,141 @@ public class AdvancedWindow : System.Windows.Window
 
     #endregion FunctionalZone
 
+    #region Close
+
+    public static RoutedCommand CloseCommand { get; private set; } = new RoutedCommand("Close", typeof(AdvancedWindow));
+
+    public static void OnClose(object sender, ExecutedRoutedEventArgs e)
+    {
+        var window = sender as Window;
+        window?.Close();
+    }
+
+    public static void OnCanClose(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.CanExecute = window.Visibility == Visibility.Visible && window.IsActive;
+            return;
+        }
+
+        e.CanExecute = false;
+    }
+
+    #endregion Close
+
+    #region Maximize
+
+    public static void OnMaximize(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            window.WindowState = (window.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
+        }
+    }
+
+    public static void OnCanMaximize(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.CanExecute = window.Visibility == Visibility.Visible &&
+                           window.WindowState != WindowState.Maximized &&
+                           window.IsActive;
+            return;
+        }
+
+        e.CanExecute = false;
+    }
+
+    public static RoutedCommand MaximizeCommand { get; private set; } = new RoutedCommand("Maximize", typeof(AdvancedWindow));
+
+    #endregion Maximize
+
+    #region Restore
+
+    public static void OnCanRestore(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.CanExecute = window.Visibility == Visibility.Visible &&
+                           window.WindowState != WindowState.Normal &&
+                           window.IsActive;
+            return;
+        }
+
+        e.CanExecute = false;
+    }
+
+    public static void OnRestore(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            window.WindowState = (window.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized;
+        }
+    }
+
+    public static RoutedCommand RestoreCommand { get; private set; } = new RoutedCommand("Restore", typeof(AdvancedWindow));
+
+    #endregion Restore
+
+    #region Minimize
+
+    public static void OnCanMinimize(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.CanExecute = window.Visibility == Visibility.Visible &&
+                           window.WindowState != WindowState.Minimized &&
+                           window.IsActive;
+            return;
+        }
+
+        e.CanExecute = false;
+    }
+
+    public static void OnMinimize(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            window.WindowState = (window.WindowState == WindowState.Minimized) ? WindowState.Normal : WindowState.Minimized;
+        }
+    }
+
+    public static RoutedCommand MinimizeCommand { get; private set; } = new RoutedCommand("Minimize", typeof(AdvancedWindow));
+
+    #endregion Minimize
+
+    #region Topmost
+
+    public static void OnCanTopmost(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.CanExecute = window.Visibility == Visibility.Visible && window.IsActive;
+            return;
+        }
+
+        e.CanExecute = false;
+    }
+
+    public static void OnTopmost(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (e.Parameter is not ToggleButton button) { return; }
+
+        if (sender is not Window window) { return; }
+
+        window.Topmost = button.IsChecked ?? false;
+    }
+
+    public static RoutedCommand TopmostCommand { get; private set; } = new RoutedCommand("Topmost", typeof(AdvancedWindow));
+
+    #endregion Topmost
+
     #region Override
 
     protected override void OnInitialized(EventArgs e)
     {
         base.OnInitialized(e);
-
-        CommandBindings.Add(new CommandBinding(CaptionButtonCommand.CloseCommand, CaptionButtonCommand.OnClose, CaptionButtonCommand.OnCanClose));
-        CommandBindings.Add(new CommandBinding(CaptionButtonCommand.MaximizeCommand, CaptionButtonCommand.OnMaximize, CaptionButtonCommand.OnCanMaximize));
-        CommandBindings.Add(new CommandBinding(CaptionButtonCommand.RestoreCommand, CaptionButtonCommand.OnRestore, CaptionButtonCommand.OnCanRestore));
-        CommandBindings.Add(new CommandBinding(CaptionButtonCommand.MinimizeCommand, CaptionButtonCommand.OnMinimize, CaptionButtonCommand.OnCanMinimize));
-        CommandBindings.Add(new CommandBinding(CaptionButtonCommand.TopmostCommand, CaptionButtonCommand.OnTopmost, CaptionButtonCommand.OnCanTopmost));
     }
 
     public override void OnApplyTemplate()

@@ -44,6 +44,9 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial double Hue { get; set; }
 
+        [ObservableProperty]
+        public partial Color Color { get; set; } = Colors.Red;
+
         [RelayCommand]
         void ShowColorPaletteColor(Color? color)
         {
