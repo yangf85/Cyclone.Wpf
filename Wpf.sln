@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyclone.Wpf", "Cyclone.Wpf\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyclone.Wpf.Demo", "Cyclone.Wpf.Demo\Cyclone.Wpf.Demo.csproj", "{8285E0E4-F5FD-4461-AF7B-43EA8F7B014C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyclon.Wpf.Themes", "Cyclon.Wpf.Themes\Cyclon.Wpf.Themes.csproj", "{BC396C9C-B837-43A3-8DFC-7C252ECC6F6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,15 @@ Global
 		{8285E0E4-F5FD-4461-AF7B-43EA8F7B014C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8285E0E4-F5FD-4461-AF7B-43EA8F7B014C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8285E0E4-F5FD-4461-AF7B-43EA8F7B014C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC396C9C-B837-43A3-8DFC-7C252ECC6F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC396C9C-B837-43A3-8DFC-7C252ECC6F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC396C9C-B837-43A3-8DFC-7C252ECC6F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC396C9C-B837-43A3-8DFC-7C252ECC6F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {967C5F83-6479-4B18-A9F7-2187BCBF58A6}
 	EndGlobalSection
 EndGlobal

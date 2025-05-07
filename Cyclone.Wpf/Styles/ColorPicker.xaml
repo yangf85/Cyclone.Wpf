@@ -1,18 +1,21 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  通用滑块轨道按钮样式  -->
-    <Style x:Key="ColorSelector.Slider.Track.RepeatButton"
-           TargetType="RepeatButton">
+    <Style
+        x:Key="ColorSelector.Slider.Track.RepeatButton"
+        TargetType="RepeatButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid x:Name="RootBorder"
-                          Background="Transparent">
+                    <Grid
+                        x:Name="RootBorder"
+                        Background="Transparent">
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -26,15 +29,17 @@
     </Style>
 
     <!--  通用滑块拇指样式  -->
-    <Style x:Key="ColorSelector.Slider.Track.Thumb"
-           TargetType="Thumb">
+    <Style
+        x:Key="ColorSelector.Slider.Track.Thumb"
+        TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border x:Name="RootBorder"
-                            Background="{DynamicResource Background.Default}"
-                            BorderBrush="{DynamicResource Border.Active}"
-                            BorderThickness="{DynamicResource BorderThickness.Thin}" />
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{DynamicResource Background.Default}"
+                        BorderBrush="{DynamicResource Border.Active}"
+                        BorderThickness="{DynamicResource BorderThickness.Thin}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
@@ -46,8 +51,9 @@
     </Style>
 
     <!--  基础滑块样式 - 其他样式将基于此样式  -->
-    <Style x:Key="ColorSelector.Slider.Base"
-           TargetType="Slider">
+    <Style
+        x:Key="ColorSelector.Slider.Base"
+        TargetType="Slider">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
@@ -58,9 +64,10 @@
     </Style>
 
     <!--  1. 色相滑块样式  -->
-    <Style x:Key="ColorSelector.Slider.Hue"
-           TargetType="Slider"
-           BasedOn="{StaticResource ColorSelector.Slider.Base}">
+    <Style
+        x:Key="ColorSelector.Slider.Hue"
+        BasedOn="{StaticResource ColorSelector.Slider.Base}"
+        TargetType="Slider">
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="360" />
         <Setter Property="SmallChange" Value="1" />
@@ -69,9 +76,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -86,19 +94,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track"
-                                   Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12"
-                                           Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -109,9 +121,10 @@
     </Style>
 
     <!--  2. 透明度滑块样式  -->
-    <Style x:Key="ColorSelector.Slider.Opacity"
-           TargetType="Slider"
-           BasedOn="{StaticResource ColorSelector.Slider.Base}">
+    <Style
+        x:Key="ColorSelector.Slider.Opacity"
+        BasedOn="{StaticResource ColorSelector.Slider.Base}"
+        TargetType="Slider">
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
         <Setter Property="SmallChange" Value="0.01" />
@@ -120,16 +133,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
-                                    <DrawingBrush TileMode="Tile"
-                                                  Viewport="0,0,10,10"
-                                                  ViewportUnits="Absolute">
+                                    <DrawingBrush
+                                        TileMode="Tile"
+                                        Viewport="0,0,10,10"
+                                        ViewportUnits="Absolute">
                                         <DrawingBrush.Drawing>
                                             <DrawingGroup>
                                                 <GeometryDrawing Brush="{DynamicResource Alternation.Dark}">
@@ -158,19 +173,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track"
-                                   Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12"
-                                           Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -181,9 +200,10 @@
     </Style>
 
     <!--  3. 亮度滑块样式  -->
-    <Style x:Key="ColorSelector.Slider.Brightness"
-           TargetType="Slider"
-           BasedOn="{StaticResource ColorSelector.Slider.Base}">
+    <Style
+        x:Key="ColorSelector.Slider.Brightness"
+        BasedOn="{StaticResource ColorSelector.Slider.Base}"
+        TargetType="Slider">
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
         <Setter Property="SmallChange" Value="0.01" />
@@ -192,10 +212,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -206,19 +227,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track"
-                                   Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12"
-                                           Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -229,9 +254,10 @@
     </Style>
 
     <!--  4. 饱和度滑块样式  -->
-    <Style x:Key="ColorSelector.Slider.Saturation"
-           TargetType="Slider"
-           BasedOn="{StaticResource ColorSelector.Slider.Base}">
+    <Style
+        x:Key="ColorSelector.Slider.Saturation"
+        BasedOn="{StaticResource ColorSelector.Slider.Base}"
+        TargetType="Slider">
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
         <Setter Property="SmallChange" Value="0.01" />
@@ -240,10 +266,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Rectangle>
                                 <Rectangle.Fill>
@@ -253,19 +280,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track"
-                                   Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge"
-                                                  Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12"
-                                           Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -277,19 +308,21 @@
 
     <Style TargetType="{x:Type ctl:ColorRegion}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="MinHeight" Value="200" />
-        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="100" />
+        <Setter Property="MinWidth" Value="100" />
         <Setter Property="BorderBrush" Value="{StaticResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Thin}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorRegion}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Border x:Name="PART_ColorArea"
-                                    ClipToBounds="True">
+                            <Border
+                                x:Name="PART_ColorArea"
+                                ClipToBounds="True">
                                 <Border.Background>
                                     <LinearGradientBrush x:Name="SaturationGradient" StartPoint="0,0" EndPoint="1,0">
                                         <GradientStop Offset="0" Color="White" />
@@ -306,14 +339,16 @@
                                 </Rectangle>
                             </Border>
                             <Canvas>
-                                <Ellipse x:Name="PART_Selector"
-                                         Width="12"
-                                         Height="12"
-                                         Stroke="White"
-                                         StrokeThickness="1">
+                                <Ellipse
+                                    x:Name="PART_Selector"
+                                    Width="12"
+                                    Height="12"
+                                    Stroke="White"
+                                    StrokeThickness="1">
                                     <Ellipse.Effect>
-                                        <DropShadowEffect Opacity="0.5"
-                                                          ShadowDepth="1" />
+                                        <DropShadowEffect
+                                            Opacity="0.5"
+                                            ShadowDepth="1" />
                                     </Ellipse.Effect>
                                 </Ellipse>
                             </Canvas>
@@ -333,26 +368,30 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorEyedropper}">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <StackPanel Orientation="Horizontal">
-                            <Rectangle x:Name="SelectedColorIndicator"
-                                       MinWidth="64"
-                                       Visibility="Collapsed">
+                            <Rectangle
+                                x:Name="SelectedColorIndicator"
+                                MinWidth="64"
+                                Visibility="Collapsed">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="{Binding Path=SelectedColor, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Button x:Name="PART_ExecuteButton"
-                                    Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                                    Height="{TemplateBinding Height}"
-                                    Command="{x:Static ctl:ColorEyedropper.PickColorCommand}">
+                            <Button
+                                x:Name="PART_ExecuteButton"
+                                Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                                Height="{TemplateBinding Height}"
+                                Command="{x:Static ctl:ColorEyedropper.PickColorCommand}">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
-                                        <Grid x:Name="RootGrid"
-                                              Background="{TemplateBinding Background}">
+                                        <Grid
+                                            x:Name="RootGrid"
+                                            Background="{TemplateBinding Background}">
                                             <ContentPresenter />
                                         </Grid>
                                         <ControlTemplate.Triggers>
@@ -362,10 +401,11 @@
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Button.Template>
-                                <Path Margin="5"
-                                      Data="M883.34331703 140.80691492A167.59875575 167.59875575 0 0 0 763.96901502 91.35055923c-45.06958293 0-87.43499091 17.54709096-119.25411646 49.39626291l-137.13171769 137.22185685-56.75762811-56.78767451a30.6473164 30.6473164 0 1 0-43.32689241 43.35693879l78.18070321 78.2107496 0.24037112 0.30046389 7.12099409 7.09094771-297.1587835 297.36910824a127.09622388 127.09622388 0 0 0-35.84534164 110.6908957L113.28442293 805.01238188A74.27467268 74.27467268 0 0 0 91.35055923 857.86397947c-0.06009278 19.83061649 7.81206104 38.88002689 21.87377093 52.8515976a74.21457992 74.21457992 0 0 0 52.88164397 21.9338637h0.0300464c19.83061649 0.06009278 38.81993411-7.81206104 52.76145842-21.90381731l46.57190237-46.5118096a127.33659501 127.33659501 0 0 0 111.32186987-35.72515608l297.18882989-297.33906184 7.15104049 7.1510405c0.09013917 0.12018555 0.24037111 0.21032472 0.36055667 0.30046389l78.12061042 78.12061042a30.58722362 30.58722362 0 0 0 52.28071621-21.6634462c0-8.11252493-3.21496358-15.92458597-8.98387018-21.6634462l-56.75762813-56.7876745 137.19181047-137.19181047a168.98088964 168.98088964 0 0 0 0-238.62841846zM333.46435879 785.151719a66.40251885 66.40251885 0 0 1-64.50959639 17.06634874 30.58722362 30.58722362 0 0 0-31.18815139 3.57552024c-1.0516236 0.8112525-2.1032472 1.65255138-3.12482442 2.55394305L175.54054016 867.44877744a13.28050377 13.28050377 0 0 1-9.40451963 3.90603053 13.4607821 13.4607821 0 0 1-9.5247052-22.9854873l57.08813839-57.14823117c0.39060305-0.33051028 4.35672634-4.68723663 5.2881644-6.03932411 0.42064944-0.60092777 2.16333998-3.63561302 2.61403581-4.59709746a56.18674673 56.18674673 0 0 0 1.80278332-4.95765412c0.42064944-1.56241221 0.90139166-5.10788607 0.93143804-5.25811801a30.6473164 30.6473164 0 0 0-1.98306164-14.33212739 66.22224053 66.22224053 0 0 1 16.85602401-65.2006633l297.15878352-297.30901546 94.2855675 94.28556751-297.18882989 297.33906184z m506.52201945-449.1033708l-137.16176407 137.22185686-151.88449451-151.94458728 137.13171769-137.22185685c40.56262465-40.56262465 111.32186985-40.53257825 151.91454089 0.06009276a107.56607128 107.56607128 0 0 1 0 151.88449451z"
-                                      Fill="{DynamicResource Icon.Foreground.Default}"
-                                      Stretch="Uniform" />
+                                <Path
+                                    Margin="5"
+                                    Data="M883.34331703 140.80691492A167.59875575 167.59875575 0 0 0 763.96901502 91.35055923c-45.06958293 0-87.43499091 17.54709096-119.25411646 49.39626291l-137.13171769 137.22185685-56.75762811-56.78767451a30.6473164 30.6473164 0 1 0-43.32689241 43.35693879l78.18070321 78.2107496 0.24037112 0.30046389 7.12099409 7.09094771-297.1587835 297.36910824a127.09622388 127.09622388 0 0 0-35.84534164 110.6908957L113.28442293 805.01238188A74.27467268 74.27467268 0 0 0 91.35055923 857.86397947c-0.06009278 19.83061649 7.81206104 38.88002689 21.87377093 52.8515976a74.21457992 74.21457992 0 0 0 52.88164397 21.9338637h0.0300464c19.83061649 0.06009278 38.81993411-7.81206104 52.76145842-21.90381731l46.57190237-46.5118096a127.33659501 127.33659501 0 0 0 111.32186987-35.72515608l297.18882989-297.33906184 7.15104049 7.1510405c0.09013917 0.12018555 0.24037111 0.21032472 0.36055667 0.30046389l78.12061042 78.12061042a30.58722362 30.58722362 0 0 0 52.28071621-21.6634462c0-8.11252493-3.21496358-15.92458597-8.98387018-21.6634462l-56.75762813-56.7876745 137.19181047-137.19181047a168.98088964 168.98088964 0 0 0 0-238.62841846zM333.46435879 785.151719a66.40251885 66.40251885 0 0 1-64.50959639 17.06634874 30.58722362 30.58722362 0 0 0-31.18815139 3.57552024c-1.0516236 0.8112525-2.1032472 1.65255138-3.12482442 2.55394305L175.54054016 867.44877744a13.28050377 13.28050377 0 0 1-9.40451963 3.90603053 13.4607821 13.4607821 0 0 1-9.5247052-22.9854873l57.08813839-57.14823117c0.39060305-0.33051028 4.35672634-4.68723663 5.2881644-6.03932411 0.42064944-0.60092777 2.16333998-3.63561302 2.61403581-4.59709746a56.18674673 56.18674673 0 0 0 1.80278332-4.95765412c0.42064944-1.56241221 0.90139166-5.10788607 0.93143804-5.25811801a30.6473164 30.6473164 0 0 0-1.98306164-14.33212739 66.22224053 66.22224053 0 0 1 16.85602401-65.2006633l297.15878352-297.30901546 94.2855675 94.28556751-297.18882989 297.33906184z m506.52201945-449.1033708l-137.16176407 137.22185686-151.88449451-151.94458728 137.13171769-137.22185685c40.56262465-40.56262465 111.32186985-40.53257825 151.91454089 0.06009276a107.56607128 107.56607128 0 0 1 0 151.88449451z"
+                                    Fill="{DynamicResource Icon.Foreground.Default}"
+                                    Stretch="Uniform" />
                             </Button>
                         </StackPanel>
                     </Border>
@@ -391,16 +431,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorTextBox}">
-                    <Border x:Name="RootBorder"
-                            SnapsToDevicePixels="True"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Focusable="False"
-                                      HorizontalScrollBarVisibility="Hidden"
-                                      VerticalScrollBarVisibility="Hidden"
-                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <ScrollViewer
+                            x:Name="PART_ContentHost"
+                            Focusable="False"
+                            HorizontalScrollBarVisibility="Hidden"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            VerticalScrollBarVisibility="Hidden" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsInputValid" Value="False">
@@ -420,29 +462,33 @@
 
     <!--  颜色项数据模板  -->
     <DataTemplate x:Key="ColorPalette.ItemTemplate">
-        <Border x:Name="RootBorder"
-                BorderThickness="0"
-                Cursor="Hand"
-                ToolTipService.BetweenShowDelay="0"
-                ToolTipService.InitialShowDelay="500">
+        <Border
+            x:Name="RootBorder"
+            BorderThickness="0"
+            Cursor="Hand"
+            ToolTipService.BetweenShowDelay="0"
+            ToolTipService.InitialShowDelay="500">
             <Border.Background>
                 <SolidColorBrush Color="{Binding Color}" />
             </Border.Background>
             <Border.ToolTip>
                 <StackPanel>
-                    <TextBlock Margin="0,0,0,4"
-                               FontStyle="Italic"
-                               Text="{Binding Category}" />
+                    <TextBlock
+                        Margin="0,0,0,4"
+                        FontStyle="Italic"
+                        Text="{Binding Category}" />
                     <TextBlock Text="{Binding RGB}" />
-                    <TextBlock FontFamily="Consolas"
-                               Text="{Binding HEX}" />
+                    <TextBlock
+                        FontFamily="Consolas"
+                        Text="{Binding HEX}" />
                     <TextBlock Text="{Binding HSL}" />
                 </StackPanel>
             </Border.ToolTip>
         </Border>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
-                         Value="True">
+            <DataTrigger
+                Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
+                Value="True">
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
                 <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
             </DataTrigger>
@@ -452,12 +498,13 @@
     <!--  ListBoxItem 样式  -->
     <Style TargetType="ctl:ColorPaletteItem">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Item}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="RootBorder"
-                            Padding="1">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="1">
                         <ContentPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -478,15 +525,16 @@
     <!--  标准颜色面板样式  -->
     <Style TargetType="{x:Type ctl:ColorPalette}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="#CCCCCC" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ItemTemplate" Value="{StaticResource ColorPalette.ItemTemplate}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorPalette}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <ItemsPresenter />
                     </Border>
                 </ControlTemplate>
@@ -495,8 +543,9 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}"
-                                 Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
+                    <UniformGrid
+                        Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}"
+                        Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -513,239 +562,256 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorSelector}">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="5" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
 
                             <!--  左侧区域：主要控制区  -->
                             <Grid Grid.Column="0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="10" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="10" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="10" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="10" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <!--  颜色区域：饱和度/明度选择器  -->
-                                <ctl:ColorRegion x:Name="PART_ColorRegion"
-                                                 Grid.Row="0"
-                                                 Hue="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Hue}"
-                                                 Saturation="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Saturation}"
-                                                 Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value}" />
-
-                                <!--  色相(HUE)滑块  -->
-                                <Grid Grid.Row="2">
+                                <ctl:ColorRegion
+                                    x:Name="PART_ColorRegion"
+                                    Grid.Row="0"
+                                    Hue="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Hue}"
+                                    Saturation="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Saturation}"
+                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value}" />
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Text="HUE"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <Slider x:Name="PART_HueSlider"
-                                            Grid.Column="1"
-                                            Style="{StaticResource ColorSelector.Slider.Hue}"
-                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Hue}" />
-                                </Grid>
-
-                                <!--  透明度滑块  -->
-                                <Grid Grid.Row="4">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Text="透明度"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <Slider x:Name="PART_OpacitySlider"
-                                            Grid.Column="1"
-                                            Style="{StaticResource ColorSelector.Slider.Opacity}"
-                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AlphaValue}" />
-                                </Grid>
-
-                                <!--  亮度滑块  -->
-                                <Grid Grid.Row="6">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Text="亮度"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <Slider x:Name="PART_BrightSlider"
-                                            Grid.Column="1"
-                                            Style="{StaticResource ColorSelector.Slider.Brightness}"
-                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value}" />
-                                </Grid>
-
-                                <!--  饱和度滑块  -->
-                                <Grid Grid.Row="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Text="饱和度"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <Slider x:Name="PART_SaturationSlider"
-                                            Grid.Column="1"
-                                            Style="{StaticResource ColorSelector.Slider.Saturation}"
-                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Saturation}" />
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding HueLabel}" />
+                                    <Slider
+                                        x:Name="PART_HueSlider"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Margin="10,5,0,0"
+                                        Style="{StaticResource ColorSelector.Slider.Hue}"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Hue}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding AlphaLabel}" />
+                                    <Slider
+                                        x:Name="PART_OpacitySlider"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="10,5,0,0"
+                                        Style="{StaticResource ColorSelector.Slider.Opacity}"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AlphaValue}" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding BrightnessLabel}" />
+                                    <Slider
+                                        x:Name="PART_BrightSlider"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="10,5,0,0"
+                                        Style="{StaticResource ColorSelector.Slider.Brightness}"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value}" />
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding SaturationLabel}" />
+                                    <Slider
+                                        x:Name="PART_SaturationSlider"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="10,5,0,0"
+                                        Style="{StaticResource ColorSelector.Slider.Saturation}"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Saturation}" />
                                 </Grid>
                             </Grid>
 
                             <!--  右侧区域：快速选择与预览  -->
-                            <StackPanel Grid.Column="2"
-                                        Margin="10,0,0,0">
-                                <Grid>
+                            <Grid
+                                Grid.Column="2"
+                                Margin="10,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid
+                                    Grid.Row="0"
+                                    MinHeight="32">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="5" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--  颜色预览区  -->
-                                    <Border Grid.Column="0"
-                                            Height="40"
-                                            Margin="0,0,10,0"
-                                            BorderBrush="{DynamicResource Border.Default}"
-                                            BorderThickness="{DynamicResource BorderThickness.Thin}">
-                                        <Grid>
-                                            <!--  透明背景格子  -->
-                                            <Rectangle>
-                                                <Rectangle.Fill>
-                                                    <DrawingBrush TileMode="Tile"
-                                                                  Viewport="0,0,8,8"
-                                                                  ViewportUnits="Absolute">
-                                                        <DrawingBrush.Drawing>
-                                                            <DrawingGroup>
-                                                                <GeometryDrawing Brush="{DynamicResource Alternation.Dark}">
-                                                                    <GeometryDrawing.Geometry>
-                                                                        <RectangleGeometry Rect="0,0,8,8" />
-                                                                    </GeometryDrawing.Geometry>
-                                                                </GeometryDrawing>
-                                                                <GeometryDrawing Brush="{DynamicResource Alternation.Light}">
-                                                                    <GeometryDrawing.Geometry>
-                                                                        <GeometryGroup>
-                                                                            <RectangleGeometry Rect="0,0,4,4" />
-                                                                            <RectangleGeometry Rect="4,4,4,4" />
-                                                                        </GeometryGroup>
-                                                                    </GeometryDrawing.Geometry>
-                                                                </GeometryDrawing>
-                                                            </DrawingGroup>
-                                                        </DrawingBrush.Drawing>
-                                                    </DrawingBrush>
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                            <!--  当前颜色预览  -->
-                                            <Rectangle>
-                                                <Rectangle.Fill>
-                                                    <SolidColorBrush Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
-                                                </Rectangle.Fill>
-                                            </Rectangle>
+                                    <Grid Grid.Column="0">
 
-                                            <!--  颜色预览文本  -->
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Text="颜色预览"
-                                                       Foreground="{DynamicResource Foreground.Inverse}"
-                                                       FontSize="14" />
-                                        </Grid>
-                                    </Border>
+                                        <Rectangle>
+                                            <Rectangle.Fill>
+                                                <DrawingBrush
+                                                    TileMode="Tile"
+                                                    Viewport="0,0,10,10"
+                                                    ViewportUnits="Absolute">
+                                                    <DrawingBrush.Drawing>
+                                                        <DrawingGroup>
+                                                            <GeometryDrawing Brush="{DynamicResource Alternation.Dark}">
+                                                                <GeometryDrawing.Geometry>
+                                                                    <RectangleGeometry Rect="0,0,10,10" />
+                                                                </GeometryDrawing.Geometry>
+                                                            </GeometryDrawing>
+                                                            <GeometryDrawing Brush="{DynamicResource Alternation.Light}">
+                                                                <GeometryDrawing.Geometry>
+                                                                    <GeometryGroup>
+                                                                        <RectangleGeometry Rect="0,0,5,5" />
+                                                                        <RectangleGeometry Rect="5,5,5,5" />
+                                                                    </GeometryGroup>
+                                                                </GeometryDrawing.Geometry>
+                                                            </GeometryDrawing>
+                                                        </DrawingGroup>
+                                                    </DrawingBrush.Drawing>
+                                                </DrawingBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+
+                                        <Rectangle>
+                                            <Rectangle.Fill>
+                                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            Foreground="{DynamicResource Text.Invert}"
+                                            Text="{TemplateBinding ColorPreviewLabel}" />
+                                    </Grid>
 
                                     <!--  取色器  -->
-                                    <ctl:ColorEyedropper x:Name="PART_Eyedropper"
-                                                         Grid.Column="1"
-                                                         Width="40"
-                                                         Height="40"
-                                                         SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}"
-                                                         IsShowSelectedColor="False" />
+                                    <ctl:ColorEyedropper
+                                        x:Name="PART_Eyedropper"
+                                        Grid.Column="2"
+                                        Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                                        Height="Auto"
+                                        IsShowSelectedColor="False"
+                                        SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
                                 </Grid>
 
                                 <!--  文本输入区  -->
-                                <Grid Margin="0,15,0,0">
+                                <Grid
+                                    Grid.Row="1"
+                                    Margin="0,5,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--  HEX文本输入  -->
-                                    <StackPanel Grid.Column="0"
-                                                Margin="0,0,5,0">
-                                        <TextBlock Margin="0,0,0,5"
-                                                   Text="HEX文本显示"
-                                                   Foreground="{TemplateBinding Foreground}"
-                                                   FontSize="14" />
-                                        <ctl:ColorTextBox x:Name="PART_HexTextBox"
-                                                          TextMode="HEX"
-                                                          Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="0,0,5,0">
+                                        <TextBlock
+                                            Margin="0,0,0,5"
+                                            FontSize="14"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            Text="{TemplateBinding HexInputLabel}" />
+                                        <ctl:ColorTextBox
+                                            x:Name="PART_HexTextBox"
+                                            TextMode="HEX"
+                                            Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
                                     </StackPanel>
 
                                     <!--  RGB文本输入  -->
-                                    <StackPanel Grid.Column="1"
-                                                Margin="5,0,0,0">
-                                        <TextBlock Margin="0,0,0,5"
-                                                   Text="RGB文本显示"
-                                                   Foreground="{TemplateBinding Foreground}"
-                                                   FontSize="14" />
-                                        <ctl:ColorTextBox x:Name="PART_RgbTextBox"
-                                                          TextMode="RGB"
-                                                          Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0">
+                                        <TextBlock
+                                            Margin="0,0,0,5"
+                                            FontSize="14"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            Text="{TemplateBinding RgbInputLabel}" />
+                                        <ctl:ColorTextBox
+                                            x:Name="PART_RgbTextBox"
+                                            TextMode="RGB"
+                                            Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
                                     </StackPanel>
                                 </Grid>
 
                                 <!--  预选颜色块区域  -->
-                                <StackPanel Margin="0,15,0,0">
-                                    <TextBlock Margin="0,0,0,5"
-                                               Text="预选颜色块"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <ctl:ColorPalette x:Name="PART_PresetColors"
-                                                      MinHeight="150"
-                                                      Mode="Preset"
-                                                      BorderThickness="0"
-                                                      SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Margin="0,5,0,0">
+                                    <TextBlock
+                                        Margin="0,0,0,5"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding PresetColorLabel}" />
+                                    <ctl:ColorPalette
+                                        x:Name="PART_PresetColors"
+                                        MinHeight="150"
+                                        BorderThickness="0"
+                                        Mode="Preset"
+                                        SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
                                 </StackPanel>
 
                                 <!--  颜色历史记录区域  -->
-                                <StackPanel Margin="0,15,0,0">
-                                    <TextBlock Margin="0,0,0,5"
-                                               Text="颜色历史记录块"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontSize="14" />
-                                    <ctl:ColorPalette x:Name="PART_HistoryColors"
-                                                      Height="120"
-                                                      MinHeight="30"
-                                                      Rows="2"
-                                                      Columns="9"
-                                                      Mode="Custom"
-                                                      SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}"
-                                                      ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HistoryColors}" />
+                                <StackPanel
+                                    Grid.Row="3"
+                                    Margin="0,5,0,0">
+                                    <TextBlock
+                                        Margin="0,0,0,5"
+                                        FontSize="14"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{TemplateBinding HistoryColorLabel}" />
+                                    <ctl:ColorPalette
+                                        x:Name="PART_HistoryColors"
+                                        MinHeight="100"
+                                        BorderThickness="0"
+                                        Columns="9"
+                                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HistoryColors}"
+                                        Mode="Custom"
+                                        Rows="3"
+                                        SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
                                 </StackPanel>
-                            </StackPanel>
+                            </Grid>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -753,6 +819,165 @@
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Active}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  下拉按钮样式  -->
+    <Style
+        x:Key="ColorPicker.OpenButton.Style"
+        TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="Transparent"
+                        BorderThickness="0">
+                        <Path
+                            x:Name="DropDownArrow"
+                            Width="8"
+                            Height="4"
+                            Margin="0,0,4,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M 0,0 L 8,0 L 4,4 Z"
+                            Fill="{DynamicResource Foreground.Default}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="DropDownArrow" Property="Data" Value="M 0,4 L 8,4 L 4,0 Z" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  ColorPicker 控件样式  -->
+    <Style TargetType="{x:Type ctl:ColorPicker}">
+        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="DisplayColorText" Value="True" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctl:ColorPicker}">
+                    <Grid>
+                        <Border
+                            x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  颜色显示区域  -->
+                                <Border
+                                    x:Name="PART_ColorDisplay"
+                                    Grid.Column="0"
+                                    Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                    Margin="2"
+                                    BorderBrush="{DynamicResource Border.Default}"
+                                    BorderThickness="1">
+                                    <!--  透明度背景  -->
+                                    <Border.Background>
+                                        <DrawingBrush
+                                            TileMode="Tile"
+                                            Viewport="0,0,10,10"
+                                            ViewportUnits="Absolute">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource Alternation.Dark}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <RectangleGeometry Rect="0,0,10,10" />
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                    <GeometryDrawing Brush="{DynamicResource Alternation.Light}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,5,5" />
+                                                                <RectangleGeometry Rect="5,5,5,5" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Border.Background>
+                                    <!--  颜色矩形  -->
+                                    <Rectangle>
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Border>
+
+                                <!--  颜色文本区域  -->
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="5,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ColorText}" />
+
+                                <!--  下拉按钮  -->
+                                <ToggleButton
+                                    x:Name="PART_OpenButton"
+                                    Grid.Column="2"
+                                    Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                    IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsOpen, Mode=TwoWay}"
+                                    Style="{StaticResource ColorPicker.OpenButton.Style}" />
+                            </Grid>
+                        </Border>
+
+                        <!--  弹出框  -->
+                        <Popup
+                            x:Name="PART_Popup"
+                            Width="{Binding ElementName=RootBorder, Path=ActualWidth}"
+                            AllowsTransparency="True"
+                            IsOpen="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsOpen, Mode=TwoWay}"
+                            Placement="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Placement}"
+                            PlacementTarget="{Binding ElementName=RootBorder}"
+                            StaysOpen="False">
+                            <Border
+                                Margin="0,1,0,0"
+                                Background="{DynamicResource Background.Container}"
+                                BorderBrush="{DynamicResource Border.Default}"
+                                BorderThickness="{DynamicResource BorderThickness.Medium}">
+                                <ctl:ColorSelector
+                                    x:Name="PART_ColorSelector"
+                                    Width="400"
+                                    MinHeight="350"
+                                    BorderThickness="0"
+                                    SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Active}" />
+                        </Trigger>
+                        <Trigger Property="IsOpen" Value="True">
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Active}" />
                         </Trigger>
                     </ControlTemplate.Triggers>

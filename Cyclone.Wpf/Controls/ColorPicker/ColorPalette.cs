@@ -15,14 +15,8 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public enum ColorPaletteMode
 {
-    /// <summary>
-    /// 预设颜色模式 - 显示标准颜色集合
-    /// </summary>
     Preset,
 
-    /// <summary>
-    /// 自定义模式 - 通过 ItemsSource 绑定外部颜色集合
-    /// </summary>
     Custom
 }
 
@@ -104,16 +98,12 @@ public class ColorPalette : ListBox
     {
         base.OnSelectionChanged(e);
 
-        // Update SelectedColor when selection changes
         if (SelectedItem is IColorRepresentation colorItem && colorItem.Color.HasValue)
         {
             SelectedColor = colorItem.Color.Value;
         }
     }
 
-    /// <summary>
-    /// Update the selected color item
-    /// </summary>
     private void UpdateSelectedItemFromColor(Color color)
     {
         foreach (IColorRepresentation item in Items)
@@ -126,9 +116,6 @@ public class ColorPalette : ListBox
         }
     }
 
-    /// <summary>
-    /// Determine if two colors are close
-    /// </summary>
     private bool AreColorsClose(Color a, Color b, int tolerance = 5)
     {
         return Math.Abs(a.R - b.R) <= tolerance &&
@@ -137,10 +124,7 @@ public class ColorPalette : ListBox
                Math.Abs(a.A - b.A) <= tolerance;
     }
 
-    /// <summary>
-    /// Initialize color collection
-    /// </summary>
-    void Initialize()
+    private void Initialize()
     {
         // 检查是否是自定义模式
         if (Mode == ColorPaletteMode.Custom)
@@ -254,9 +238,6 @@ public class ColorPalette : ListBox
                      Color.FromRgb(50, 50, 50));
     }
 
-    /// <summary>
-    /// Add a group of colors
-    /// </summary>
     private void AddColorGroup(string category, params Color[] colors)
     {
         // 如果是自定义模式或有外部 ItemsSource 绑定，则不直接操作 Items 集合
