@@ -12,8 +12,8 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
-		<Setter Property="Panel.ZIndex" Value="99"/>
-		<Setter Property="Template">
+        <Setter Property="Panel.ZIndex" Value="99" />
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Border x:Name="RootBorder"
@@ -145,6 +145,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource SideMenuItem.Style.Basic}" />
+        <Setter Property="Panel.ZIndex" Value="999" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:SideMenu">

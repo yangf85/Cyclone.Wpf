@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -343,47 +344,44 @@ public class ColorEyedropper : Control
     /// </summary>
     private class ColorPickerOverlay : Window
     {
-        // 颜色信息面板
         private Border _colorInfoPanel;
 
-        // 坐标文本
         private TextBlock _positionText;
 
-        // 颜色文本
         private TextBlock _colorText;
 
-        // 颜色示例
         private Border _colorSample;
 
-        // DPI缩放比例
         private double _dpiScaleX = 1.0;
 
         private double _dpiScaleY = 1.0;
 
-        // 对父控件的引用
         private ColorEyedropper _parent;
 
-        // 预创建的 SolidColorBrush，重用以减少内存分配
         private SolidColorBrush _colorBrush;
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
         public ColorPickerOverlay(ColorEyedropper parent)
         {
-            // 保存父控件引用
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
             // 设置窗口属性
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
-            AllowsTransparency = true;
-            Background = null;
+            //AllowsTransparency = true;//不要使用它,资源占用太多，使用WindowChrome解决
+            Background = Brushes.Transparent;
             Topmost = true;
             ShowInTaskbar = false;
             Cursor = Cursors.Cross;
             WindowStartupLocation = WindowStartupLocation.Manual;
-            IsHitTestVisible = true; // 确保窗口可以接收鼠标事件
+            IsHitTestVisible = true;
+
+            WindowChrome.SetWindowChrome(this, new WindowChrome
+            {
+                CaptionHeight = 0,
+                ResizeBorderThickness = new Thickness(0),
+                GlassFrameThickness = new Thickness(-1),
+                CornerRadius = new CornerRadius(0)
+            });
 
             // 使用虚拟屏幕
             Left = SystemParameters.VirtualScreenLeft;
@@ -395,18 +393,6 @@ public class ColorEyedropper : Control
             Grid mainGrid = new Grid();
             mainGrid.IsHitTestVisible = true; // 确保网格可以接收鼠标事件
             Content = mainGrid;
-
-            // 添加一个完全透明但可以接收鼠标事件的覆盖层
-            Rectangle transparentBackground = new Rectangle
-            {
-                Fill = new SolidColorBrush(Color.FromArgb(1, 255, 255, 255)), // 几乎完全透明，但不是0
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                IsHitTestVisible = true, // 关键属性：确保它可以接收鼠标事件
-                Cursor = Cursors.Cross  // 直接在覆盖层上设置光标
-            };
-            mainGrid.Children.Add(transparentBackground);
-            Panel.SetZIndex(transparentBackground, 0);
 
             // 创建颜色信息面板
             _colorInfoPanel = new Border
