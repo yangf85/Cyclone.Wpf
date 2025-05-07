@@ -9,8 +9,8 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <StackPanel Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource AncestorType=UserControl}}">
-        <GroupBox Padding="20"
+    <StackPanel Height="500">
+        <!--<GroupBox Padding="20"
                   Header="Slider">
             <StackPanel>
                 <cy:FormItem Label="Eyedropper">
@@ -39,10 +39,15 @@
                              SharedName="Slier">
                     <cy:ColorHueSlider Value="{Binding Hue}" />
                 </cy:FormItem>
+
+                <cy:FormItem Label="ColorTextBox"
+                             SharedName="Slier">
+                    <cy:ColorTextBox Color="{Binding Color}"  TextMode="RGB" />
+                </cy:FormItem>
             </StackPanel>
         </GroupBox>
         <GroupBox Padding="20"
-                  Header="ColorSelector">
+                  Header="ColorRegion">
             <cy:ColorRegion Hue="{Binding Hue}"
                             Saturation="{Binding Saturation}"
                             Value="{Binding Bright}" />
@@ -53,6 +58,7 @@
             <StackPanel>
                 <cy:ColorPalette x:Name="ColorPalette" />
             </StackPanel>
-        </GroupBox>
+        </GroupBox>-->
+        <cy:ColorSelector SelectedColor="{Binding Color}" />
     </StackPanel>
 </UserControl>

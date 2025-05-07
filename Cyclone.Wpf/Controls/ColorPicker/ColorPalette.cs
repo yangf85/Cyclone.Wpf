@@ -45,7 +45,7 @@ public class ColorPalette : ListBox
 
     #endregion SelectedColor
 
-    #region 行数和列数
+    #region Rows and Columns
 
     public int Rows
     {
@@ -65,13 +65,13 @@ public class ColorPalette : ListBox
     public static readonly DependencyProperty ColumnsProperty =
         DependencyProperty.Register(nameof(Columns), typeof(int), typeof(ColorPalette), new PropertyMetadata(9));
 
-    #endregion 行数和列数
+    #endregion Rows and Columns
 
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
     {
         base.OnSelectionChanged(e);
 
-        // 当选择项改变时，更新SelectedColor
+        // Update SelectedColor when selection changes
         if (SelectedItem is IColorRepresentation colorItem && colorItem.Color.HasValue)
         {
             SelectedColor = colorItem.Color.Value;
@@ -79,7 +79,7 @@ public class ColorPalette : ListBox
     }
 
     /// <summary>
-    /// 更新选中的颜色项
+    /// Update the selected color item
     /// </summary>
     private void UpdateSelectedItemFromColor(Color color)
     {
@@ -94,7 +94,7 @@ public class ColorPalette : ListBox
     }
 
     /// <summary>
-    /// 判断两个颜色是否接近
+    /// Determine if two colors are close
     /// </summary>
     private bool AreColorsClose(Color a, Color b, int tolerance = 5)
     {
@@ -105,109 +105,112 @@ public class ColorPalette : ListBox
     }
 
     /// <summary>
-    /// 初始化颜色集合
+    /// Initialize color collection
     /// </summary>
     void Initialize()
     {
-        // 如果Items已有内容，不重复初始化
+        // Don't reinitialize if Items already has content
         if (Items.Count > 0)
             return;
 
         Items.Clear();
 
-        // 添加标准颜色
+        // Add standard colors
         InitializeStandardColors();
     }
 
     private void InitializeStandardColors()
     {
-        // 第1行：红色系 - 从深红到浅红更平滑的过渡
-        AddColorGroup("红色系", Color.FromRgb(102, 0, 0), Color.FromRgb(153, 0, 0),
-                     Color.FromRgb(204, 0, 0), Color.FromRgb(255, 0, 0),
-                     Color.FromRgb(255, 51, 51), Color.FromRgb(255, 102, 102),
+        // 基于图片中的色板设计
+        // 第5个为基准色，向左变浅，向右变深
+
+        // Row 1: 红色系列 - 第5个为标准红色
+        AddColorGroup("红色", Color.FromRgb(179, 0, 0), Color.FromRgb(204, 0, 0),
+                     Color.FromRgb(229, 0, 0), Color.FromRgb(242, 0, 0),
+                     Color.FromRgb(255, 0, 0), Color.FromRgb(255, 77, 77),
                      Color.FromRgb(255, 153, 153), Color.FromRgb(255, 204, 204),
-                     Color.FromRgb(255, 102, 102));
+                     Color.FromRgb(255, 240, 240));
 
-        // 第2行：橙色系 - 更均匀的橙色过渡
-        AddColorGroup("橙色系", Color.FromRgb(153, 51, 0), Color.FromRgb(204, 76, 0),
-                     Color.FromRgb(255, 102, 0), Color.FromRgb(255, 128, 0),
-                     Color.FromRgb(255, 153, 51), Color.FromRgb(255, 178, 102),
-                     Color.FromRgb(255, 204, 153), Color.FromRgb(255, 229, 204),
-                     Color.FromRgb(204, 102, 51));
+        // Row 2: 橙色系列 - 第5个为标准橙色
+        AddColorGroup("橙色", Color.FromRgb(153, 77, 0), Color.FromRgb(179, 90, 0),
+                     Color.FromRgb(204, 102, 0), Color.FromRgb(230, 115, 0),
+                     Color.FromRgb(255, 128, 0), Color.FromRgb(255, 153, 51),
+                     Color.FromRgb(255, 178, 102), Color.FromRgb(255, 204, 153),
+                     Color.FromRgb(255, 235, 204));
 
-        // 第3行：黄色系 - 更纯净的黄色系列
-        AddColorGroup("黄色系", Color.FromRgb(153, 153, 0), Color.FromRgb(204, 204, 0),
-                     Color.FromRgb(255, 255, 0), Color.FromRgb(255, 255, 51),
-                     Color.FromRgb(255, 255, 102), Color.FromRgb(255, 255, 153),
-                     Color.FromRgb(255, 255, 204), Color.FromRgb(255, 250, 205),
-                     Color.FromRgb(238, 232, 170));
+        // Row 3: 黄色系列 - 第5个为标准黄色
+        AddColorGroup("黄色", Color.FromRgb(153, 153, 0), Color.FromRgb(179, 179, 0),
+                     Color.FromRgb(204, 204, 0), Color.FromRgb(230, 230, 0),
+                     Color.FromRgb(255, 255, 0), Color.FromRgb(255, 255, 77),
+                     Color.FromRgb(255, 255, 153), Color.FromRgb(255, 255, 204),
+                     Color.FromRgb(255, 255, 230));
 
-        // 第4行：绿色系 - 暗绿到亮绿，更平滑的过渡
-        AddColorGroup("绿色系", Color.FromRgb(0, 51, 0), Color.FromRgb(0, 102, 0),
-                     Color.FromRgb(0, 153, 0), Color.FromRgb(0, 204, 0),
-                     Color.FromRgb(0, 255, 0), Color.FromRgb(51, 255, 51),
-                     Color.FromRgb(102, 255, 102), Color.FromRgb(153, 255, 153),
-                     Color.FromRgb(204, 255, 204));
+        // Row 4: 绿色系列 - 第5个为标准绿色
+        AddColorGroup("绿色", Color.FromRgb(0, 102, 0), Color.FromRgb(0, 128, 0),
+                     Color.FromRgb(0, 153, 0), Color.FromRgb(0, 179, 0),
+                     Color.FromRgb(0, 255, 0), Color.FromRgb(77, 255, 77),
+                     Color.FromRgb(153, 255, 153), Color.FromRgb(204, 255, 204),
+                     Color.FromRgb(230, 255, 230));
 
-        // 第5行：青绿色系 - 绿到青的平滑过渡
-        AddColorGroup("青绿色系", Color.FromRgb(0, 255, 0), Color.FromRgb(0, 255, 51),
-                     Color.FromRgb(0, 255, 102), Color.FromRgb(0, 255, 153),
-                     Color.FromRgb(0, 255, 204), Color.FromRgb(0, 255, 255),
-                     Color.FromRgb(0, 204, 153), Color.FromRgb(0, 153, 102),
-                     Color.FromRgb(0, 102, 51));
-
-        // 第6行：蓝绿色系 - 青到蓝绿的平滑过渡
-        AddColorGroup("蓝绿色系", Color.FromRgb(0, 102, 102), Color.FromRgb(0, 153, 153),
-                     Color.FromRgb(0, 204, 204), Color.FromRgb(0, 255, 255),
-                     Color.FromRgb(51, 255, 255), Color.FromRgb(102, 255, 255),
+        // Row 5: 青色系列 - 第5个为标准青色
+        AddColorGroup("青色", Color.FromRgb(0, 102, 102), Color.FromRgb(0, 128, 128),
+                     Color.FromRgb(0, 153, 153), Color.FromRgb(0, 204, 204),
+                     Color.FromRgb(0, 255, 255), Color.FromRgb(77, 255, 255),
                      Color.FromRgb(153, 255, 255), Color.FromRgb(204, 255, 255),
-                     Color.FromRgb(224, 255, 255));
+                     Color.FromRgb(230, 255, 255));
 
-        // 第7行：蓝色系 - 更均匀的蓝色渐变
-        AddColorGroup("蓝色系", Color.FromRgb(0, 0, 102), Color.FromRgb(0, 0, 153),
-                     Color.FromRgb(0, 0, 204), Color.FromRgb(0, 0, 255),
-                     Color.FromRgb(51, 51, 255), Color.FromRgb(102, 102, 255),
+        // Row 6: 蓝色系列 - 第5个为标准蓝色
+        AddColorGroup("蓝色", Color.FromRgb(0, 0, 153), Color.FromRgb(0, 0, 179),
+                     Color.FromRgb(0, 0, 204), Color.FromRgb(0, 0, 230),
+                     Color.FromRgb(0, 0, 255), Color.FromRgb(77, 77, 255),
                      Color.FromRgb(153, 153, 255), Color.FromRgb(204, 204, 255),
-                     Color.FromRgb(230, 230, 250));
+                     Color.FromRgb(230, 230, 255));
 
-        // 第8行：紫蓝色系 - 蓝到紫的平滑过渡
-        AddColorGroup("紫蓝色系", Color.FromRgb(25, 25, 112), Color.FromRgb(48, 25, 160),
-                     Color.FromRgb(71, 60, 176), Color.FromRgb(72, 50, 204),
-                     Color.FromRgb(75, 0, 255), Color.FromRgb(93, 39, 255),
-                     Color.FromRgb(111, 78, 255), Color.FromRgb(129, 117, 255),
-                     Color.FromRgb(147, 156, 255));
+        // Row 7: 紫色系列 - 第5个为标准紫色
+        AddColorGroup("紫色", Color.FromRgb(51, 0, 102), Color.FromRgb(64, 0, 128),
+                     Color.FromRgb(77, 0, 153), Color.FromRgb(89, 0, 179),
+                     Color.FromRgb(102, 0, 204), Color.FromRgb(128, 51, 255),
+                     Color.FromRgb(178, 102, 255), Color.FromRgb(204, 153, 255),
+                     Color.FromRgb(230, 204, 255));
 
-        // 第9行：紫色系 - 更均匀的紫色渐变
-        AddColorGroup("紫色系", Color.FromRgb(76, 0, 153), Color.FromRgb(102, 0, 204),
-                     Color.FromRgb(128, 0, 255), Color.FromRgb(147, 51, 255),
-                     Color.FromRgb(160, 102, 255), Color.FromRgb(178, 153, 255),
-                     Color.FromRgb(204, 204, 255), Color.FromRgb(221, 209, 255),
-                     Color.FromRgb(238, 229, 255));
-
-        // 第10行：粉紫色系 - 紫到粉红的平滑过渡
-        AddColorGroup("粉紫色系", Color.FromRgb(128, 0, 128), Color.FromRgb(153, 0, 153),
-                     Color.FromRgb(204, 0, 204), Color.FromRgb(255, 0, 255),
-                     Color.FromRgb(255, 51, 255), Color.FromRgb(255, 102, 255),
+        // Row 8: 洋红/品红系列 - 第5个为标准洋红色
+        AddColorGroup("洋红", Color.FromRgb(102, 0, 102), Color.FromRgb(128, 0, 128),
+                     Color.FromRgb(153, 0, 153), Color.FromRgb(204, 0, 204),
+                     Color.FromRgb(255, 0, 255), Color.FromRgb(255, 77, 255),
                      Color.FromRgb(255, 153, 255), Color.FromRgb(255, 204, 255),
-                     Color.FromRgb(255, 153, 204));
+                     Color.FromRgb(255, 230, 255));
 
-        // 第11行：棕色系 - 深棕到浅棕
-        AddColorGroup("棕色系", Color.FromRgb(102, 51, 0), Color.FromRgb(153, 76, 0),
-                     Color.FromRgb(153, 102, 51), Color.FromRgb(204, 102, 0),
-                     Color.FromRgb(204, 153, 102), Color.FromRgb(210, 180, 140),
-                     Color.FromRgb(222, 184, 135), Color.FromRgb(245, 222, 179),
-                     Color.FromRgb(255, 228, 196));
+        // Row 9: 粉色系列 - 第5个为标准粉红色
+        AddColorGroup("粉色", Color.FromRgb(153, 0, 76), Color.FromRgb(179, 0, 89),
+                     Color.FromRgb(204, 0, 102), Color.FromRgb(230, 0, 115),
+                     Color.FromRgb(255, 0, 128), Color.FromRgb(255, 77, 166),
+                     Color.FromRgb(255, 153, 204), Color.FromRgb(255, 204, 230),
+                     Color.FromRgb(255, 230, 242));
 
-        // 第12行：灰色系 - 黑到白的更均匀渐变
-        AddColorGroup("灰色系", Color.FromRgb(0, 0, 0), Color.FromRgb(32, 32, 32),
-                     Color.FromRgb(64, 64, 64), Color.FromRgb(96, 96, 96),
+        // Row 10: 棕色系列 - 第5个为标准棕色
+        AddColorGroup("棕色", Color.FromRgb(102, 51, 51), Color.FromRgb(128, 64, 64),
+                     Color.FromRgb(153, 76, 76), Color.FromRgb(166, 83, 83),
+                     Color.FromRgb(153, 76, 0), Color.FromRgb(179, 90, 0),
+                     Color.FromRgb(204, 102, 0), Color.FromRgb(204, 153, 102),
+                     Color.FromRgb(222, 184, 135));
+
+        // Row 11: 灰色系列 - 第5个为中灰色
+        AddColorGroup("灰色", Color.FromRgb(32, 32, 32), Color.FromRgb(64, 64, 64),
+                     Color.FromRgb(96, 96, 96), Color.FromRgb(112, 112, 112),
                      Color.FromRgb(128, 128, 128), Color.FromRgb(160, 160, 160),
                      Color.FromRgb(192, 192, 192), Color.FromRgb(224, 224, 224),
                      Color.FromRgb(255, 255, 255));
+
+        // Row 12: 黑色系列 - 全黑到深灰
+        AddColorGroup("黑色", Color.FromRgb(0, 0, 0), Color.FromRgb(5, 5, 5),
+                     Color.FromRgb(10, 10, 10), Color.FromRgb(15, 15, 15),
+                     Color.FromRgb(20, 20, 20), Color.FromRgb(25, 25, 25),
+                     Color.FromRgb(30, 30, 30), Color.FromRgb(40, 40, 40),
+                     Color.FromRgb(50, 50, 50));
     }
 
     /// <summary>
-    /// 添加一组颜色
+    /// Add a group of colors
     /// </summary>
     private void AddColorGroup(string category, params Color[] colors)
     {

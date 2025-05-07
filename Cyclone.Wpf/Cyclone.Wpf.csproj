@@ -28,4 +28,11 @@
     <Page Remove="Resources\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Controls\ColorPicker\ColorBrightSlider.cs" />
+    <Compile Remove="Controls\ColorPicker\ColorHueSlider.cs" />
+    <Compile Remove="Controls\ColorPicker\ColorOpacitySlider.cs" />
+    <Compile Remove="Controls\ColorPicker\ColorSaturationSlider.cs" />
+  </ItemGroup>
+
 </Project>
