@@ -10,6 +10,22 @@ using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
 
+/// <summary>
+/// 定义 ColorPalette 的工作模式
+/// </summary>
+public enum ColorPaletteMode
+{
+    /// <summary>
+    /// 预设颜色模式 - 显示标准颜色集合
+    /// </summary>
+    Preset,
+
+    /// <summary>
+    /// 自定义模式 - 通过 ItemsSource 绑定外部颜色集合
+    /// </summary>
+    Custom
+}
+
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(ColorPaletteItem))]
 public class ColorPalette : ListBox
 {
@@ -22,6 +38,23 @@ public class ColorPalette : ListBox
     {
         Loaded += (s, e) => Initialize();
     }
+
+    #region Mode 属性
+
+    /// <summary>
+    /// 调色板的模式 - 预设或自定义
+    /// </summary>
+    public ColorPaletteMode Mode
+    {
+        get => (ColorPaletteMode)GetValue(ModeProperty);
+        set => SetValue(ModeProperty, value);
+    }
+
+    public static readonly DependencyProperty ModeProperty =
+        DependencyProperty.Register(nameof(Mode), typeof(ColorPaletteMode), typeof(ColorPalette),
+            new PropertyMetadata(ColorPaletteMode.Preset));
+
+    #endregion Mode 属性
 
     #region SelectedColor
 
@@ -109,13 +142,25 @@ public class ColorPalette : ListBox
     /// </summary>
     void Initialize()
     {
-        // Don't reinitialize if Items already has content
+        // 检查是否是自定义模式
+        if (Mode == ColorPaletteMode.Custom)
+        {
+            // 自定义模式下，不初始化预设颜色
+            return;
+        }
+
+        // 检查是否是从 XAML 中通过绑定设置了 ItemsSource
+        if (ItemsSource != null)
+        {
+            // 当存在外部 ItemsSource 时，不要初始化标准颜色
+            return;
+        }
+
+        // 仅当没有内容时才初始化
         if (Items.Count > 0)
             return;
 
-        Items.Clear();
-
-        // Add standard colors
+        // 添加标准颜色
         InitializeStandardColors();
     }
 
@@ -214,6 +259,10 @@ public class ColorPalette : ListBox
     /// </summary>
     private void AddColorGroup(string category, params Color[] colors)
     {
+        // 如果是自定义模式或有外部 ItemsSource 绑定，则不直接操作 Items 集合
+        if (Mode == ColorPaletteMode.Custom || ItemsSource != null)
+            return;
+
         foreach (var color in colors)
         {
             var colorItem = new ColorRepresentation(color)

@@ -379,37 +379,6 @@
         </Setter>
     </Style>
 
-    <!--  颜色项数据模板  -->
-    <DataTemplate x:Key="ColorPalette.ItemTemplate">
-        <Border x:Name="RootBorder"
-                BorderThickness="0"
-                Cursor="Hand"
-                ToolTipService.BetweenShowDelay="0"
-                ToolTipService.InitialShowDelay="500">
-            <Border.Background>
-                <SolidColorBrush Color="{Binding Color}" />
-            </Border.Background>
-            <Border.ToolTip>
-                <StackPanel>
-                    <TextBlock Margin="0,0,0,4"
-                               FontStyle="Italic"
-                               Text="{Binding Category}" />
-                    <TextBlock Text="{Binding RGB}" />
-                    <TextBlock FontFamily="Consolas"
-                               Text="{Binding HEX}" />
-                    <TextBlock Text="{Binding HSL}" />
-                </StackPanel>
-            </Border.ToolTip>
-        </Border>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
-                         Value="True">
-                <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
-                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>
-
     <Style TargetType="{x:Type ctl:ColorTextBox}">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
@@ -448,6 +417,37 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--  颜色项数据模板  -->
+    <DataTemplate x:Key="ColorPalette.ItemTemplate">
+        <Border x:Name="RootBorder"
+                BorderThickness="0"
+                Cursor="Hand"
+                ToolTipService.BetweenShowDelay="0"
+                ToolTipService.InitialShowDelay="500">
+            <Border.Background>
+                <SolidColorBrush Color="{Binding Color}" />
+            </Border.Background>
+            <Border.ToolTip>
+                <StackPanel>
+                    <TextBlock Margin="0,0,0,4"
+                               FontStyle="Italic"
+                               Text="{Binding Category}" />
+                    <TextBlock Text="{Binding RGB}" />
+                    <TextBlock FontFamily="Consolas"
+                               Text="{Binding HEX}" />
+                    <TextBlock Text="{Binding HSL}" />
+                </StackPanel>
+            </Border.ToolTip>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
+                         Value="True">
+                <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
+                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <!--  ListBoxItem 样式  -->
     <Style TargetType="ctl:ColorPaletteItem">
@@ -508,8 +508,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
-        <Setter Property="MinWidth" Value="300" />
-        <Setter Property="MinHeight" Value="200" />
+        <Setter Property="MinWidth" Value="400" />
+        <Setter Property="MinHeight" Value="300" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:ColorSelector}">
@@ -520,8 +520,8 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="20" />
-                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <!--  左侧区域：主要控制区  -->
@@ -725,6 +725,7 @@
                                                FontSize="14" />
                                     <ctl:ColorPalette x:Name="PART_PresetColors"
                                                       MinHeight="150"
+                                                      Mode="Preset"
                                                       BorderThickness="0"
                                                       SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
                                 </StackPanel>
@@ -735,12 +736,14 @@
                                                Text="颜色历史记录块"
                                                Foreground="{TemplateBinding Foreground}"
                                                FontSize="14" />
-                                    <!--<ctl:ColorPalette x:Name="PART_HistoryColors"
+                                    <ctl:ColorPalette x:Name="PART_HistoryColors"
                                                       Height="120"
-                                                      Rows="3"
-                                                      Columns="4"
+                                                      MinHeight="30"
+                                                      Rows="2"
+                                                      Columns="9"
+                                                      Mode="Custom"
                                                       SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}"
-                                                      ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HistoryColors}" />-->
+                                                      ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HistoryColors}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

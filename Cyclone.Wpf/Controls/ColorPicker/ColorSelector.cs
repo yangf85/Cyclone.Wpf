@@ -105,42 +105,25 @@ namespace Cyclone.Wpf.Controls
 
         #endregion SelectedColor - 当前选中的颜色
 
-        #region Alpha - 透明度值
+        #region AlphaValue - 透明度值(0.0-1.0)
 
-        public byte Alpha
+        public double AlphaValue
         {
-            get => (byte)GetValue(AlphaProperty);
-            set => SetValue(AlphaProperty, value);
+            get => (double)GetValue(AlphaValueProperty);
+            set => SetValue(AlphaValueProperty, value);
         }
 
-        public static readonly DependencyProperty AlphaProperty =
-            DependencyProperty.Register(nameof(Alpha), typeof(byte), typeof(ColorSelector),
-                new FrameworkPropertyMetadata((byte)255,
+        public static readonly DependencyProperty AlphaValueProperty =
+            DependencyProperty.Register(nameof(AlphaValue), typeof(double), typeof(ColorSelector),
+                new FrameworkPropertyMetadata(1.0,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                    OnAlphaChanged));
+                    OnAlphaValueChanged));
 
-        private static void OnAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnAlphaValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ColorSelector selector)
             {
-                selector.OnAlphaChanged((byte)e.OldValue, (byte)e.NewValue);
-                // 更新AlphaValue属性
-                selector.OnPropertyChanged(nameof(AlphaValue));
-            }
-        }
-
-        #endregion Alpha - 透明度值
-
-        #region AlphaValue - 透明度值(0.0-1.0)
-
-        // 用于与滑块控件直接绑定的属性
-        public double AlphaValue
-        {
-            get => Alpha / 255.0;
-            set
-            {
-                Alpha = (byte)(value * 255);
-                OnPropertyChanged(nameof(AlphaValue));
+                selector.OnAlphaValueChanged((double)e.OldValue, (double)e.NewValue);
             }
         }
 
@@ -360,12 +343,13 @@ namespace Cyclone.Wpf.Controls
 
             if (_presetColors != null)
             {
+                _presetColors.Mode = ColorPaletteMode.Preset;
                 _presetColors.SelectionChanged += PresetColors_SelectionChanged;
             }
 
             if (_historyColors != null)
             {
-                _historyColors.ItemsSource = HistoryColors;
+                _historyColors.Mode = ColorPaletteMode.Custom;
                 _historyColors.SelectionChanged += HistoryColors_SelectionChanged;
             }
         }
@@ -437,7 +421,7 @@ namespace Cyclone.Wpf.Controls
                 ColorHelper.RgbToHsv(color.R, color.G, color.B, out double h, out double s, out double v);
 
                 // 更新属性值
-                Alpha = color.A;
+                AlphaValue = color.A / 255.0;
                 Hue = h;
                 Saturation = s;
                 Value = v;
@@ -459,7 +443,7 @@ namespace Cyclone.Wpf.Controls
                 // 更新透明度滑块
                 if (_opacitySlider != null)
                 {
-                    _opacitySlider.Value = AlphaValue; // 使用AlphaValue属性
+                    _opacitySlider.Value = AlphaValue;
 
                     // 设置带透明度的指示颜色
                     Color fullColor = Color.FromArgb(255, color.R, color.G, color.B);
@@ -572,11 +556,12 @@ namespace Cyclone.Wpf.Controls
             }
         }
 
-        private void OnAlphaChanged(byte oldValue, byte newValue)
+        private void OnAlphaValueChanged(double oldValue, double newValue)
         {
             if (!_isUpdatingControls)
             {
-                Color newColor = Color.FromArgb(newValue, SelectedColor.R, SelectedColor.G, SelectedColor.B);
+                byte alpha = (byte)(newValue * 255);
+                Color newColor = Color.FromArgb(alpha, SelectedColor.R, SelectedColor.G, SelectedColor.B);
                 SelectedColor = newColor;
             }
         }
@@ -587,7 +572,8 @@ namespace Cyclone.Wpf.Controls
             {
                 // 构建新颜色并更新
                 ColorHelper.HsvToRgb(newValue, Saturation, Value, out byte r, out byte g, out byte b);
-                SelectedColor = Color.FromArgb(Alpha, r, g, b);
+                byte alpha = (byte)(AlphaValue * 255);
+                SelectedColor = Color.FromArgb(alpha, r, g, b);
             }
         }
 
@@ -597,7 +583,8 @@ namespace Cyclone.Wpf.Controls
             {
                 // 构建新颜色并更新
                 ColorHelper.HsvToRgb(Hue, newValue, Value, out byte r, out byte g, out byte b);
-                SelectedColor = Color.FromArgb(Alpha, r, g, b);
+                byte alpha = (byte)(AlphaValue * 255);
+                SelectedColor = Color.FromArgb(alpha, r, g, b);
             }
         }
 
@@ -607,7 +594,8 @@ namespace Cyclone.Wpf.Controls
             {
                 // 构建新颜色并更新
                 ColorHelper.HsvToRgb(Hue, Saturation, newValue, out byte r, out byte g, out byte b);
-                SelectedColor = Color.FromArgb(Alpha, r, g, b);
+                byte alpha = (byte)(AlphaValue * 255);
+                SelectedColor = Color.FromArgb(alpha, r, g, b);
             }
         }
 
@@ -631,7 +619,7 @@ namespace Cyclone.Wpf.Controls
         {
             if (!_isUpdatingControls)
             {
-                AlphaValue = e.NewValue; // 直接设置AlphaValue
+                AlphaValue = e.NewValue;
             }
         }
 
@@ -656,7 +644,8 @@ namespace Cyclone.Wpf.Controls
             if (!_isUpdatingControls && _hexTextBox != null)
             {
                 // 保持当前Alpha值
-                Color newColor = Color.FromArgb(Alpha, _hexTextBox.Color.R, _hexTextBox.Color.G, _hexTextBox.Color.B);
+                byte alpha = (byte)(AlphaValue * 255);
+                Color newColor = Color.FromArgb(alpha, _hexTextBox.Color.R, _hexTextBox.Color.G, _hexTextBox.Color.B);
                 SelectedColor = newColor;
             }
         }
@@ -666,7 +655,8 @@ namespace Cyclone.Wpf.Controls
             if (!_isUpdatingControls && _rgbTextBox != null)
             {
                 // 保持当前Alpha值
-                Color newColor = Color.FromArgb(Alpha, _rgbTextBox.Color.R, _rgbTextBox.Color.G, _rgbTextBox.Color.B);
+                byte alpha = (byte)(AlphaValue * 255);
+                Color newColor = Color.FromArgb(alpha, _rgbTextBox.Color.R, _rgbTextBox.Color.G, _rgbTextBox.Color.B);
                 SelectedColor = newColor;
             }
         }
@@ -684,7 +674,8 @@ namespace Cyclone.Wpf.Controls
             if (!_isUpdatingControls && _presetColors != null && _presetColors.SelectedItem is IColorRepresentation colorItem && colorItem.Color.HasValue)
             {
                 // 保持当前Alpha值
-                Color newColor = Color.FromArgb(Alpha, colorItem.Color.Value.R, colorItem.Color.Value.G, colorItem.Color.Value.B);
+                byte alpha = (byte)(AlphaValue * 255);
+                Color newColor = Color.FromArgb(alpha, colorItem.Color.Value.R, colorItem.Color.Value.G, colorItem.Color.Value.B);
                 SelectedColor = newColor;
             }
         }
