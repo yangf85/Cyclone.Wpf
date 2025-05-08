@@ -13,6 +13,11 @@ namespace Cyclone.Wpf.Demo.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    public MainViewModel()
+    {
+        CurrentView = new ButtonView();
+    }
+
     [ObservableProperty]
     public partial SideMenuViewModel SideMenu { get; set; } = new SideMenuViewModel();
 
@@ -23,8 +28,7 @@ public partial class MainViewModel : ObservableObject
     private void SwitchView(object item)
     {
         // 处理传入的参数，统一为SideMenuItemViewModel
-        var menuItem = item as SideMenuItemViewModel;
-        if (menuItem == null) { return; }
+        if (item is not SideMenuItemViewModel menuItem) { return; }
 
         CurrentView = menuItem.Header switch
         {
@@ -35,7 +39,7 @@ public partial class MainViewModel : ObservableObject
             "CascadePicker" => new CascadePickerView(),
             "Loading" => new LoadingView(),
             "DataGrid" => new DataGridView(),
-            "Date" => new DateView(),
+            "DateTime" => new DateView(),
             "Range" => new RangeView(),
             "TabControl" => new TabControlView(),
             "FluidTabControl" => new FluidTabControlView(),
@@ -61,7 +65,7 @@ public partial class MainViewModel : ObservableObject
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
             "CountDown" => new CountDownView(),
-            _ => new object(),
+            _ => null,
         };
     }
 }

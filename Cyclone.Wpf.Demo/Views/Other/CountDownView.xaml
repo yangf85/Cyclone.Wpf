@@ -13,7 +13,7 @@
         <cy:Countdown x:Name="countdown"
                       StartSeconds="9"
                       EndSeconds="0"
-                      FontFamily="Segoe UI"
+                      FontFamily="Tahoma"
                       WarningThreshold="3"
                       TimeFormat="ss"
                       FontWeight="Bold"

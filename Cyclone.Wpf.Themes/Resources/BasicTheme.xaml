@@ -9,6 +9,8 @@
                      Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Background.Default"
                      Color="{StaticResource GrayLighten5}" />
+    <SolidColorBrush x:Key="Background.Invert"
+                     Color="{StaticResource GrayDarken3}" />
     <SolidColorBrush x:Key="Background.Active"
                      Color="{StaticResource BlueDarken2}" />
     <SolidColorBrush x:Key="Background.Inactive"
@@ -180,11 +182,11 @@
     <SolidColorBrush x:Key="Text.Subtitle"
                      Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Text.Header"
-                     Color="{StaticResource GrayDarken3}" />
+                     Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Text.Caption"
-                     Color="{StaticResource GrayDarken3}" />
+                     Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Text.Content"
-                     Color="{StaticResource GrayDarken2}" />
+                     Color="{StaticResource GrayDarken3}" />
     <SolidColorBrush x:Key="Text.Prompt"
                      Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Text.Invert"

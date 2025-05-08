@@ -1,277 +1,274 @@
-﻿<ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
-	xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
+                    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
 
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-	<!--  CarouselItem 样式和模板  -->
-	<ControlTemplate x:Key="CarouselItem.ControlTemplate.Basic" TargetType="ctl:CarouselItem">
-		<Grid x:Name="RootGrid">
-			<ContentPresenter
-				Margin="{TemplateBinding Padding}"
-				HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-				VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-				Content="{TemplateBinding Content}"
-				ContentTemplate="{TemplateBinding ContentTemplate}" />
-		</Grid>
-	</ControlTemplate>
+    <!--  CarouselItem 样式和模板  -->
+    <ControlTemplate x:Key="CarouselItem.ControlTemplate.Basic"
+                     TargetType="ctl:CarouselItem">
+        <Grid x:Name="RootGrid">
+            <ContentPresenter Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Grid>
+    </ControlTemplate>
 
-	<Style x:Key="CarouselItem.Style.Basic" TargetType="ctl:CarouselItem">
-		<Setter Property="Template" Value="{StaticResource CarouselItem.ControlTemplate.Basic}" />
-		<Setter Property="Height" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:Carousel}}" />
-		<Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:Carousel}}" />
-		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-		<Setter Property="VerticalContentAlignment" Value="Stretch" />
-		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="Focusable" Value="True" />
-		<Setter Property="IsTabStop" Value="True" />
-		<Style.Triggers>
-			<Trigger Property="IsSelected" Value="True">
-				<Setter Property="Opacity" Value="1" />
-				<Setter Property="IsHitTestVisible" Value="True" />
-			</Trigger>
-			<Trigger Property="IsSelected" Value="False">
-				<Setter Property="Opacity" Value="1" />
-				<Setter Property="IsHitTestVisible" Value="True" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
+    <Style x:Key="CarouselItem.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="ctl:CarouselItem">
+        <Setter Property="Template" Value="{StaticResource CarouselItem.ControlTemplate.Basic}" />
+        <Setter Property="Height" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:Carousel}}" />
+        <Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:Carousel}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="IsTabStop" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="IsHitTestVisible" Value="True" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="IsHitTestVisible" Value="True" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-	<!--  默认样式  -->
-	<Style BasedOn="{StaticResource CarouselItem.Style.Basic}" TargetType="ctl:CarouselItem" />
+    <!--  默认样式  -->
+    <Style BasedOn="{StaticResource CarouselItem.Style.Basic}"
+           TargetType="ctl:CarouselItem" />
 
-	<!--  导航按钮样式  -->
-	<Style
-		x:Key="Carousel.PrevNextButtonStyle"
-		x:Shared="False"
-		TargetType="Button">
-		<Setter Property="Background" Value="#55000000" />
-		<Setter Property="Width" Value="36" />
-		<Setter Property="Height" Value="36" />
-		<Setter Property="IsTabStop" Value="False" />
-		<Setter Property="Opacity" Value="0.7" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Border
-						x:Name="RootBorder"
-						Background="{TemplateBinding Background}"
-						BorderThickness="0"
-						CornerRadius="20">
-						<ContentPresenter
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center"
-							Content="{TemplateBinding Content}" />
-					</Border>
+    <!--  导航按钮样式  -->
+    <Style x:Key="Carousel.PrevNextButtonStyle"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="Button">
+        <Setter Property="Background" Value="#55000000" />
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Opacity" Value="0.7" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="RootBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0"
+                            CornerRadius="20">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
+                    </Border>
 
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="#88000000" />
-							<Setter TargetName="RootBorder" Property="Opacity" Value="1" />
-						</Trigger>
-						<Trigger Property="IsPressed" Value="True">
-							<Setter Property="Background" Value="#AA000000" />
-						</Trigger>
-						<Trigger Property="IsEnabled" Value="False">
-							<Setter TargetName="RootBorder" Property="Opacity" Value="0.3" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#88000000" />
+                            <Setter TargetName="RootBorder" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#AA000000" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="RootBorder" Property="Opacity" Value="0.3" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!--  指示器按钮样式  -->
-	<Style x:Key="Carousel.IndicatorButtonStyle" TargetType="RadioButton">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="Margin" Value="5,0" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="RadioButton">
-					<Grid x:Name="RootGrid" SnapsToDevicePixels="True">
-						<Ellipse
-							x:Name="OuterEllipse"
-							Width="18"
-							Height="18"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center"
-							Fill="Transparent" />
-						<Ellipse
-							x:Name="InnerEllipse"
-							Width="7"
-							Height="7"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center"
-							Fill="{DynamicResource Icon.Foreground.Invert}" />
-					</Grid>
+    <!--  指示器按钮样式  -->
+    <Style x:Key="Carousel.IndicatorButtonStyle"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="5,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid x:Name="RootGrid"
+                          SnapsToDevicePixels="True">
+                        <Ellipse x:Name="OuterEllipse"
+                                 Width="18"
+                                 Height="18"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Fill="Transparent" />
+                        <Ellipse x:Name="InnerEllipse"
+                                 Width="7"
+                                 Height="7"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Fill="{DynamicResource Icon.Foreground.Invert}" />
+                    </Grid>
 
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsChecked" Value="True">
-							<Setter TargetName="InnerEllipse" Property="Width" Value="10" />
-							<Setter TargetName="InnerEllipse" Property="Height" Value="10" />
-						</Trigger>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource Background.TransparentMedium}" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="InnerEllipse" Property="Width" Value="10" />
+                            <Setter TargetName="InnerEllipse" Property="Height" Value="10" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource Background.TransparentMedium}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!--  Carousel 控件模板  -->
-	<ControlTemplate x:Key="Carousel.ControlTemplate.Basic" TargetType="ctl:Carousel">
-		<Grid x:Name="RootGrid">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="Auto" />
-			</Grid.ColumnDefinitions>
+    <!--  Carousel 控件模板  -->
+    <ControlTemplate x:Key="Carousel.ControlTemplate.Basic"
+                     TargetType="ctl:Carousel">
+        <Grid x:Name="RootGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-			<!--  功能栏容器  -->
-			<ContentPresenter
-				x:Name="FunctionBarContainer"
-				Grid.ColumnSpan="3"
-				HorizontalAlignment="Right"
-				VerticalAlignment="Top"
-				Panel.ZIndex="98"
-				Content="{TemplateBinding FunctionBar}" />
+            <!--  功能栏容器  -->
+            <ContentPresenter x:Name="FunctionBarContainer"
+                              Grid.ColumnSpan="3"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Top"
+                              Panel.ZIndex="98"
+                              Content="{TemplateBinding FunctionBar}" />
 
-			<!--  导航栏容器  -->
-			<ContentPresenter
-				x:Name="NavigationBarContainer"
-				Grid.ColumnSpan="3"
-				VerticalAlignment="Bottom"
-				Panel.ZIndex="98"
-				Content="{TemplateBinding NavigationBar}" />
+            <!--  导航栏容器  -->
+            <ContentPresenter x:Name="NavigationBarContainer"
+                              Grid.ColumnSpan="3"
+                              VerticalAlignment="Bottom"
+                              Panel.ZIndex="98"
+                              Content="{TemplateBinding NavigationBar}" />
 
-			<!--  上一个按钮  -->
-			<Button
-				x:Name="PART_PrevButton"
-				Grid.Column="0"
-				Margin="10,0,0,0"
-				VerticalAlignment="Center"
-				Panel.ZIndex="99"
-				Command="{x:Static ctl:Carousel.PrevCommand}"
-				Style="{StaticResource Carousel.PrevNextButtonStyle}">
-				<Path
-					Width="16"
-					Height="16"
-					Data="M384 512l192 192 29.866667-29.866667-162.133334-162.133333 162.133334-162.133333-29.866667-29.866667L384 512z"
-					Fill="{DynamicResource Icon.Foreground.Invert}"
-					Stretch="Uniform" />
-			</Button>
+            <!--  上一个按钮  -->
+            <Button x:Name="PART_PrevButton"
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="99"
+                    Command="{x:Static ctl:Carousel.PrevCommand}"
+                    Style="{StaticResource Carousel.PrevNextButtonStyle}">
+                <Path Width="16"
+                      Height="16"
+                      Data="M384 512l192 192 29.866667-29.866667-162.133334-162.133333 162.133334-162.133333-29.866667-29.866667L384 512z"
+                      Fill="{DynamicResource Icon.Foreground.Invert}"
+                      Stretch="Uniform" />
+            </Button>
 
-			<!--  内容滚动区域  -->
-			<ScrollViewer
-				x:Name="PART_ScrollViewer"
-				Grid.ColumnSpan="3"
-				Panel.ZIndex="0"
-				hp:ScrollViewerHelper.HorizontalOffset="0"
-				CanContentScroll="False"
-				HorizontalScrollBarVisibility="Hidden"
-				IsDeferredScrollingEnabled="True"
-				VerticalScrollBarVisibility="Disabled">
-				<ItemsPresenter VerticalAlignment="Stretch">
-					<ItemsPresenter.Resources>
-						<Style TargetType="StackPanel">
-							<Setter Property="Orientation" Value="Horizontal" />
-						</Style>
-					</ItemsPresenter.Resources>
-				</ItemsPresenter>
-			</ScrollViewer>
+            <!--  内容滚动区域  -->
+            <ScrollViewer x:Name="PART_ScrollViewer"
+                          Grid.ColumnSpan="3"
+                          Panel.ZIndex="0"
+                          hp:ScrollViewerHelper.HorizontalOffset="0"
+                          CanContentScroll="False"
+                          HorizontalScrollBarVisibility="Hidden"
+                          IsDeferredScrollingEnabled="True"
+                          VerticalScrollBarVisibility="Disabled">
+                <ItemsPresenter VerticalAlignment="Stretch">
+                    <ItemsPresenter.Resources>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Orientation" Value="Horizontal" />
+                        </Style>
+                    </ItemsPresenter.Resources>
+                </ItemsPresenter>
+            </ScrollViewer>
 
-			<!--  下一个按钮  -->
-			<Button
-				x:Name="PART_NextButton"
-				Grid.Column="2"
-				Margin="0,0,10,0"
-				VerticalAlignment="Center"
-				Panel.ZIndex="99"
-				Command="{x:Static ctl:Carousel.NextCommand}"
-				Style="{StaticResource Carousel.PrevNextButtonStyle}">
-				<Path
-					Width="16"
-					Height="16"
-					Data="M644.266667 494.933333l-192 192-29.866667-29.866666 162.133333-162.133334-162.133333-162.133333 29.866667-29.866667 192 192z"
-					Fill="{DynamicResource Icon.Foreground.Invert}"
-					Stretch="Uniform" />
-			</Button>
+            <!--  下一个按钮  -->
+            <Button x:Name="PART_NextButton"
+                    Grid.Column="2"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="99"
+                    Command="{x:Static ctl:Carousel.NextCommand}"
+                    Style="{StaticResource Carousel.PrevNextButtonStyle}">
+                <Path Width="16"
+                      Height="16"
+                      Data="M644.266667 494.933333l-192 192-29.866667-29.866666 162.133333-162.133334-162.133333-162.133333 29.866667-29.866667 192 192z"
+                      Fill="{DynamicResource Icon.Foreground.Invert}"
+                      Stretch="Uniform" />
+            </Button>
 
-			<!--  指示器列表  -->
-			<ListBox
-				x:Name="PART_IndicatorsListBox"
-				Grid.ColumnSpan="3"
-				Height="30"
-				Margin="0,0,0,10"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Bottom"
-				Panel.ZIndex="100"
-				Background="Transparent"
-				BorderThickness="0"
-				Focusable="False"
-				IsTabStop="False"
-				ItemsSource="{Binding Path=Items, Converter={x:Static conv:MathConverter.ObjectsToIndexes}, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-				ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-				ScrollViewer.VerticalScrollBarVisibility="Disabled"
-				SelectedIndex="{Binding Path=SelectedIndex, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-				Style="{x:Null}">
-				<ListBox.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel
-							HorizontalAlignment="Center"
-							Orientation="Horizontal"
-							SnapsToDevicePixels="True" />
-					</ItemsPanelTemplate>
-				</ListBox.ItemsPanel>
-				<ListBox.ItemContainerStyle>
-					<Style TargetType="ListBoxItem">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="ListBoxItem">
-									<RadioButton IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource Carousel.IndicatorButtonStyle}" />
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</ListBox.ItemContainerStyle>
-			</ListBox>
-		</Grid>
+            <!--  指示器列表  -->
+            <ListBox x:Name="PART_IndicatorsListBox"
+                     Grid.ColumnSpan="3"
+                     Height="30"
+                     Margin="0,0,0,10"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Bottom"
+                     Panel.ZIndex="100"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Focusable="False"
+                     IsTabStop="False"
+                     ItemsSource="{Binding Path=Items, Converter={x:Static conv:MathConverter.ObjectsToIndexes}, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     SelectedIndex="{Binding Path=SelectedIndex, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                     Style="{x:Null}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel HorizontalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    SnapsToDevicePixels="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <RadioButton IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                 Style="{StaticResource Carousel.IndicatorButtonStyle}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
 
-		<!--  模板触发器  -->
-		<ControlTemplate.Triggers>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Opacity" Value="0.6" />
-			</Trigger>
-		</ControlTemplate.Triggers>
-	</ControlTemplate>
+        <!--  模板触发器  -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.6" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
-	<!--  Carousel 样式  -->
-	<Style x:Key="Carousel.Style.Basic" TargetType="ctl:Carousel">
-		<Setter Property="Template" Value="{StaticResource Carousel.ControlTemplate.Basic}" />
-		<Setter Property="ItemContainerStyle" Value="{StaticResource CarouselItem.Style.Basic}" />
-		<Setter Property="Height" Value="Auto" />
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
-		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
-		<Setter Property="SnapsToDevicePixels" Value="True" />
-		<Setter Property="ItemsPanel">
-			<Setter.Value>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <!--  Carousel 样式  -->
+    <Style x:Key="Carousel.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
+           TargetType="ctl:Carousel">
+        <Setter Property="Template" Value="{StaticResource Carousel.ControlTemplate.Basic}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource CarouselItem.Style.Basic}" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<!--  默认样式  -->
-	<Style BasedOn="{StaticResource Carousel.Style.Basic}" TargetType="ctl:Carousel" />
+    <!--  默认样式  -->
+    <Style BasedOn="{StaticResource Carousel.Style.Basic}"
+           TargetType="ctl:Carousel" />
 </ResourceDictionary>

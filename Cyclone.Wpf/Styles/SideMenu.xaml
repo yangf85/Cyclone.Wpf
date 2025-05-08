@@ -13,6 +13,7 @@
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
         <Setter Property="Panel.ZIndex" Value="99" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -119,8 +120,6 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                         </Trigger>
-
-                        <!--  新增的触发器，检测父级 SideMenu 的 IsCompact 属性  -->
                         <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}"
                                      Value="True">
                             <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />

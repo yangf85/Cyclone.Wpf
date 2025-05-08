@@ -8,10 +8,6 @@
     <Style x:Key="Button.Style.Basic"
            BasedOn="{StaticResource Control.Style.Basic}"
            TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
-        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
-        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

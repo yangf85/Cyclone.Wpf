@@ -4,10 +4,12 @@
                     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
                     xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
+        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="Window.CaptionButtonStyle"
+           BasedOn="{StaticResource Control.Style.Basic}"
            TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
@@ -38,6 +40,7 @@
     </Style>
 
     <Style x:Key="Window.CaptionCloseButtonStyle"
+           BasedOn="{StaticResource Control.Style.Basic}"
            TargetType="Button">
         <Setter Property="Background" Value="{Binding Path=CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Height" Value="{Binding Path=CaptionHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:AdvancedWindow}}" />
@@ -69,6 +72,7 @@
     </Style>
 
     <Style x:Key="Window.TopmostButtonStyle"
+           BasedOn="{StaticResource Control.Style.Basic}"
            TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding CaptionBackground, RelativeSource={RelativeSource AncestorType=ctl:AdvancedWindow}}" />
         <Setter Property="Template">
@@ -244,14 +248,14 @@
     </ControlTemplate>
 
     <Style x:Key="AdvacedWindow.Style.Basic"
+           BasedOn="{StaticResource Control.Style.Basic}"
            TargetType="{x:Type ctl:AdvancedWindow}">
         <Setter Property="Template" Value="{DynamicResource BasicWindowControlTemplate}" />
-        <Setter Property="CaptionHeight" Value="32" />
-        <Setter Property="Background" Value="White" />
+        <Setter Property="CaptionHeight" Value="{DynamicResource Height.Horizontal.Caption}" />
+        <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="CaptionBackground" Value="{DynamicResource Background.Caption}" />
         <Setter Property="TitleBrush" Value="White" />
         <Setter Property="BorderBrush" Value="{DynamicResource Background.Caption}" />
-        <Setter Property="Foreground" Value="{x:Static SystemColors.WindowTextBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
