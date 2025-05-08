@@ -24,6 +24,7 @@ public class ColorRegion : Control
     }
 
     #region Hue
+
     public double Hue
     {
         get => (double)GetValue(HueProperty);
@@ -47,9 +48,11 @@ public class ColorRegion : Control
         UpdateHueGradient();
         UpdateSelectedColor();
     }
-    #endregion
+
+    #endregion Hue
 
     #region Saturation
+
     public double Saturation
     {
         get => (double)GetValue(SaturationProperty);
@@ -58,7 +61,7 @@ public class ColorRegion : Control
 
     public static readonly DependencyProperty SaturationProperty =
         DependencyProperty.Register(nameof(Saturation), typeof(double), typeof(ColorRegion),
-            new FrameworkPropertyMetadata(1.0,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSaturationChanged)); // 将初始值改为1.0
+            new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSaturationChanged)); // 将初始值改为1.0
 
     private static void OnSaturationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -73,9 +76,11 @@ public class ColorRegion : Control
         UpdateSelectorPosition();
         UpdateSelectedColor();
     }
-    #endregion
+
+    #endregion Saturation
 
     #region Value
+
     public double Value
     {
         get => (double)GetValue(ValueProperty);
@@ -99,11 +104,11 @@ public class ColorRegion : Control
         UpdateSelectorPosition();
         UpdateSelectedColor();
     }
-    #endregion
 
-
+    #endregion Value
 
     #region SelectedColor
+
     public Color SelectedColor
     {
         get => (Color)GetValue(SelectedColorProperty);
@@ -115,12 +120,14 @@ public class ColorRegion : Control
             new PropertyMetadata(Colors.Red));
 
     public static readonly DependencyProperty SelectedColorProperty = SelectedColorPropertyKey.DependencyProperty;
-    #endregion
+
+    #endregion SelectedColor
 
     public event EventHandler<ColorChangedEventArgs> ColorChanged;
 
     // 模板部分
     private FrameworkElement _colorArea;
+
     private FrameworkElement _selector;
     private GradientStop _hueGradient;
     private Border _colorAreaBorder;
@@ -204,7 +211,6 @@ public class ColorRegion : Control
                 _colorArea.InvalidateVisual();
             }
         }
-       
     }
 
     private void UpdateSelectorPosition()
@@ -219,7 +225,6 @@ public class ColorRegion : Control
             Canvas.SetLeft(_selector, x - _selector.ActualWidth / 2);
             Canvas.SetTop(_selector, y - _selector.ActualHeight / 2);
         }
-       
     }
 
     private void UpdateSelectedColor()
@@ -292,6 +297,7 @@ public class ColorChangedEventArgs : EventArgs
     public Color NewColor { get; }
 
     public Color OldColor { get; }
+
     public ColorChangedEventArgs(Color oldColor, Color newColor)
     {
         OldColor = oldColor;

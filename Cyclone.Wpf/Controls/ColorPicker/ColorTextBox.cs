@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -164,11 +163,11 @@ namespace Cyclone.Wpf.Controls
         {
             if (TextMode == ColorTextMode.HEX)
             {
-                e.Handled = !IsValidHexChar(e.Text);
+                e.Handled = !ColorHelper.IsValidHexChar(e.Text);
             }
             else if (TextMode == ColorTextMode.RGB)
             {
-                e.Handled = !IsValidRgbChar(e.Text);
+                e.Handled = !ColorHelper.IsValidRgbChar(e.Text);
             }
         }
 
@@ -180,20 +179,20 @@ namespace Cyclone.Wpf.Controls
                 string text = (string)e.DataObject.GetData(typeof(string));
 
                 // 如果粘贴的内容包含完整的颜色格式，自动切换模式
-                if (IsValidHexString(text) && TextMode != ColorTextMode.HEX)
+                if (ColorHelper.IsValidHexString(text) && TextMode != ColorTextMode.HEX)
                 {
                     TextMode = ColorTextMode.HEX;
                 }
-                else if (IsValidRgbString(text) && TextMode != ColorTextMode.RGB)
+                else if (ColorHelper.IsValidRgbString(text) && TextMode != ColorTextMode.RGB)
                 {
                     TextMode = ColorTextMode.RGB;
                 }
                 // 验证当前模式下的合法性
-                else if (TextMode == ColorTextMode.HEX && !IsValidHexChar(text))
+                else if (TextMode == ColorTextMode.HEX && !ColorHelper.IsValidHexChar(text))
                 {
                     e.CancelCommand();
                 }
-                else if (TextMode == ColorTextMode.RGB && !IsValidRgbChar(text))
+                else if (TextMode == ColorTextMode.RGB && !ColorHelper.IsValidRgbChar(text))
                 {
                     e.CancelCommand();
                 }
@@ -235,99 +234,6 @@ namespace Cyclone.Wpf.Controls
 
         #endregion 事件处理
 
-        #region 颜色转换方法
-
-        /// <summary>
-        /// 尝试将HEX格式字符串解析为颜色
-        /// </summary>
-        /// <param name="text">要解析的字符串</param>
-        /// <param name="color">输出颜色</param>
-        /// <returns>是否解析成功</returns>
-        public static bool TryParseHexColor(string text, out Color color)
-        {
-            color = Colors.Black;
-
-            if (string.IsNullOrWhiteSpace(text))
-                return false;
-
-            text = text.TrimStart('#');
-
-            // 支持简写形式 #RGB
-            if (text.Length == 3)
-            {
-                text = $"{text[0]}{text[0]}{text[1]}{text[1]}{text[2]}{text[2]}";
-            }
-
-            // 检查长度是否为6
-            if (text.Length != 6)
-                return false;
-
-            try
-            {
-                byte r = Convert.ToByte(text.Substring(0, 2), 16);
-                byte g = Convert.ToByte(text.Substring(2, 2), 16);
-                byte b = Convert.ToByte(text.Substring(4, 2), 16);
-
-                color = Color.FromRgb(r, g, b);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 尝试将RGB格式字符串解析为颜色
-        /// </summary>
-        /// <param name="text">要解析的字符串</param>
-        /// <param name="color">输出颜色</param>
-        /// <returns>是否解析成功</returns>
-        public static bool TryParseRgbColor(string text, out Color color)
-        {
-            color = Colors.Black;
-
-            var match = Regex.Match(text, @"RGB\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", RegexOptions.IgnoreCase);
-            if (!match.Success)
-                return false;
-
-            try
-            {
-                byte r = Clamp(byte.Parse(match.Groups[1].Value), 0, 255);
-                byte g = Clamp(byte.Parse(match.Groups[2].Value), 0, 255);
-                byte b = Clamp(byte.Parse(match.Groups[3].Value), 0, 255);
-
-                color = Color.FromRgb(r, g, b);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 将颜色转换为HEX格式字符串
-        /// </summary>
-        /// <param name="color">要转换的颜色</param>
-        /// <returns>HEX格式字符串</returns>
-        public static string ColorToHexString(Color color)
-        {
-            return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-        }
-
-        /// <summary>
-        /// 将颜色转换为RGB格式字符串
-        /// </summary>
-        /// <param name="color">要转换的颜色</param>
-        /// <returns>RGB格式字符串</returns>
-        public static string ColorToRgbString(Color color)
-        {
-            return $"RGB({color.R}, {color.G}, {color.B})";
-        }
-
-        #endregion 颜色转换方法
-
         #region 私有辅助方法
 
         // 根据颜色更新文本
@@ -335,11 +241,11 @@ namespace Cyclone.Wpf.Controls
         {
             if (TextMode == ColorTextMode.HEX)
             {
-                Text = ColorToHexString(Color);
+                Text = ColorHelper.ColorToHexString(Color);
             }
             else
             {
-                Text = ColorToRgbString(Color);
+                Text = ColorHelper.ColorToRgbString(Color);
             }
 
             IsInputValid = true;
@@ -350,60 +256,15 @@ namespace Cyclone.Wpf.Controls
         {
             string text = Text;
 
-            if (TextMode == ColorTextMode.HEX)
+            if (ColorHelper.TryParseColorText(text, TextMode, out Color parsedColor))
             {
-                if (TryParseHexColor(text, out Color parsedColor))
-                {
-                    Color = parsedColor;
-                    IsInputValid = true;
-                }
-                else
-                {
-                    IsInputValid = false;
-                }
+                Color = parsedColor;
+                IsInputValid = true;
             }
-            else if (TextMode == ColorTextMode.RGB)
+            else
             {
-                if (TryParseRgbColor(text, out Color parsedColor))
-                {
-                    Color = parsedColor;
-                    IsInputValid = true;
-                }
-                else
-                {
-                    IsInputValid = false;
-                }
+                IsInputValid = false;
             }
-        }
-
-        // 验证HEX字符
-        private bool IsValidHexChar(string text)
-        {
-            return Regex.IsMatch(text, "^[#0-9a-fA-F]+$");
-        }
-
-        // 验证RGB字符
-        private bool IsValidRgbChar(string text)
-        {
-            return Regex.IsMatch(text, "^[rgbRGB0-9()\\s,]+$");
-        }
-
-        // 验证HEX字符串
-        private bool IsValidHexString(string text)
-        {
-            return Regex.IsMatch(text, "^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$");
-        }
-
-        // 验证RGB字符串
-        private bool IsValidRgbString(string text)
-        {
-            return Regex.IsMatch(text, @"^RGB\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$", RegexOptions.IgnoreCase);
-        }
-
-        // 数值范围限制
-        private static byte Clamp(int value, int min, int max)
-        {
-            return (byte)Math.Max(min, Math.Min(value, max));
         }
 
         #endregion 私有辅助方法

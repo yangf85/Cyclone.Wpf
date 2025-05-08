@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 
@@ -9,6 +10,8 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public static class ColorHelper
 {
+    #region 颜色空间转换
+
     /// <summary>
     /// 计算给定色调的无饱和度颜色
     /// </summary>
@@ -242,6 +245,10 @@ public static class ColorHelper
         b = (byte)((1 - y) * (1 - k) * 255);
     }
 
+    #endregion 颜色空间转换
+
+    #region 颜色比较
+
     /// <summary>
     /// 判断两个颜色是否接近
     /// </summary>
@@ -272,4 +279,316 @@ public static class ColorHelper
         // 亮度高于128使用黑色文本，否则使用白色
         return luminance > 128 ? Colors.Black : Colors.White;
     }
+
+    #endregion 颜色比较
+
+    #region 颜色分类
+
+    /// <summary>
+    /// 根据颜色获取默认分类
+    /// </summary>
+    public static string GetColorCategory(Color color)
+    {
+        RgbToHsv(color.R, color.G, color.B, out double h, out double s, out double v);
+
+        // 灰度色
+        if (s < 0.15)
+        {
+            if (v < 0.1) return "黑色";
+            if (v > 0.9) return "白色";
+            return "灰色";
+        }
+
+        // 按色相分类
+        if (h < 30) return "红色";
+        if (h < 60) return "橙色";
+        if (h < 90) return "黄色";
+        if (h < 150) return "绿色";
+        if (h < 210) return "青色";
+        if (h < 270) return "蓝色";
+        if (h < 330) return "紫色";
+        return "红色";
+    }
+
+    /// <summary>
+    ///
+    /// 获取颜色名称
+    /// </summary>
+    public static string GetColorName(Color color)
+    {
+        // 基本颜色命名
+        if (color == Colors.Red) return "红色";
+        if (color == Colors.Green) return "绿色";
+        if (color == Colors.Blue) return "蓝色";
+        if (color == Colors.Yellow) return "黄色";
+        if (color == Colors.Purple) return "紫色";
+        if (color == Colors.Cyan) return "青色";
+        if (color == Colors.Magenta) return "品红";
+        if (color == Colors.White) return "白色";
+        if (color == Colors.Black) return "黑色";
+        if (color == Colors.Gray) return "灰色";
+        if (color == Colors.Orange) return "橙色";
+
+        // 如果不是标准颜色，返回十六进制值作为名称
+        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
+
+    #endregion 颜色分类
+
+    #region 颜色文本转换
+
+    /// <summary>
+    /// 将颜色转换为HEX格式字符串
+    /// </summary>
+    /// <param name="color">要转换的颜色</param>
+    /// <param name="includeAlpha">是否包含透明度</param>
+    /// <returns>HEX格式字符串</returns>
+    public static string ColorToHexString(Color color, bool includeAlpha = false)
+    {
+        if (includeAlpha && color.A < 255)
+        {
+            return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
+        }
+        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
+
+    /// <summary>
+    /// 将颜色转换为RGB格式字符串
+    /// </summary>
+    /// <param name="color">要转换的颜色</param>
+    /// <param name="includeAlpha">是否包含透明度</param>
+    /// <returns>RGB格式字符串</returns>
+    public static string ColorToRgbString(Color color, bool includeAlpha = false)
+    {
+        if (includeAlpha && color.A < 255)
+        {
+            return $"RGBA({color.R}, {color.G}, {color.B}, {color.A / 255.0:F2})";
+        }
+        return $"RGB({color.R}, {color.G}, {color.B})";
+    }
+
+    /// <summary>
+    /// 将颜色转换为HSL格式字符串
+    /// </summary>
+    /// <param name="color">要转换的颜色</param>
+    /// <returns>HSL格式字符串</returns>
+    public static string ColorToHslString(Color color)
+    {
+        RgbToHsl(color.R, color.G, color.B, out double h, out double s, out double l);
+        return $"HSL: {h:F0}°, {s:P0}, {l:P0}";
+    }
+
+    /// <summary>
+    /// 将颜色转换为HSV格式字符串
+    /// </summary>
+    /// <param name="color">要转换的颜色</param>
+    /// <returns>HSV格式字符串</returns>
+    public static string ColorToHsvString(Color color)
+    {
+        RgbToHsv(color.R, color.G, color.B, out double h, out double s, out double v);
+        return $"HSV: {h:F0}°, {s:P0}, {v:P0}";
+    }
+
+    /// <summary>
+    /// 将颜色转换为CMYK格式字符串
+    /// </summary>
+    /// <param name="color">要转换的颜色</param>
+    /// <returns>CMYK格式字符串</returns>
+    public static string ColorToCmykString(Color color)
+    {
+        RgbToCmyk(color.R, color.G, color.B, out double c, out double m, out double y, out double k);
+        return $"CMYK: {c:P0}, {m:P0}, {y:P0}, {k:P0}";
+    }
+
+    /// <summary>
+    /// 将指定格式的颜色文本转换为颜色对象
+    /// </summary>
+    /// <param name="text">颜色文本</param>
+    /// <param name="mode">颜色文本格式</param>
+    /// <param name="color">输出颜色</param>
+    /// <returns>是否转换成功</returns>
+    public static bool TryParseColorText(string text, ColorTextMode mode, out Color color)
+    {
+        if (mode == ColorTextMode.HEX)
+        {
+            return TryParseHexColor(text, out color);
+        }
+        else if (mode == ColorTextMode.RGB)
+        {
+            return TryParseRgbColor(text, out color);
+        }
+        else
+        {
+            color = Colors.Transparent;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 尝试将HEX格式字符串解析为颜色
+    /// </summary>
+    /// <param name="text">要解析的字符串</param>
+    /// <param name="color">输出颜色</param>
+    /// <returns>是否解析成功</returns>
+    public static bool TryParseHexColor(string text, out Color color)
+    {
+        color = Colors.Black;
+
+        if (string.IsNullOrWhiteSpace(text))
+            return false;
+
+        text = text.TrimStart('#');
+
+        // 支持ARGB格式
+        if (text.Length == 8)
+        {
+            try
+            {
+                byte a = Convert.ToByte(text.Substring(0, 2), 16);
+                byte r = Convert.ToByte(text.Substring(2, 2), 16);
+                byte g = Convert.ToByte(text.Substring(4, 2), 16);
+                byte b = Convert.ToByte(text.Substring(6, 2), 16);
+
+                color = Color.FromArgb(a, r, g, b);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // 支持简写形式 #RGB
+        if (text.Length == 3)
+        {
+            text = $"{text[0]}{text[0]}{text[1]}{text[1]}{text[2]}{text[2]}";
+        }
+
+        // 标准RGB格式
+        if (text.Length != 6)
+            return false;
+
+        try
+        {
+            byte r = Convert.ToByte(text.Substring(0, 2), 16);
+            byte g = Convert.ToByte(text.Substring(2, 2), 16);
+            byte b = Convert.ToByte(text.Substring(4, 2), 16);
+
+            color = Color.FromRgb(r, g, b);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 尝试将RGB格式字符串解析为颜色
+    /// </summary>
+    /// <param name="text">要解析的字符串</param>
+    /// <param name="color">输出颜色</param>
+    /// <returns>是否解析成功</returns>
+    public static bool TryParseRgbColor(string text, out Color color)
+    {
+        color = Colors.Black;
+
+        // 支持RGBA格式
+        var rgbaMatch = Regex.Match(text, @"RGBA\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d\.]+)\s*\)", RegexOptions.IgnoreCase);
+        if (rgbaMatch.Success)
+        {
+            try
+            {
+                byte r = Clamp(byte.Parse(rgbaMatch.Groups[1].Value), 0, 255);
+                byte g = Clamp(byte.Parse(rgbaMatch.Groups[2].Value), 0, 255);
+                byte b = Clamp(byte.Parse(rgbaMatch.Groups[3].Value), 0, 255);
+                byte a = (byte)(Clamp(double.Parse(rgbaMatch.Groups[4].Value), 0, 1) * 255);
+
+                color = Color.FromArgb(a, r, g, b);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // 支持RGB格式
+        var rgbMatch = Regex.Match(text, @"RGB\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", RegexOptions.IgnoreCase);
+        if (!rgbMatch.Success)
+            return false;
+
+        try
+        {
+            byte r = Clamp(byte.Parse(rgbMatch.Groups[1].Value), 0, 255);
+            byte g = Clamp(byte.Parse(rgbMatch.Groups[2].Value), 0, 255);
+            byte b = Clamp(byte.Parse(rgbMatch.Groups[3].Value), 0, 255);
+
+            color = Color.FromRgb(r, g, b);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    #endregion 颜色文本转换
+
+    #region 颜色文本验证
+
+    /// <summary>
+    /// 验证Hex颜色字符
+    /// </summary>
+    public static bool IsValidHexChar(string text)
+    {
+        return Regex.IsMatch(text, "^[#0-9a-fA-F]+$");
+    }
+
+    /// <summary>
+    /// 验证RGB颜色字符
+    /// </summary>
+    public static bool IsValidRgbChar(string text)
+    {
+        return Regex.IsMatch(text, "^[rgbRGB0-9()\\s,.]+$");
+    }
+
+    /// <summary>
+    /// 验证Hex颜色字符串
+    /// </summary>
+    public static bool IsValidHexString(string text)
+    {
+        return Regex.IsMatch(text, "^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$");
+    }
+
+    /// <summary>
+    /// 验证RGB颜色字符串
+    /// </summary>
+    public static bool IsValidRgbString(string text)
+    {
+        return Regex.IsMatch(text, @"^RGB\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$", RegexOptions.IgnoreCase) ||
+               Regex.IsMatch(text, @"^RGBA\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d\.]+\s*\)$", RegexOptions.IgnoreCase);
+    }
+
+    #endregion 颜色文本验证
+
+    #region 辅助方法
+
+    /// <summary>
+    /// 将数值限制在指定范围内
+    /// </summary>
+    public static byte Clamp(int value, int min, int max)
+    {
+        return (byte)Math.Max(min, Math.Min(value, max));
+    }
+
+    /// <summary>
+    /// 将浮点数值限制在指定范围内
+    /// </summary>
+    public static double Clamp(double value, double min, double max)
+    {
+        return Math.Max(min, Math.Min(value, max));
+    }
+
+    #endregion 辅助方法
 }

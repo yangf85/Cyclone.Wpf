@@ -13,7 +13,7 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 [TemplatePart(Name = "PART_ColorRegion", Type = typeof(ColorRegion))]
 [TemplatePart(Name = "PART_HueSlider", Type = typeof(Slider))]
-[TemplatePart(Name = "PART_OpacitySlider", Type = typeof(Slider))]
+[TemplatePart(Name = "PART_AlphaSlider", Type = typeof(Slider))]
 [TemplatePart(Name = "PART_BrightSlider", Type = typeof(Slider))]
 [TemplatePart(Name = "PART_SaturationSlider", Type = typeof(Slider))]
 [TemplatePart(Name = "PART_HexTextBox", Type = typeof(ColorTextBox))]
@@ -21,16 +21,16 @@ namespace Cyclone.Wpf.Controls;
 [TemplatePart(Name = "PART_Eyedropper", Type = typeof(ColorEyedropper))]
 [TemplatePart(Name = "PART_PresetColors", Type = typeof(ColorPalette))]
 [TemplatePart(Name = "PART_HistoryColors", Type = typeof(ColorPalette))]
-[TemplatePart(Name = "PART_OpacityGradient", Type = typeof(GradientStop))]
+[TemplatePart(Name = "PART_AlphaGradient", Type = typeof(GradientStop))]
 [TemplatePart(Name = "PART_BrightnessGradient", Type = typeof(GradientStop))]
 [TemplatePart(Name = "PART_SaturationGradient", Type = typeof(GradientStop))]
-public class ColorSelector : Control, INotifyPropertyChanged
+public class ColorSelector : Control
 {
     #region 私有字段
 
     private ColorRegion _colorRegion;
     private Slider _hueSlider;
-    private Slider _opacitySlider;
+    private Slider _alphaSlider;
     private Slider _brightSlider;
     private Slider _saturationSlider;
     private ColorTextBox _hexTextBox;
@@ -51,17 +51,6 @@ public class ColorSelector : Control, INotifyPropertyChanged
     private const int MaxHistoryCount = 27; // 历史记录最大数量
 
     #endregion 私有字段
-
-    #region INotifyPropertyChanged 实现
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    #endregion INotifyPropertyChanged 实现
 
     #region 构造函数
 
@@ -294,7 +283,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
 
     #endregion Saturation - 饱和度值
 
-    #region Value - 明度值
+    #region Value - 亮度值
 
     public double Value
     {
@@ -316,7 +305,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
         }
     }
 
-    #endregion Value - 明度值
+    #endregion Value - 亮度值
 
     #region HistoryColors - 颜色历史记录
 
@@ -365,7 +354,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
         // 获取新控件
         _colorRegion = GetTemplateChild("PART_ColorRegion") as ColorRegion;
         _hueSlider = GetTemplateChild("PART_HueSlider") as Slider;
-        _opacitySlider = GetTemplateChild("PART_OpacitySlider") as Slider;
+        _alphaSlider = GetTemplateChild("PART_AlphaSlider") as Slider;
         _brightSlider = GetTemplateChild("PART_BrightSlider") as Slider;
         _saturationSlider = GetTemplateChild("PART_SaturationSlider") as Slider;
         _hexTextBox = GetTemplateChild("PART_HexTextBox") as ColorTextBox;
@@ -375,9 +364,9 @@ public class ColorSelector : Control, INotifyPropertyChanged
         _historyColors = GetTemplateChild("PART_HistoryColors") as ColorPalette;
 
         // 获取渐变对象
-        if (_opacitySlider != null)
+        if (_alphaSlider != null)
         {
-            _opacityGradient = GetGradientStopFromSlider(_opacitySlider, "PART_OpacityGradient");
+            _opacityGradient = GetGradientStopFromSlider(_alphaSlider, "PART_AlphaGradient");
         }
 
         if (_brightSlider != null)
@@ -426,9 +415,9 @@ public class ColorSelector : Control, INotifyPropertyChanged
             _hueSlider.ValueChanged += HueSlider_ValueChanged;
         }
 
-        if (_opacitySlider != null)
+        if (_alphaSlider != null)
         {
-            _opacitySlider.ValueChanged += OpacitySlider_ValueChanged;
+            _alphaSlider.ValueChanged += OpacitySlider_ValueChanged;
         }
 
         if (_brightSlider != null)
@@ -483,9 +472,9 @@ public class ColorSelector : Control, INotifyPropertyChanged
             _hueSlider.ValueChanged -= HueSlider_ValueChanged;
         }
 
-        if (_opacitySlider != null)
+        if (_alphaSlider != null)
         {
-            _opacitySlider.ValueChanged -= OpacitySlider_ValueChanged;
+            _alphaSlider.ValueChanged -= OpacitySlider_ValueChanged;
         }
 
         if (_brightSlider != null)
@@ -534,7 +523,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
         {
             _isUpdatingControls = true;
 
-            // 解析颜色到HSV
+            // 使用ColorHelper解析颜色到HSV
             ColorHelper.RgbToHsv(color.R, color.G, color.B, out double h, out double s, out double v);
 
             // 更新属性值
@@ -558,9 +547,9 @@ public class ColorSelector : Control, INotifyPropertyChanged
             }
 
             // 更新透明度滑块
-            if (_opacitySlider != null)
+            if (_alphaSlider != null)
             {
-                _opacitySlider.Value = AlphaValue;
+                _alphaSlider.Value = AlphaValue;
 
                 // 设置带透明度的指示颜色
                 Color fullColor = Color.FromArgb(255, color.R, color.G, color.B);
@@ -687,7 +676,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
     {
         if (!_isUpdatingControls)
         {
-            // 构建新颜色并更新
+            // 使用ColorHelper构建新颜色并更新
             ColorHelper.HsvToRgb(newValue, Saturation, Value, out byte r, out byte g, out byte b);
             byte alpha = (byte)(AlphaValue * 255);
             SelectedColor = Color.FromArgb(alpha, r, g, b);
@@ -698,7 +687,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
     {
         if (!_isUpdatingControls)
         {
-            // 构建新颜色并更新
+            // 使用ColorHelper构建新颜色并更新
             ColorHelper.HsvToRgb(Hue, newValue, Value, out byte r, out byte g, out byte b);
             byte alpha = (byte)(AlphaValue * 255);
             SelectedColor = Color.FromArgb(alpha, r, g, b);
@@ -709,7 +698,7 @@ public class ColorSelector : Control, INotifyPropertyChanged
     {
         if (!_isUpdatingControls)
         {
-            // 构建新颜色并更新
+            // 使用ColorHelper构建新颜色并更新
             ColorHelper.HsvToRgb(Hue, Saturation, newValue, out byte r, out byte g, out byte b);
             byte alpha = (byte)(AlphaValue * 255);
             SelectedColor = Color.FromArgb(alpha, r, g, b);

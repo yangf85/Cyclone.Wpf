@@ -44,8 +44,8 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
     public ColorRepresentation(Color color, string name = null, string category = null)
     {
         _color = color;
-        _name = name ?? GetColorName(color);
-        _category = category ?? GetDefaultCategory(color);
+        _name = name ?? ColorHelper.GetColorName(color);
+        _category = category ?? ColorHelper.GetColorCategory(color);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
             if (_color == null || _color == Colors.Transparent)
                 return string.Empty;
 
-            return $"RGB: {_color.Value.R}, {_color.Value.G}, {_color.Value.B}";
+            return ColorHelper.ColorToRgbString(_color.Value);
         }
     }
 
@@ -142,8 +142,7 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
             if (_color == null || _color == Colors.Transparent)
                 return string.Empty;
 
-            ColorHelper.RgbToHsl(_color.Value.R, _color.Value.G, _color.Value.B, out double h, out double s, out double l);
-            return $"HSL: {h:F0}°, {s:P0}, {l:P0}";
+            return ColorHelper.ColorToHslString(_color.Value);
         }
     }
 
@@ -157,8 +156,7 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
             if (_color == null || _color == Colors.Transparent)
                 return string.Empty;
 
-            ColorHelper.RgbToHsv(_color.Value.R, _color.Value.G, _color.Value.B, out double h, out double s, out double v);
-            return $"HSV: {h:F0}°, {s:P0}, {v:P0}";
+            return ColorHelper.ColorToHsvString(_color.Value);
         }
     }
 
@@ -172,7 +170,7 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
             if (_color == null || _color == Colors.Transparent)
                 return string.Empty;
 
-            return $"#{_color.Value.R:X2}{_color.Value.G:X2}{_color.Value.B:X2}";
+            return ColorHelper.ColorToHexString(_color.Value);
         }
     }
 
@@ -186,8 +184,7 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
             if (_color == null || _color == Colors.Transparent)
                 return string.Empty;
 
-            ColorHelper.RgbToCmyk(_color.Value.R, _color.Value.G, _color.Value.B, out double c, out double m, out double y, out double k);
-            return $"CMYK: {c:P0}, {m:P0}, {y:P0}, {k:P0}";
+            return ColorHelper.ColorToCmykString(_color.Value);
         }
     }
 
@@ -203,56 +200,4 @@ public class ColorRepresentation : IColorRepresentation, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
-    #region 辅助方法
-
-    /// <summary>
-    /// 根据颜色获取默认分类
-    /// </summary>
-    private string GetDefaultCategory(Color color)
-    {
-        ColorHelper.RgbToHsv(color.R, color.G, color.B, out double h, out double s, out double v);
-
-        // 灰度色
-        if (s < 0.15)
-        {
-            if (v < 0.1) return "黑色";
-            if (v > 0.9) return "白色";
-            return "灰色";
-        }
-
-        // 按色相分类
-        if (h < 30) return "红色";
-        if (h < 60) return "橙色";
-        if (h < 90) return "黄色";
-        if (h < 150) return "绿色";
-        if (h < 210) return "青色";
-        if (h < 270) return "蓝色";
-        if (h < 330) return "紫色";
-        return "红色";
-    }
-
-    /// <summary>
-    /// 获取颜色名称
-    /// </summary>
-    private string GetColorName(Color color)
-    {
-        // 基本颜色命名
-        if (color == Colors.Red) return "红色";
-        if (color == Colors.Green) return "绿色";
-        if (color == Colors.Blue) return "蓝色";
-        if (color == Colors.Yellow) return "黄色";
-        if (color == Colors.Purple) return "紫色";
-        if (color == Colors.Cyan) return "青色";
-        if (color == Colors.Magenta) return "品红";
-        if (color == Colors.White) return "白色";
-        if (color == Colors.Black) return "黑色";
-        if (color == Colors.Gray) return "灰色";
-        if (color == Colors.Orange) return "橙色";
-
-        // 如果不是标准颜色，返回十六进制值作为名称
-        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-    }
-
-    #endregion 辅助方法
 }
