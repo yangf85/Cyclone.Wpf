@@ -39,32 +39,6 @@ namespace Cyclone.Wpf.Demo.Views
             WebBrowser wb = (WebBrowser)sender;
             wb.InvokeScript("execScript", new Object[] { script, "JavaScript" });
         }
-
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            CountdownControl.Start();
-        }
-
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            CountdownControl.Reset();
-        }
-
-        private void AnimationTypeCombo_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (CountdownControl != null)
-            {
-                CountdownControl.AnimationType = (AnimationType)AnimationTypeCombo.SelectedIndex;
-            }
-        }
-
-        private void DurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (CountdownControl != null)
-            {
-                CountdownControl.AnimationDuration = DurationSlider.Value;
-            }
-        }
     }
 
     public partial class ImageViewModel : ObservableObject

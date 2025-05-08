@@ -30,16 +30,6 @@ namespace Cyclone.Wpf.Demo.Views
             DataContext = new RangeViewModel();
         }
 
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            CountdownControl.Start();
-        }
-
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            CountdownControl.Reset();
-        }
-
         private void CountdownControl_Completed(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("倒计时结束！");

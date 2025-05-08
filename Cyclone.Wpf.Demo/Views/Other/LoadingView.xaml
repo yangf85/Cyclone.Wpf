@@ -133,52 +133,5 @@
                 </Border>
             </cy:SpacingStackPanel>
         </HeaderedContentControl>
-
-        <HeaderedContentControl Header="CountDown">
-            <StackPanel Width="300"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                <cy:NumberCountdown x:Name="CountdownControl"
-                                    Margin="0,0,0,20"
-                                    AnimationDuration="0.5"
-                                    AnimationType="Scale"
-                                    FontSize="72"
-                                    NumberColor="Blue"
-                                    StartNumber="10" />
-
-                <StackPanel HorizontalAlignment="Center"
-                            Orientation="Horizontal">
-                    <Button Margin="0,0,10,0"
-                            Padding="10,5"
-                            Click="StartButton_Click"
-                            Content="Start" />
-                    <Button Padding="10,5"
-                            Click="ResetButton_Click"
-                            Content="Reset" />
-                </StackPanel>
-
-                <StackPanel Margin="0,20,0,0">
-                    <TextBlock Margin="0,0,0,5"
-                               Text="Animation Type:" />
-                    <ComboBox x:Name="AnimationTypeCombo"
-                              SelectedIndex="1"
-                              SelectionChanged="AnimationTypeCombo_SelectionChanged">
-                        <ComboBoxItem Content="None" />
-                        <ComboBoxItem Content="Fade" />
-                        <ComboBoxItem Content="Scale" />
-                        <ComboBoxItem Content="Flip" />
-                    </ComboBox>
-
-                    <TextBlock Margin="0,10,0,5"
-                               Text="Duration (seconds):" />
-                    <Slider x:Name="DurationSlider"
-                            Maximum="2"
-                            Minimum="0.1"
-                            TickFrequency="0.1"
-                            ValueChanged="DurationSlider_ValueChanged"
-                            Value="0.5" />
-                </StackPanel>
-            </StackPanel>
-        </HeaderedContentControl>
     </cy:SpacingStackPanel>
 </UserControl>

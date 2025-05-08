@@ -7,32 +7,33 @@
 
     <Style TargetType="{x:Type ctl:Countdown}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
-        <Setter Property="Foreground" Value="{DynamicResource tex}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
+        <Setter Property="Padding" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:Countdown}">
-                    <Grid x:Name="RootBorder"
-                          Background="{TemplateBinding Background}">
+                    <Border x:Name="RootBorder"
+                            SnapsToDevicePixels="True"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}">
                         <!--  内容  -->
-                        <Border x:Name="PART_AnimationContainer"
-                                Margin="{TemplateBinding Padding}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                BorderThickness="0"
-                                Background="Transparent">
-                            <Border.RenderTransform>
+                        <Grid x:Name="PART_AnimationContainer"
+                              Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Background="Transparent">
+                            <Grid.RenderTransform>
                                 <ScaleTransform x:Name="AnimationScaleTransform" CenterX="0.5" CenterY="0.5" />
-                            </Border.RenderTransform>
+                            </Grid.RenderTransform>
                             <TextBlock x:Name="DisplayText"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
                                        Foreground="{TemplateBinding Foreground}"
                                        FontSize="24" />
-                        </Border>
+                        </Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Idle">
@@ -118,7 +119,7 @@
                                                                        Storyboard.TargetProperty="ScaleX">
                                             <EasingDoubleKeyFrame KeyTime="0:0:0"
                                                                   Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.25"
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3"
                                                                   Value="1.25" />
                                             <EasingDoubleKeyFrame KeyTime="0:0:0.5"
                                                                   Value="1.0" />
@@ -128,7 +129,7 @@
                                                                        Storyboard.TargetProperty="ScaleY">
                                             <EasingDoubleKeyFrame KeyTime="0:0:0"
                                                                   Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.25"
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3"
                                                                   Value="1.25" />
                                             <EasingDoubleKeyFrame KeyTime="0:0:0.5"
                                                                   Value="1.0" />
@@ -137,7 +138,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

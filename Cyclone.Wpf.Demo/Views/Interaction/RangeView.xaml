@@ -29,21 +29,6 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
 
-        <HeaderedContentControl Header="CountDown">
-            <cy:SpacingStackPanel>
-                <cy:NumberCountdown x:Name="CountdownControl"
-                                    Width="200"
-                                    Height="200"
-                                    AnimationType="Scale"
-                                    IsAnimating="{Binding ElementName=AAA, Path=IsChecked}"
-                                    NumberColor="Red"
-                                    StartNumber="5" />
-                <ToggleButton x:Name="AAA"
-                              Margin="10"
-                              Content="Start" />
-            </cy:SpacingStackPanel>
-        </HeaderedContentControl>
-
         <HeaderedContentControl Header="RangeSlider">
             <DockPanel>
                 <cy:RangeSlider x:Name="RangeSlider"
