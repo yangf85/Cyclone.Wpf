@@ -2,9 +2,12 @@
 
   <PropertyGroup>
 	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
+	  <Nullable>enable</Nullable>
+	  <UseWPF>true</UseWPF>
+	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyVersion>1.25.5.0</AssemblyVersion>
+    <FileVersion>1.25.5.0</FileVersion>
   </PropertyGroup>
 
 </Project>

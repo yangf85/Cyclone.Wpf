@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Cyclone.Wpf.Themes;
+using Cyclone.Wpf.Themes.ThemeManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

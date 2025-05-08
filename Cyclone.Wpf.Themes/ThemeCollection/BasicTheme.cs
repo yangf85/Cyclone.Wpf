@@ -1,7 +1,7 @@
-﻿using Cyclone.Wpf.Themes;
+﻿using Cyclone.Wpf.Themes.ThemeManagement;
 using System.ComponentModel;
 
-namespace Cyclone.Wpf.Themes
+namespace Cyclone.Wpf.Themes.ThemeCollection
 {
     /// <summary>
     /// 基础主题
@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Themes
     {
         public BasicTheme()
         {
-            Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml", UriKind.Absolute);
+            Source = new Uri("pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml", UriKind.Absolute);
         }
 
         public override string Name => nameof(BasicTheme);

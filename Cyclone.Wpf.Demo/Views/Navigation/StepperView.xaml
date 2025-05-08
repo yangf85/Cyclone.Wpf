@@ -10,16 +10,11 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+    <UserControl.Resources />
 
     <StackPanel>
-        <GroupBox Padding="10" Header="Normarl">
+        <GroupBox Padding="10"
+                  Header="Normarl">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -30,12 +25,18 @@
                             HorizontalAlignment="Center"
                             CurrentIndex="0"
                             Orientation="Vertical">
-                    <cy:StepperItem Content="步骤1" Description="备注" />
-                    <cy:StepperItem Content="步骤2" Description="备注" />
-                    <cy:StepperItem Content="步骤3" Description="备注" />
-                    <cy:StepperItem Content="步骤4" Description="备注" />
+                    <cy:StepperItem Content="步骤1"
+                                    Description="备注" />
+                    <cy:StepperItem Content="步骤2"
+                                    Description="备注" />
+                    <cy:StepperItem Content="步骤3"
+                                    Description="备注" />
+                    <cy:StepperItem Content="步骤4"
+                                    Description="备注" />
                 </cy:Stepper>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
                     <Button Width="100"
                             Margin="10,0"
                             Click="PreviousButton_Click"
@@ -49,19 +50,27 @@
         </GroupBox>
         <GroupBox Header="DataContext">
             <StackPanel HorizontalAlignment="Center">
-                <cy:Stepper CurrentIndex="{Binding CurrentStepIndex}" ItemsSource="{Binding StepperItems}">
+                <cy:Stepper CurrentIndex="{Binding CurrentStepIndex}"
+                            ItemsSource="{Binding StepperItems}">
                     <cy:Stepper.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                                <TextBlock HorizontalAlignment="Center" Text="{Binding Header}" />
-                                <TextBlock HorizontalAlignment="Center" Foreground="{DynamicResource Text.Prompt}" Text="{Binding Description}" />
+                            <StackPanel HorizontalAlignment="Center"
+                                        Orientation="Vertical">
+                                <TextBlock HorizontalAlignment="Center"
+                                           Text="{Binding Header}" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource Text.Prompt}"
+                                           Text="{Binding Description}" />
                             </StackPanel>
                         </DataTemplate>
                     </cy:Stepper.ItemTemplate>
                 </cy:Stepper>
-                <UniformGrid HorizontalAlignment="Center" Rows="1">
-                    <Button Command="{Binding PreviousCommand}" Content="Previous" />
-                    <Button Command="{Binding NextCommand}" Content="Next" />
+                <UniformGrid HorizontalAlignment="Center"
+                             Rows="1">
+                    <Button Command="{Binding PreviousCommand}"
+                            Content="Previous" />
+                    <Button Command="{Binding NextCommand}"
+                            Content="Next" />
                 </UniformGrid>
             </StackPanel>
         </GroupBox>

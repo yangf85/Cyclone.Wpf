@@ -9,7 +9,9 @@
              d:DesignWidth="800"
              mc:Ignorable="d">
     <Grid x:Name="ContainerGrid">
-        <cy:Drawer x:Name="Drawer" DrawerWidth="250" Placement="Bottom">
+        <cy:Drawer x:Name="Drawer"
+                   DrawerWidth="250"
+                   Placement="Bottom">
             <!--  主窗口内容作为Drawer的Content  -->
             <Grid>
                 <Grid.RowDefinitions>
@@ -18,23 +20,32 @@
                 </Grid.RowDefinitions>
 
                 <!--  顶部工具栏  -->
-                <StackPanel Grid.Row="0" Background="#F0F0F0" Orientation="Horizontal">
+                <StackPanel Grid.Row="0"
+                            Background="#F0F0F0"
+                            Orientation="Horizontal">
                     <ToggleButton Margin="0,0,10,0"
                                   Padding="8,4"
                                   Content="打开菜单"
                                   IsChecked="{Binding Path=IsOpen, ElementName=Drawer}" />
-                    <Button Margin="0,0,10,0" Padding="8,4" Content="打开设置" />
+                    <Button Margin="0,0,10,0"
+                            Padding="8,4"
+                            Content="打开设置" />
                 </StackPanel>
 
                 <!--  主内容区域  -->
-                <Border Grid.Row="1" Padding="20" Background="White">
+                <Border Grid.Row="1"
+                        Padding="20"
+                        Background="White">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,20" FontSize="24" Text="主应用内容区域" />
+                        <TextBlock Margin="0,0,0,20"
+                                   FontSize="24"
+                                   Text="主应用内容区域" />
                         <TextBlock TextWrapping="Wrap">
                             这是应用程序的主要内容区域。这个简化版的Drawer控件允许你从屏幕边缘滑入菜单或面板，
                             而不会干扰主内容的布局。Drawer可以设置为从左侧、右侧、顶部或底部滑入。
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" TextWrapping="Wrap">
+                        <TextBlock Margin="0,20,0,0"
+                                   TextWrapping="Wrap">
                             点击顶部的按钮可以打开不同方向的抽屉面板。你也可以点击遮罩层关闭抽屉。
                         </TextBlock>
                     </StackPanel>

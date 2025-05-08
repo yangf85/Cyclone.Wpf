@@ -3,7 +3,7 @@
                     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
                     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -62,7 +62,6 @@
                         <StackPanel>
                             <Grid x:Name="HeaderRoot"
                                   Height="{TemplateBinding RowHeight}"
-                                  HorizontalAlignment="Stretch"
                                   Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{Binding Indent, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -127,7 +126,7 @@
                             <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="IconContainer" Property="HorizontalAlignment" Value="Center" />
-                            <Setter TargetName="IconColumn" Property="Width" Value="*" />
+                            <Setter TargetName="IconColumn" Property="Width" Value="Auto" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

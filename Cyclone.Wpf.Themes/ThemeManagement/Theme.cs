@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace Cyclone.Wpf.Themes;
+namespace Cyclone.Wpf.Themes.ThemeManagement;
 
 /// <summary>
 /// 主题 所有的主题资源字典的文件名称以 ThemeBrush.xaml 结尾

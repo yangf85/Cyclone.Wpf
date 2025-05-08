@@ -4,7 +4,7 @@
 	xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
 	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

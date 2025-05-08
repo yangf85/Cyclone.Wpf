@@ -60,6 +60,7 @@ public partial class MainViewModel : ObservableObject
             "Stepper" => new StepperView(),
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
+            "CountDown" => new CountDownView(),
             _ => new object(),
         };
     }
@@ -106,7 +107,7 @@ public partial class SideMenuViewModel : ObservableObject
                 },
                 new SideMenuItemViewModel()
                 {
-                    Header="Date",
+                    Header="DateTime",
                     Icon= "\xe604",
                 },
                 new SideMenuItemViewModel()
@@ -123,7 +124,7 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="ColorPicker",
-                    Icon= "\xe660",
+                    Icon= "\xe8fb",
                 },
 
             ]
@@ -158,7 +159,7 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Description",
-                    Icon= "\xe631",
+                    Icon= "\xe719",
                 },
             ]
         });
@@ -176,12 +177,12 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="FluidTabControl",
-                    Icon= "\xe6c1",
+                    Icon= "\xe609",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="TransitionBox",
-                    Icon= "\xe600",
+                    Icon= "\xe64a",
                 },
                 new SideMenuItemViewModel()
                 {
@@ -196,17 +197,17 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel()
                 {
                     Header="Drawer",
-                    Icon= "\xe637",
+                    Icon= "\xe650",
                 },
                  new SideMenuItemViewModel()
                 {
                     Header="Stepper",
-                    Icon= "\xe65f",
+                    Icon= "\xe756",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="Breadcrumb",
-                    Icon= "\xe69e",
+                    Icon= "\xe8d4",
                 },
 
             ]
@@ -215,27 +216,22 @@ public partial class SideMenuViewModel : ObservableObject
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Hierarchy",
-            Icon = "\xe7a3",
+            Icon = "\xe817",
             Items =
             [
                 new SideMenuItemViewModel()
                 {
                     Header="Menu",
-                    Icon= "\xe6d5",
+                    Icon= "\xe633",
                 },
                 new SideMenuItemViewModel()
                 {
                     Header="TreeView",
-                    Icon= "\xe6d5",
+                    Icon= "\xe970",
                 },
             ]
         });
 
-        Items.Add(new SideMenuItemViewModel()
-        {
-            Header = "Loading",
-            Icon = "\xe891",
-        });
         Items.Add(new SideMenuItemViewModel()
         {
             Header = "Notification",
@@ -265,7 +261,7 @@ public partial class SideMenuViewModel : ObservableObject
                  new SideMenuItemViewModel()
                 {
                     Header="FisheyePanel",
-                    Icon= "\xe8f1",
+                    Icon= "\xe60a",
                 },
                  new SideMenuItemViewModel()
                 {
@@ -288,17 +284,15 @@ public partial class SideMenuViewModel : ObservableObject
             [
                 new SideMenuItemViewModel()
                 {
-                    Header="ProgressBar",
-                    Icon= "\xe6d5",
-                    Items=
-                    [
-                        new SideMenuItemViewModel()
-                        {
-                            Header="CircleProgressBar",
-                            Icon= "\xe6d5",
-                        }
-                    ]
+                    Header = "Loading",
+                    Icon = "\xe891",
                 },
+                new SideMenuItemViewModel()
+                {
+                    Header = "CountDown",
+                    Icon = "\xe661",
+                }
+
             ]
         });
     }

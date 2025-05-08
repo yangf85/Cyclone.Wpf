@@ -6,7 +6,7 @@
 	xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<!--  CarouselItem 样式和模板  -->

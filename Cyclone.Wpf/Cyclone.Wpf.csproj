@@ -23,9 +23,13 @@
 
   <ItemGroup>
     <Compile Remove="Resources\**" />
+    <Compile Remove="Themes\ResourceKey\**" />
     <EmbeddedResource Remove="Resources\**" />
+    <EmbeddedResource Remove="Themes\ResourceKey\**" />
     <None Remove="Resources\**" />
+    <None Remove="Themes\ResourceKey\**" />
     <Page Remove="Resources\**" />
+    <Page Remove="Themes\ResourceKey\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +37,17 @@
     <Compile Remove="Controls\ColorPicker\ColorHueSlider.cs" />
     <Compile Remove="Controls\ColorPicker\ColorOpacitySlider.cs" />
     <Compile Remove="Controls\ColorPicker\ColorSaturationSlider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Themes\BasicTheme.xaml" />
+    <Page Remove="Themes\Color.xaml" />
+    <Page Remove="Themes\DarkTheme.xaml" />
+    <Page Remove="Themes\LightTheme.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cyclone.Wpf.Themes\Cyclone.Wpf.Themes.csproj" />
   </ItemGroup>
 
 </Project>

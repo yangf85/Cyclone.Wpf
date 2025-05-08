@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Linq;
 using System.Windows.Controls;
+using Cyclone.Wpf.Themes.ThemeCollection;
 
-namespace Cyclone.Wpf.Themes;
+namespace Cyclone.Wpf.Themes.ThemeManagement;
 
 /// <summary>
 /// 主题管理 在xaml中使用，要在资源的最后加载，否则无效

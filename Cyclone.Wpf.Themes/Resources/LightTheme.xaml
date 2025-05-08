@@ -2,9 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/Color.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/Color.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!--  Light Theme  -->
     <SolidColorBrush x:Key="Background.Global"
                      Color="{StaticResource White}" />
     <SolidColorBrush x:Key="Background.Default"
@@ -55,15 +56,6 @@
                      Color="{StaticResource BlueDarken4}" />
     <SolidColorBrush x:Key="Background.Transition"
                      Color="{StaticResource GrayLighten5}" />
-
-    <SolidColorBrush x:Key="Background.TransparentLight"
-                     Color="#33000000" />
-
-    <SolidColorBrush x:Key="Background.TransparentMedium"
-                     Color="#66000000" />
-
-    <SolidColorBrush x:Key="Background.TransparentDark"
-                     Color="#99000000" />
 
     <SolidColorBrush x:Key="Foreground.Global"
                      Color="{StaticResource GrayDarken4}" />
@@ -178,13 +170,13 @@
     <SolidColorBrush x:Key="Text.Title"
                      Color="{StaticResource GrayDarken4}" />
     <SolidColorBrush x:Key="Text.Subtitle"
-                     Color="{StaticResource GrayDarken4}" />
+                     Color="{StaticResource GrayDarken3}" />
     <SolidColorBrush x:Key="Text.Header"
-                     Color="{StaticResource GrayDarken3}" />
+                     Color="{StaticResource GrayDarken1}" />
     <SolidColorBrush x:Key="Text.Caption"
-                     Color="{StaticResource GrayDarken3}" />
+                     Color="{StaticResource GrayDarken1}" />
     <SolidColorBrush x:Key="Text.Content"
-                     Color="{StaticResource GrayDarken2}" />
+                     Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Text.Prompt"
                      Color="{StaticResource GrayDefault}" />
     <SolidColorBrush x:Key="Text.Invert"
@@ -213,7 +205,7 @@
     <SolidColorBrush x:Key="Icon.Foreground.Warning"
                      Color="{StaticResource OrangeLighten1}" />
     <SolidColorBrush x:Key="Icon.Foreground.Info"
-                     Color="{StaticResource BlueDarken3}" />
+                     Color="{StaticResource BlueLighten3}" />
     <SolidColorBrush x:Key="Icon.Foreground.Disabled"
                      Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Icon.Foreground.Link"
@@ -239,8 +231,6 @@
                      Color="{StaticResource GrayLighten4}" />
     <SolidColorBrush x:Key="Alternation.Light"
                      Color="{StaticResource White}" />
-    <SolidColorBrush x:Key="Alternation.Invert"
-                     Color="{StaticResource GrayDarken1}" />
 
     <SolidColorBrush x:Key="Shadow.Default"
                      Color="{StaticResource TransparentColor}" />
