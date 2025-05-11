@@ -6,8 +6,12 @@
 	  <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.25.5.1</AssemblyVersion>
-    <FileVersion>1.25.5.1</FileVersion>
+    <AssemblyVersion>1.25.5.3</AssemblyVersion>
+    <FileVersion>1.25.5.3</FileVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Cyclone.Wpf.Theme</Title>
+    <Description>wpf的主题资源</Description>
+    <PackageOutputPath>E:\YangF\Code\Nugets</PackageOutputPath>
   </PropertyGroup>
 
 </Project>
