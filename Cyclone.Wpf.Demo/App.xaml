@@ -1,8 +1,9 @@
-﻿<Application x:Class="Cyclone.Wpf.Demo.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Cyclone.Wpf.Demo"
-             StartupUri="ShellWindow.xaml">
+﻿<Application
+    x:Class="Cyclone.Wpf.Demo.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo"
+    StartupUri="ShellWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
