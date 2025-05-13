@@ -50,4 +50,8 @@
     <ProjectReference Include="..\Cyclone.Wpf.Themes\Cyclone.Wpf.Themes.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controls\LcdDisplayer\" />
+  </ItemGroup>
+
 </Project>

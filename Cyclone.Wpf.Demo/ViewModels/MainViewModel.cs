@@ -65,6 +65,7 @@ public partial class MainViewModel : ObservableObject
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
             "CountDown" => new CountDownView(),
+            "LcdDisplayer"=>new LcdDisplayerView(),
             _ => null,
         };
     }
@@ -295,8 +296,12 @@ public partial class SideMenuViewModel : ObservableObject
                 {
                     Header = "CountDown",
                     Icon = "\xe661",
-                }
-
+                },
+               new SideMenuItemViewModel()
+               {
+                   Header="LcdDisplayer",
+                   Icon = "\xe699",
+               }
             ]
         });
     }
