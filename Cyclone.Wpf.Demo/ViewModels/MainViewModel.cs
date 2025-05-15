@@ -65,7 +65,8 @@ public partial class MainViewModel : ObservableObject
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
             "CountDown" => new CountDownView(),
-            "LcdDisplayer"=>new LcdDisplayerView(),
+            "LcdDisplayer" => new LcdDisplayerView(),
+            "EnumSelector" => new EnumSelectorView(),
             _ => null,
         };
     }
@@ -120,7 +121,11 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="CascadePicker",
                     Icon= "\xe78a",
                 },
-
+                  new SideMenuItemViewModel()
+                {
+                    Header="EnumSelector",
+                    Icon= "\xe627",
+                },
                 new SideMenuItemViewModel()
                 {
                     Header="Form",

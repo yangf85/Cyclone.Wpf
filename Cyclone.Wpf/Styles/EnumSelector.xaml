@@ -1,0 +1,89 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style
+        x:Key="EnumSelector.ListBoxItem.Style.Basic"
+        TargetType="ListBoxItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <ContentPresenter
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="EnumSelector.ListBox.Style.Basic"
+        TargetType="ListBox">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource EnumSelector.ListBoxItem.Style.Basic}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ItemsPresenter x:Name="ItemsContainer" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <CheckBox
+                        Content="{Binding}"
+                        IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
+                Value="Horizontal">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger
+                Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
+                Value="Vertical">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="1" />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="EnumSelector.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:EnumSelector">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctl:EnumSelector">
+                    <Border x:Name="RootBorder">
+                        <ListBox
+                            x:Name="PART_ItemsContainer"
+                            Style="{StaticResource EnumSelector.ListBox.Style.Basic}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        BasedOn="{StaticResource EnumSelector.Style.Basic}"
+        TargetType="ctl:EnumSelector" />
+</ResourceDictionary>
