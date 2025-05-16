@@ -5,292 +5,572 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace Cyclone.Wpf.Controls;
-
-internal class EnumObject : NotificationObject
+namespace Cyclone.Wpf.Controls
 {
-    public EnumObject(Enum @enum, bool isUseAlias = true)
+    /// <summary>
+    /// 表示枚举项的包装类，用于UI绑定
+    /// </summary>
+    internal class EnumObject : NotificationObject
     {
-        Enum = @enum;
-
-        IsUseAlias = isUseAlias;
-    }
-
-    public bool IsSelected
-    {
-        get => field;
-        set => Set(ref field, value);
-    }
-
-    public Enum Enum
-    {
-        get => field;
-        set => Set(ref field, value);
-    }
-
-    public bool IsUseAlias
-    {
-        get => field;
-        set => Set(ref field, value);
-    }
-
-    public override string ToString()
-    {
-        return IsUseAlias ? GetEnumDescription() : Enum.ToString();
-    }
-
-    private string GetEnumDescription()
-    {
-        // 获取枚举值的字段信息
-        FieldInfo fieldInfo = Enum.GetType().GetField(Enum.ToString());
-
-        if (fieldInfo == null)
-            return Enum.ToString();
-
-        // 如果找到Description特性，返回描述内容，否则返回枚举名称
-        return fieldInfo.GetCustomAttribute<DescriptionAttribute>() is DescriptionAttribute attr
-            ? attr.Description
-            : Enum.ToString();
-    }
-}
-
-[TemplatePart(Name = "PART_ItemsContainer", Type = typeof(ListBox))]
-public class EnumSelector : Control
-{
-    private ListBox _listBox;
-    private bool _isUpdatingSelection = false;
-
-    static EnumSelector()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumSelector), new FrameworkPropertyMetadata(typeof(EnumSelector)));
-    }
-
-    #region Rows
-
-    public int Rows
-    {
-        get => (int)GetValue(RowsProperty);
-        set => SetValue(RowsProperty, value);
-    }
-
-    public static readonly DependencyProperty RowsProperty =
-        DependencyProperty.Register(nameof(Rows), typeof(int), typeof(EnumSelector), new PropertyMetadata(default(int)));
-
-    #endregion Rows
-
-    #region Columns
-
-    public string Columns
-    {
-        get => (string)GetValue(ColumnsProperty);
-        set => SetValue(ColumnsProperty, value);
-    }
-
-    public static readonly DependencyProperty ColumnsProperty =
-        DependencyProperty.Register(nameof(Columns), typeof(string), typeof(EnumSelector), new PropertyMetadata(default(string)));
-
-    #endregion Columns
-
-    #region EnumType
-
-    private ObservableCollection<EnumObject> _enums;
-
-    public Type EnumType
-    {
-        get => (Type)GetValue(EnumTypeProperty);
-        set => SetValue(EnumTypeProperty, value);
-    }
-
-    public static readonly DependencyProperty EnumTypeProperty =
-        DependencyProperty.Register(nameof(EnumType), typeof(Type), typeof(EnumSelector), new PropertyMetadata(OnEnumTypeChanged));
-
-    private static void OnEnumTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var selector = d as EnumSelector;
-        selector?.Dispatcher.BeginInvoke(new Action(() =>
+        public EnumObject(Enum @enum, bool isUseAlias = true)
         {
-            selector.UpdateItemsSource();
-        }), DispatcherPriority.Loaded);
-    }
+            Enum = @enum;
+            IsUseAlias = isUseAlias;
+        }
 
-    #endregion EnumType
-
-    #region SelectedEnum
-
-    public Enum SelectedEnum
-    {
-        get => (Enum)GetValue(SelectedEnumProperty);
-        set => SetValue(SelectedEnumProperty, value);
-    }
-
-    public static readonly DependencyProperty SelectedEnumProperty =
-        DependencyProperty.Register(nameof(SelectedEnum), typeof(Enum), typeof(EnumSelector),
-            new FrameworkPropertyMetadata(default(Enum), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedEnumChanged));
-
-    private static void OnSelectedEnumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var selector = d as EnumSelector;
-        if (selector != null && !selector._isUpdatingSelection)
+        public bool IsSelected
         {
-            selector._isUpdatingSelection = true;
-            selector.UpdateSelectionFromSelectedEnum();
-            selector._isUpdatingSelection = false;
+            get => field;
+            set => Set(ref field, value);
+        }
+
+        public Enum Enum
+        {
+            get => field;
+            set => Set(ref field, value);
+        }
+
+        public bool IsUseAlias
+        {
+            get => field;
+            set => Set(ref field, value);
+        }
+
+        public override string ToString()
+        {
+            return IsUseAlias ? GetEnumDescription() : Enum.ToString();
+        }
+
+        private string GetEnumDescription()
+        {
+            // 获取枚举值的字段信息
+            FieldInfo fieldInfo = Enum.GetType().GetField(Enum.ToString());
+
+            if (fieldInfo == null)
+                return Enum.ToString();
+
+            // 如果找到Description特性，返回描述内容，否则返回枚举名称
+            return fieldInfo.GetCustomAttribute<DescriptionAttribute>() is DescriptionAttribute attr
+                ? attr.Description
+                : Enum.ToString();
         }
     }
 
-    #endregion SelectedEnum
-
-    #region IsUseAlias
-
-    public bool IsUseAlias
+    /// <summary>
+    /// 枚举选择器控件，支持单选和多选(Flags)枚举
+    /// </summary>
+    [TemplatePart(Name = "PART_ItemsContainer", Type = typeof(ListBox))]
+    public class EnumSelector : Control
     {
-        get => (bool)GetValue(IsUseAliasProperty);
-        set => SetValue(IsUseAliasProperty, value);
-    }
+        private ListBox _listBox;
+        private bool _isUpdatingSelection = false;
 
-    public static readonly DependencyProperty IsUseAliasProperty =
-        DependencyProperty.Register(nameof(IsUseAlias), typeof(bool), typeof(EnumSelector), new PropertyMetadata(true, OnIsUseAliasChanged));
-
-    private static void OnIsUseAliasChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var selector = d as EnumSelector;
-        if (selector?._enums != null)
+        static EnumSelector()
         {
-            foreach (var item in selector._enums)
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumSelector), new FrameworkPropertyMetadata(typeof(EnumSelector)));
+        }
+
+        #region 依赖属性
+
+        #region Rows
+
+        public int Rows
+        {
+            get => (int)GetValue(RowsProperty);
+            set => SetValue(RowsProperty, value);
+        }
+
+        public static readonly DependencyProperty RowsProperty =
+            DependencyProperty.Register(nameof(Rows), typeof(int), typeof(EnumSelector), new PropertyMetadata(0));
+
+        #endregion Rows
+
+        #region Columns
+
+        public string Columns
+        {
+            get => (string)GetValue(ColumnsProperty);
+            set => SetValue(ColumnsProperty, value);
+        }
+
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register(nameof(Columns), typeof(string), typeof(EnumSelector), new PropertyMetadata(string.Empty));
+
+        #endregion Columns
+
+        #region EnumType
+
+        private ObservableCollection<EnumObject> _enums;
+
+        public Type EnumType
+        {
+            get => (Type)GetValue(EnumTypeProperty);
+            set => SetValue(EnumTypeProperty, value);
+        }
+
+        public static readonly DependencyProperty EnumTypeProperty =
+            DependencyProperty.Register(nameof(EnumType), typeof(Type), typeof(EnumSelector), new PropertyMetadata(OnEnumTypeChanged));
+
+        private static void OnEnumTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var selector = d as EnumSelector;
+            selector?.Dispatcher.BeginInvoke(new Action(() =>
             {
-                item.IsUseAlias = (bool)e.NewValue;
-            }
+                selector.UpdateItemsSource();
+            }), DispatcherPriority.Loaded);
         }
-    }
 
-    #endregion IsUseAlias
+        #endregion EnumType
 
-    #region Override
+        #region SelectedEnum
 
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-        _listBox = GetTemplateChild("PART_ItemsContainer") as ListBox;
-
-        if (_listBox != null)
+        public Enum SelectedEnum
         {
-            UpdateItemsSource();
-            _listBox.SelectionChanged += ListBox_SelectionChanged;
+            get => (Enum)GetValue(SelectedEnumProperty);
+            set => SetValue(SelectedEnumProperty, value);
         }
-    }
 
-    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (_isUpdatingSelection || _listBox == null || _enums == null)
-            return;
+        public static readonly DependencyProperty SelectedEnumProperty =
+            DependencyProperty.Register(nameof(SelectedEnum), typeof(Enum), typeof(EnumSelector),
+                new FrameworkPropertyMetadata(default(Enum), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedEnumChanged));
 
-        _isUpdatingSelection = true;
-
-        if (HasFlaggsAttribute())
+        private static void OnSelectedEnumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // 处理[Flags]枚举，多选模式
-            int result = 0;
-            foreach (var item in _enums.Where(i => i.IsSelected))
+            var selector = d as EnumSelector;
+            if (selector != null && !selector._isUpdatingSelection)
             {
-                result |= Convert.ToInt32(item.Enum);
-            }
-            SelectedEnum = (Enum)Enum.ToObject(EnumType, result);
-        }
-        else
-        {
-            // 处理普通枚举，单选模式
-            var selectedItem = _enums.FirstOrDefault(i => i.IsSelected);
-            if (selectedItem != null)
-            {
-                SelectedEnum = selectedItem.Enum;
+                selector._isUpdatingSelection = true;
+                selector.UpdateSelectionFromSelectedEnum();
+                selector._isUpdatingSelection = false;
             }
         }
 
-        _isUpdatingSelection = false;
-    }
+        #endregion SelectedEnum
 
-    #endregion Override
+        #region IsUseAlias
 
-    #region Private
-
-    private void UpdateItemsSource()
-    {
-        if (_listBox != null && EnumType != null)
+        public bool IsUseAlias
         {
+            get => (bool)GetValue(IsUseAliasProperty);
+            set => SetValue(IsUseAliasProperty, value);
+        }
+
+        public static readonly DependencyProperty IsUseAliasProperty =
+            DependencyProperty.Register(nameof(IsUseAlias), typeof(bool), typeof(EnumSelector), new PropertyMetadata(true, OnIsUseAliasChanged));
+
+        private static void OnIsUseAliasChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var selector = d as EnumSelector;
+            if (selector?._enums != null)
+            {
+                foreach (var item in selector._enums)
+                {
+                    item.IsUseAlias = (bool)e.NewValue;
+                }
+            }
+        }
+
+        #endregion IsUseAlias
+
+        #endregion 依赖属性
+
+        #region 重写方法
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            // 先移除旧事件（如果有）
+            if (_listBox != null)
+            {
+                _listBox.SelectionChanged -= ListBox_SelectionChanged;
+                _listBox.PreviewMouseDown -= ListBox_PreviewMouseDown;
+            }
+
+            _listBox = GetTemplateChild("PART_ItemsContainer") as ListBox;
+
+            if (_listBox != null)
+            {
+                UpdateItemsSource();
+                _listBox.SelectionChanged += ListBox_SelectionChanged;
+                AttachMouseEvents();
+            }
+        }
+
+        #endregion 重写方法
+
+        #region 事件处理
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingSelection || _listBox == null || _enums == null)
+                return;
+
+            _isUpdatingSelection = true;
+
+            try
+            {
+                if (HasFlaggsAttribute())
+                {
+                    // 检查是否有新选中的项
+                    foreach (EnumObject addedItem in e.AddedItems)
+                    {
+                        // 处理选中的组合值
+                        HandleEnumItemSelection(addedItem, true);
+                    }
+
+                    // 检查是否有取消选中的项
+                    foreach (EnumObject removedItem in e.RemovedItems)
+                    {
+                        // 处理取消选中的组合值
+                        HandleEnumItemSelection(removedItem, false);
+                    }
+
+                    // 更新SelectedEnum属性
+                    UpdateSelectedEnumFromSelections();
+                }
+                else
+                {
+                    // 处理普通枚举...
+                    var selectedItem = _enums.FirstOrDefault(i => i.IsSelected);
+                    if (selectedItem != null)
+                    {
+                        SelectedEnum = selectedItem.Enum;
+                    }
+                }
+            }
+            finally
+            {
+                _isUpdatingSelection = false;
+            }
+        }
+
+        // 绑定ListBox的鼠标按下事件，用于处理反选
+        private void AttachMouseEvents()
+        {
+            if (_listBox != null)
+            {
+                _listBox.PreviewMouseDown += ListBox_PreviewMouseDown;
+            }
+        }
+
+        private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // 获取点击的项
+            HitTestResult result = VisualTreeHelper.HitTest(_listBox, e.GetPosition(_listBox));
+            if (result != null)
+            {
+                // 查找点击的CheckBox，因为它是实际的可点击元素
+                CheckBox checkBox = FindVisualChild<CheckBox>(result.VisualHit);
+                if (checkBox != null)
+                {
+                    // 获取DataContext（即EnumObject）
+                    if (checkBox.DataContext is EnumObject enumObj)
+                    {
+                        // 如果点击的是已选中的复合项，则进行反选
+                        if (enumObj.IsSelected && IsCompositeValue(Convert.ToInt32(enumObj.Enum)))
+                        {
+                            // 阻止默认事件，以便我们可以自定义行为
+                            e.Handled = true;
+
+                            // 执行反选操作
+                            _isUpdatingSelection = true;
+                            try
+                            {
+                                // 反选此项及其所有子项
+                                HandleEnumItemSelection(enumObj, false);
+                                // 更新SelectedEnum属性
+                                UpdateSelectedEnumFromSelections();
+                            }
+                            finally
+                            {
+                                _isUpdatingSelection = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion 事件处理
+
+        #region 私有方法
+
+        private void UpdateItemsSource()
+        {
+            if (_listBox != null && EnumType != null)
+            {
+                if (HasFlaggsAttribute())
+                {
+                    _listBox.SelectionMode = SelectionMode.Multiple;
+                }
+                else
+                {
+                    _listBox.SelectionMode = SelectionMode.Single;
+                }
+
+                var values = Enum.GetValues(EnumType).Cast<Enum>().Select(i => new EnumObject(i, IsUseAlias));
+                _enums = new ObservableCollection<EnumObject>(values);
+                _listBox.ItemsSource = _enums;
+
+                for (int i = 0; i < _enums.Count; i++)
+                {
+                    var item = _listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+                    if (item != null)
+                    {
+                        var binding = new Binding("IsSelected");
+                        binding.Source = _enums[i];
+                        binding.Mode = BindingMode.TwoWay;
+                        BindingOperations.SetBinding(item, ListBoxItem.IsSelectedProperty, binding);
+                    }
+                }
+
+                // 更新初始选择
+                if (SelectedEnum != null)
+                {
+                    UpdateSelectionFromSelectedEnum();
+                }
+            }
+        }
+
+        private void UpdateSelectionFromSelectedEnum()
+        {
+            if (_enums == null || SelectedEnum == null)
+                return;
+
             if (HasFlaggsAttribute())
             {
-                _listBox.SelectionMode = SelectionMode.Multiple;
+                // 处理[Flags]枚举
+                int selectedValue = Convert.ToInt32(SelectedEnum);
+
+                // 创建枚举值关系映射
+                var enumValueMap = CreateEnumValueMap();
+
+                // 首先取消所有选择
+                foreach (var item in _enums)
+                {
+                    item.IsSelected = false;
+                }
+
+                // 然后设置基本选择
+                foreach (var item in _enums)
+                {
+                    int itemValue = Convert.ToInt32(item.Enum);
+                    // 检查当前标志位是否被设置
+                    if (itemValue != 0 && (selectedValue & itemValue) == itemValue)
+                    {
+                        item.IsSelected = true;
+                    }
+                }
+
+                // 最后更新复合选项状态
+                UpdateAllCompositeItems(enumValueMap);
             }
             else
             {
-                _listBox.SelectionMode = SelectionMode.Single;
+                // 处理普通枚举
+                int selectedValue = Convert.ToInt32(SelectedEnum);
+                foreach (var item in _enums)
+                {
+                    item.IsSelected = Convert.ToInt32(item.Enum) == selectedValue;
+                }
+            }
+        }
+
+        // 处理枚举项的选择或取消选择，包括处理复合关系
+        private void HandleEnumItemSelection(EnumObject item, bool isSelected)
+        {
+            int itemValue = Convert.ToInt32(item.Enum);
+
+            // 首先更新当前项
+            item.IsSelected = isSelected;
+
+            // 创建所有枚举值的映射表，用于分析组合关系
+            var enumValueMap = CreateEnumValueMap();
+
+            if (isSelected)
+            {
+                // 当选中一个项时，选中其所有子项（包含在该值中的所有基本标志）
+                UpdateChildItemsSelection(itemValue, true, enumValueMap);
+            }
+            else
+            {
+                // 当取消选中一个项时，有两种情况处理：
+
+                // 1. 如果是组合值，取消选中它的所有子项
+                if (IsCompositeValue(itemValue))
+                {
+                    UpdateChildItemsSelection(itemValue, false, enumValueMap);
+                }
+
+                // 2. 总是取消选中包含它的所有复合项（父项）
+                UpdateParentItemsSelection(itemValue, false, enumValueMap);
             }
 
-            var values = Enum.GetValues(EnumType).Cast<Enum>().Select(i => new EnumObject(i, IsUseAlias));
-            _enums = new ObservableCollection<EnumObject>(values);
-            _listBox.ItemsSource = _enums;
+            // 最后检查和更新所有复合项的状态
+            UpdateAllCompositeItems(enumValueMap);
+        }
 
-            for (int i = 0; i < _enums.Count; i++)
+        // 创建枚举值的组合关系映射
+        private Dictionary<int, List<int>> CreateEnumValueMap()
+        {
+            var result = new Dictionary<int, List<int>>();
+
+            // 获取所有枚举值
+            var allValues = _enums.Select(e => Convert.ToInt32(e.Enum)).ToList();
+
+            // 对每个值，查找其所有可能的子值组合
+            foreach (int value in allValues)
             {
-                var item = _listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                if (item != null)
+                result[value] = new List<int>();
+                foreach (int otherValue in allValues)
                 {
-                    var binding = new Binding("IsSelected");
-                    binding.Source = _enums[i];
-                    binding.Mode = BindingMode.TwoWay;
-                    BindingOperations.SetBinding(item, ListBoxItem.IsSelectedProperty, binding);
+                    // 如果otherValue是value的非零子集，则添加到该value的子值列表中
+                    if (otherValue != 0 && otherValue != value && (value & otherValue) == otherValue)
+                    {
+                        result[value].Add(otherValue);
+                    }
                 }
             }
 
-            // 更新初始选择
-            if (SelectedEnum != null)
+            return result;
+        }
+
+        // 更新所有子项的选择状态
+        private void UpdateChildItemsSelection(int value, bool isSelected, Dictionary<int, List<int>> enumValueMap)
+        {
+            if (!enumValueMap.ContainsKey(value))
+                return;
+
+            // 获取该值的所有子值
+            var childValues = enumValueMap[value];
+
+            foreach (int childValue in childValues)
             {
-                UpdateSelectionFromSelectedEnum();
+                // 找到对应的EnumObject并更新其选择状态
+                var childItem = _enums.FirstOrDefault(e => Convert.ToInt32(e.Enum) == childValue);
+                if (childItem != null)
+                {
+                    childItem.IsSelected = isSelected;
+                }
             }
         }
-    }
 
-    private void UpdateSelectionFromSelectedEnum()
-    {
-        if (_enums == null || SelectedEnum == null)
-            return;
-
-        if (HasFlaggsAttribute())
+        // 更新所有父项的选择状态
+        private void UpdateParentItemsSelection(int value, bool isSelected, Dictionary<int, List<int>> enumValueMap)
         {
-            // 处理[Flags]枚举
-            int selectedValue = Convert.ToInt32(SelectedEnum);
+            if (isSelected)
+                return; // 只有在取消选中时才需要更新父项
+
+            // 找到所有包含该值的复合值（父项）
+            foreach (var entry in enumValueMap)
+            {
+                if (entry.Value.Contains(value))
+                {
+                    // 找到对应的EnumObject并取消选中
+                    var parentItem = _enums.FirstOrDefault(e => Convert.ToInt32(e.Enum) == entry.Key);
+                    if (parentItem != null)
+                    {
+                        parentItem.IsSelected = false;
+                    }
+                }
+            }
+        }
+
+        // 更新所有复合项的状态
+        private void UpdateAllCompositeItems(Dictionary<int, List<int>> enumValueMap)
+        {
+            foreach (var entry in enumValueMap)
+            {
+                // 跳过没有子项的基本值
+                if (entry.Value.Count == 0)
+                    continue;
+
+                var compositeItem = _enums.FirstOrDefault(e => Convert.ToInt32(e.Enum) == entry.Key);
+                if (compositeItem != null)
+                {
+                    // 检查该复合值的所有子值是否都被选中
+                    bool allChildrenSelected = true;
+                    foreach (int childValue in entry.Value)
+                    {
+                        var childItem = _enums.FirstOrDefault(e => Convert.ToInt32(e.Enum) == childValue);
+                        if (childItem == null || !childItem.IsSelected)
+                        {
+                            allChildrenSelected = false;
+                            break;
+                        }
+                    }
+
+                    // 只有当所有子值都被选中时，才选中复合值
+                    compositeItem.IsSelected = allChildrenSelected;
+                }
+            }
+        }
+
+        // 根据当前选择更新SelectedEnum属性
+        private void UpdateSelectedEnumFromSelections()
+        {
+            int result = 0;
+
+            // 使用所有选中项计算结果
             foreach (var item in _enums)
             {
-                int itemValue = Convert.ToInt32(item.Enum);
-                // 检查当前标志位是否被设置
-                item.IsSelected = (selectedValue & itemValue) == itemValue && itemValue != 0;
+                if (item.IsSelected)
+                {
+                    int itemValue = Convert.ToInt32(item.Enum);
+                    result |= itemValue;
+                }
             }
+
+            SelectedEnum = (Enum)Enum.ToObject(EnumType, result);
         }
-        else
+
+        // 判断一个值是否是组合值（由多个基本值组合而成）
+        private bool IsCompositeValue(int value)
         {
-            // 处理普通枚举
-            int selectedValue = Convert.ToInt32(SelectedEnum);
-            foreach (var item in _enums)
-            {
-                item.IsSelected = Convert.ToInt32(item.Enum) == selectedValue;
-            }
+            if (value == 0)
+                return false;
+
+            var enumValueMap = CreateEnumValueMap();
+            return enumValueMap.ContainsKey(value) && enumValueMap[value].Count > 0;
         }
+
+        private bool HasFlaggsAttribute()
+        {
+            if (EnumType == null) { return false; }
+
+            var attributes = EnumType.GetCustomAttribute<FlagsAttribute>();
+            return attributes != null;
+        }
+
+        // 查找视觉树中指定类型的子元素
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null)
+                return null;
+
+            if (parent is T typed)
+                return typed;
+
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                var result = FindVisualChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+
+            return null;
+        }
+
+        #endregion 私有方法
     }
-
-    private bool HasFlaggsAttribute()
-    {
-        if (EnumType == null) { return false; }
-
-        var attributes = EnumType.GetCustomAttribute<FlagsAttribute>();
-        return attributes != null;
-    }
-
-    #endregion Private
 }
