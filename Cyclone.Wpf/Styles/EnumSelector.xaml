@@ -28,7 +28,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <ItemsPresenter x:Name="ItemsContainer" />
+                    <UniformGrid
+                        x:Name="ItemsContainer"
+                        Columns="{Binding Path=Columns, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
+                        IsItemsHost="True"
+                        Rows="{Binding Path=Rows, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -41,30 +45,6 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <DataTrigger
-                Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
-                Value="Horizontal">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="1" />
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger
-                Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
-                Value="Vertical">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="1" />
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
     <Style

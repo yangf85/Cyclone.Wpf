@@ -72,6 +72,32 @@ public class EnumSelector : Control
         DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumSelector), new FrameworkPropertyMetadata(typeof(EnumSelector)));
     }
 
+    #region Rows
+
+    public int Rows
+    {
+        get => (int)GetValue(RowsProperty);
+        set => SetValue(RowsProperty, value);
+    }
+
+    public static readonly DependencyProperty RowsProperty =
+        DependencyProperty.Register(nameof(Rows), typeof(int), typeof(EnumSelector), new PropertyMetadata(default(int)));
+
+    #endregion Rows
+
+    #region Columns
+
+    public string Columns
+    {
+        get => (string)GetValue(ColumnsProperty);
+        set => SetValue(ColumnsProperty, value);
+    }
+
+    public static readonly DependencyProperty ColumnsProperty =
+        DependencyProperty.Register(nameof(Columns), typeof(string), typeof(EnumSelector), new PropertyMetadata(default(string)));
+
+    #endregion Columns
+
     #region EnumType
 
     private ObservableCollection<EnumObject> _enums;
@@ -145,19 +171,6 @@ public class EnumSelector : Control
     }
 
     #endregion IsUseAlias
-
-    #region Orientation
-
-    public Orientation Orientation
-    {
-        get => (Orientation)GetValue(OrientationProperty);
-        set => SetValue(OrientationProperty, value);
-    }
-
-    public static readonly DependencyProperty OrientationProperty =
-        DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(EnumSelector), new PropertyMetadata(default(Orientation)));
-
-    #endregion Orientation
 
     #region Override
 

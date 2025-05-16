@@ -14,9 +14,10 @@
         <cy:SpacingStackPanel Spacing="10">
             <cy:EnumSelector
                 EnumType="{x:Type local:WeekDays}"
-                Orientation="Vertical"
+                Rows="2"
                 SelectedEnum="{Binding WeekDays}" />
             <cy:EnumSelector
+                Columns="1"
                 EnumType="{x:Type local:VipLevel}"
                 SelectedEnum="{Binding VipLevel}" />
             <Button
