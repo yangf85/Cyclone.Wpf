@@ -34,7 +34,7 @@ public partial class EnumSelectorView : UserControl
 public partial class EnumSelectorViewModel : ObservableObject
 {
     [ObservableProperty]
-    public partial WeekDays WeekDays { get; set; } = WeekDays.All;
+    public partial WeekDays WeekDays { get; set; } = WeekDays.Sunday | WeekDays.Monday;
 
     [ObservableProperty]
     public partial VipLevel VipLevel { get; set; } = VipLevel.Silver;

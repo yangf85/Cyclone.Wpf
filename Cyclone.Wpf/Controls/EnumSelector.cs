@@ -77,6 +77,10 @@ namespace Cyclone.Wpf.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumSelector), new FrameworkPropertyMetadata(typeof(EnumSelector)));
         }
 
+        public EnumSelector()
+        {
+        }
+
         #region 依赖属性
 
         #region Rows
@@ -191,7 +195,6 @@ namespace Cyclone.Wpf.Controls
             if (_listBox != null)
             {
                 _listBox.SelectionChanged -= ListBox_SelectionChanged;
-                _listBox.PreviewMouseDown -= ListBox_PreviewMouseDown;
             }
 
             _listBox = GetTemplateChild("PART_ItemsContainer") as ListBox;
@@ -200,7 +203,6 @@ namespace Cyclone.Wpf.Controls
             {
                 UpdateItemsSource();
                 _listBox.SelectionChanged += ListBox_SelectionChanged;
-                AttachMouseEvents();
             }
         }
 
@@ -210,8 +212,7 @@ namespace Cyclone.Wpf.Controls
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_isUpdatingSelection || _listBox == null || _enums == null)
-                return;
+            if (_isUpdatingSelection || _listBox == null || _enums == null) { return; }
 
             _isUpdatingSelection = true;
 
@@ -249,53 +250,6 @@ namespace Cyclone.Wpf.Controls
             finally
             {
                 _isUpdatingSelection = false;
-            }
-        }
-
-        // 绑定ListBox的鼠标按下事件，用于处理反选
-        private void AttachMouseEvents()
-        {
-            if (_listBox != null)
-            {
-                _listBox.PreviewMouseDown += ListBox_PreviewMouseDown;
-            }
-        }
-
-        private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // 获取点击的项
-            HitTestResult result = VisualTreeHelper.HitTest(_listBox, e.GetPosition(_listBox));
-            if (result != null)
-            {
-                // 查找点击的CheckBox，因为它是实际的可点击元素
-                CheckBox checkBox = FindVisualChild<CheckBox>(result.VisualHit);
-                if (checkBox != null)
-                {
-                    // 获取DataContext（即EnumObject）
-                    if (checkBox.DataContext is EnumObject enumObj)
-                    {
-                        // 如果点击的是已选中的复合项，则进行反选
-                        if (enumObj.IsSelected && IsCompositeValue(Convert.ToInt32(enumObj.Enum)))
-                        {
-                            // 阻止默认事件，以便我们可以自定义行为
-                            e.Handled = true;
-
-                            // 执行反选操作
-                            _isUpdatingSelection = true;
-                            try
-                            {
-                                // 反选此项及其所有子项
-                                HandleEnumItemSelection(enumObj, false);
-                                // 更新SelectedEnum属性
-                                UpdateSelectedEnumFromSelections();
-                            }
-                            finally
-                            {
-                                _isUpdatingSelection = false;
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -548,27 +502,6 @@ namespace Cyclone.Wpf.Controls
 
             var attributes = EnumType.GetCustomAttribute<FlagsAttribute>();
             return attributes != null;
-        }
-
-        // 查找视觉树中指定类型的子元素
-        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            if (parent == null)
-                return null;
-
-            if (parent is T typed)
-                return typed;
-
-            int childCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < childCount; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                var result = FindVisualChild<T>(child);
-                if (result != null)
-                    return result;
-            }
-
-            return null;
         }
 
         #endregion 私有方法

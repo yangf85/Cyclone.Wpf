@@ -17,15 +17,12 @@
                 Rows="2"
                 SelectedEnum="{Binding WeekDays}" />
             <cy:EnumSelector
-                Columns="1"
+                Columns="2"
                 EnumType="{x:Type local:VipLevel}"
+                Rows="3"
                 SelectedEnum="{Binding VipLevel}" />
-            <Button
-                Command="{Binding ShowFlagEnumCommand}"
-                Content="ShowFlagEnum" />
-            <Button
-                Command="{Binding ShowEnumCommand}"
-                Content="ShowEnum" />
+            <Button Command="{Binding ShowFlagEnumCommand}" Content="ShowFlagEnum" />
+            <Button Command="{Binding ShowEnumCommand}" Content="ShowEnum" />
         </cy:SpacingStackPanel>
     </Grid>
 </UserControl>
