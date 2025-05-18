@@ -75,6 +75,9 @@ internal static class WindowsNativeService
     /// </summary>
     public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
 
+    // 用于DPI计算的默认值，用于非WPF环境
+    private const double DEFAULT_DPI = 96.0;
+
     #endregion 常量定义
 
     #region 委托定义
@@ -169,6 +172,33 @@ internal static class WindowsNativeService
     [DllImport("user32.dll")]
     public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
+    /// <summary>
+    /// 获取系统DPI设置
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern bool GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
+
+    /// <summary>
+    /// 获取主显示器句柄
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+    /// <summary>
+    /// 获取桌面窗口句柄
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetDesktopWindow();
+
+    /// <summary>
+    /// 获取工作区域大小
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref RECT pvParam, uint fWinIni);
+
+    // 用于获取工作区的常量
+    private const uint SPI_GETWORKAREA = 0x0030;
+
     #endregion Window API导入
 
     #region 实用方法
@@ -180,7 +210,14 @@ internal static class WindowsNativeService
     /// <returns>是否有效</returns>
     public static bool IsValidWindow(IntPtr windowHandle)
     {
-        return windowHandle != IntPtr.Zero && IsWindow(windowHandle);
+        try
+        {
+            return windowHandle != IntPtr.Zero && IsWindow(windowHandle);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -189,10 +226,17 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void SetWindowNoActivate(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            var extendedStyle = GetWindowLong(windowHandle, GWL_EXSTYLE);
-            SetWindowLong(windowHandle, GWL_EXSTYLE, extendedStyle | WS_EX_NOACTIVATE);
+            if (IsValidWindow(windowHandle))
+            {
+                var extendedStyle = GetWindowLong(windowHandle, GWL_EXSTYLE);
+                SetWindowLong(windowHandle, GWL_EXSTYLE, extendedStyle | WS_EX_NOACTIVATE);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常，确保不会中断程序流程
         }
     }
 
@@ -202,10 +246,17 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void SetWindowTopMostNoActivate(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            SetWindowPos(windowHandle, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0,
-                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            if (IsValidWindow(windowHandle))
+            {
+                SetWindowPos(windowHandle, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -215,10 +266,17 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void SetWindowTopMostAndShow(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            SetWindowPos(windowHandle, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0,
-                SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+            if (IsValidWindow(windowHandle))
+            {
+                SetWindowPos(windowHandle, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -228,9 +286,16 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void ShowWindowNoActivate(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            ShowWindow(windowHandle, SW_SHOWNA);
+            if (IsValidWindow(windowHandle))
+            {
+                ShowWindow(windowHandle, SW_SHOWNA);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -240,10 +305,17 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void ActivateAndBringToFront(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            BringWindowToTop(windowHandle);
-            SetForegroundWindow(windowHandle);
+            if (IsValidWindow(windowHandle))
+            {
+                BringWindowToTop(windowHandle);
+                SetForegroundWindow(windowHandle);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -255,15 +327,22 @@ internal static class WindowsNativeService
     /// <returns>操作是否成功</returns>
     public static bool SetWindowZOrder(IntPtr hWnd, IntPtr hWndInsertAfter)
     {
-        if (IsValidWindow(hWnd) && IsValidWindow(hWndInsertAfter))
+        try
         {
-            // 在Windows API中，窗口Z顺序是一个链表，其中hWndInsertAfter指定的是
-            // 作为参考的窗口，然后hWnd被放在这个窗口之后（在Z顺序链中）
-            // 换句话说，hWnd将会在屏幕显示上位于hWndInsertAfter之上
-            return SetWindowPos(hWnd, hWndInsertAfter, 0, 0, 0, 0,
-                SWP_NOMOVE | SWP_NOSIZE);
+            if (IsValidWindow(hWnd) && IsValidWindow(hWndInsertAfter))
+            {
+                // 在Windows API中，窗口Z顺序是一个链表，其中hWndInsertAfter指定的是
+                // 作为参考的窗口，然后hWnd被放在这个窗口之后（在Z顺序链中）
+                // 换句话说，hWnd将会在屏幕显示上位于hWndInsertAfter之上
+                return SetWindowPos(hWnd, hWndInsertAfter, 0, 0, 0, 0,
+                    SWP_NOMOVE | SWP_NOSIZE);
+            }
+            return false;
         }
-        return false;
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -272,10 +351,17 @@ internal static class WindowsNativeService
     /// <param name="windowHandle">窗口句柄</param>
     public static void SetWindowNotTopMost(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            SetWindowPos(windowHandle, new IntPtr(HWND_NOTOPMOST), 0, 0, 0, 0,
-                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            if (IsValidWindow(windowHandle))
+            {
+                SetWindowPos(windowHandle, new IntPtr(HWND_NOTOPMOST), 0, 0, 0, 0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -286,15 +372,58 @@ internal static class WindowsNativeService
     /// <returns>窗口矩形，如果获取失败则返回空值</returns>
     public static Rect? GetWindowRectAsWpfRect(IntPtr windowHandle)
     {
-        if (IsValidWindow(windowHandle))
+        try
         {
-            if (GetWindowRect(windowHandle, out RECT rect))
+            if (IsValidWindow(windowHandle))
             {
-                // 转换为WPF Rect
-                return ConvertRectToWpfUnit(rect);
+                if (GetWindowRect(windowHandle, out RECT rect))
+                {
+                    // 转换为WPF Rect
+                    return ConvertRectToWpfUnit(rect);
+                }
             }
+            return null;
         }
-        return null;
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 获取系统工作区域（桌面区域，不包括任务栏）
+    /// </summary>
+    /// <returns>工作区域矩形</returns>
+    public static Rect GetSystemWorkArea()
+    {
+        try
+        {
+            // 首先尝试使用WPF方式获取工作区
+            if (Application.Current != null)
+            {
+                return SystemParameters.WorkArea;
+            }
+
+            // 如果WPF方式不可用，则使用Windows API
+            RECT workArea = new RECT();
+            if (SystemParametersInfo(SPI_GETWORKAREA, 0, ref workArea, 0))
+            {
+                return new Rect(
+                    workArea.Left,
+                    workArea.Top,
+                    workArea.Right - workArea.Left,
+                    workArea.Bottom - workArea.Top
+                );
+            }
+
+            // 如果API调用失败，则返回屏幕默认值
+            return new Rect(0, 0, 1920, 1080);
+        }
+        catch (Exception)
+        {
+            // 如果出现任何异常，返回默认值
+            return new Rect(0, 0, 1920, 1080);
+        }
     }
 
     /// <summary>
@@ -304,10 +433,23 @@ internal static class WindowsNativeService
     /// <returns>转换后的WPF Rect</returns>
     public static Rect ConvertRectToWpfUnit(RECT rect)
     {
-        Point topLeft = ConvertPixelToWpfUnit(rect.Left, rect.Top);
-        Point bottomRight = ConvertPixelToWpfUnit(rect.Right, rect.Bottom);
+        try
+        {
+            Point topLeft = ConvertPixelToWpfUnit(rect.Left, rect.Top);
+            Point bottomRight = ConvertPixelToWpfUnit(rect.Right, rect.Bottom);
 
-        return new Rect(topLeft, bottomRight);
+            return new Rect(topLeft, bottomRight);
+        }
+        catch (Exception)
+        {
+            // 如果转换失败，则直接使用像素值创建Rect
+            return new Rect(
+                rect.Left,
+                rect.Top,
+                rect.Right - rect.Left,
+                rect.Bottom - rect.Top
+            );
+        }
     }
 
     /// <summary>
@@ -318,12 +460,53 @@ internal static class WindowsNativeService
     /// <returns>WPF坐标点</returns>
     public static Point ConvertPixelToWpfUnit(int x, int y)
     {
-        Matrix transformToDevice = GetDpiScale();
-        double dpiX = transformToDevice.M11;
-        double dpiY = transformToDevice.M22;
+        try
+        {
+            Matrix transformToDevice = GetDpiScale();
+            double dpiX = transformToDevice.M11;
+            double dpiY = transformToDevice.M22;
 
-        // 转换坐标
-        return new Point(x / dpiX, y / dpiY);
+            // 确保DPI非零
+            if (Math.Abs(dpiX) < 0.01) dpiX = 1.0;
+            if (Math.Abs(dpiY) < 0.01) dpiY = 1.0;
+
+            // 转换坐标
+            return new Point(x / dpiX, y / dpiY);
+        }
+        catch (Exception)
+        {
+            // 在异常情况下，使用默认的96 DPI进行转换
+            double dpiScale = GetSystemDpiScale();
+            return new Point(x / dpiScale, y / dpiScale);
+        }
+    }
+
+    /// <summary>
+    /// 通过Windows API获取系统DPI缩放因子
+    /// </summary>
+    /// <returns>系统DPI缩放因子（相对于96 DPI）</returns>
+    private static double GetSystemDpiScale()
+    {
+        try
+        {
+            // 获取桌面窗口的监视器
+            IntPtr desktop = GetDesktopWindow();
+            IntPtr monitor = MonitorFromWindow(desktop, 0); // 0 = MONITOR_DEFAULTTONULL
+
+            // 获取监视器的DPI
+            if (monitor != IntPtr.Zero && GetDpiForMonitor(monitor, 0, out uint dpiX, out uint dpiY))
+            {
+                return dpiX / DEFAULT_DPI;
+            }
+
+            // 默认返回1.0（96 DPI）
+            return 1.0;
+        }
+        catch (Exception)
+        {
+            // 如果出现任何异常，返回默认值
+            return 1.0;
+        }
     }
 
     /// <summary>
@@ -332,12 +515,46 @@ internal static class WindowsNativeService
     /// <returns>DPI缩放矩阵</returns>
     public static Matrix GetDpiScale()
     {
-        var source = PresentationSource.FromVisual(Application.Current.MainWindow);
-        if (source?.CompositionTarget != null)
+        try
         {
-            return source.CompositionTarget.TransformToDevice;
+            // 首先尝试获取WPF的DPI设置
+            if (Application.Current?.MainWindow != null)
+            {
+                var source = PresentationSource.FromVisual(Application.Current.MainWindow);
+                if (source?.CompositionTarget != null)
+                {
+                    return source.CompositionTarget.TransformToDevice;
+                }
+            }
+
+            // 如果无法通过WPF获取，则尝试使用Windows API
+            double dpiScale = GetSystemDpiScale();
+            return new Matrix(dpiScale, 0, 0, dpiScale, 0, 0);
         }
-        return Matrix.Identity; // 如果无法确定，则返回1:1比例
+        catch (Exception)
+        {
+            // 如果出现任何异常，返回默认值
+            return Matrix.Identity; // 1:1比例
+        }
+    }
+
+    /// <summary>
+    /// 安全执行Windows API调用，捕获可能的异常
+    /// </summary>
+    /// <typeparam name="T">返回值类型</typeparam>
+    /// <param name="action">要执行的API调用</param>
+    /// <param name="defaultValue">发生异常时的默认返回值</param>
+    /// <returns>API调用的结果或默认值</returns>
+    public static T SafeApiCall<T>(Func<T> action, T defaultValue)
+    {
+        try
+        {
+            return action();
+        }
+        catch (Exception)
+        {
+            return defaultValue;
+        }
     }
 
     #endregion 实用方法

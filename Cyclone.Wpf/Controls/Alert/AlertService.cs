@@ -5,6 +5,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -20,7 +21,6 @@ public interface IAlertService : IDisposable
 
 /// <summary>
 /// 警告框服务实现类
-/// 现在存在一个问题，当使用窗口时，主窗口隐藏以后再显示,消息窗口无法显示 ,需要使用ALT+TAB键显示
 /// </summary>
 public class AlertService : IAlertService, IDisposable
 {
@@ -32,6 +32,9 @@ public class AlertService : IAlertService, IDisposable
 
     // 使用原子操作控制对象状态
     private int _isDisposed;
+
+    // 自定义Dispatcher，用于在非WPF环境下工作
+    private Dispatcher _customDispatcher;
 
     /// <summary>
     /// 静态构造函数，初始化单例实例
@@ -99,6 +102,78 @@ public class AlertService : IAlertService, IDisposable
     public AlertService(AlertOption option)
     {
         Option = option ?? throw new ArgumentNullException(nameof(option));
+
+        // 确保Dispatcher已初始化
+        GetDispatcher();
+    }
+
+    /// <summary>
+    /// 获取可用的Dispatcher，确保在非WPF环境下也能正常工作
+    /// </summary>
+    private Dispatcher GetDispatcher()
+    {
+        // 如果已有自定义Dispatcher，直接返回
+        if (_customDispatcher != null)
+            return _customDispatcher;
+
+        // 尝试获取Application.Current.Dispatcher
+        if (Application.Current != null && Application.Current.Dispatcher != null)
+            return Application.Current.Dispatcher;
+
+        // 在非WPF环境下，创建并使用自己的Dispatcher线程
+        _customDispatcher = Dispatcher.CurrentDispatcher;
+        return _customDispatcher;
+    }
+
+    /// <summary>
+    /// 检查是否需要在Dispatcher上调用并执行操作
+    /// </summary>
+    private void InvokeOnDispatcher(Action action)
+    {
+        if (action == null)
+            return;
+
+        var dispatcher = GetDispatcher();
+
+        if (dispatcher == null)
+        {
+            // 如果无法获取任何Dispatcher，则直接执行操作
+            action();
+            return;
+        }
+
+        if (dispatcher.CheckAccess())
+        {
+            // 已在UI线程上，直接执行
+            action();
+        }
+        else
+        {
+            // 需要在UI线程上执行
+            dispatcher.BeginInvoke(action);
+        }
+    }
+
+    /// <summary>
+    /// 同步在Dispatcher上执行操作并返回结果
+    /// </summary>
+    private T InvokeOnDispatcherWithResult<T>(Func<T> func)
+    {
+        if (func == null)
+            throw new ArgumentNullException(nameof(func));
+
+        var dispatcher = GetDispatcher();
+
+        if (dispatcher == null || dispatcher.CheckAccess())
+        {
+            // 如果无法获取任何Dispatcher或已在UI线程上，直接执行
+            return func();
+        }
+        else
+        {
+            // 需要在UI线程上执行并等待结果
+            return (T)dispatcher.Invoke(func);
+        }
     }
 
     /// <summary>
@@ -173,11 +248,18 @@ public class AlertService : IAlertService, IDisposable
     /// </summary>
     private void UnhookEvents()
     {
-        if (_winEventHook != IntPtr.Zero)
+        try
         {
-            WindowsNativeService.UnhookWinEvent(_winEventHook);
-            _winEventHook = IntPtr.Zero;
-            _winEventProc = null;
+            if (_winEventHook != IntPtr.Zero)
+            {
+                WindowsNativeService.UnhookWinEvent(_winEventHook);
+                _winEventHook = IntPtr.Zero;
+                _winEventProc = null;
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -185,7 +267,6 @@ public class AlertService : IAlertService, IDisposable
     /// 创建警告窗口实例
     /// </summary>
     /// <param name="content">窗口内容</param>
-    /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>创建的AlertWindow实例</returns>
     private AlertWindow CreateAlertWindow(object content, string title)
@@ -252,50 +333,59 @@ public class AlertService : IAlertService, IDisposable
             }
         }
 
-        // 创建蒙版窗口
-        var maskWindow = new Window
+        try
         {
-            Width = ownerRect.Width,
-            Height = ownerRect.Height,
-            Left = ownerRect.Left,
-            Top = ownerRect.Top,
-            WindowStyle = WindowStyle.None,
-            ResizeMode = ResizeMode.NoResize,
-            ShowInTaskbar = false,
-            AllowsTransparency = true,
-            Background = Brushes.Transparent,
-            WindowStartupLocation = WindowStartupLocation.Manual,
-            // 修改：设置为接收点击事件但不获取焦点
-            IsHitTestVisible = false,
-            // 修改：允许获取焦点以便正确处理Z顺序
-            Focusable = true,
-            // 设置为不是最上层，让Alert窗口可以在其上方
-            Topmost = false,
-        };
+            // 创建蒙版窗口
+            var maskWindow = new Window
+            {
+                Width = ownerRect.Width,
+                Height = ownerRect.Height,
+                Left = ownerRect.Left,
+                Top = ownerRect.Top,
+                WindowStyle = WindowStyle.None,
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                AllowsTransparency = true,
+                Background = Brushes.Transparent,
+                WindowStartupLocation = WindowStartupLocation.Manual,
+                // 修改：设置为接收点击事件但不获取焦点
+                IsHitTestVisible = false,
+                // 修改：允许获取焦点以便正确处理Z顺序
+                Focusable = true,
+                // 设置为不是最上层，让Alert窗口可以在其上方
+                Topmost = false,
+            };
 
-        // 添加矩形蒙版
-        var rectangle = new Rectangle
-        {
-            Width = ownerRect.Width,
-            Height = ownerRect.Height,
-            Fill = Option.MaskBrush ?? new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))
-        };
+            // 添加矩形蒙版
+            var rectangle = new Rectangle
+            {
+                Width = ownerRect.Width,
+                Height = ownerRect.Height,
+                Fill = Option.MaskBrush ?? new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))
+            };
 
-        maskWindow.Content = rectangle;
+            maskWindow.Content = rectangle;
 
-        // 如果有WPF Owner，设置蒙版窗口的Owner，确保Z顺序和焦点行为正确
-        if (_ownerWindow != null)
-        {
-            maskWindow.Owner = _ownerWindow;
+            // 如果有WPF Owner，设置蒙版窗口的Owner，确保Z顺序和焦点行为正确
+            if (_ownerWindow != null)
+            {
+                maskWindow.Owner = _ownerWindow;
+            }
+
+            // 添加事件处理，确保点击蒙版时不会让蒙版获得焦点
+            maskWindow.PreviewMouseDown += (sender, e) =>
+            {
+                e.Handled = true;
+            };
+
+            return maskWindow;
         }
-
-        // 添加事件处理，确保点击蒙版时不会让蒙版获得焦点
-        maskWindow.PreviewMouseDown += (sender, e) =>
+        catch (Exception ex)
         {
-            e.Handled = true;
-        };
-
-        return maskWindow;
+            // 记录异常但不中断流程
+            System.Diagnostics.Debug.WriteLine($"创建蒙版窗口时出错: {ex.Message}");
+            return null;
+        }
     }
 
     /// <summary>
@@ -312,96 +402,34 @@ public class AlertService : IAlertService, IDisposable
             throw new ArgumentNullException(nameof(window));
         }
 
-        // 如果有拥有者窗口，使用它作为中心点
-        if (_ownerWindow != null)
+        try
         {
-            window.Owner = _ownerWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            return;
-        }
-
-        // 如果有有效的句柄，使用句柄窗口位置计算中心点
-        if (WindowsNativeService.IsValidWindow(_ownerHandle))
-        {
-            var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
-            if (wpfRect.HasValue)
+            // 如果有WPF窗口作为拥有者，使用WPF的标准居中逻辑
+            if (_ownerWindow != null)
             {
-                // 计算窗口的尺寸
-                double ownerWidth = wpfRect.Value.Width;
-                double ownerHeight = wpfRect.Value.Height;
-
-                // 计算中心点
-                double ownerCenterX = wpfRect.Value.Left + (ownerWidth / 2);
-                double ownerCenterY = wpfRect.Value.Top + (ownerHeight / 2);
-
-                // 计算警告窗口左上角位置
-                window.Left = ownerCenterX - (window.Width / 2);
-                window.Top = ownerCenterY - (window.Height / 2);
-
-                // 确保窗口在屏幕边界内
-                EnsureWindowInScreenBounds(window);
-
-                // 设置窗口启动位置为手动，以使用我们计算的位置
-                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Owner = _ownerWindow;
+                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 return;
             }
+
+            // 如果有非WPF窗口作为拥有者，使用专用的Alert窗口定位器
+            if (WindowsNativeService.IsValidWindow(_ownerHandle))
+            {
+                // 尝试使用AlertWindowPositioner在拥有者窗口中心定位警告窗口
+                if (AlertWindowPositioner.CenterAlertInOwner(window, _ownerHandle))
+                {
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // 记录异常但不中断流程
+            System.Diagnostics.Debug.WriteLine($"定位警告窗口时出错: {ex.Message}");
         }
 
-        // 如果没有Owner或者Owner无效，使用屏幕中心
+        // 如果以上方法都失败，则默认使用屏幕中心
         window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-    }
-
-    /// <summary>
-    /// 确保窗口在屏幕边界内
-    /// </summary>
-    /// <param name="window">要检查的窗口</param>
-    private void EnsureWindowInScreenBounds(Window window)
-    {
-        var screenBounds = SystemParameters.WorkArea;
-
-        // 检查并调整左边界
-        if (window.Left < screenBounds.Left)
-        {
-            window.Left = screenBounds.Left;
-        }
-        else if (window.Left + window.Width > screenBounds.Right)
-        {
-            window.Left = screenBounds.Right - window.Width;
-        }
-
-        // 检查并调整上边界
-        if (window.Top < screenBounds.Top)
-        {
-            window.Top = screenBounds.Top;
-        }
-        else if (window.Top + window.Height > screenBounds.Bottom)
-        {
-            window.Top = screenBounds.Bottom - window.Height;
-        }
-    }
-
-    /// <summary>
-    /// 更新蒙版窗口位置
-    /// </summary>
-    private void UpdateMaskPosition()
-    {
-        if (_maskWindow != null && _ownerWindow != null && _maskWindow.IsLoaded)
-        {
-            _maskWindow.Left = _ownerWindow.Left;
-            _maskWindow.Top = _ownerWindow.Top;
-        }
-    }
-
-    /// <summary>
-    /// 更新蒙版窗口大小
-    /// </summary>
-    private void UpdateMaskSize()
-    {
-        if (_maskWindow != null && _ownerWindow != null && _maskWindow.IsLoaded)
-        {
-            _maskWindow.Width = _ownerWindow.Width;
-            _maskWindow.Height = _ownerWindow.Height;
-        }
     }
 
     /// <summary>
@@ -409,22 +437,29 @@ public class AlertService : IAlertService, IDisposable
     /// </summary>
     private void UpdateMaskPositionFromHandle()
     {
-        if (_currentAlertWindow != null && _currentAlertWindow.IsLoaded)
+        try
         {
-            _currentAlertWindow.Visibility = Visibility.Visible;
-            _currentAlertWindow.Activate();
-        }
-
-        if (_maskWindow != null && WindowsNativeService.IsValidWindow(_ownerHandle))
-        {
-            var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
-            if (wpfRect.HasValue)
+            if (_currentAlertWindow != null && _currentAlertWindow.IsLoaded)
             {
-                _maskWindow.Left = wpfRect.Value.Left;
-                _maskWindow.Top = wpfRect.Value.Top;
-                _maskWindow.Width = wpfRect.Value.Width;
-                _maskWindow.Height = wpfRect.Value.Height;
+                _currentAlertWindow.Visibility = Visibility.Visible;
+                _currentAlertWindow.Activate();
             }
+
+            if (_maskWindow != null && WindowsNativeService.IsValidWindow(_ownerHandle))
+            {
+                var wpfRect = WindowsNativeService.GetWindowRectAsWpfRect(_ownerHandle);
+                if (wpfRect.HasValue)
+                {
+                    _maskWindow.Left = wpfRect.Value.Left;
+                    _maskWindow.Top = wpfRect.Value.Top;
+                    _maskWindow.Width = wpfRect.Value.Width;
+                    _maskWindow.Height = wpfRect.Value.Height;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -433,13 +468,20 @@ public class AlertService : IAlertService, IDisposable
     /// </summary>
     private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
-        // 只处理我们拥有者窗口的事件
-        if (hwnd == _ownerHandle)
+        try
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            // 只处理我们拥有者窗口的事件
+            if (hwnd == _ownerHandle)
             {
-                UpdateMaskPositionFromHandle();
-            }));
+                InvokeOnDispatcher(() =>
+                {
+                    UpdateMaskPositionFromHandle();
+                });
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -451,21 +493,28 @@ public class AlertService : IAlertService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        // 只有在有非WPF所有者且尚未设置钩子时才设置
-        if (_ownerHandle != IntPtr.Zero && _winEventHook == IntPtr.Zero && _ownerWindow == null)
+        try
         {
-            // 创建委托（保持引用以防止垃圾回收）
-            _winEventProc = new WindowsNativeService.WinEventDelegate(WinEventProc);
+            // 只有在有非WPF所有者且尚未设置钩子时才设置
+            if (_ownerHandle != IntPtr.Zero && _winEventHook == IntPtr.Zero && _ownerWindow == null)
+            {
+                // 创建委托（保持引用以防止垃圾回收）
+                _winEventProc = new WindowsNativeService.WinEventDelegate(WinEventProc);
 
-            // 为窗口位置变化设置事件钩子
-            _winEventHook = WindowsNativeService.SetWinEventHook(
-                WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
-                WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
-                IntPtr.Zero,
-                _winEventProc,
-                0,
-                0,
-                WindowsNativeService.WINEVENT_OUTOFCONTEXT);
+                // 为窗口位置变化设置事件钩子
+                _winEventHook = WindowsNativeService.SetWinEventHook(
+                    WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
+                    WindowsNativeService.EVENT_OBJECT_LOCATIONCHANGE,
+                    IntPtr.Zero,
+                    _winEventProc,
+                    0,
+                    0,
+                    WindowsNativeService.WINEVENT_OUTOFCONTEXT);
+            }
+        }
+        catch (Exception)
+        {
+            // 忽略可能的异常
         }
     }
 
@@ -510,7 +559,6 @@ public class AlertService : IAlertService, IDisposable
     /// 显示模态警告框并返回对话框结果
     /// </summary>
     /// <param name="content">窗口内容</param>
-    /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>对话框结果</returns>
     public bool? Show(object content, string title = null)
@@ -518,25 +566,17 @@ public class AlertService : IAlertService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        // 确保在UI线程上执行
-        if (Application.Current.Dispatcher.CheckAccess())
+        // 使用自定义的Dispatcher调用方法执行
+        return InvokeOnDispatcherWithResult(() =>
         {
             return ShowDialogInternal(content, title);
-        }
-        else
-        {
-            return Application.Current.Dispatcher.Invoke(() =>
-            {
-                return ShowDialogInternal(content, title);
-            });
-        }
+        });
     }
 
     /// <summary>
     /// 内部方法，用于显示对话框
     /// </summary>
     /// <param name="content">窗口内容</param>
-    /// <param name="template">内容模板</param>
     /// <param name="title">窗口标题</param>
     /// <returns>对话框结果</returns>
     private bool? ShowDialogInternal(object content, string title)
@@ -544,55 +584,78 @@ public class AlertService : IAlertService, IDisposable
         // 检查是否已被处置
         ThrowIfDisposed();
 
-        // 如果启用了蒙版并且有所有者，显示蒙版
-        if (Option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
-        {
-            _maskWindow = CreateMaskWindow();
-            // 显示蒙版窗口但不激活它
-            _maskWindow?.Show();
-        }
-
-        var window = CreateAlertWindow(content, title);
-        // 添加蒙版窗口作为警告窗口的关闭回调
-        window.Closed += (sender, e) =>
-        {
-            // 确保蒙版窗口关闭
-            if (_maskWindow != null && _maskWindow.IsLoaded)
-            {
-                _maskWindow.Close();
-            }
-
-            // 清理事件钩子
-            UnhookEvents();
-        };
-
-        _currentAlertWindow = window;
-        PositionWindowInCenter(window);
-        window.Owner = _maskWindow;
-        bool? result = null;
         try
         {
-            // 显示模态对话框
-            result = window.ShowDialog();
-
-            return result;
-        }
-        finally
-        {
-            _currentAlertWindow = null;
-
-            // 关闭蒙版窗口
-            if (_maskWindow != null)
+            // 如果启用了蒙版并且有所有者，显示蒙版
+            if (Option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
             {
-                _maskWindow.Close();
-                _maskWindow = null;
+                _maskWindow = CreateMaskWindow();
+                // 显示蒙版窗口但不激活它
+                _maskWindow?.Show();
             }
 
-            // 清理事件钩子
-            UnhookEvents();
+            var window = CreateAlertWindow(content, title);
+            // 添加蒙版窗口作为警告窗口的关闭回调
+            window.Closed += (sender, e) =>
+            {
+                try
+                {
+                    // 确保蒙版窗口关闭
+                    if (_maskWindow != null && _maskWindow.IsLoaded)
+                    {
+                        _maskWindow.Close();
+                    }
 
-            // 在弹窗关闭后激活Owner窗口以确保它保持在前台
-            ActivateOwnerWindow();
+                    // 清理事件钩子
+                    UnhookEvents();
+                }
+                catch
+                {
+                    // 忽略关闭时的异常
+                }
+            };
+
+            _currentAlertWindow = window;
+            PositionWindowInCenter(window);
+            window.Owner = _maskWindow;
+            bool? result = null;
+            try
+            {
+                // 显示模态对话框
+                result = window.ShowDialog();
+
+                return result;
+            }
+            finally
+            {
+                _currentAlertWindow = null;
+
+                // 关闭蒙版窗口
+                if (_maskWindow != null)
+                {
+                    try
+                    {
+                        _maskWindow.Close();
+                    }
+                    catch
+                    {
+                        // 忽略关闭时可能发生的异常
+                    }
+                    _maskWindow = null;
+                }
+
+                // 清理事件钩子
+                UnhookEvents();
+
+                // 在弹窗关闭后激活Owner窗口以确保它保持在前台
+                ActivateOwnerWindow();
+            }
+        }
+        catch (Exception ex)
+        {
+            // 记录任何显示过程中的异常
+            System.Diagnostics.Debug.WriteLine($"显示警告对话框时出错: {ex.Message}");
+            return null;
         }
     }
 
@@ -632,38 +695,36 @@ public class AlertService : IAlertService, IDisposable
                 // 清理非托管资源
                 UnhookEvents();
 
-                // 在UI线程上执行清理
-                if (Application.Current != null && Application.Current.Dispatcher != null)
+                // 使用安全的Dispatcher调用清理UI资源
+                InvokeOnDispatcher(() =>
                 {
                     try
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        // 关闭警告窗口
+                        if (_currentAlertWindow != null)
                         {
-                            // 关闭警告窗口
-                            if (_currentAlertWindow != null)
-                            {
-                                _currentAlertWindow.Close();
-                                _currentAlertWindow = null;
-                            }
+                            _currentAlertWindow.Close();
+                            _currentAlertWindow = null;
+                        }
 
-                            // 关闭蒙版窗口
-                            if (_maskWindow != null)
-                            {
-                                _maskWindow.Close();
-                                _maskWindow = null;
-                            }
-                        });
+                        // 关闭蒙版窗口
+                        if (_maskWindow != null)
+                        {
+                            _maskWindow.Close();
+                            _maskWindow = null;
+                        }
                     }
                     catch (Exception ex)
                     {
                         // 记录任何清理过程中的异常，但不阻止释放继续进行
                         System.Diagnostics.Debug.WriteLine($"释放AlertService资源时出错: {ex.Message}");
                     }
-                }
+                });
 
                 // 释放引用
                 _ownerWindow = null;
                 _ownerHandle = IntPtr.Zero;
+                _customDispatcher = null;
             }
         }
     }

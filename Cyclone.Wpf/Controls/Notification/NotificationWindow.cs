@@ -93,24 +93,44 @@ internal class NotificationWindow : Window
     private double _originalLeft;
     private double _originalTop;
 
+    // 用于获取安全的Dispatcher
+    private Dispatcher GetSafeDispatcher()
+    {
+        return Dispatcher ?? (Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher);
+    }
+
     public NotificationWindow()
     {
         // 注册命令绑定
         CommandBindings.Add(new CommandBinding(CloseWindowCommand, ExecuteCloseWindow, CanExecuteCloseWindow));
-        var dict = new ResourceDictionary();
-        dict.Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute);
-        Resources.MergedDictionaries.Add(dict);
 
-        // 初始化自动关闭计时器
-        _autoCloseTimer = new DispatcherTimer();
-        _autoCloseTimer.Tick += AutoCloseTimer_Tick;
+        try
+        {
+            var dict = new ResourceDictionary();
+            dict.Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Notification.xaml", UriKind.Absolute);
+            Resources.MergedDictionaries.Add(dict);
+        }
+        catch (Exception ex)
+        {
+            // 在资源加载失败的情况下提供异常处理
+            Console.WriteLine($"Error loading notification resources: {ex.Message}");
+            // 可以在这里添加默认资源或降级处理
+        }
 
+        // 初始化自动关闭计时器（在Loaded事件中）
         Loaded += NotificationWindow_Loaded;
         Unloaded += NotificationWindow_Unloaded;
     }
 
     private void NotificationWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        // 初始化计时器
+        if (_autoCloseTimer == null)
+        {
+            _autoCloseTimer = new DispatcherTimer(DispatcherPriority.Normal, GetSafeDispatcher());
+            _autoCloseTimer.Tick += AutoCloseTimer_Tick;
+        }
+
         // 保存原始位置用于动画
         _originalLeft = Left;
         _originalTop = Top;
@@ -262,11 +282,8 @@ internal class NotificationWindow : Window
     {
         if (_isClosing) return;
 
-        // Check if _autoCloseTimer is not null before stopping it
-        if (_autoCloseTimer != null)
-        {
-            StopAutoCloseTimer();
-        }
+        // 停止计时器
+        StopAutoCloseTimer();
 
         PlayCloseAnimation(() =>
         {
@@ -276,25 +293,22 @@ internal class NotificationWindow : Window
 
     private void StartAutoCloseTimer()
     {
-        // Add null check for _autoCloseTimer
+        // 如果计时器为空，创建一个新的
         if (_autoCloseTimer == null)
         {
-            _autoCloseTimer = new DispatcherTimer();
+            _autoCloseTimer = new DispatcherTimer(DispatcherPriority.Normal, GetSafeDispatcher());
             _autoCloseTimer.Tick += AutoCloseTimer_Tick;
         }
 
-        // If timer is already running or mouse is over window, don't start timer
+        // 如果计时器已在运行或鼠标在窗口上，不启动计时器
         if (_autoCloseTimer.IsEnabled || this.IsMouseOver || DisplayDuration <= TimeSpan.Zero)
         {
             return;
         }
 
-        // Set timer interval and start
+        // 设置计时器间隔并启动
         _autoCloseTimer.Interval = DisplayDuration;
         _autoCloseTimer.Start();
-
-        // Debug output
-        Console.WriteLine($"Auto close timer started: {DisplayDuration.TotalMilliseconds}ms");
     }
 
     private void StopAutoCloseTimer()
@@ -302,7 +316,6 @@ internal class NotificationWindow : Window
         if (_autoCloseTimer != null && _autoCloseTimer.IsEnabled)
         {
             _autoCloseTimer.Stop();
-            Console.WriteLine("Auto close timer stopped");
         }
     }
 

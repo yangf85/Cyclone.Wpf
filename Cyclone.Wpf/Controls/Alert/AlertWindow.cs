@@ -200,9 +200,44 @@ public class AlertWindow : Window
     public AlertWindow()
     {
         InitializeCommand();
-        var dict = new ResourceDictionary();
-        dict.Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Alert.xaml", UriKind.Absolute);
-        Resources.MergedDictionaries.Add(dict);
+
+        try
+        {
+            // 尝试加载资源字典
+            var dict = new ResourceDictionary();
+            dict.Source = new Uri("pack://application:,,,/Cyclone.Wpf;component/Styles/Alert.xaml", UriKind.Absolute);
+            Resources.MergedDictionaries.Add(dict);
+        }
+        catch (Exception ex)
+        {
+            // 记录异常但继续初始化窗口
+            System.Diagnostics.Debug.WriteLine($"加载Alert样式资源时出错: {ex.Message}");
+
+            // 可以在这里添加基本样式作为备用
+            ApplyFallbackStyles();
+        }
+
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
+    }
+
+    /// <summary>
+    /// 在无法加载资源字典时应用基本样式
+    /// </summary>
+    private void ApplyFallbackStyles()
+    {
+        try
+        {
+            // 创建基本样式作为备用
+            // 这些是基本设置，确保窗口在没有样式文件时仍然可见
+            Background = Brushes.White;
+            BorderBrush = Brushes.DarkGray;
+            BorderThickness = new Thickness(1);
+
+            // 其他基本样式设置...
+        }
+        catch (Exception)
+        {
+            // 忽略应用备用样式时的异常
+        }
     }
 }

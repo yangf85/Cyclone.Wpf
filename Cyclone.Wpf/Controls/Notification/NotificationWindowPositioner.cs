@@ -49,6 +49,25 @@ internal class NotificationWindowPositioner
     }
 
     /// <summary>
+    /// 获取当前可用的工作区
+    /// </summary>
+    private Rect GetWorkArea()
+    {
+        // 尝试获取System.Windows.SystemParameters.WorkArea
+        // 如果失败，则使用默认屏幕尺寸
+        try
+        {
+            return SystemParameters.WorkArea;
+        }
+        catch
+        {
+            // 在非WPF环境中，创建一个合理的默认工作区
+            // 可以尝试使用P/Invoke获取屏幕信息
+            return new Rect(0, 0, 1920, 1080); // 默认1080p分辨率
+        }
+    }
+
+    /// <summary>
     /// 根据当前设置定位所有通知窗口
     /// </summary>
     public void PositionWindows(IList<NotificationWindow> activeWindows)
@@ -63,7 +82,7 @@ internal class NotificationWindowPositioner
         IntPtr ownerHandle = _ownerHandle;
 
         WindowsNativeService.RECT ownerRect;
-        var screenBounds = System.Windows.SystemParameters.WorkArea;
+        var screenBounds = GetWorkArea();
 
         if (useScreen || !WindowsNativeService.IsValidWindow(ownerHandle) ||
             !WindowsNativeService.GetWindowRect(ownerHandle, out ownerRect))

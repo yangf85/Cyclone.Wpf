@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>25.5.17.69</AssemblyVersion>
-    <FileVersion>25.5.17.69</FileVersion>
+    <AssemblyVersion>25.5.18.17</AssemblyVersion>
+    <FileVersion>25.5.18.17</FileVersion>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
@@ -19,6 +19,34 @@
 	  <Version>$(AssemblyVersion)</Version>
 
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyVersionSettings>
+    <UpdatePackageVersion>False</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+    <AssemblyFileVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyInfoVersionSettings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyVersionSettings>
+    <UpdatePackageVersion>False</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+    <AssemblyFileVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>ShortYearStamp.MonthStamp.DayStamp.IncrementOnDemand</AssemblyInfoVersionSettings>
   </PropertyGroup>
 
   <ItemGroup>

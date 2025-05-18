@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Collections.Concurrent;
+using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -26,6 +27,9 @@ public class NotificationService : INotificationService, IDisposable
     // 使用原子操作控制对象状态
     private int _isDisposed;
 
+    // 自定义Dispatcher，用于在非WPF环境下工作
+    private Dispatcher _customDispatcher;
+
     // 允许重置单例的静态字段 - 非readonly
     private static Lazy<NotificationService> _lazyInstance =
         new Lazy<NotificationService>(() => new NotificationService(), LazyThreadSafetyMode.ExecutionAndPublication);
@@ -37,6 +41,8 @@ public class NotificationService : INotificationService, IDisposable
     /// 获取通知服务的单例实例
     /// </summary>
     public static NotificationService Instance => _lazyInstance.Value;
+
+    private NotificationOption field = new NotificationOption();
 
     public NotificationOption Option
     {
@@ -74,6 +80,56 @@ public class NotificationService : INotificationService, IDisposable
     {
         Option = option;
         _windowPositioner = new NotificationWindowPositioner(option);
+
+        // 确保Dispatcher已初始化
+        GetDispatcher();
+    }
+
+    /// <summary>
+    /// 获取可用的Dispatcher，确保在非WPF环境下也能正常工作
+    /// </summary>
+    private Dispatcher GetDispatcher()
+    {
+        // 如果已有自定义Dispatcher，直接返回
+        if (_customDispatcher != null)
+            return _customDispatcher;
+
+        // 尝试获取Application.Current.Dispatcher
+        if (Application.Current != null && Application.Current.Dispatcher != null)
+            return Application.Current.Dispatcher;
+
+        // 在非WPF环境下，创建并使用自己的Dispatcher线程
+        _customDispatcher = Dispatcher.CurrentDispatcher;
+        return _customDispatcher;
+    }
+
+    /// <summary>
+    /// 检查是否需要在Dispatcher上调用并执行操作
+    /// </summary>
+    private void InvokeOnDispatcher(Action action)
+    {
+        if (action == null)
+            return;
+
+        var dispatcher = GetDispatcher();
+
+        if (dispatcher == null)
+        {
+            // 如果无法获取任何Dispatcher，则直接执行操作
+            action();
+            return;
+        }
+
+        if (dispatcher.CheckAccess())
+        {
+            // 已在UI线程上，直接执行
+            action();
+        }
+        else
+        {
+            // 需要在UI线程上执行
+            dispatcher.BeginInvoke(action);
+        }
     }
 
     /// <summary>
@@ -152,14 +208,7 @@ public class NotificationService : INotificationService, IDisposable
             _windowPositioner.SetOwner(handle);
 
             // 确保在UI线程上重新定位窗口
-            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(RepositionActiveWindows));
-            }
-            else
-            {
-                RepositionActiveWindows();
-            }
+            InvokeOnDispatcher(RepositionActiveWindows);
         }
     }
 
@@ -169,8 +218,9 @@ public class NotificationService : INotificationService, IDisposable
     {
         // 检查是否已被处置
         ThrowIfDisposed();
-        // 我们需要在UI线程上创建窗口
-        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+
+        // 在UI线程上创建窗口
+        InvokeOnDispatcher(() =>
         {
             if (Interlocked.CompareExchange(ref _isDisposed, 0, 0) == 1) return;
 
@@ -183,7 +233,7 @@ public class NotificationService : INotificationService, IDisposable
             window.DisplayDuration = Option.DisplayDuration;
 
             AddWindow(window);
-        }));
+        });
     }
 
     #endregion Implementation INotificationService
@@ -238,38 +288,34 @@ public class NotificationService : INotificationService, IDisposable
 
     private void RepositionActiveWindows()
     {
-        // 确保在UI线程上执行位置更新
-        if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
+        // 使用自定义的线程调度方法
+        InvokeOnDispatcher(() =>
         {
-            // 如果不在UI线程，则分发到UI线程执行
-            Application.Current.Dispatcher.BeginInvoke(new Action(RepositionActiveWindows));
-            return;
-        }
+            // 获取当前窗口快照并按添加时间排序
+            List<NotificationWindow> windowsSnapshot;
 
-        // 获取当前窗口快照并按添加时间排序
-        List<NotificationWindow> windowsSnapshot;
+            // 根据位置决定排序方向
+            bool isTopPosition = Option.Position == NotificationPosition.TopLeft ||
+                                Option.Position == NotificationPosition.TopRight;
 
-        // 根据位置决定排序方向
-        bool isTopPosition = Option.Position == NotificationPosition.TopLeft ||
-                             Option.Position == NotificationPosition.TopRight;
+            if (isTopPosition)
+            {
+                // 顶部位置：最新的窗口在底部（按时间升序排列）
+                windowsSnapshot = _activeWindows.OrderBy(pair => pair.Value)
+                                              .Select(pair => pair.Key)
+                                              .ToList();
+            }
+            else
+            {
+                // 底部位置：最新的窗口在顶部（按时间降序排列）
+                windowsSnapshot = _activeWindows.OrderByDescending(pair => pair.Value)
+                                              .Select(pair => pair.Key)
+                                              .ToList();
+            }
 
-        if (isTopPosition)
-        {
-            // 顶部位置：最新的窗口在底部（按时间升序排列）
-            windowsSnapshot = _activeWindows.OrderBy(pair => pair.Value)
-                                          .Select(pair => pair.Key)
-                                          .ToList();
-        }
-        else
-        {
-            // 底部位置：最新的窗口在顶部（按时间降序排列）
-            windowsSnapshot = _activeWindows.OrderByDescending(pair => pair.Value)
-                                          .Select(pair => pair.Key)
-                                          .ToList();
-        }
-
-        // 使用排序后的快照进行重新定位
-        _windowPositioner.PositionWindows(windowsSnapshot);
+            // 使用排序后的快照进行重新定位
+            _windowPositioner.PositionWindows(windowsSnapshot);
+        });
     }
 
     internal void UpdateOption(Action<NotificationOption> action)
@@ -307,24 +353,24 @@ public class NotificationService : INotificationService, IDisposable
         {
             if (disposing)
             {
-                // 在UI线程上关闭所有窗口
-                if (Application.Current != null && Application.Current.Dispatcher != null)
+                // 使用自定义的线程调度方法关闭所有窗口
+                InvokeOnDispatcher(() =>
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
+                    // 获取当前所有窗口
+                    var windowsToClose = _activeWindows.Keys.ToArray();
+
+                    // 关闭所有窗口
+                    foreach (var notification in windowsToClose)
                     {
-                        // 获取当前所有窗口
-                        var windowsToClose = _activeWindows.Keys.ToArray();
+                        notification.Close();
+                    }
 
-                        // 关闭所有窗口
-                        foreach (var notification in windowsToClose)
-                        {
-                            notification.Close();
-                        }
+                    // 清空字典
+                    _activeWindows.Clear();
 
-                        // 清空字典
-                        _activeWindows.Clear();
-                    });
-                }
+                    // 清理自定义Dispatcher
+                    _customDispatcher = null;
+                });
 
                 // 重置单例实例 - 使用线程安全的公共方法
                 ResetInstance();
