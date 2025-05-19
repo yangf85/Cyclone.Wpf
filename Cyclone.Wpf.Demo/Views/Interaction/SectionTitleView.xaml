@@ -14,6 +14,13 @@
             <!--  基本用法  -->
             <cy:SectionHeader
                 Margin="0,0,0,20"
+                MainTitle="单表态"
+                MainTitleBackground="{DynamicResource Background.Caption}"
+                MainTitleForeground="{DynamicResource Text.Invert}"
+                MainTitleHeight="48" />
+
+            <cy:SectionHeader
+                Margin="0,0,0,20"
                 MainTitle="系统设置"
                 SperaterVisibility="Visible"
                 SubTitle="配置应用程序的基本参数"

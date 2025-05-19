@@ -7,17 +7,18 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="SectionHeader.Style.Basic"
-        TargetType="{x:Type ctl:SectionHeader}">
+    <Style x:Key="SectionHeader.Style.Basic" TargetType="{x:Type ctl:SectionHeader}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SectionHeader}">
-                    <Grid Background="{TemplateBinding Background}">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding MainTitleHeight}" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="{TemplateBinding SubTitleHeight}" />
                         </Grid.RowDefinitions>
 
                         <Rectangle
@@ -29,6 +30,7 @@
                             x:Name="MainTitleContainer"
                             Grid.Row="0"
                             HorizontalAlignment="{TemplateBinding MainTitleHorizontalAlignment}"
+                            VerticalAlignment="Center"
                             Content="{TemplateBinding MainTitle}"
                             TextElement.FontFamily="{TemplateBinding MainTitleFontFamily}"
                             TextElement.FontSize="{TemplateBinding MainTitleFontSize}"
@@ -51,6 +53,7 @@
                             x:Name="SubTitleContainer"
                             Grid.Row="2"
                             HorizontalAlignment="{TemplateBinding SubTitleHorizontalAlignment}"
+                            VerticalAlignment="Center"
                             Content="{TemplateBinding SubTitle}"
                             TextElement.FontFamily="{TemplateBinding SubTitleFontFamily}"
                             TextElement.FontSize="{TemplateBinding SubTitleFontSize}"
@@ -60,8 +63,8 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsUseUnifiedBackground" Value="True">
-                            <Setter TargetName="MainTitleFiller" Property="Visibility" Value="Hidden" />
-                            <Setter TargetName="SubTitleFiller" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="MainTitleFiller" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="SubTitleFiller" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -69,7 +72,5 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource SectionHeader.Style.Basic}"
-        TargetType="{x:Type ctl:SectionHeader}" />
+    <Style BasedOn="{StaticResource SectionHeader.Style.Basic}" TargetType="{x:Type ctl:SectionHeader}" />
 </ResourceDictionary>

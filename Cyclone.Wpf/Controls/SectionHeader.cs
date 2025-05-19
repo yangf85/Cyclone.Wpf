@@ -28,6 +28,19 @@ public class SectionHeader : Control
 
     #endregion MainTitle
 
+    #region MainTitleHeight
+
+    public GridLength MainTitleHeight
+    {
+        get => (GridLength)GetValue(MainTitleHeightProperty);
+        set => SetValue(MainTitleHeightProperty, value);
+    }
+
+    public static readonly DependencyProperty MainTitleHeightProperty =
+        DependencyProperty.Register(nameof(MainTitleHeight), typeof(GridLength), typeof(SectionHeader), new PropertyMetadata(new GridLength(1, GridUnitType.Star)));
+
+    #endregion MainTitleHeight
+
     #region MainTitleFontSize
 
     public double MainTitleFontSize
@@ -118,6 +131,19 @@ public class SectionHeader : Control
         DependencyProperty.Register(nameof(SubTitle), typeof(object), typeof(SectionHeader), new PropertyMetadata(default));
 
     #endregion SubTitle
+
+    #region SubTitleHeight
+
+    public GridLength SubTitleHeight
+    {
+        get => (GridLength)GetValue(SubTitleHeightProperty);
+        set => SetValue(SubTitleHeightProperty, value);
+    }
+
+    public static readonly DependencyProperty SubTitleHeightProperty =
+        DependencyProperty.Register(nameof(SubTitleHeight), typeof(GridLength), typeof(SectionHeader), new PropertyMetadata(GridLength.Auto));
+
+    #endregion SubTitleHeight
 
     #region SubTitleFontSize
 
