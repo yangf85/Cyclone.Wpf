@@ -1,14 +1,14 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-                    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="SideMenu.ToggleButtonStyle"
-           TargetType="ToggleButton">
+    <Style x:Key="SideMenu.ToggleButtonStyle" TargetType="ToggleButton">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
@@ -17,23 +17,25 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="RootBorder"
-                            Padding="3"
-                            CornerRadius="60"
-                            BorderBrush="{DynamicResource Border.Default}"
-                            SnapsToDevicePixels="True"
-                            Background="{DynamicResource Background.Default}"
-                            BorderThickness="1.5">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="3"
+                        Background="{DynamicResource Background.Default}"
+                        BorderBrush="{DynamicResource Border.Default}"
+                        BorderThickness="1.5"
+                        CornerRadius="60"
+                        SnapsToDevicePixels="True">
                         <Grid>
-                            <Path x:Name="Arrow"
-                                  Width="16"
-                                  Height="16"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Data="M461.994667 512l211.2 211.2-60.330667 60.373333L341.333333 512l271.530667-271.530667 60.330667 60.330667-211.2 211.2z"
-                                  Fill="{DynamicResource Icon.Foreground.Default}"
-                                  SnapsToDevicePixels="True"
-                                  Stretch="Uniform" />
+                            <Path
+                                x:Name="Arrow"
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M461.994667 512l211.2 211.2-60.330667 60.373333L341.333333 512l271.530667-271.530667 60.330667 60.330667-211.2 211.2z"
+                                Fill="{DynamicResource Icon.Foreground.Default}"
+                                SnapsToDevicePixels="True"
+                                Stretch="Uniform" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -54,50 +56,49 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SideMenuItem.Style.Basic"
-           TargetType="ctl:SideMenuItem">
+    <Style x:Key="SideMenuItem.Style.Basic" TargetType="ctl:SideMenuItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:SideMenuItem">
                     <Border x:Name="RootBorder">
                         <StackPanel>
-                            <Grid x:Name="HeaderRoot"
-                                  Height="{TemplateBinding RowHeight}"
-                                  Background="{TemplateBinding Background}">
+                            <Grid
+                                x:Name="HeaderRoot"
+                                Height="{TemplateBinding RowHeight}"
+                                Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{Binding Indent, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <ColumnDefinition x:Name="IconColumn"
-                                                      Width="Auto" />
-                                    <ColumnDefinition x:Name="HeaderColumn"
-                                                      Width="*" />
-                                    <ColumnDefinition x:Name="ArrowColumn"
-                                                      Width="Auto" />
+                                    <ColumnDefinition x:Name="IconColumn" Width="Auto" />
+                                    <ColumnDefinition x:Name="HeaderColumn" Width="*" />
+                                    <ColumnDefinition x:Name="ArrowColumn" Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter x:Name="IconContainer"
-                                                  Grid.Column="1"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Content="{TemplateBinding Icon}"
-                                                  ContentTemplate="{TemplateBinding IconTemplate}" />
-                                <ContentPresenter x:Name="HeaderContainer"
-                                                  Grid.Column="2"
-                                                  Margin="5,0,0,0"
-                                                  VerticalAlignment="Center"
-                                                  Content="{TemplateBinding Header}"
-                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
-                                <Path x:Name="Arrow"
-                                      Grid.Column="3"
-                                      Width="12"
-                                      Height="12"
-                                      Margin="0,0,8,0"
-                                      VerticalAlignment="Center"
-                                      Data="M512 606.29333299L790.698667 341.333333 853.333333 400.853333 512 725.333333l-341.333333-324.48L233.301333 341.333333z"
-                                      Fill="{DynamicResource Icon.Foreground.Default}"
-                                      Stretch="Uniform"
-                                      StrokeThickness="0" />
+                                <ContentPresenter
+                                    x:Name="IconContainer"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Icon}"
+                                    ContentTemplate="{TemplateBinding IconTemplate}" />
+                                <ContentPresenter
+                                    x:Name="HeaderContainer"
+                                    Grid.Column="2"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                                <Path
+                                    x:Name="Arrow"
+                                    Grid.Column="3"
+                                    Width="12"
+                                    Height="12"
+                                    Margin="0,0,8,0"
+                                    VerticalAlignment="Center"
+                                    Data="M512 606.29333299L790.698667 341.333333 853.333333 400.853333 512 725.333333l-341.333333-324.48L233.301333 341.333333z"
+                                    Fill="{DynamicResource Icon.Foreground.Default}"
+                                    Stretch="Uniform"
+                                    StrokeThickness="0" />
                             </Grid>
-                            <ItemsPresenter x:Name="ItemsContainer"
-                                            Visibility="Collapsed" />
+                            <ItemsPresenter x:Name="ItemsContainer" Visibility="Collapsed" />
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -120,8 +121,7 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}"
-                                     Value="True">
+                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" Value="True">
                             <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="IconContainer" Property="HorizontalAlignment" Value="Center" />
@@ -133,12 +133,12 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}"
-           TargetType="ctl:SideMenuItem" />
+    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}" TargetType="ctl:SideMenuItem" />
 
-    <Style x:Key="SideMenu.Style.Basic"
-           BasedOn="{StaticResource Control.Style.Basic}"
-           TargetType="ctl:SideMenu">
+    <Style
+        x:Key="SideMenu.Style.Basic"
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:SideMenu">
         <Setter Property="Background" Value="{DynamicResource Background.Global}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -147,33 +147,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:SideMenu">
-                    <Border x:Name="RootBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <DockPanel x:Name="HeaderContainer"
-                                       Grid.Row="0">
-                                <ContentPresenter Grid.Column="0"
-                                                  Content="{TemplateBinding Header}" />
+                            <DockPanel x:Name="HeaderContainer" Grid.Row="0">
+                                <ContentPresenter Grid.Column="0" Content="{TemplateBinding Header}" />
                             </DockPanel>
 
                             <ItemsPresenter Grid.Row="1" />
-                            <ContentPresenter Grid.Row="2"
-                                              Content="{TemplateBinding Footer}" />
-                            <ToggleButton x:Name="ToggleCompactButton"
-                                          Grid.RowSpan="3"
-                                          Margin="0,0,-15,0"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          IsChecked="{Binding IsCompact, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                          Style="{StaticResource SideMenu.ToggleButtonStyle}"
-                                          Visibility="{Binding Path=IsShowOpenButton, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}" />
+                            <ToggleButton
+                                x:Name="ToggleCompactButton"
+                                Grid.RowSpan="3"
+                                Margin="0,0,-15,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding IsCompact, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                Style="{StaticResource SideMenu.ToggleButtonStyle}"
+                                Visibility="{Binding Path=IsShowOpenButton, Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -181,6 +180,5 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource SideMenu.Style.Basic}"
-           TargetType="ctl:SideMenu" />
+    <Style BasedOn="{StaticResource SideMenu.Style.Basic}" TargetType="ctl:SideMenu" />
 </ResourceDictionary>

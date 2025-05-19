@@ -7,23 +7,17 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="EnumSelector.ListBoxItem.Style.Basic"
-        TargetType="ListBoxItem">
+    <Style x:Key="EnumSelector.ListBoxItem.Style.Basic" TargetType="ListBoxItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <ContentPresenter
-                        Content="{TemplateBinding Content}"
-                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="EnumSelector.ListBox.Style.Basic"
-        TargetType="ListBox">
+    <Style x:Key="EnumSelector.ListBox.Style.Basic" TargetType="ListBox">
         <Setter Property="ItemContainerStyle" Value="{StaticResource EnumSelector.ListBoxItem.Style.Basic}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -39,9 +33,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <CheckBox
-                        Content="{Binding}"
-                        IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                    <CheckBox Content="{Binding}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -55,15 +47,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:EnumSelector">
                     <Border x:Name="RootBorder">
-                        <ListBox
-                            x:Name="PART_ItemsContainer"
-                            Style="{StaticResource EnumSelector.ListBox.Style.Basic}" />
+                        <ListBox x:Name="PART_ItemsContainer" Style="{StaticResource EnumSelector.ListBox.Style.Basic}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        BasedOn="{StaticResource EnumSelector.Style.Basic}"
-        TargetType="ctl:EnumSelector" />
+    <Style BasedOn="{StaticResource EnumSelector.Style.Basic}" TargetType="ctl:EnumSelector" />
 </ResourceDictionary>

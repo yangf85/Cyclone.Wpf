@@ -1,249 +1,249 @@
 ﻿<ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:converters="clr-namespace:Cyclone.Wpf.Converters"
-	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-	<ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Vertical" TargetType="{x:Type ctl:StepperItem}">
-		<Grid x:Name="RootGrid" SnapsToDevicePixels="True">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid Grid.Column="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<Rectangle
-					x:Name="TopConnector"
-					Grid.Row="0"
-					Width="5"
-					HorizontalAlignment="Center"
-					Fill="{DynamicResource Border.Default}" />
-				<Grid Grid.Row="1">
-					<Ellipse
-						x:Name="IndicatorEllipse"
-						Width="36"
-						Height="36"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						Fill="{DynamicResource Background.Default}"
-						Stretch="Uniform"
-						StrokeDashArray="2,1" />
-					<TextBlock
-						x:Name="IndexTextBlock"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						FontSize="16"
-						FontWeight="Heavy"
-						Foreground="{DynamicResource Text.Prompt}"
-						Text="{Binding Path=Index, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ctl:StepperItem}}" />
-					<Path
-						x:Name="IndexIcon"
-						Width="16"
-						Height="16"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						Data="M997.888 70.144C686.592 261.12 460.8 502.272 358.912 623.104l-248.832-195.072-110.08 88.576 429.568 437.248c73.728-189.44 308.224-559.616 594.432-822.784l-26.112-60.928m0 0z"
-						Fill="{DynamicResource Icon.Foreground.Invert}"
-						Stretch="Uniform"
-						Visibility="Collapsed" />
-				</Grid>
-				<Rectangle
-					x:Name="BottomConnector"
-					Grid.Row="2"
-					Width="5"
-					HorizontalAlignment="Center"
-					Fill="{DynamicResource Border.Default}" />
-			</Grid>
-			<Grid
-				Grid.Column="1"
-				Margin="10,0,0,0"
-				VerticalAlignment="Center">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<ContentPresenter
-					Grid.Row="0"
-					HorizontalAlignment="Left"
-					Content="{TemplateBinding Content}"
-					ContentTemplate="{TemplateBinding ContentTemplate}" />
-				<TextBlock
-					Grid.Row="1"
-					Margin="0,5,0,0"
-					HorizontalAlignment="Left"
-					Foreground="{DynamicResource Text.Prompt}"
-					Text="{TemplateBinding Description}"
-					TextWrapping="WrapWithOverflow" />
-			</Grid>
-		</Grid>
-		<ControlTemplate.Triggers>
-			<Trigger Property="IsFirst" Value="True">
-				<Setter TargetName="TopConnector" Property="Visibility" Value="Collapsed" />
-			</Trigger>
-			<Trigger Property="IsLast" Value="True">
-				<Setter TargetName="BottomConnector" Property="Visibility" Value="Collapsed" />
-			</Trigger>
-			<Trigger Property="Status" Value="Pending">
-				<Setter TargetName="IndicatorEllipse" Property="StrokeThickness" Value="3" />
-				<Setter TargetName="IndicatorEllipse" Property="Stroke" Value="{DynamicResource Border.Default}" />
-			</Trigger>
-			<Trigger Property="Status" Value="Current">
-				<Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Selected}" />
-				<Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
-				<Setter TargetName="TopConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
-				<Setter TargetName="BottomConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
-			</Trigger>
-			<Trigger Property="Status" Value="Completed">
-				<Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="TopConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="BottomConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
-				<Setter TargetName="IndexTextBlock" Property="Visibility" Value="Collapsed" />
-				<Setter TargetName="IndexIcon" Property="Visibility" Value="Visible" />
-			</Trigger>
-		</ControlTemplate.Triggers>
-	</ControlTemplate>
+    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Vertical" TargetType="{x:Type ctl:StepperItem}">
+        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Rectangle
+                    x:Name="TopConnector"
+                    Grid.Row="0"
+                    Width="5"
+                    HorizontalAlignment="Center"
+                    Fill="{DynamicResource Border.Default}" />
+                <Grid Grid.Row="1">
+                    <Ellipse
+                        x:Name="IndicatorEllipse"
+                        Width="36"
+                        Height="36"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Fill="{DynamicResource Background.Default}"
+                        Stretch="Uniform"
+                        StrokeDashArray="2,1" />
+                    <TextBlock
+                        x:Name="IndexTextBlock"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="Heavy"
+                        Foreground="{DynamicResource Text.Prompt}"
+                        Text="{Binding Path=Index, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ctl:StepperItem}}" />
+                    <Path
+                        x:Name="IndexIcon"
+                        Width="16"
+                        Height="16"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M997.888 70.144C686.592 261.12 460.8 502.272 358.912 623.104l-248.832-195.072-110.08 88.576 429.568 437.248c73.728-189.44 308.224-559.616 594.432-822.784l-26.112-60.928m0 0z"
+                        Fill="{DynamicResource Icon.Foreground.Invert}"
+                        Stretch="Uniform"
+                        Visibility="Collapsed" />
+                </Grid>
+                <Rectangle
+                    x:Name="BottomConnector"
+                    Grid.Row="2"
+                    Width="5"
+                    HorizontalAlignment="Center"
+                    Fill="{DynamicResource Border.Default}" />
+            </Grid>
+            <Grid
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ContentPresenter
+                    Grid.Row="0"
+                    HorizontalAlignment="Left"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Left"
+                    Foreground="{DynamicResource Text.Prompt}"
+                    Text="{TemplateBinding Description}"
+                    TextWrapping="WrapWithOverflow" />
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFirst" Value="True">
+                <Setter TargetName="TopConnector" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="IsLast" Value="True">
+                <Setter TargetName="BottomConnector" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="Status" Value="Pending">
+                <Setter TargetName="IndicatorEllipse" Property="StrokeThickness" Value="3" />
+                <Setter TargetName="IndicatorEllipse" Property="Stroke" Value="{DynamicResource Border.Default}" />
+            </Trigger>
+            <Trigger Property="Status" Value="Current">
+                <Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Selected}" />
+                <Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
+                <Setter TargetName="TopConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
+                <Setter TargetName="BottomConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
+            </Trigger>
+            <Trigger Property="Status" Value="Completed">
+                <Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="TopConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="BottomConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
+                <Setter TargetName="IndexTextBlock" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="IndexIcon" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
-	<ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Horizontal" TargetType="{x:Type ctl:StepperItem}">
-		<Grid x:Name="RootGrid" SnapsToDevicePixels="True">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<Grid Grid.Row="0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
-				<Rectangle
-					x:Name="LeftConnector"
-					Grid.Column="0"
-					Height="5"
-					Fill="{DynamicResource Border.Default}" />
-				<Grid Grid.Column="1">
-					<Ellipse
-						x:Name="IndicatorEllipse"
-						Width="36"
-						Height="36"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						Fill="{DynamicResource Background.Default}"
-						Stretch="Uniform"
-						StrokeDashArray="2,1" />
-					<TextBlock
-						x:Name="IndexTextBlock"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						FontSize="16"
-						FontWeight="Heavy"
-						Foreground="{DynamicResource Text.Prompt}"
-						Text="{Binding Path=Index, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ctl:StepperItem}}" />
-					<Path
-						x:Name="IndexIcon"
-						Width="16"
-						Height="16"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						Data="M997.888 70.144C686.592 261.12 460.8 502.272 358.912 623.104l-248.832-195.072-110.08 88.576 429.568 437.248c73.728-189.44 308.224-559.616 594.432-822.784l-26.112-60.928m0 0z"
-						Fill="{DynamicResource Icon.Foreground.Invert}"
-						Stretch="Uniform"
-						Visibility="Collapsed" />
-				</Grid>
-				<Rectangle
-					x:Name="RightConnector"
-					Grid.Column="2"
-					Height="5"
-					Fill="{DynamicResource Border.Default}" />
-			</Grid>
-			<Grid Grid.Row="1" HorizontalAlignment="Center">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<ContentPresenter
-					Grid.Row="0"
-					Margin="0,5"
-					HorizontalAlignment="Center"
-					Content="{TemplateBinding Content}"
-					ContentTemplate="{TemplateBinding ContentTemplate}" />
-				<TextBlock
-					Grid.Row="1"
-					HorizontalAlignment="Center"
-					Foreground="{DynamicResource Text.Prompt}"
-					Text="{TemplateBinding Description}"
-					TextWrapping="WrapWithOverflow" />
-			</Grid>
-		</Grid>
-		<ControlTemplate.Triggers>
-			<Trigger Property="IsLast" Value="True">
-				<Setter TargetName="RightConnector" Property="Visibility" Value="Collapsed" />
-			</Trigger>
-			<Trigger Property="IsFirst" Value="True">
-				<Setter TargetName="LeftConnector" Property="Visibility" Value="Collapsed" />
-			</Trigger>
-			<Trigger Property="Status" Value="Pending">
-				<Setter TargetName="IndicatorEllipse" Property="StrokeThickness" Value="3" />
-				<Setter TargetName="IndicatorEllipse" Property="Stroke" Value="{DynamicResource Border.Default}" />
-			</Trigger>
-			<Trigger Property="Status" Value="Current">
-				<Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Selected}" />
-				<Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
-				<Setter TargetName="LeftConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
-				<Setter TargetName="RightConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
-			</Trigger>
-			<Trigger Property="Status" Value="Completed">
-				<Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="LeftConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="RightConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
-				<Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
-				<Setter TargetName="IndexTextBlock" Property="Visibility" Value="Collapsed" />
-				<Setter TargetName="IndexIcon" Property="Visibility" Value="Visible" />
-			</Trigger>
-		</ControlTemplate.Triggers>
-	</ControlTemplate>
+    <ControlTemplate x:Key="StepperItem.ControlTemplate.Basic.Horizontal" TargetType="{x:Type ctl:StepperItem}">
+        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Rectangle
+                    x:Name="LeftConnector"
+                    Grid.Column="0"
+                    Height="5"
+                    Fill="{DynamicResource Border.Default}" />
+                <Grid Grid.Column="1">
+                    <Ellipse
+                        x:Name="IndicatorEllipse"
+                        Width="36"
+                        Height="36"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Fill="{DynamicResource Background.Default}"
+                        Stretch="Uniform"
+                        StrokeDashArray="2,1" />
+                    <TextBlock
+                        x:Name="IndexTextBlock"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="Heavy"
+                        Foreground="{DynamicResource Text.Prompt}"
+                        Text="{Binding Path=Index, Mode=OneWay, RelativeSource={RelativeSource AncestorType=ctl:StepperItem}}" />
+                    <Path
+                        x:Name="IndexIcon"
+                        Width="16"
+                        Height="16"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M997.888 70.144C686.592 261.12 460.8 502.272 358.912 623.104l-248.832-195.072-110.08 88.576 429.568 437.248c73.728-189.44 308.224-559.616 594.432-822.784l-26.112-60.928m0 0z"
+                        Fill="{DynamicResource Icon.Foreground.Invert}"
+                        Stretch="Uniform"
+                        Visibility="Collapsed" />
+                </Grid>
+                <Rectangle
+                    x:Name="RightConnector"
+                    Grid.Column="2"
+                    Height="5"
+                    Fill="{DynamicResource Border.Default}" />
+            </Grid>
+            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ContentPresenter
+                    Grid.Row="0"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                <TextBlock
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    Foreground="{DynamicResource Text.Prompt}"
+                    Text="{TemplateBinding Description}"
+                    TextWrapping="WrapWithOverflow" />
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsLast" Value="True">
+                <Setter TargetName="RightConnector" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="IsFirst" Value="True">
+                <Setter TargetName="LeftConnector" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="Status" Value="Pending">
+                <Setter TargetName="IndicatorEllipse" Property="StrokeThickness" Value="3" />
+                <Setter TargetName="IndicatorEllipse" Property="Stroke" Value="{DynamicResource Border.Default}" />
+            </Trigger>
+            <Trigger Property="Status" Value="Current">
+                <Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Selected}" />
+                <Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
+                <Setter TargetName="LeftConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
+                <Setter TargetName="RightConnector" Property="Fill" Value="{DynamicResource Background.Selected}" />
+            </Trigger>
+            <Trigger Property="Status" Value="Completed">
+                <Setter TargetName="IndicatorEllipse" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="LeftConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="RightConnector" Property="Fill" Value="{DynamicResource Background.Success}" />
+                <Setter TargetName="IndexTextBlock" Property="TextElement.Foreground" Value="{DynamicResource Text.Invert}" />
+                <Setter TargetName="IndexTextBlock" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="IndexIcon" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
-	<Style x:Key="StepperItem.Style.Basic" TargetType="ctl:StepperItem">
-		<Setter Property="MinWidth" Value="100" />
-		<Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Horizontal}" />
-		<Style.Triggers>
-			<DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}" Value="Vertical">
-				<Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Vertical}" />
-				<Setter Property="MinHeight" Value="100" />
-			</DataTrigger>
-		</Style.Triggers>
-	</Style>
-	<Style BasedOn="{StaticResource StepperItem.Style.Basic}" TargetType="ctl:StepperItem" />
+    <Style x:Key="StepperItem.Style.Basic" TargetType="ctl:StepperItem">
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Horizontal}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}" Value="Vertical">
+                <Setter Property="Template" Value="{StaticResource StepperItem.ControlTemplate.Basic.Vertical}" />
+                <Setter Property="MinHeight" Value="100" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style BasedOn="{StaticResource StepperItem.Style.Basic}" TargetType="ctl:StepperItem" />
 
-	<Style x:Key="Stepper.Style.Basic" TargetType="{x:Type ctl:Stepper}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ctl:Stepper}">
-					<Border
-						x:Name="RootBorder"
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="{TemplateBinding BorderThickness}">
-						<ItemsPresenter />
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="ItemsPanel">
-			<Setter.Value>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}" />
-				</ItemsPanelTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="Stepper.Style.Basic" TargetType="{x:Type ctl:Stepper}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctl:Stepper}">
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ctl:Stepper}}" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style BasedOn="{StaticResource Stepper.Style.Basic}" TargetType="ctl:Stepper" />
+    <Style BasedOn="{StaticResource Stepper.Style.Basic}" TargetType="ctl:Stepper" />
 </ResourceDictionary>

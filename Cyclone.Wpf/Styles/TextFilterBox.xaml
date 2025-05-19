@@ -1,92 +1,92 @@
 ﻿<ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
-	xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
-	xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CheckBox.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextBox.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
+    xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Helpers">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/TextBox.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-	<Style
-		x:Key="TextFilterBox.ActiveCheckBoxStyle"
-		BasedOn="{StaticResource CheckBox.Style.Basic}"
-		TargetType="CheckBox">
-		<Setter Property="IsTabStop" Value="False" />
-		<Setter Property="Focusable" Value="False" />
-	</Style>
+    <Style
+        x:Key="TextFilterBox.ActiveCheckBoxStyle"
+        BasedOn="{StaticResource CheckBox.Style.Basic}"
+        TargetType="CheckBox">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+    </Style>
 
-	<Style
-		x:Key="TextFilterBox.OperatorComboBoxStyle"
-		BasedOn="{StaticResource ComboBox.Style.Basic}"
-		TargetType="ComboBox">
-		<Setter Property="IsTabStop" Value="False" />
-		<Setter Property="Focusable" Value="False" />
-	</Style>
+    <Style
+        x:Key="TextFilterBox.OperatorComboBoxStyle"
+        BasedOn="{StaticResource ComboBox.Style.Basic}"
+        TargetType="ComboBox">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+    </Style>
 
-	<Style
-		x:Key="TextFilterBox.TextBoxStyle"
-		BasedOn="{StaticResource TextBox.Style.Basic}"
-		TargetType="TextBox" />
+    <Style
+        x:Key="TextFilterBox.TextBoxStyle"
+        BasedOn="{StaticResource TextBox.Style.Basic}"
+        TargetType="TextBox" />
 
-	<ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
-		<Border
-			x:Name="RootBorder"
-			Margin="{TemplateBinding Padding}"
-			Background="{TemplateBinding Background}"
-			BorderBrush="{TemplateBinding BorderBrush}"
-			BorderThickness="{TemplateBinding BorderThickness}"
-			SnapsToDevicePixels="True">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="Auto" />
-				</Grid.ColumnDefinitions>
-				<CheckBox
-					x:Name="PART_ActivedCheckBox"
-					Grid.Column="0"
-					VerticalContentAlignment="Center"
-					Content="{TemplateBinding Label}"
-					IsChecked="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-					Style="{StaticResource TextFilterBox.ActiveCheckBoxStyle}" />
-				<ComboBox
-					x:Name="PART_OperatorComboBox"
-					Grid.Column="1"
-					MinWidth="50"
-					Margin="5,0"
-					IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-					ItemsSource="{hp:EnumToItemsSource EnumType=ctl:TextOperator}"
-					SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}"
-					Style="{StaticResource TextFilterBox.OperatorComboBoxStyle}" />
-				<TextBox
-					x:Name="PART_InputTextBox"
-					Grid.Column="2"
-					IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-					Style="{StaticResource TextFilterBox.TextBoxStyle}"
-					Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-				<ContentPresenter
-					x:Name="PART_ExtendObjectContainer"
-					Grid.Column="3"
-					Content="{TemplateBinding ExtendObject}"
-					IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-			</Grid>
-		</Border>
-	</ControlTemplate>
+    <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
+        <Border
+            x:Name="RootBorder"
+            Margin="{TemplateBinding Padding}"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <CheckBox
+                    x:Name="PART_ActivedCheckBox"
+                    Grid.Column="0"
+                    VerticalContentAlignment="Center"
+                    Content="{TemplateBinding Label}"
+                    IsChecked="{Binding Path=IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                    Style="{StaticResource TextFilterBox.ActiveCheckBoxStyle}" />
+                <ComboBox
+                    x:Name="PART_OperatorComboBox"
+                    Grid.Column="1"
+                    MinWidth="50"
+                    Margin="5,0"
+                    IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                    ItemsSource="{hp:EnumToItemsSource EnumType=ctl:TextOperator}"
+                    SelectedValue="{Binding Operator, RelativeSource={RelativeSource TemplatedParent}}"
+                    Style="{StaticResource TextFilterBox.OperatorComboBoxStyle}" />
+                <TextBox
+                    x:Name="PART_InputTextBox"
+                    Grid.Column="2"
+                    IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                    Style="{StaticResource TextFilterBox.TextBoxStyle}"
+                    Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <ContentPresenter
+                    x:Name="PART_ExtendObjectContainer"
+                    Grid.Column="3"
+                    Content="{TemplateBinding ExtendObject}"
+                    IsEnabled="{Binding IsActived, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
 
-	<Style x:Key="TextFilterBox.Style.Basic" TargetType="ctl:TextFilterBox">
-		<Setter Property="Template" Value="{StaticResource TextFilterBox.ControlTemplate.Basic}" />
-		<Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
+    <Style x:Key="TextFilterBox.Style.Basic" TargetType="ctl:TextFilterBox">
+        <Setter Property="Template" Value="{StaticResource TextFilterBox.ControlTemplate.Basic}" />
+        <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
 
-		<Style.Triggers />
-	</Style>
+        <Style.Triggers />
+    </Style>
 
-	<Style BasedOn="{StaticResource TextFilterBox.Style.Basic}" TargetType="ctl:TextFilterBox" />
+    <Style BasedOn="{StaticResource TextFilterBox.Style.Basic}" TargetType="ctl:TextFilterBox" />
 </ResourceDictionary>
