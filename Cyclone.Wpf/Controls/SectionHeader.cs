@@ -221,6 +221,8 @@ public class SectionHeader : Control
     public static readonly DependencyProperty SubTitleMarginProperty =
         DependencyProperty.Register(nameof(SubTitleMargin), typeof(Thickness), typeof(SectionHeader), new PropertyMetadata(new Thickness(0)));
 
+    #endregion SubTitleMargin
+
     #region SubTitleFontFamily
 
     public FontFamily SubTitleFontFamily
