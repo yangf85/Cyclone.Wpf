@@ -29,8 +29,9 @@
                         <ContentPresenter
                             x:Name="MainTitleContainer"
                             Grid.Row="0"
+                            Margin="{TemplateBinding MainTitleMargin}"
                             HorizontalAlignment="{TemplateBinding MainTitleHorizontalAlignment}"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="{TemplateBinding MainTitleVerticalAlignment}"
                             Content="{TemplateBinding MainTitle}"
                             TextElement.FontFamily="{TemplateBinding MainTitleFontFamily}"
                             TextElement.FontSize="{TemplateBinding MainTitleFontSize}"
@@ -52,8 +53,9 @@
                         <ContentPresenter
                             x:Name="SubTitleContainer"
                             Grid.Row="2"
+                            Margin="{TemplateBinding SubTitleMargin}"
                             HorizontalAlignment="{TemplateBinding SubTitleHorizontalAlignment}"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="{TemplateBinding SubTitleVerticalAlignment}"
                             Content="{TemplateBinding SubTitle}"
                             TextElement.FontFamily="{TemplateBinding SubTitleFontFamily}"
                             TextElement.FontSize="{TemplateBinding SubTitleFontSize}"

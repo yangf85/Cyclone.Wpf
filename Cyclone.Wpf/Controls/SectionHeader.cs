@@ -67,6 +67,32 @@ public class SectionHeader : Control
 
     #endregion MainTitleHorizontalAlignment
 
+    #region MainTitleVerticalAlignment
+
+    public VerticalAlignment MainTitleVerticalAlignment
+    {
+        get => (VerticalAlignment)GetValue(MainTitleVerticalAlignmentProperty);
+        set => SetValue(MainTitleVerticalAlignmentProperty, value);
+    }
+
+    public static readonly DependencyProperty MainTitleVerticalAlignmentProperty =
+        DependencyProperty.Register(nameof(MainTitleVerticalAlignment), typeof(VerticalAlignment), typeof(SectionHeader), new PropertyMetadata(VerticalAlignment.Center));
+
+    #endregion MainTitleVerticalAlignment
+
+    #region MainTitleMargin
+
+    public Thickness MainTitleMargin
+    {
+        get => (Thickness)GetValue(MainTitleMarginProperty);
+        set => SetValue(MainTitleMarginProperty, value);
+    }
+
+    public static readonly DependencyProperty MainTitleMarginProperty =
+        DependencyProperty.Register(nameof(MainTitleMargin), typeof(Thickness), typeof(SectionHeader), new PropertyMetadata(new Thickness(0)));
+
+    #endregion MainTitleMargin
+
     #region MainTitleFontFamily
 
     public FontFamily MainTitleFontFamily
@@ -170,6 +196,30 @@ public class SectionHeader : Control
         DependencyProperty.Register(nameof(SubTitleHorizontalAlignment), typeof(HorizontalAlignment), typeof(SectionHeader), new PropertyMetadata(HorizontalAlignment.Center));
 
     #endregion SubTitleHorizontalAlignment
+
+    #region SubTitleVerticalAlignment
+
+    public VerticalAlignment SubTitleVerticalAlignment
+    {
+        get => (VerticalAlignment)GetValue(SubTitleVerticalAlignmentProperty);
+        set => SetValue(SubTitleVerticalAlignmentProperty, value);
+    }
+
+    public static readonly DependencyProperty SubTitleVerticalAlignmentProperty =
+        DependencyProperty.Register(nameof(SubTitleVerticalAlignment), typeof(VerticalAlignment), typeof(SectionHeader), new PropertyMetadata(VerticalAlignment.Center));
+
+    #endregion SubTitleVerticalAlignment
+
+    #region SubTitleMargin
+
+    public Thickness SubTitleMargin
+    {
+        get => (Thickness)GetValue(SubTitleMarginProperty);
+        set => SetValue(SubTitleMarginProperty, value);
+    }
+
+    public static readonly DependencyProperty SubTitleMarginProperty =
+        DependencyProperty.Register(nameof(SubTitleMargin), typeof(Thickness), typeof(SectionHeader), new PropertyMetadata(new Thickness(0)));
 
     #region SubTitleFontFamily
 
