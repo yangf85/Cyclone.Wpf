@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shell;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -186,7 +187,7 @@ public class AlertWindow : Window
 
     #region Command
 
-    void InitializeCommand()
+    private void InitializeCommand()
     {
         CommandBindings.Add(new CommandBinding(OkCommand, (sender, e) =>
         {
@@ -243,6 +244,24 @@ public class AlertWindow : Window
     public static RoutedCommand CloseCommand { get; private set; } = new RoutedCommand("Close", typeof(AlertWindow));
 
     #endregion Command
+
+    #region Override
+
+    /// <summary>
+    /// 窗口初始化时，如果设置了SizeToContent.WidthAndHeight，则重新测量窗口大小以适应内容
+    /// 解决了窗口在Chrome模式下无法自动适应内容的问题
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        if (SizeToContent == SizeToContent.WidthAndHeight && WindowChrome.GetWindowChrome(this) != null)
+        {
+            InvalidateMeasure();
+        }
+    }
+
+    #endregion Override
 
     public AlertWindow()
     {

@@ -68,7 +68,7 @@ public static class AlertServiceExtension
     /// </summary>
     public static bool? Error(this IAlertService self, string message, string title = "错误")
     {
-        var content = new AlertWarningMessage()
+        var content = new AlertErrorMessage()
         {
             DataContext = message,
         };

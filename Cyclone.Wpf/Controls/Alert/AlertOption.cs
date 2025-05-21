@@ -6,10 +6,6 @@ namespace Cyclone.Wpf.Controls;
 
 public class AlertOption
 {
-    public double Width { get; set; } = 400;
-
-    public double Height { get; set; } = 240;
-
     public AlertButton ButtonType { get; set; } = AlertButton.Ok;
 
     public string Title { get; set; } = "Alert";

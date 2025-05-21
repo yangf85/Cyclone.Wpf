@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using System.Windows.Shell;
 using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
@@ -345,6 +346,20 @@ internal class NotificationWindow : Window
     }
 
     #region Override
+
+    /// <summary>
+    /// 窗口初始化时，如果设置了SizeToContent.WidthAndHeight，则重新测量窗口大小以适应内容
+    /// 解决了窗口在Chrome模式下无法自动适应内容的问题
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        if (SizeToContent == SizeToContent.WidthAndHeight && WindowChrome.GetWindowChrome(this) != null)
+        {
+            InvalidateMeasure();
+        }
+    }
 
     protected override void OnClosed(EventArgs e)
     {

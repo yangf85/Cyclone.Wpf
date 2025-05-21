@@ -102,15 +102,13 @@ namespace Cyclone.Wpf.Demo.Views
         public partial FakerData Data { get; set; } = new FakerData();
 
         [RelayCommand]
-        void ShowForm()
+        private void ShowForm()
         {
             var service = new Cyclone.Wpf.Controls.AlertService();
             service.SetOwner(App.Current.MainWindow);
             service.Option.Title = "Faker";
             service.Option.ButtonType = AlertButton.OkCancel;
             service.Option.AlertButtonHorizontalAlignment = HorizontalAlignment.Right;
-            service.Option.Width = 600;
-            service.Option.Height = 400;
             service.ShowWithValidation(new FakerForm()
             {
                 DataContext = Data,

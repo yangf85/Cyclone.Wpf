@@ -266,8 +266,6 @@ public class AlertService : IAlertService, IDisposable
 
         var window = new AlertWindow
         {
-            Width = Option.Width,
-            Height = Option.Height,
             ButtonType = Option.ButtonType,
             Title = title ?? Option.Title,
             Icon = Option.Icon,
