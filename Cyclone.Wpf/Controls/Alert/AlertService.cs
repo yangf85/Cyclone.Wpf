@@ -10,16 +10,6 @@ using System.Windows.Threading;
 namespace Cyclone.Wpf.Controls;
 
 /// <summary>
-/// 弹出警告框服务接口
-/// </summary>
-public interface IAlertService : IDisposable
-{
-    bool? Show(object content, string title = null);
-
-    AlertOption Option { get; }
-}
-
-/// <summary>
 /// 警告框服务实现类
 /// </summary>
 public class AlertService : IAlertService, IDisposable
@@ -574,6 +564,29 @@ public class AlertService : IAlertService, IDisposable
     }
 
     /// <summary>
+    /// 显示带验证回调的警告框
+    /// </summary>
+    /// <param name="content">窗口内容</param>
+    /// <param name="validation">验证回调函数</param>
+    /// <param name="title">窗口标题</param>
+    public void ShowWithValidation(object content, Func<bool> validation, string title = null)
+    {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        if (validation == null)
+        {
+            throw new ArgumentNullException(nameof(validation), "验证回调函数不能为空");
+        }
+
+        // 使用自定义的Dispatcher调用方法执行
+        InvokeOnDispatcher(() =>
+        {
+            ShowDialogWithValidationInternal(content, validation, title);
+        });
+    }
+
+    /// <summary>
     /// 内部方法，用于显示对话框
     /// </summary>
     /// <param name="content">窗口内容</param>
@@ -656,6 +669,91 @@ public class AlertService : IAlertService, IDisposable
             // 记录任何显示过程中的异常
             System.Diagnostics.Debug.WriteLine($"显示警告对话框时出错: {ex.Message}");
             return null;
+        }
+    }
+
+    /// <summary>
+    /// 内部方法，用于显示带验证的对话框
+    /// </summary>
+    /// <param name="content">窗口内容</param>
+    /// <param name="validation">验证回调函数</param>
+    /// <param name="title">窗口标题</param>
+    private void ShowDialogWithValidationInternal(object content, Func<bool> validation, string title)
+    {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        try
+        {
+            // 如果启用了蒙版并且有所有者，显示蒙版
+            if (Option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
+            {
+                _maskWindow = CreateMaskWindow();
+                _maskWindow?.Show();
+            }
+
+            // 创建普通的AlertWindow，然后设置验证回调
+            var window = CreateAlertWindow(content, title);
+            window.ValidationCallback = validation; // 设置验证回调
+
+            // 添加蒙版窗口关闭回调
+            window.Closed += (sender, e) =>
+            {
+                try
+                {
+                    // 确保蒙版窗口关闭
+                    if (_maskWindow != null && _maskWindow.IsLoaded)
+                    {
+                        _maskWindow.Close();
+                    }
+
+                    // 清理事件钩子
+                    UnhookEvents();
+                }
+                catch
+                {
+                    // 忽略关闭时的异常
+                }
+            };
+
+            _currentAlertWindow = window;
+            PositionWindowInCenter(window);
+            window.Owner = _maskWindow;
+
+            try
+            {
+                // 显示模态对话框
+                window.ShowDialog();
+            }
+            finally
+            {
+                _currentAlertWindow = null;
+
+                // 关闭蒙版窗口
+                if (_maskWindow != null)
+                {
+                    try
+                    {
+                        _maskWindow.Close();
+                    }
+                    catch
+                    {
+                        // 忽略关闭时可能发生的异常
+                    }
+                    _maskWindow = null;
+                }
+
+                // 清理事件钩子
+                UnhookEvents();
+
+                // 在弹窗关闭后激活Owner窗口
+                ActivateOwnerWindow();
+            }
+        }
+        catch (Exception ex)
+        {
+            // 记录任何显示过程中的异常
+            System.Diagnostics.Debug.WriteLine($"显示验证警告对话框时出错: {ex.Message}");
         }
     }
 

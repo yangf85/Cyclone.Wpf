@@ -10,7 +10,7 @@ public class AlertOption
 
     public double Height { get; set; } = 240;
 
-    public AlertButton ButtonType { get; set; } = AlertButton.Yes;
+    public AlertButton ButtonType { get; set; } = AlertButton.Ok;
 
     public string Title { get; set; } = "Alert";
 

@@ -107,13 +107,27 @@ namespace Cyclone.Wpf.Demo.Views
             var service = new Cyclone.Wpf.Controls.AlertService();
             service.SetOwner(App.Current.MainWindow);
             service.Option.Title = "Faker";
-            service.Option.ButtonType = AlertButton.YesNo;
+            service.Option.ButtonType = AlertButton.OkCancel;
             service.Option.AlertButtonHorizontalAlignment = HorizontalAlignment.Right;
             service.Option.Width = 600;
             service.Option.Height = 400;
-            var result = service.Show(new FakerForm()
+            service.ShowWithValidation(new FakerForm()
             {
                 DataContext = Data,
+            },
+            () =>
+            {
+                if (Data.HasErrors)
+                {
+                    var errors = Data.GetErrors();
+                    NotificationService.Instance.Error(string.Join("\n", errors.Select(x => x.ErrorMessage)));
+                    return false;
+                }
+                else
+                {
+                    NotificationService.Instance.Success("提交成功");
+                    return true;
+                }
             });
         }
 

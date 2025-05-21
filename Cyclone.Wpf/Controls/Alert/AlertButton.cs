@@ -11,6 +11,6 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public enum AlertButton
 {
-    Yes,
-    YesNo,
+    Ok,
+    OkCancel,
 }

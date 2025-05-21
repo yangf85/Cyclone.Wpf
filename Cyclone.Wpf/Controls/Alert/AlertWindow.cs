@@ -84,7 +84,7 @@ public class AlertWindow : Window
 
     public static readonly DependencyProperty ButtonTypeProperty =
         DependencyProperty.Register(nameof(ButtonType), typeof(AlertButton), typeof(AlertWindow),
-            new PropertyMetadata(AlertButton.Yes));
+            new PropertyMetadata(AlertButton.Ok));
 
     #endregion ButtonType
 
@@ -168,14 +168,61 @@ public class AlertWindow : Window
 
     #endregion ContentForeground
 
+    #region ValidationCallback
+
+    /// <summary>
+    /// 验证回调函数，用于在确定按钮点击时进行验证
+    /// </summary>
+    public Func<bool> ValidationCallback
+    {
+        get => (Func<bool>)GetValue(ValidationCallbackProperty);
+        set => SetValue(ValidationCallbackProperty, value);
+    }
+
+    public static readonly DependencyProperty ValidationCallbackProperty =
+        DependencyProperty.Register(nameof(ValidationCallback), typeof(Func<bool>), typeof(AlertWindow), new PropertyMetadata(null));
+
+    #endregion ValidationCallback
+
     #region Command
 
     void InitializeCommand()
     {
         CommandBindings.Add(new CommandBinding(OkCommand, (sender, e) =>
         {
-            DialogResult = true;
-            Close();
+            // 如果有验证回调，先执行验证
+            if (ValidationCallback != null)
+            {
+                try
+                {
+                    bool validationResult = ValidationCallback();
+
+                    if (validationResult)
+                    {
+                        // 验证通过，正常关闭
+                        DialogResult = true;
+                        Close();
+                    }
+                    else
+                    {
+                        // 验证失败，阻止关闭，窗口保持打开
+                        System.Diagnostics.Debug.WriteLine("验证失败，对话框保持打开");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // 验证过程中出现异常，记录并允许关闭
+                    System.Diagnostics.Debug.WriteLine($"验证过程中出现异常: {ex.Message}");
+                    DialogResult = false;
+                    Close();
+                }
+            }
+            else
+            {
+                // 没有验证回调，直接关闭
+                DialogResult = true;
+                Close();
+            }
         }));
 
         CommandBindings.Add(new CommandBinding(CancelCommand, (sender, e) =>
