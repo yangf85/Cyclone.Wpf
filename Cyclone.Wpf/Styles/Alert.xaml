@@ -22,7 +22,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="{TemplateBinding Background}">
                         <ContentPresenter
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -85,7 +87,9 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource Control.Style.Basic}" TargetType="{x:Type ctl:AlertWindow}">
+    <Style
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="{x:Type ctl:AlertWindow}">
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="ShowInTaskbar" Value="False" />
         <Setter Property="IsTabStop" Value="False" />
