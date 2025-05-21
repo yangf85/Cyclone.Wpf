@@ -90,23 +90,4 @@ public static class AlertServiceExtension
         self.Option.ButtonType = AlertButton.OkCancel;
         return self.Show(content, title);
     }
-
-    /// <summary>
-    /// 显示带验证回调的警告框
-    /// </summary>
-    /// <param name="self">AlertService实例</param>
-    /// <param name="message">消息内容</param>
-    /// <param name="validation">验证回调函数，返回 true 允许关闭，false 阻止关闭</param>
-    /// <param name="title">窗口标题</param>
-    public static void ShowWithValidation(this IAlertService self, string message,
-        Func<bool> validation, string title = "提示")
-    {
-        var content = new AlertDefaultMessage()
-        {
-            DataContext = message,
-        };
-
-        self.Option.ButtonType = AlertButton.OkCancel;
-        self.ShowWithValidation(content, validation, title);
-    }
 }
