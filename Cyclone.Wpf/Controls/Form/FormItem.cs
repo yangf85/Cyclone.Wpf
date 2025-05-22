@@ -54,17 +54,6 @@ public class FormItem : ContentControl
     }
 
     /// <summary>
-    /// 控件加载时处理共享尺寸组
-    /// </summary>
-    private static void FormItem_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (sender is FormItem formItem && formItem.Parent is Panel panel)
-        {
-            panel.SetValue(Grid.IsSharedSizeScopeProperty, true);
-        }
-    }
-
-    /// <summary>
     /// 共享尺寸组名称改变处理
     /// </summary>
     private static void OnSharedNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -83,6 +72,47 @@ public class FormItem : ContentControl
     }
 
     #endregion SharedName
+
+    #region SharedScopeLevel
+
+    /// <summary>
+    /// 共享尺寸作用域层级属性
+    /// 指定向上查找多少层级来设置 IsSharedSizeScope
+    /// 0 = 直接父容器（默认）
+    /// 1 = 父容器的父容器
+    /// 2 = 父容器的父容器的父容器
+    /// -1 = 查找到根容器
+    /// </summary>
+    public static readonly DependencyProperty SharedScopeLevelProperty =
+        DependencyProperty.Register(nameof(SharedScopeLevel), typeof(int), typeof(FormItem),
+            new FrameworkPropertyMetadata(0, OnSharedScopeLevelChanged));
+
+    /// <summary>
+    /// 获取或设置共享尺寸作用域层级
+    /// </summary>
+    public int SharedScopeLevel
+    {
+        get => (int)GetValue(SharedScopeLevelProperty);
+        set => SetValue(SharedScopeLevelProperty, value);
+    }
+
+    /// <summary>
+    /// 共享尺寸作用域层级改变处理
+    /// </summary>
+    private static void OnSharedScopeLevelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is FormItem formItem)
+        {
+            // 重新处理 SharedName 逻辑
+            if (!string.IsNullOrEmpty(formItem.SharedName))
+            {
+                formItem.Loaded -= FormItem_Loaded;
+                formItem.Loaded += FormItem_Loaded;
+            }
+        }
+    }
+
+    #endregion SharedScopeLevel
 
     #region AttachedObject
 
@@ -158,12 +188,102 @@ public class FormItem : ContentControl
     #endregion Description
 
     /// <summary>
+    /// 增强的控件加载时处理共享尺寸组
+    /// 根据 SharedScopeLevel 属性查找指定层级的容器
+    /// </summary>
+    private static void FormItem_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is FormItem formItem)
+        {
+            var targetPanel = FindTargetPanel(formItem, formItem.SharedScopeLevel);
+
+            if (targetPanel != null)
+            {
+                var isAlreadySet = Grid.GetIsSharedSizeScope(targetPanel);
+
+                if (!isAlreadySet)
+                {
+                    targetPanel.SetValue(Grid.IsSharedSizeScopeProperty, true);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 根据指定层级查找目标容器
+    /// </summary>
+    /// <param name="formItem">FormItem 实例</param>
+    /// <param name="level">查找层级：0=直接父容器, 1=祖父容器, -1=根容器</param>
+    /// <returns>找到的目标 Panel，如果没找到则返回 null</returns>
+    private static Panel FindTargetPanel(FormItem formItem, int level)
+    {
+        DependencyObject current = formItem.Parent;
+
+        if (current == null) return null;
+
+        // 如果 level = -1，查找到根容器
+        if (level == -1)
+        {
+            Panel lastPanel = null;
+
+            while (current != null)
+            {
+                if (current is Panel panel)
+                {
+                    lastPanel = panel;
+                }
+
+                // 继续向上查找
+                if (current is FrameworkElement element)
+                {
+                    var parent = element.Parent ?? element.TemplatedParent;
+                    if (parent == null) break;
+                    current = parent;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return lastPanel;
+        }
+
+        // 查找指定层级的容器
+        int currentLevel = 0;
+
+        while (current != null)
+        {
+            if (current is Panel panel)
+            {
+                if (currentLevel == level)
+                {
+                    return panel;
+                }
+                currentLevel++;
+            }
+
+            // 继续向上查找
+            if (current is FrameworkElement element)
+            {
+                current = element.Parent ?? element.TemplatedParent;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// 初始化共享尺寸组名称
     /// </summary>
     public FormItem()
     {
         // 如果父控件是Form且Form.ShareLabelColumn为true，则自动设置共享尺寸组
-        this.Loaded += (s, e) =>
+        Loaded += (s, e) =>
         {
             if (string.IsNullOrEmpty(SharedName) && Parent is DependencyObject parent)
             {
@@ -186,11 +306,6 @@ public class FormItem : ContentControl
                         break;
                     }
                 }
-
-                //if (parentForm != null && parentForm.ShareLabelColumn)
-                //{
-                //    SharedName = "FormLabels";
-                //}
             }
         };
     }

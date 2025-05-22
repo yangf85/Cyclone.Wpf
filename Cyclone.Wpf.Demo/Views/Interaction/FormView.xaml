@@ -85,11 +85,13 @@
                             Title="Basic Info"
                             Description="basic" />
                         <TextBox
+                            Height="64"
                             cy:Form.Description="This is first name."
                             cy:Form.IsRequired="True"
                             cy:Form.Label="FirstName:"
                             cy:Form.SharedName="Form"
-                            Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                            Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                            TextWrapping="WrapWithOverflow" />
 
                         <TextBox
                             cy:Form.Description="This is last name."

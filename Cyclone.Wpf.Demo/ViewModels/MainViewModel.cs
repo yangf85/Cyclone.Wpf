@@ -68,6 +68,7 @@ public partial class MainViewModel : ObservableObject
             "LcdDisplayer" => new LcdDisplayerView(),
             "EnumSelector" => new EnumSelectorView(),
             "SectionTitle" => new SectionTitleView(),
+            "Test" => new TestView(),
             _ => null,
         };
     }
@@ -314,6 +315,11 @@ public partial class SideMenuViewModel : ObservableObject
                    Icon = "\xe699",
                }
             ]
+        });
+        Items.Add(new SideMenuItemViewModel()
+        {
+            Header = "Test",
+            Icon = "\xe61a",
         });
     }
 }
