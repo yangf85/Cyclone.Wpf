@@ -42,9 +42,9 @@
                         <Rectangle
                             Grid.Row="1"
                             Height="{TemplateBinding SeperaterThickness}"
-                            Margin="{TemplateBinding SperaterMargin}"
-                            Fill="{TemplateBinding SperaterColor}"
-                            Visibility="{TemplateBinding SperaterVisibility}" />
+                            Margin="{TemplateBinding SeperaterMargin}"
+                            Fill="{TemplateBinding SeperaterColor}"
+                            Visibility="{TemplateBinding SeperaterVisibility}" />
                         <!--  子标题  -->
                         <Rectangle
                             x:Name="SubTitleFiller"

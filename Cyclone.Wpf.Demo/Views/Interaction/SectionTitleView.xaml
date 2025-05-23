@@ -22,7 +22,7 @@
             <cy:SectionHeader
                 Margin="0,0,0,20"
                 MainTitle="系统设置"
-                SperaterVisibility="Visible"
+                SeperaterVisibility="Visible"
                 SubTitle="配置应用程序的基本参数"
                 SubTitleVisibility="Visible" />
 
@@ -32,9 +32,9 @@
                 MainTitle="用户管理"
                 MainTitleFontSize="20"
                 MainTitleForeground="#2196F3"
+                SeperaterColor="#2196F3"
                 SeperaterThickness="2"
-                SperaterColor="#2196F3"
-                SperaterVisibility="Visible"
+                SeperaterVisibility="Visible"
                 SubTitle="管理系统用户和权限"
                 SubTitleForeground="#757575"
                 SubTitleVisibility="Visible" />
@@ -43,7 +43,7 @@
             <cy:SectionHeader
                 Margin="0,0,0,20"
                 MainTitle="操作记录"
-                SperaterVisibility="Visible" />
+                SeperaterVisibility="Visible" />
 
             <!--  无分隔线  -->
             <cy:SectionHeader
@@ -57,7 +57,7 @@
                 Margin="0,0,0,20"
                 MainTitle="关于我们"
                 MainTitleHorizontalAlignment="Center"
-                SperaterVisibility="Visible"
+                SeperaterVisibility="Visible"
                 SubTitle="版本信息和联系方式"
                 SubTitleHorizontalAlignment="Center"
                 SubTitleVisibility="Visible" />
@@ -69,9 +69,9 @@
                 MainTitleFontSize="18"
                 MainTitleFontWeight="Bold"
                 MainTitleForeground="#FF5722"
+                SeperaterColor="#FF5722"
                 SeperaterThickness="1.5"
-                SperaterColor="#FF5722"
-                SperaterVisibility="Visible"
+                SeperaterVisibility="Visible"
                 SubTitle="仅限管理员使用"
                 SubTitleFontSize="11"
                 SubTitleForeground="#9E9E9E"
@@ -83,8 +83,8 @@
                 MainTitle="左侧强调条"
                 MainTitleBackground="#fff3cd"
                 MainTitleForeground="#856404"
-                SperaterColor="#ffeeba"
-                SperaterVisibility="Visible"
+                SeperaterColor="#ffeeba"
+                SeperaterVisibility="Visible"
                 SubTitle="带有左侧黄色强调条的警告样式标题"
                 SubTitleForeground="#856404"
                 SubTitleVisibility="Visible" />
@@ -96,9 +96,9 @@
                 MainTitle="完整内容区块"
                 MainTitleFontWeight="Bold"
                 MainTitleForeground="White"
-                SperaterColor="White"
-                SperaterMargin="0,5"
-                SperaterVisibility="Visible"
+                SeperaterColor="White"
+                SeperaterMargin="0,5"
+                SeperaterVisibility="Visible"
                 SubTitle="整个区块都有背景色的示例"
                 SubTitleForeground="White"
                 SubTitleVisibility="Visible" />
