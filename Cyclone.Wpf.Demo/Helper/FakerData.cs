@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Cyclone.Wpf.Controls;
+using Cyclone.Wpf.Helpers;
 using Faker;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,16 @@ public partial class ContactInfo : ObservableObject
     public partial string LinkedInProfile { get; set; }
 }
 
+[TypeConverter(typeof(EnumDescriptionTypeConverter))]
 public enum UserStatus
 {
+    [Description("激活")]
     Active,
+
+    [Description("未激活")]
     Inactive,
+
+    [Description("待激活")]
     Pending
 }
 

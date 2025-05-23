@@ -39,6 +39,7 @@ namespace Cyclone.Wpf.Demo.Views
         public FormViewModel()
         {
             Data = FakerDataHelper.GenerateFakerDataCollection(1).FirstOrDefault()!;
+            Data.Status = UserStatus.Active;
         }
 
         [RelayCommand]

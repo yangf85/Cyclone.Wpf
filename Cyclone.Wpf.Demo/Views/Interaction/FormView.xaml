@@ -47,6 +47,7 @@
             <GroupBox Padding="20" Header="Attached">
                 <StackPanel>
                     <cy:Form
+                        x:Name="Form"
                         Height="320"
                         DataContext="{Binding Data}"
                         IsSyncLabelHorizontalAlignment="True"
@@ -172,7 +173,7 @@
                             Text="{Binding Lorem}"
                             TextWrapping="Wrap" />
                         <cy:Form.Footer>
-                            <Button Command="{Binding ShowCommand}" Content="Show" />
+                            <Button Command="{Binding Path=DataContext.ShowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Content="Show" />
                         </cy:Form.Footer>
                     </cy:Form>
                 </StackPanel>
