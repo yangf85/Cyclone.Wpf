@@ -408,10 +408,10 @@ public class LoadingAdorner : Adorner, IDisposable
         if (attachedContent != null)
         {
             // 使用默认的 LoadingPulse 和附加内容组合
-            return CreateCombinedContent(new LoadingPulse(), attachedContent, attachedPosition);
+            return CreateCombinedContent(new LoadingRing(), attachedContent, attachedPosition);
         }
 
-        return new LoadingPulse();
+        return new LoadingRing();
     }
 
     #endregion Private Methods
