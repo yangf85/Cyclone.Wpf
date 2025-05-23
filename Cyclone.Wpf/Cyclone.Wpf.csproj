@@ -65,9 +65,11 @@
     <Compile Remove="Controls\ColorPicker\ColorHueSlider.cs" />
     <Compile Remove="Controls\ColorPicker\ColorOpacitySlider.cs" />
     <Compile Remove="Controls\ColorPicker\ColorSaturationSlider.cs" />
+    <Compile Remove="Styles\NormalLoading.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Styles\NormalLoading.xaml" />
     <Page Remove="Themes\BasicTheme.xaml" />
     <Page Remove="Themes\Color.xaml" />
     <Page Remove="Themes\DarkTheme.xaml" />

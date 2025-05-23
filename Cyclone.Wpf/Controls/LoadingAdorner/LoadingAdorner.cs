@@ -4,7 +4,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media;
 using System.Windows;
 using Cyclone.Wpf.Helpers;
-using Cyclone.Wpf.Styles;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -201,15 +200,7 @@ public class LoadingAdorner : Adorner, IDisposable
 
         //获取遮罩元素
         var loadingContent = GetLoadingContent(element);
-        if (loadingContent == null)
-        {
-            loadingContent = element.TryFindResource("LoadingContent");
-            loadingContent ??= new NormalLoading()
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-        }
+        loadingContent ??= new LoadingSpinner();
 
         //获取装饰层
         var adornerLayer = AdornerLayer.GetAdornerLayer(element) ?? throw new Exception("未找到装饰层。");
@@ -256,7 +247,7 @@ public class LoadingAdorner : Adorner, IDisposable
     #region MaskBackground
 
     public static readonly DependencyProperty MaskBackgroundProperty =
-                DependencyProperty.RegisterAttached("MaskBackground", typeof(Brush), typeof(LoadingAdorner), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B2000000"))));
+                DependencyProperty.RegisterAttached("MaskBackground", typeof(Brush), typeof(LoadingAdorner), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66000000"))));
 
     public static Brush GetMaskBackground(DependencyObject obj) => (Brush)obj.GetValue(MaskBackgroundProperty);
 
