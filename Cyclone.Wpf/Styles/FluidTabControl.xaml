@@ -7,7 +7,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="FluidTabItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FluidTabItem}">
+    <ControlTemplate
+        x:Key="FluidTabItem.ControlTemplate.Basic"
+        TargetType="{x:Type ctl:FluidTabItem}">
         <Border
             x:Name="RootBorder"
             Height="{TemplateBinding Height}"
@@ -16,9 +18,15 @@
             SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="LeftColumn" Width="*" />
-                    <ColumnDefinition x:Name="MiddleColumn" Width="5" />
-                    <ColumnDefinition x:Name="RightColumn" Width="Auto" />
+                    <ColumnDefinition
+                        x:Name="LeftColumn"
+                        Width="*" />
+                    <ColumnDefinition
+                        x:Name="MiddleColumn"
+                        Width="5" />
+                    <ColumnDefinition
+                        x:Name="RightColumn"
+                        Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <ContentPresenter
                     Name="ContentContainer"
@@ -37,7 +45,9 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=FluidTabPlacement, RelativeSource={RelativeSource AncestorType=ctl:FluidTabControl}}" Value="Right">
+            <DataTrigger
+                Binding="{Binding Path=FluidTabPlacement, RelativeSource={RelativeSource AncestorType=ctl:FluidTabControl}}"
+                Value="Right">
                 <Setter TargetName="Indicator" Property="Grid.Column" Value="0" />
                 <Setter TargetName="Indicator" Property="HorizontalAlignment" Value="Left" />
                 <Setter TargetName="ContentContainer" Property="Grid.Column" Value="2" />
@@ -51,7 +61,9 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="FluidTabItem.Style.Basic" TargetType="{x:Type ctl:FluidTabItem}">
+    <Style
+        x:Key="FluidTabItem.Style.Basic"
+        TargetType="{x:Type ctl:FluidTabItem}">
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="Background" Value="{DynamicResource Background.Header}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -60,7 +72,9 @@
         <Setter Property="Template" Value="{StaticResource FluidTabItem.ControlTemplate.Basic}" />
     </Style>
 
-    <Style BasedOn="{StaticResource FluidTabItem.Style.Basic}" TargetType="{x:Type ctl:FluidTabItem}" />
+    <Style
+        BasedOn="{StaticResource FluidTabItem.Style.Basic}"
+        TargetType="{x:Type ctl:FluidTabItem}" />
 
     <Style
         x:Key="FluidTabControl.Style.Basic"
@@ -84,9 +98,15 @@
                             KeyboardNavigation.TabNavigation="Local"
                             SnapsToDevicePixels="true">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="LeftColumn" Width="Auto" />
-                                <ColumnDefinition x:Name="MiddleColumn" Width="Auto" />
-                                <ColumnDefinition x:Name="RightColumn" Width="*" />
+                                <ColumnDefinition
+                                    x:Name="LeftColumn"
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    x:Name="MiddleColumn"
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    x:Name="RightColumn"
+                                    Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid
                                 x:Name="ItemHeaderContainer"
@@ -112,7 +132,9 @@
                                     HorizontalScrollBarVisibility="Disabled"
                                     IsDeferredScrollingEnabled="False"
                                     VerticalScrollBarVisibility="Auto">
-                                    <VirtualizingStackPanel x:Name="PART_ItemsPanel" VirtualizingPanel.VirtualizationMode="Recycling" />
+                                    <VirtualizingStackPanel
+                                        x:Name="PART_ItemsPanel"
+                                        VirtualizingPanel.VirtualizationMode="Recycling" />
                                 </ScrollViewer>
                             </Grid>
                         </Grid>
@@ -130,5 +152,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource FluidTabControl.Style.Basic}" TargetType="ctl:FluidTabControl" />
+    <Style
+        BasedOn="{StaticResource FluidTabControl.Style.Basic}"
+        TargetType="ctl:FluidTabControl" />
 </ResourceDictionary>

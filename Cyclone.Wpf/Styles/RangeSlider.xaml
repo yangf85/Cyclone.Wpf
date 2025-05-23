@@ -7,7 +7,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="RangeSlider.ThumbStyle" TargetType="Thumb">
+    <Style
+        x:Key="RangeSlider.ThumbStyle"
+        TargetType="Thumb">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Width" Value="20" />
@@ -31,7 +33,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="RangeSlider.RepeatButtonStyle.Horizontal" TargetType="RepeatButton">
+    <Style
+        x:Key="RangeSlider.RepeatButtonStyle.Horizontal"
+        TargetType="RepeatButton">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
@@ -43,7 +47,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="RangeSlider.RepeatButtonStyle.Vertical" TargetType="RepeatButton">
+    <Style
+        x:Key="RangeSlider.RepeatButtonStyle.Vertical"
+        TargetType="RepeatButton">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
@@ -58,8 +64,12 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="RangeSlider.ControlTemplate.Horizontal.Basic" TargetType="ctl:RangeSlider">
-        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
+    <ControlTemplate
+        x:Key="RangeSlider.ControlTemplate.Horizontal.Basic"
+        TargetType="ctl:RangeSlider">
+        <Grid
+            x:Name="RootGrid"
+            SnapsToDevicePixels="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -130,7 +140,9 @@
         </Grid>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="RangeSlider.ControlTemplate.Vertical.Basic" TargetType="ctl:RangeSlider">
+    <ControlTemplate
+        x:Key="RangeSlider.ControlTemplate.Vertical.Basic"
+        TargetType="ctl:RangeSlider">
         <Grid
             x:Name="RootGrid"
             SnapsToDevicePixels="True"
@@ -142,7 +154,9 @@
             </Grid.ColumnDefinitions>
             <!--<TickBar x:Name="TopTickBar"
                      Grid.Column="0" />-->
-            <Grid x:Name="RangGrid" Grid.Column="1">
+            <Grid
+                x:Name="RangGrid"
+                Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -200,5 +214,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style BasedOn="{StaticResource RangeSlider.Style.Basic}" TargetType="{x:Type ctl:RangeSlider}" />
+    <Style
+        BasedOn="{StaticResource RangeSlider.Style.Basic}"
+        TargetType="{x:Type ctl:RangeSlider}" />
 </ResourceDictionary>

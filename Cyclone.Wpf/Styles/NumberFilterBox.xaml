@@ -34,7 +34,9 @@
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <ControlTemplate x:Key="NumberFilterBox.ControlTemplate.Basic" TargetType="ctl:NumberFilterBox">
+    <ControlTemplate
+        x:Key="NumberFilterBox.ControlTemplate.Basic"
+        TargetType="ctl:NumberFilterBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -44,7 +46,9 @@
             SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+                    <ColumnDefinition
+                        Width="Auto"
+                        SharedSizeGroup="{TemplateBinding SharedName}" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -81,7 +85,9 @@
         <ControlTemplate.Triggers />
     </ControlTemplate>
 
-    <Style x:Key="NumberFilterBox.Style.Basic" TargetType="ctl:NumberFilterBox">
+    <Style
+        x:Key="NumberFilterBox.Style.Basic"
+        TargetType="ctl:NumberFilterBox">
         <Setter Property="Template" Value="{StaticResource NumberFilterBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
@@ -94,5 +100,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style BasedOn="{StaticResource NumberFilterBox.Style.Basic}" TargetType="ctl:NumberFilterBox" />
+    <Style
+        BasedOn="{StaticResource NumberFilterBox.Style.Basic}"
+        TargetType="ctl:NumberFilterBox" />
 </ResourceDictionary>

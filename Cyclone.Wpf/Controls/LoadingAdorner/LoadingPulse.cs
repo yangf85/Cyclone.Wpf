@@ -14,51 +14,55 @@ public class LoadingPulse : ContentControl
 {
     #region 依赖属性
 
-    public static readonly DependencyProperty ParticleColorProperty =
-        DependencyProperty.Register(nameof(ParticleColor), typeof(Brush), typeof(LoadingPulse),
-            new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x21, 0x96, 0xF3)), OnVisualPropertyChanged));
+    public static readonly DependencyProperty DotColorProperty =
+        DependencyProperty.Register(nameof(DotColor), typeof(Brush), typeof(LoadingPulse),
+            new PropertyMetadata(new SolidColorBrush(Colors.White), OnVisualPropertyChanged));
 
-    public static readonly DependencyProperty ParticleRadiusProperty =
-        DependencyProperty.Register(nameof(ParticleRadius), typeof(double), typeof(LoadingPulse),
+    public static readonly DependencyProperty DotSizeProperty =
+        DependencyProperty.Register(nameof(DotSize), typeof(double), typeof(LoadingPulse),
+            new PropertyMetadata(12.0, OnVisualPropertyChanged));
+
+    public static readonly DependencyProperty DotSpacingProperty =
+        DependencyProperty.Register(nameof(DotSpacing), typeof(double), typeof(LoadingPulse),
             new PropertyMetadata(8.0, OnVisualPropertyChanged));
-
-    public static readonly DependencyProperty ParticleSpacingProperty =
-        DependencyProperty.Register(nameof(ParticleSpacing), typeof(double), typeof(LoadingPulse),
-            new PropertyMetadata(10.0, OnVisualPropertyChanged));
 
     public static readonly DependencyProperty IsActiveProperty =
         DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(LoadingPulse),
             new PropertyMetadata(true, OnIsActiveChanged));
 
-    public static readonly DependencyProperty SpinnerSizeProperty =
-        DependencyProperty.Register(nameof(SpinnerSize), typeof(double), typeof(LoadingPulse),
-            new PropertyMetadata(80.0, OnVisualPropertyChanged));
+    public static readonly DependencyProperty PulseDurationProperty =
+        DependencyProperty.Register(nameof(PulseDuration), typeof(double), typeof(LoadingPulse),
+            new PropertyMetadata(0.6, OnAnimationPropertyChanged));
+
+    public static readonly DependencyProperty DelayBetweenDotsProperty =
+        DependencyProperty.Register(nameof(DelayBetweenDots), typeof(double), typeof(LoadingPulse),
+            new PropertyMetadata(0.2, OnAnimationPropertyChanged));
 
     /// <summary>
-    /// 粒子颜色
+    /// 圆点颜色
     /// </summary>
-    public Brush ParticleColor
+    public Brush DotColor
     {
-        get { return (Brush)GetValue(ParticleColorProperty); }
-        set { SetValue(ParticleColorProperty, value); }
+        get { return (Brush)GetValue(DotColorProperty); }
+        set { SetValue(DotColorProperty, value); }
     }
 
     /// <summary>
-    /// 粒子半径
+    /// 圆点大小
     /// </summary>
-    public double ParticleRadius
+    public double DotSize
     {
-        get { return (double)GetValue(ParticleRadiusProperty); }
-        set { SetValue(ParticleRadiusProperty, value); }
+        get { return (double)GetValue(DotSizeProperty); }
+        set { SetValue(DotSizeProperty, value); }
     }
 
     /// <summary>
-    /// 粒子间距
+    /// 圆点间距
     /// </summary>
-    public double ParticleSpacing
+    public double DotSpacing
     {
-        get { return (double)GetValue(ParticleSpacingProperty); }
-        set { SetValue(ParticleSpacingProperty, value); }
+        get { return (double)GetValue(DotSpacingProperty); }
+        set { SetValue(DotSpacingProperty, value); }
     }
 
     /// <summary>
@@ -71,139 +75,118 @@ public class LoadingPulse : ContentControl
     }
 
     /// <summary>
-    /// 动画控件大小
+    /// 脉冲动画持续时间（秒）
     /// </summary>
-    public double SpinnerSize
+    public double PulseDuration
     {
-        get { return (double)GetValue(SpinnerSizeProperty); }
-        set { SetValue(SpinnerSizeProperty, value); }
+        get { return (double)GetValue(PulseDurationProperty); }
+        set { SetValue(PulseDurationProperty, value); }
+    }
+
+    /// <summary>
+    /// 圆点之间的延迟时间（秒）
+    /// </summary>
+    public double DelayBetweenDots
+    {
+        get { return (double)GetValue(DelayBetweenDotsProperty); }
+        set { SetValue(DelayBetweenDotsProperty, value); }
     }
 
     #endregion 依赖属性
 
-    private Viewbox _viewbox;
-    private Canvas _canvas;
-    private Ellipse[] _particles;
+    private StackPanel _container;
+    private Ellipse[] _dots;
     private Storyboard _storyboard;
-
-    static LoadingPulse()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(LoadingPulse),
-            new FrameworkPropertyMetadata(typeof(LoadingPulse)));
-    }
 
     public LoadingPulse()
     {
-        Loaded += OnLoaded;
-        Unloaded += OnUnloaded;
-    }
-
-    private void OnLoaded(object sender, RoutedEventArgs e)
-    {
         CreateVisualTree();
+
         if (IsActive)
         {
-            StartAnimation();
+            Loaded += (s, e) => StartAnimation();
         }
-    }
-
-    private void OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        StopAnimation();
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
     }
 
     private void CreateVisualTree()
     {
-        // 清除现有内容
-        this.Content = null;
-
-        // 创建Viewbox
-        _viewbox = new Viewbox
+        // 创建水平排列的容器
+        _container = new StackPanel
         {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Stretch = Stretch.Uniform
-        };
-
-        // 创建Grid容器
-        var grid = new Grid
-        {
-            Width = SpinnerSize,
-            Height = SpinnerSize
-        };
-
-        // 创建Canvas
-        _canvas = new Canvas
-        {
-            Width = SpinnerSize,
-            Height = SpinnerSize,
+            Orientation = Orientation.Horizontal,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
         };
 
-        // 创建3个粒子
-        _particles = new Ellipse[3];
-        double totalWidth = (ParticleRadius * 2 * 3) + (ParticleSpacing * 2);
-        double startX = (SpinnerSize - totalWidth) / 2;
-        double centerY = SpinnerSize / 2;
+        // 创建3个圆点
+        _dots = new Ellipse[3];
 
         for (int i = 0; i < 3; i++)
         {
-            var particle = new Ellipse
+            var dot = new Ellipse
             {
-                Width = ParticleRadius * 2,
-                Height = ParticleRadius * 2,
-                Fill = ParticleColor,
+                Width = DotSize,
+                Height = DotSize,
+                Fill = DotColor,
                 RenderTransformOrigin = new Point(0.5, 0.5),
-                Opacity = 0.3
+                RenderTransform = new ScaleTransform(1.0, 1.0),
+                Opacity = 0.3 // 初始透明度
             };
 
-            // 设置粒子位置
-            double x = startX + i * (ParticleRadius * 2 + ParticleSpacing);
-            Canvas.SetLeft(particle, x);
-            Canvas.SetTop(particle, centerY - ParticleRadius);
+            // 设置间距（除了第一个圆点）
+            if (i > 0)
+            {
+                dot.Margin = new Thickness(DotSpacing, 0, 0, 0);
+            }
 
-            // 添加缩放变换
-            particle.RenderTransform = new ScaleTransform(1, 1);
-
-            _canvas.Children.Add(particle);
-            _particles[i] = particle;
+            _container.Children.Add(dot);
+            _dots[i] = dot;
         }
 
-        grid.Children.Add(_canvas);
-        _viewbox.Child = grid;
-        this.Content = _viewbox;
-
-        // 绑定宽高
-        _viewbox.SetBinding(Viewbox.WidthProperty, new System.Windows.Data.Binding("Width") { Source = this });
-        _viewbox.SetBinding(Viewbox.HeightProperty, new System.Windows.Data.Binding("Height") { Source = this });
+        this.Content = _container;
     }
 
     private static void OnVisualPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingPulse)d;
-        if (spinner.IsLoaded)
-        {
-            spinner.CreateVisualTree();
-            if (spinner.IsActive)
-            {
-                spinner.StopAnimation();
-                spinner.StartAnimation();
-            }
-        }
+        var pulse = (LoadingPulse)d;
+        pulse.UpdateVisualProperties();
     }
 
     private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingPulse)d;
-        if (spinner.IsLoaded)
+        var pulse = (LoadingPulse)d;
+        if (pulse.IsLoaded)
         {
-            spinner.UpdateAnimationState();
+            pulse.UpdateAnimationState();
+        }
+    }
+
+    private static void OnAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var pulse = (LoadingPulse)d;
+        if (pulse.IsLoaded && pulse.IsActive)
+        {
+            pulse.RecreateAnimation();
+        }
+    }
+
+    private void UpdateVisualProperties()
+    {
+        if (_dots != null)
+        {
+            for (int i = 0; i < _dots.Length; i++)
+            {
+                var dot = _dots[i];
+                dot.Width = DotSize;
+                dot.Height = DotSize;
+                dot.Fill = DotColor;
+
+                // 更新间距（除了第一个圆点）
+                if (i > 0)
+                {
+                    dot.Margin = new Thickness(DotSpacing, 0, 0, 0);
+                }
+            }
         }
     }
 
@@ -219,10 +202,18 @@ public class LoadingPulse : ContentControl
         }
     }
 
+    private void RecreateAnimation()
+    {
+        StopAnimation();
+        _storyboard = null;
+        if (IsActive)
+        {
+            StartAnimation();
+        }
+    }
+
     private void StartAnimation()
     {
-        if (_particles == null) return;
-
         if (_storyboard == null)
         {
             CreateAnimation();
@@ -233,64 +224,101 @@ public class LoadingPulse : ContentControl
     private void StopAnimation()
     {
         _storyboard?.Stop();
+
+        // 重置所有圆点状态
+        if (_dots != null)
+        {
+            foreach (var dot in _dots)
+            {
+                dot.Opacity = 0.3;
+                if (dot.RenderTransform is ScaleTransform scale)
+                {
+                    scale.ScaleX = 1.0;
+                    scale.ScaleY = 1.0;
+                }
+            }
+        }
     }
 
     private void CreateAnimation()
     {
         _storyboard = new Storyboard { RepeatBehavior = RepeatBehavior.Forever };
 
+        // 计算总循环时间
+        var totalCycleTime = PulseDuration + (DelayBetweenDots * 2) + 0.3; // 额外0.3秒的间隔
+
+        // 为每个圆点创建脉冲动画
         for (int i = 0; i < 3; i++)
         {
-            var particle = _particles[i];
-            var delay = TimeSpan.FromSeconds(i * 0.15);
-
-            // 创建缩放动画
-            var scaleAnimation = new DoubleAnimationUsingKeyFrames();
-            scaleAnimation.BeginTime = delay;
-
-            // 关键帧
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1.8, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.3)))
-            {
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseOut }
-            });
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)))
-            {
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseIn }
-            });
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.35))));
-
-            // 为X和Y轴应用相同的动画
-            var scaleXAnimation = scaleAnimation.Clone();
-            var scaleYAnimation = scaleAnimation.Clone();
-
-            Storyboard.SetTarget(scaleXAnimation, particle);
-            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("(UIElement.RenderTransform).(ScaleTransform.ScaleX)"));
-
-            Storyboard.SetTarget(scaleYAnimation, particle);
-            Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("(UIElement.RenderTransform).(ScaleTransform.ScaleY)"));
+            var dot = _dots[i];
+            var beginDelay = TimeSpan.FromSeconds(i * DelayBetweenDots);
 
             // 创建透明度动画
-            var opacityAnimation = new DoubleAnimationUsingKeyFrames();
-            opacityAnimation.BeginTime = delay;
-
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.3)))
+            var opacityAnimation = new DoubleAnimationUsingKeyFrames
             {
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseOut }
-            });
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)))
+                BeginTime = beginDelay,
+                Duration = new Duration(TimeSpan.FromSeconds(totalCycleTime))
+            };
+
+            // 添加关键帧
+            opacityAnimation.KeyFrames.Add(new LinearDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.Zero))); // 初始状态
+            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration * 0.5)))
             {
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseIn }
-            });
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.35))));
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            }); // 脉冲峰值
+            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+            }); // 回到初始状态
+            opacityAnimation.KeyFrames.Add(new LinearDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(totalCycleTime)))); // 保持初始状态直到循环结束
 
-            Storyboard.SetTarget(opacityAnimation, particle);
-            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
-
-            _storyboard.Children.Add(scaleXAnimation);
-            _storyboard.Children.Add(scaleYAnimation);
+            Storyboard.SetTarget(opacityAnimation, dot);
+            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath(Ellipse.OpacityProperty));
             _storyboard.Children.Add(opacityAnimation);
+
+            // 创建缩放动画
+            var scaleAnimationX = new DoubleAnimationUsingKeyFrames
+            {
+                BeginTime = beginDelay,
+                Duration = new Duration(TimeSpan.FromSeconds(totalCycleTime))
+            };
+
+            var scaleAnimationY = new DoubleAnimationUsingKeyFrames
+            {
+                BeginTime = beginDelay,
+                Duration = new Duration(TimeSpan.FromSeconds(totalCycleTime))
+            };
+
+            // 添加缩放关键帧
+            scaleAnimationX.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+            scaleAnimationX.KeyFrames.Add(new EasingDoubleKeyFrame(1.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration * 0.5)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            });
+            scaleAnimationX.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+            });
+            scaleAnimationX.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(totalCycleTime))));
+
+            scaleAnimationY.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+            scaleAnimationY.KeyFrames.Add(new EasingDoubleKeyFrame(1.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration * 0.5)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            });
+            scaleAnimationY.KeyFrames.Add(new EasingDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(PulseDuration)))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+            });
+            scaleAnimationY.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(totalCycleTime))));
+
+            Storyboard.SetTarget(scaleAnimationX, dot);
+            Storyboard.SetTargetProperty(scaleAnimationX, new PropertyPath("(UIElement.RenderTransform).(ScaleTransform.ScaleX)"));
+            _storyboard.Children.Add(scaleAnimationX);
+
+            Storyboard.SetTarget(scaleAnimationY, dot);
+            Storyboard.SetTargetProperty(scaleAnimationY, new PropertyPath("(UIElement.RenderTransform).(ScaleTransform.ScaleY)"));
+            _storyboard.Children.Add(scaleAnimationY);
         }
     }
 }

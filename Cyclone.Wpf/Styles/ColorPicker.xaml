@@ -7,11 +7,15 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--  通用滑块轨道按钮样式  -->
-    <Style x:Key="ColorSelector.Slider.Track.RepeatButton" TargetType="RepeatButton">
+    <Style
+        x:Key="ColorSelector.Slider.Track.RepeatButton"
+        TargetType="RepeatButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid x:Name="RootBorder" Background="Transparent">
+                    <Grid
+                        x:Name="RootBorder"
+                        Background="Transparent">
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -25,7 +29,9 @@
     </Style>
 
     <!--  通用滑块拇指样式  -->
-    <Style x:Key="ColorSelector.Slider.Track.Thumb" TargetType="Thumb">
+    <Style
+        x:Key="ColorSelector.Slider.Track.Thumb"
+        TargetType="Thumb">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
@@ -46,7 +52,9 @@
     </Style>
 
     <!--  基础滑块样式 - 其他样式将基于此样式  -->
-    <Style x:Key="ColorSelector.Slider.Base" TargetType="Slider">
+    <Style
+        x:Key="ColorSelector.Slider.Base"
+        TargetType="Slider">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
@@ -90,15 +98,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -163,15 +179,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -211,15 +235,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -258,15 +290,23 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <Track x:Name="PART_Track" Grid.Row="0">
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Row="0">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.DecreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
+                                    <RepeatButton
+                                        Command="Slider.IncreaseLarge"
+                                        Style="{StaticResource ColorSelector.Slider.Track.RepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="12" Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
+                                    <Thumb
+                                        Width="12"
+                                        Style="{StaticResource ColorSelector.Slider.Track.Thumb}" />
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -290,7 +330,9 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Border x:Name="PART_ColorArea" ClipToBounds="True">
+                            <Border
+                                x:Name="PART_ColorArea"
+                                ClipToBounds="True">
                                 <Border.Background>
                                     <LinearGradientBrush x:Name="SaturationGradient" StartPoint="0,0" EndPoint="1,0">
                                         <GradientStop Offset="0" Color="White" />
@@ -314,7 +356,9 @@
                                     Stroke="White"
                                     StrokeThickness="1">
                                     <Ellipse.Effect>
-                                        <DropShadowEffect Opacity="0.5" ShadowDepth="1" />
+                                        <DropShadowEffect
+                                            Opacity="0.5"
+                                            ShadowDepth="1" />
                                     </Ellipse.Effect>
                                 </Ellipse>
                             </Canvas>
@@ -355,7 +399,9 @@
                                 Command="{x:Static ctl:ColorEyedropper.PickColorCommand}">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
-                                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                                        <Grid
+                                            x:Name="RootGrid"
+                                            Background="{TemplateBinding Background}">
                                             <ContentPresenter />
                                         </Grid>
                                         <ControlTemplate.Triggers>
@@ -442,13 +488,17 @@
                         FontStyle="Italic"
                         Text="{Binding Category}" />
                     <TextBlock Text="{Binding RGB}" />
-                    <TextBlock FontFamily="Consolas" Text="{Binding HEX}" />
+                    <TextBlock
+                        FontFamily="Consolas"
+                        Text="{Binding HEX}" />
                     <TextBlock Text="{Binding HSL}" />
                 </StackPanel>
             </Border.ToolTip>
         </Border>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+            <DataTrigger
+                Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
+                Value="True">
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="White" />
                 <Setter TargetName="RootBorder" Property="BorderThickness" Value="1" />
             </DataTrigger>
@@ -462,7 +512,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="RootBorder" Padding="1">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="1">
                         <ContentPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -501,7 +553,9 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}" Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
+                    <UniformGrid
+                        Columns="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Columns}"
+                        Rows="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctl:ColorPalette}}, Path=Rows}" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -627,7 +681,9 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" MinHeight="32">
+                                <Grid
+                                    Grid.Row="0"
+                                    MinHeight="32">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="5" />
@@ -688,14 +744,18 @@
                                 </Grid>
 
                                 <!--  文本输入区  -->
-                                <Grid Grid.Row="1" Margin="0,5,0,0">
+                                <Grid
+                                    Grid.Row="1"
+                                    Margin="0,5,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--  HEX文本输入  -->
-                                    <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="0,0,5,0">
                                         <TextBlock
                                             Margin="0,0,0,5"
                                             Foreground="{TemplateBinding Foreground}"
@@ -707,7 +767,9 @@
                                     </StackPanel>
 
                                     <!--  RGB文本输入  -->
-                                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0">
                                         <TextBlock
                                             Margin="0,0,0,5"
                                             Foreground="{TemplateBinding Foreground}"
@@ -720,7 +782,9 @@
                                 </Grid>
 
                                 <!--  预选颜色块区域  -->
-                                <StackPanel Grid.Row="2" Margin="0,5,0,0">
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Margin="0,5,0,0">
                                     <TextBlock
                                         Margin="0,0,0,5"
                                         Foreground="{TemplateBinding Foreground}"
@@ -734,7 +798,9 @@
                                 </StackPanel>
 
                                 <!--  颜色历史记录区域  -->
-                                <StackPanel Grid.Row="3" Margin="0,5,0,0">
+                                <StackPanel
+                                    Grid.Row="3"
+                                    Margin="0,5,0,0">
                                     <TextBlock
                                         Margin="0,0,0,5"
                                         Foreground="{TemplateBinding Foreground}"
@@ -766,12 +832,16 @@
     </Style>
 
     <!--  下拉按钮样式  -->
-    <Style x:Key="ColorPicker.OpenButton.Style" TargetType="ToggleButton">
+    <Style
+        x:Key="ColorPicker.OpenButton.Style"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding Path=Background, RelativeSource={RelativeSource AncestorType=ctl:ColorPicker}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="{TemplateBinding Background}">
                         <Path
                             x:Name="Indicator"
                             Width="15"
@@ -893,7 +963,9 @@
                             StaysOpen="True"
                             VerticalOffset="-1">
                             <Grid Background="{DynamicResource Background.Container}">
-                                <ctl:ColorSelector x:Name="PART_ColorSelector" SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
+                                <ctl:ColorSelector
+                                    x:Name="PART_ColorSelector"
+                                    SelectedColor="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedColor, Mode=TwoWay}" />
                             </Grid>
                         </Popup>
                     </Grid>

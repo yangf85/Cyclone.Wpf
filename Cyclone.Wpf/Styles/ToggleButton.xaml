@@ -1,4 +1,6 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
@@ -127,5 +129,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource ToggleButton.Style.Basic}" TargetType="ToggleButton" />
+    <Style
+        BasedOn="{StaticResource ToggleButton.Style.Basic}"
+        TargetType="ToggleButton" />
 </ResourceDictionary>

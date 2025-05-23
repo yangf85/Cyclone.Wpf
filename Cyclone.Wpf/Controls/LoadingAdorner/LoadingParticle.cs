@@ -10,24 +10,24 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 加载动画控件 - 显示5个旋转的粒子
 /// </summary>
-public class LoadingSpinner : UserControl
+public class LoadingParticle : ContentControl
 {
     #region 依赖属性
 
     public static readonly DependencyProperty ParticleColorProperty =
-        DependencyProperty.Register(nameof(ParticleColor), typeof(Brush), typeof(LoadingSpinner),
-            new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x0D, 0x47, 0xA1)), OnVisualPropertyChanged));
+        DependencyProperty.Register(nameof(ParticleColor), typeof(Brush), typeof(LoadingParticle),
+            new PropertyMetadata(new SolidColorBrush(Colors.White), OnVisualPropertyChanged));
 
     public static readonly DependencyProperty ParticleRadiusProperty =
-        DependencyProperty.Register(nameof(ParticleRadius), typeof(double), typeof(LoadingSpinner),
+        DependencyProperty.Register(nameof(ParticleRadius), typeof(double), typeof(LoadingParticle),
             new PropertyMetadata(5.0, OnVisualPropertyChanged));
 
     public static readonly DependencyProperty IsActiveProperty =
-        DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(LoadingSpinner),
+        DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(LoadingParticle),
             new PropertyMetadata(true, OnIsActiveChanged));
 
     public static readonly DependencyProperty SpinnerSizeProperty =
-        DependencyProperty.Register(nameof(SpinnerSize), typeof(double), typeof(LoadingSpinner),
+        DependencyProperty.Register(nameof(SpinnerSize), typeof(double), typeof(LoadingParticle),
             new PropertyMetadata(75.0, OnVisualPropertyChanged));
 
     /// <summary>
@@ -74,7 +74,7 @@ public class LoadingSpinner : UserControl
     private Border[] _particleBorders;
     private Storyboard _storyboard;
 
-    public LoadingSpinner()
+    public LoadingParticle()
     {
         CreateVisualTree();
 
@@ -157,13 +157,13 @@ public class LoadingSpinner : UserControl
 
     private static void OnVisualPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingSpinner)d;
+        var spinner = (LoadingParticle)d;
         spinner.UpdateVisualProperties();
     }
 
     private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingSpinner)d;
+        var spinner = (LoadingParticle)d;
         if (spinner.IsLoaded)
         {
             spinner.UpdateAnimationState();

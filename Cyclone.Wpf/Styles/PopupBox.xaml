@@ -6,7 +6,9 @@
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="PopupBox.ToggleButtonStyle" TargetType="ToggleButton">
+    <Style
+        x:Key="PopupBox.ToggleButtonStyle"
+        TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -31,7 +33,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="PopupBox.ControlTemplate.Basic" TargetType="ctl:PopupBox">
+    <ControlTemplate
+        x:Key="PopupBox.ControlTemplate.Basic"
+        TargetType="ctl:PopupBox">
         <Grid>
             <ToggleButton
                 x:Name="PART_ToggleButton"

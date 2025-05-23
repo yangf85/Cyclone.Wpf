@@ -8,11 +8,15 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="TextBox.ClearButtonStyle" TargetType="Button">
+    <Style
+        x:Key="TextBox.ClearButtonStyle"
+        TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
                         <Path
                             x:Name="IconPath"
                             Width="12"
@@ -34,7 +38,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="TextBox.ControlTemplate.Basic" TargetType="{x:Type TextBox}">
+    <ControlTemplate
+        x:Key="TextBox.ControlTemplate.Basic"
+        TargetType="{x:Type TextBox}">
         <Border
             x:Name="RootBorder"
             Padding="3,0"
@@ -72,7 +78,9 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=(hp:TextBoxHelper.HasClearButton), RelativeSource={RelativeSource Mode=Self}}" Value="False">
+            <DataTrigger
+                Binding="{Binding Path=(hp:TextBoxHelper.HasClearButton), RelativeSource={RelativeSource Mode=Self}}"
+                Value="False">
                 <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
 
@@ -131,5 +139,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style BasedOn="{StaticResource TextBox.Style.Basic}" TargetType="TextBox" />
+    <Style
+        BasedOn="{StaticResource TextBox.Style.Basic}"
+        TargetType="TextBox" />
 </ResourceDictionary>

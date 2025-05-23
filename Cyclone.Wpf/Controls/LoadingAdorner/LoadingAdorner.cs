@@ -1,257 +1,418 @@
-﻿using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media.Animation;
-using System.Windows.Media;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
-using Cyclone.Wpf.Helpers;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace Cyclone.Wpf.Controls;
 
+public enum LoadingAttachedPosition
+{
+    Top,
+    Bottom,
+    Left,
+    Right
+}
+
 public class LoadingAdorner : Adorner, IDisposable
 {
-    private FrameworkElement _owner;
+    private static readonly Dictionary<FrameworkElement, LoadingAdorner> _adornerCache = new();
+    private readonly FrameworkElement _owner;
+    private readonly VisualCollection _children;
+    private readonly Border _maskBorder;
+    private readonly ContentControl _loadingContent;
+    private readonly DispatcherTimer _delayTimer;
+    private bool _isDisposed;
 
-    private VisualCollection _child;
+    #region Visual Tree Override
 
-    private Border _border;
+    protected override int VisualChildrenCount => _children.Count;
 
-    private ContentControl _content;
-
-    #region Override
-
-    protected override int VisualChildrenCount
-    {
-        get
-        {
-            return _child == null ? 0 : _child.Count;
-        }
-    }
+    protected override Visual GetVisualChild(int index) => _children[index];
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        _border?.Arrange(new Rect(new Point(0, 0), new Size(_owner.ActualWidth, _owner.ActualHeight)));
+        if (_isDisposed) return finalSize;
+
+        var ownerSize = new Size(_owner.ActualWidth, _owner.ActualHeight);
+        _maskBorder.Arrange(new Rect(ownerSize));
         return finalSize;
     }
 
     protected override Size MeasureOverride(Size constraint)
     {
-        _border?.Arrange(new Rect(new Point(0, 0), new Size(_owner.ActualWidth, _owner.ActualHeight)));
+        if (_isDisposed) return Size.Empty;
+
+        _maskBorder.Measure(constraint);
         return base.MeasureOverride(constraint);
     }
 
-    protected override Visual GetVisualChild(int index)
-    {
-        return _child?[index];
-    }
+    #endregion Visual Tree Override
 
-    #endregion Override
-
-    public LoadingAdorner(FrameworkElement owner, object content, Action completed = null) : base(owner)
+    public LoadingAdorner(FrameworkElement owner, object content, TimeSpan? showDelay = null) : base(owner)
     {
         _owner = owner;
-        _owner.SizeChanged += (sender, e) => InvalidateVisual();
+        _owner.SizeChanged += OnOwnerSizeChanged;
 
-        _content = new ContentControl
+        // 创建加载内容
+        _loadingContent = new ContentControl
         {
             Content = content,
             HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            Focusable = false
         };
-        _border = new Border
+
+        // 创建遮罩边框
+        _maskBorder = new Border
         {
             Background = GetMaskBackground(owner),
-            Child = _content
+            Child = _loadingContent,
+            Focusable = false
         };
-        _child = new VisualCollection(this) { _border };
 
-        var storyboard = new Storyboard();
-        if (completed != null)
-            storyboard.Completed += (sender, e) => completed();
-        AddDoubleAnimationUsingKeyFrames(storyboard, "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)", _content);
-        AddDoubleAnimationUsingKeyFrames(storyboard, "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)", _content);
-        AddRenderTransform(_content);
-        AddTrigger(_content, storyboard);
+        _children = new VisualCollection(this) { _maskBorder };
+
+        // 延迟显示支持
+        if (showDelay.HasValue && showDelay.Value > TimeSpan.Zero)
+        {
+            _maskBorder.Opacity = 0;
+            _delayTimer = new DispatcherTimer
+            {
+                Interval = showDelay.Value
+            };
+            _delayTimer.Tick += (s, e) =>
+            {
+                _delayTimer.Stop();
+                ShowWithAnimation();
+            };
+            _delayTimer.Start();
+        }
+        else
+        {
+            ShowWithAnimation();
+        }
     }
 
-    #region Implement IDisposable
+    private void OnOwnerSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (!_isDisposed)
+        {
+            InvalidateVisual();
+        }
+    }
+
+    private void ShowWithAnimation()
+    {
+        if (_isDisposed) return;
+
+        // 设置初始状态
+        var scaleTransform = new ScaleTransform(0.8, 0.8);
+        _loadingContent.RenderTransform = scaleTransform;
+        _loadingContent.RenderTransformOrigin = new Point(0.5, 0.5);
+        _maskBorder.Opacity = 0;
+
+        // 创建入场动画
+        var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+
+        var scaleAnimation = new DoubleAnimation(0.8, 1, TimeSpan.FromMilliseconds(300))
+        {
+            EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.3 }
+        };
+
+        _maskBorder.BeginAnimation(OpacityProperty, fadeIn);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+    }
+
+    public void HideWithAnimation(Action onCompleted = null)
+    {
+        if (_isDisposed) return;
+
+        var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(150))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
+
+        fadeOut.Completed += (s, e) => onCompleted?.Invoke();
+        _maskBorder.BeginAnimation(OpacityProperty, fadeOut);
+    }
 
     public void Dispose()
     {
-        _content.Content = null;
-    }
+        if (_isDisposed) return;
+        _isDisposed = true;
 
-    #endregion Implement IDisposable
+        _delayTimer?.Stop();
+        _owner.SizeChanged -= OnOwnerSizeChanged;
 
-    #region Private
-
-    private void AddRenderTransform(FrameworkElement element)
-    {
-        var group = new TransformGroup();
-        group.Children.Add(new ScaleTransform() { ScaleX = 0, ScaleY = 0 });
-        group.Children.Add(new SkewTransform());
-        group.Children.Add(new RotateTransform());
-        group.Children.Add(new TranslateTransform());
-
-        element.RenderTransform = group;
-        element.RenderTransformOrigin = new Point(0.5, 0.5);
-    }
-
-    private void AddTrigger(FrameworkElement target, Storyboard storyboard)
-    {
-        var trigger = new EventTrigger { RoutedEvent = LoadedEvent };
-        var beginStoryboard = new BeginStoryboard() { Storyboard = storyboard };
-        trigger.Actions.Add(beginStoryboard);
-        target.Triggers.Add(trigger);
-    }
-
-    private void AddDoubleAnimationUsingKeyFrames(Storyboard storyboard, string property, FrameworkElement target)
-    {
-        var daukf = new DoubleAnimationUsingKeyFrames();
-        Storyboard.SetTargetProperty(daukf, new PropertyPath(property));
-        Storyboard.SetTarget(daukf, target);
-
-        var edkf = new EasingDoubleKeyFrame
+        if (_loadingContent.Content is IDisposable disposableContent)
         {
-            KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0)),
-            Value = 0
-        };
-        daukf.KeyFrames.Add(edkf);
+            disposableContent.Dispose();
+        }
 
-        var quinticEase = new QuinticEase { EasingMode = EasingMode.EaseOut };
-        edkf = new EasingDoubleKeyFrame
-        {
-            KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)),
-            Value = 1,
-            EasingFunction = quinticEase
-        };
-
-        daukf.KeyFrames.Add(edkf);
-        storyboard.Children.Add(daukf);
+        _loadingContent.Content = null;
+        _children.Clear();
     }
 
-    #endregion Private
-
-    #region IsLoading
+    #region Attached Properties
 
     public static readonly DependencyProperty IsLoadingProperty =
-        DependencyProperty.RegisterAttached("IsLoading", typeof(bool), typeof(LoadingAdorner), new PropertyMetadata(IsLoadingPropertyChangedCallback));
-
-    private static void IsLoadingPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        if (d is FrameworkElement control)
-        {
-            if (!control.IsLoaded)
-            {
-                control.Loaded -= Control_Loaded;
-                control.Loaded += Control_Loaded;
-            }
-            else
-            {
-                Loading(control, (bool)e.NewValue);
-            }
-        }
-    }
-
-    private static void Control_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (sender is FrameworkElement control)
-        {
-            Loading(control);
-        }
-    }
-
-    private static void ClearAdorners(FrameworkElement element)
-    {
-        var adornerLayer = AdornerLayer.GetAdornerLayer(element);
-        if (adornerLayer != null)
-        {
-            Adorner[] adorners = adornerLayer.GetAdorners(element);
-            if (adorners != null)
-            {
-                for (int i = 0; i < adorners.Length; i++)
-                {
-                    if (adorners[i] is IDisposable disposable)
-                        disposable.Dispose();
-                    adornerLayer.Remove(adorners[i]);
-                }
-            }
-        }
-    }
-
-    public static bool GetIsLoading(DependencyObject obj)
-    {
-        return (bool)obj.GetValue(IsLoadingProperty);
-    }
-
-    public static void SetIsLoading(DependencyObject obj, bool value)
-    {
-        obj.SetValue(IsLoadingProperty, value);
-    }
-
-    public static void Loading(FrameworkElement element, bool isOpen = true)
-    {
-        if (element == null) return;
-        //移除遮罩
-        if (!isOpen)
-        {
-            ClearAdorners(element);
-            return;
-        }
-
-        //获取遮罩元素
-        var loadingContent = GetLoadingContent(element);
-        loadingContent ??= new LoadingSpinner();
-
-        //获取装饰层
-        var adornerLayer = AdornerLayer.GetAdornerLayer(element) ?? throw new Exception("未找到装饰层。");
-
-        //添加遮罩层
-        if (loadingContent is FrameworkElement maskElement)
-        {
-            if (maskElement.Parent != null)
-            {
-                var type = loadingContent.GetType();
-                var properties = type.GetProperties().Where(p => p.CanWrite).ToArray();
-                var obj = Activator.CreateInstance(type);
-                foreach (var property in properties)
-                {
-                    if (property.Name == "Content" || property.Name == "Child" || property.Name == "Children")
-                        continue;
-                    property.SetValue(obj, property.GetValue(loadingContent));
-                }
-                loadingContent = obj;
-            }
-        }
-        adornerLayer.Add(new LoadingAdorner(element, loadingContent));
-    }
-
-    #endregion IsLoading
-
-    #region LoadingContent
+        DependencyProperty.RegisterAttached(
+            "IsLoading",
+            typeof(bool),
+            typeof(LoadingAdorner),
+            new PropertyMetadata(false, OnIsLoadingChanged));
 
     public static readonly DependencyProperty LoadingContentProperty =
-        DependencyProperty.RegisterAttached("LoadingContent", typeof(object), typeof(LoadingAdorner));
-
-    public static object GetLoadingContent(DependencyObject obj)
-    {
-        return obj.GetValue(LoadingContentProperty);
-    }
-
-    public static void SetLoadingContent(DependencyObject obj, object value)
-    {
-        obj.SetValue(LoadingContentProperty, value);
-    }
-
-    #endregion LoadingContent
-
-    #region MaskBackground
+        DependencyProperty.RegisterAttached(
+            "LoadingContent",
+            typeof(object),
+            typeof(LoadingAdorner));
 
     public static readonly DependencyProperty MaskBackgroundProperty =
-                DependencyProperty.RegisterAttached("MaskBackground", typeof(Brush), typeof(LoadingAdorner), new PropertyMetadata(new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66000000"))));
+        DependencyProperty.RegisterAttached(
+            "MaskBackground",
+            typeof(Brush),
+            typeof(LoadingAdorner),
+            new PropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))));
+
+    public static readonly DependencyProperty ShowDelayProperty =
+        DependencyProperty.RegisterAttached(
+            "ShowDelay",
+            typeof(TimeSpan),
+            typeof(LoadingAdorner),
+            new PropertyMetadata(TimeSpan.Zero));
+
+    public static readonly DependencyProperty AttachedContentProperty =
+        DependencyProperty.RegisterAttached(
+            "AttachedContent",
+            typeof(object),
+            typeof(LoadingAdorner));
+
+    public static readonly DependencyProperty AttachedPositionProperty =
+        DependencyProperty.RegisterAttached(
+            "AttachedPosition",
+            typeof(LoadingAttachedPosition),
+            typeof(LoadingAdorner),
+            new PropertyMetadata(LoadingAttachedPosition.Bottom));
+
+    // Getters and Setters
+    public static bool GetIsLoading(DependencyObject obj) => (bool)obj.GetValue(IsLoadingProperty);
+
+    public static void SetIsLoading(DependencyObject obj, bool value) => obj.SetValue(IsLoadingProperty, value);
+
+    public static object GetLoadingContent(DependencyObject obj) => obj.GetValue(LoadingContentProperty);
+
+    public static void SetLoadingContent(DependencyObject obj, object value) => obj.SetValue(LoadingContentProperty, value);
 
     public static Brush GetMaskBackground(DependencyObject obj) => (Brush)obj.GetValue(MaskBackgroundProperty);
 
     public static void SetMaskBackground(DependencyObject obj, Brush value) => obj.SetValue(MaskBackgroundProperty, value);
 
-    #endregion MaskBackground
+    public static TimeSpan GetShowDelay(DependencyObject obj) => (TimeSpan)obj.GetValue(ShowDelayProperty);
+
+    public static void SetShowDelay(DependencyObject obj, TimeSpan value) => obj.SetValue(ShowDelayProperty, value);
+
+    public static object GetAttachedContent(DependencyObject obj) => obj.GetValue(AttachedContentProperty);
+
+    public static void SetAttachedContent(DependencyObject obj, object value) => obj.SetValue(AttachedContentProperty, value);
+
+    public static LoadingAttachedPosition GetAttachedPosition(DependencyObject obj) => (LoadingAttachedPosition)obj.GetValue(AttachedPositionProperty);
+
+    public static void SetAttachedPosition(DependencyObject obj, LoadingAttachedPosition value) => obj.SetValue(AttachedPositionProperty, value);
+
+    #endregion Attached Properties
+
+    #region Private Methods
+
+    private static void OnIsLoadingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is not FrameworkElement element) return;
+
+        var isLoading = (bool)e.NewValue;
+
+        if (element.IsLoaded)
+        {
+            SetLoadingState(element, isLoading);
+        }
+        else
+        {
+            element.Loaded -= OnElementLoaded;
+            element.Loaded += OnElementLoaded;
+        }
+    }
+
+    private static void OnElementLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement element)
+        {
+            element.Loaded -= OnElementLoaded;
+            SetLoadingState(element, GetIsLoading(element));
+        }
+    }
+
+    private static void SetLoadingState(FrameworkElement element, bool isLoading)
+    {
+        if (isLoading)
+        {
+            ShowLoading(element);
+        }
+        else
+        {
+            HideLoading(element);
+        }
+    }
+
+    private static void ShowLoading(FrameworkElement element)
+    {
+        var adornerLayer = AdornerLayer.GetAdornerLayer(element);
+        if (adornerLayer == null)
+        {
+            throw new InvalidOperationException("未找到装饰层，请确保元素在可视化树中。");
+        }
+
+        // 使用缓存避免重复添加
+        if (_adornerCache.ContainsKey(element)) return;
+
+        // 获取加载内容
+        var loadingContent = CreateLoadingContent(element);
+        var showDelay = GetShowDelay(element);
+
+        var adorner = new LoadingAdorner(element, loadingContent, showDelay);
+        _adornerCache[element] = adorner;
+        adornerLayer.Add(adorner);
+    }
+
+    private static void HideLoading(FrameworkElement element)
+    {
+        if (!_adornerCache.TryGetValue(element, out var adorner)) return;
+
+        var adornerLayer = AdornerLayer.GetAdornerLayer(element);
+        if (adornerLayer == null) return;
+
+        adorner.HideWithAnimation(() =>
+        {
+            adorner.Dispose();
+            adornerLayer.Remove(adorner);
+            _adornerCache.Remove(element);
+        });
+    }
+
+    private static object CreateLoadingContent(FrameworkElement element)
+    {
+        var loadingContent = GetLoadingContent(element);
+        var attachedContent = GetAttachedContent(element);
+        var attachedPosition = GetAttachedPosition(element);
+
+        // 如果同时设置了主加载内容和附加内容，按位置组合显示
+        if (loadingContent != null && attachedContent != null)
+        {
+            return CreateCombinedContent(loadingContent, attachedContent, attachedPosition);
+        }
+
+        // 如果只设置了主加载内容
+        if (loadingContent != null)
+        {
+            return loadingContent;
+        }
+
+        // 如果只设置了附加内容或都没设置，使用默认样式
+        return CreateDefaultLoadingContent(element);
+    }
+
+    private static object CreateCombinedContent(object loadingContent, object attachedContent, LoadingAttachedPosition position)
+    {
+        var loadingControl = new ContentControl
+        {
+            Content = loadingContent,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        var attachedControl = new ContentControl
+        {
+            Content = attachedContent,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        return position switch
+        {
+            LoadingAttachedPosition.Top => new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Children =
+                {
+                    ApplyMargin(attachedControl, new Thickness(0, 0, 0, 10)),
+                    loadingControl
+                }
+            },
+            LoadingAttachedPosition.Bottom => new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Children =
+                {
+                    ApplyMargin(loadingControl, new Thickness(0, 0, 0, 10)),
+                    attachedControl
+                }
+            },
+            LoadingAttachedPosition.Left => new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Children =
+                {
+                    ApplyMargin(attachedControl, new Thickness(0, 0, 10, 0)),
+                    loadingControl
+                }
+            },
+            LoadingAttachedPosition.Right => new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Children =
+                {
+                    ApplyMargin(loadingControl, new Thickness(0, 0, 10, 0)),
+                    attachedControl
+                }
+            },
+            _ => throw new ArgumentOutOfRangeException(nameof(position))
+        };
+    }
+
+    private static ContentControl ApplyMargin(ContentControl control, Thickness margin)
+    {
+        control.Margin = margin;
+        return control;
+    }
+
+    private static object CreateDefaultLoadingContent(FrameworkElement element)
+    {
+        var attachedContent = GetAttachedContent(element);
+        var attachedPosition = GetAttachedPosition(element);
+
+        if (attachedContent != null)
+        {
+            // 使用默认的 LoadingPulse 和附加内容组合
+            return CreateCombinedContent(new LoadingPulse(), attachedContent, attachedPosition);
+        }
+
+        return new LoadingPulse();
+    }
+
+    #endregion Private Methods
 }

@@ -32,7 +32,9 @@
         BasedOn="{StaticResource TextBox.Style.Basic}"
         TargetType="TextBox" />
 
-    <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
+    <ControlTemplate
+        x:Key="TextFilterBox.ControlTemplate.Basic"
+        TargetType="ctl:TextFilterBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -42,7 +44,9 @@
             SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+                    <ColumnDefinition
+                        Width="Auto"
+                        SharedSizeGroup="{TemplateBinding SharedName}" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -78,7 +82,9 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TextFilterBox.Style.Basic" TargetType="ctl:TextFilterBox">
+    <Style
+        x:Key="TextFilterBox.Style.Basic"
+        TargetType="ctl:TextFilterBox">
         <Setter Property="Template" Value="{StaticResource TextFilterBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
@@ -88,5 +94,7 @@
         <Style.Triggers />
     </Style>
 
-    <Style BasedOn="{StaticResource TextFilterBox.Style.Basic}" TargetType="ctl:TextFilterBox" />
+    <Style
+        BasedOn="{StaticResource TextFilterBox.Style.Basic}"
+        TargetType="ctl:TextFilterBox" />
 </ResourceDictionary>

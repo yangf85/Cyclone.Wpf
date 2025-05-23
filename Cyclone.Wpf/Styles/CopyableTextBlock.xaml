@@ -16,7 +16,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:CopyableTextBlock}">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -53,5 +55,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource CopyableTextBlock.Style.Basic}" TargetType="ctl:CopyableTextBlock" />
+    <Style
+        BasedOn="{StaticResource CopyableTextBlock.Style.Basic}"
+        TargetType="ctl:CopyableTextBlock" />
 </ResourceDictionary>

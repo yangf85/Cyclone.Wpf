@@ -8,57 +8,61 @@ using System.Windows.Shapes;
 namespace Cyclone.Wpf.Controls;
 
 /// <summary>
-/// 环形加载动画控件 - 显示多个圆环的收缩扩张动画
+/// 旋转圆环加载动画控件 - 显示旋转的圆环
 /// </summary>
 public class LoadingRing : ContentControl
 {
     #region 依赖属性
 
-    public static readonly DependencyProperty ParticleColorProperty =
-        DependencyProperty.Register(nameof(ParticleColor), typeof(Brush), typeof(LoadingRing),
-            new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xFF, 0x52, 0x52)), OnVisualPropertyChanged));
+    public static readonly DependencyProperty RingColorProperty =
+        DependencyProperty.Register(nameof(RingColor), typeof(Brush), typeof(LoadingRing),
+            new PropertyMetadata(new SolidColorBrush(Colors.White), OnVisualPropertyChanged));
 
-    public static readonly DependencyProperty ParticleRadiusProperty =
-        DependencyProperty.Register(nameof(ParticleRadius), typeof(double), typeof(LoadingRing),
-            new PropertyMetadata(3.0, OnVisualPropertyChanged));
+    public static readonly DependencyProperty RingSizeProperty =
+        DependencyProperty.Register(nameof(RingSize), typeof(double), typeof(LoadingRing),
+            new PropertyMetadata(50.0, OnVisualPropertyChanged));
 
-    public static readonly DependencyProperty RingCountProperty =
-        DependencyProperty.Register(nameof(RingCount), typeof(int), typeof(LoadingRing),
-            new PropertyMetadata(3, OnVisualPropertyChanged), ValidateRingCount);
+    public static readonly DependencyProperty RingThicknessProperty =
+        DependencyProperty.Register(nameof(RingThickness), typeof(double), typeof(LoadingRing),
+            new PropertyMetadata(4.0, OnVisualPropertyChanged));
 
     public static readonly DependencyProperty IsActiveProperty =
         DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(LoadingRing),
             new PropertyMetadata(true, OnIsActiveChanged));
 
-    public static readonly DependencyProperty SpinnerSizeProperty =
-        DependencyProperty.Register(nameof(SpinnerSize), typeof(double), typeof(LoadingRing),
-            new PropertyMetadata(80.0, OnVisualPropertyChanged));
+    public static readonly DependencyProperty RotationSpeedProperty =
+        DependencyProperty.Register(nameof(RotationSpeed), typeof(double), typeof(LoadingRing),
+            new PropertyMetadata(1.5, OnAnimationPropertyChanged));
+
+    public static readonly DependencyProperty ArcLengthProperty =
+        DependencyProperty.Register(nameof(ArcLength), typeof(double), typeof(LoadingRing),
+            new PropertyMetadata(270.0, OnVisualPropertyChanged));
 
     /// <summary>
-    /// 粒子颜色
+    /// 圆环颜色
     /// </summary>
-    public Brush ParticleColor
+    public Brush RingColor
     {
-        get { return (Brush)GetValue(ParticleColorProperty); }
-        set { SetValue(ParticleColorProperty, value); }
+        get { return (Brush)GetValue(RingColorProperty); }
+        set { SetValue(RingColorProperty, value); }
     }
 
     /// <summary>
-    /// 粒子（线条）粗细
+    /// 圆环大小
     /// </summary>
-    public double ParticleRadius
+    public double RingSize
     {
-        get { return (double)GetValue(ParticleRadiusProperty); }
-        set { SetValue(ParticleRadiusProperty, value); }
+        get { return (double)GetValue(RingSizeProperty); }
+        set { SetValue(RingSizeProperty, value); }
     }
 
     /// <summary>
-    /// 环形数量
+    /// 圆环厚度
     /// </summary>
-    public int RingCount
+    public double RingThickness
     {
-        get { return (int)GetValue(RingCountProperty); }
-        set { SetValue(RingCountProperty, value); }
+        get { return (double)GetValue(RingThicknessProperty); }
+        set { SetValue(RingThicknessProperty, value); }
     }
 
     /// <summary>
@@ -71,150 +75,146 @@ public class LoadingRing : ContentControl
     }
 
     /// <summary>
-    /// 动画控件大小
+    /// 旋转速度（秒/圈）
     /// </summary>
-    public double SpinnerSize
+    public double RotationSpeed
     {
-        get { return (double)GetValue(SpinnerSizeProperty); }
-        set { SetValue(SpinnerSizeProperty, value); }
+        get { return (double)GetValue(RotationSpeedProperty); }
+        set { SetValue(RotationSpeedProperty, value); }
+    }
+
+    /// <summary>
+    /// 圆弧长度（角度）
+    /// </summary>
+    public double ArcLength
+    {
+        get { return (double)GetValue(ArcLengthProperty); }
+        set { SetValue(ArcLengthProperty, value); }
     }
 
     #endregion 依赖属性
 
-    private Viewbox _viewbox;
-    private Canvas _canvas;
-    private Ellipse[] _rings;
+    private Grid _container;
+    private Path _ringPath;
     private Storyboard _storyboard;
-
-    static LoadingRing()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(LoadingRing),
-            new FrameworkPropertyMetadata(typeof(LoadingRing)));
-    }
 
     public LoadingRing()
     {
-        Loaded += OnLoaded;
-        Unloaded += OnUnloaded;
-    }
-
-    private static bool ValidateRingCount(object value)
-    {
-        int count = (int)value;
-        return count >= 1 && count <= 5;
-    }
-
-    private void OnLoaded(object sender, RoutedEventArgs e)
-    {
         CreateVisualTree();
+
         if (IsActive)
         {
-            StartAnimation();
+            Loaded += (s, e) => StartAnimation();
         }
-    }
-
-    private void OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        StopAnimation();
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
     }
 
     private void CreateVisualTree()
     {
-        // 清除现有内容
-        this.Content = null;
-
-        // 创建Viewbox
-        _viewbox = new Viewbox
+        // 创建容器
+        _container = new Grid
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Stretch = Stretch.Uniform
+            Width = RingSize,
+            Height = RingSize,
+            RenderTransformOrigin = new Point(0.5, 0.5),
+            RenderTransform = new RotateTransform()
         };
 
-        // 创建Grid容器
-        var grid = new Grid
+        // 创建圆环路径
+        _ringPath = new Path
         {
-            Width = SpinnerSize,
-            Height = SpinnerSize
+            Stroke = RingColor,
+            StrokeThickness = RingThickness,
+            StrokeEndLineCap = PenLineCap.Round,
+
+            StrokeStartLineCap = PenLineCap.Round,
+            Fill = Brushes.Transparent
         };
 
-        // 创建Canvas
-        _canvas = new Canvas
+        UpdateRingGeometry();
+
+        _container.Children.Add(_ringPath);
+        this.Content = _container;
+    }
+
+    private void UpdateRingGeometry()
+    {
+        if (_ringPath == null) return;
+
+        var radius = (RingSize - RingThickness) / 2;
+        var center = new Point(RingSize / 2, RingSize / 2);
+
+        // 计算圆弧的起始和结束角度
+        var startAngle = 0;
+        var endAngle = ArcLength * Math.PI / 180; // 转换为弧度
+
+        // 计算起始和结束点
+        var startPoint = new Point(
+            center.X + radius * Math.Cos(startAngle),
+            center.Y + radius * Math.Sin(startAngle)
+        );
+
+        var endPoint = new Point(
+            center.X + radius * Math.Cos(endAngle),
+            center.Y + radius * Math.Sin(endAngle)
+        );
+
+        // 创建圆弧几何
+        var geometry = new PathGeometry();
+        var figure = new PathFigure { StartPoint = startPoint };
+
+        var arcSegment = new ArcSegment
         {
-            Width = SpinnerSize,
-            Height = SpinnerSize,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
+            Point = endPoint,
+            Size = new Size(radius, radius),
+            SweepDirection = SweepDirection.Clockwise,
+            IsLargeArc = ArcLength > 180
         };
 
-        // 创建环形
-        _rings = new Ellipse[RingCount];
-        double centerX = SpinnerSize / 2;
-        double centerY = SpinnerSize / 2;
-        double maxRadius = SpinnerSize / 2 - ParticleRadius;
+        figure.Segments.Add(arcSegment);
+        geometry.Figures.Add(figure);
 
-        for (int i = 0; i < RingCount; i++)
-        {
-            var ring = new Ellipse
-            {
-                Stroke = ParticleColor,
-                StrokeThickness = ParticleRadius,
-                Fill = Brushes.Transparent,
-                RenderTransformOrigin = new Point(0.5, 0.5),
-                Opacity = 1.0 - (i * 0.2)
-            };
-
-            // 初始化大小和位置
-            double initialRadius = maxRadius * (1.0 - i * 0.3);
-            ring.Width = initialRadius * 2;
-            ring.Height = initialRadius * 2;
-
-            Canvas.SetLeft(ring, centerX - initialRadius);
-            Canvas.SetTop(ring, centerY - initialRadius);
-
-            // 添加缩放变换
-            var transformGroup = new TransformGroup();
-            transformGroup.Children.Add(new ScaleTransform(1, 1, centerX, centerY));
-            ring.RenderTransform = transformGroup;
-
-            _canvas.Children.Add(ring);
-            _rings[i] = ring;
-        }
-
-        grid.Children.Add(_canvas);
-        _viewbox.Child = grid;
-        this.Content = _viewbox;
-
-        // 绑定宽高
-        _viewbox.SetBinding(Viewbox.WidthProperty, new System.Windows.Data.Binding("Width") { Source = this });
-        _viewbox.SetBinding(Viewbox.HeightProperty, new System.Windows.Data.Binding("Height") { Source = this });
+        _ringPath.Data = geometry;
     }
 
     private static void OnVisualPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingRing)d;
-        if (spinner.IsLoaded)
-        {
-            spinner.CreateVisualTree();
-            if (spinner.IsActive)
-            {
-                spinner.StopAnimation();
-                spinner.StartAnimation();
-            }
-        }
+        var ring = (LoadingRing)d;
+        ring.UpdateVisualProperties();
     }
 
     private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var spinner = (LoadingRing)d;
-        if (spinner.IsLoaded)
+        var ring = (LoadingRing)d;
+        if (ring.IsLoaded)
         {
-            spinner.UpdateAnimationState();
+            ring.UpdateAnimationState();
+        }
+    }
+
+    private static void OnAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var ring = (LoadingRing)d;
+        if (ring.IsLoaded && ring.IsActive)
+        {
+            ring.RecreateAnimation();
+        }
+    }
+
+    private void UpdateVisualProperties()
+    {
+        if (_container != null)
+        {
+            _container.Width = RingSize;
+            _container.Height = RingSize;
+        }
+
+        if (_ringPath != null)
+        {
+            _ringPath.Stroke = RingColor;
+            _ringPath.StrokeThickness = RingThickness;
+            UpdateRingGeometry();
         }
     }
 
@@ -230,10 +230,18 @@ public class LoadingRing : ContentControl
         }
     }
 
+    private void RecreateAnimation()
+    {
+        StopAnimation();
+        _storyboard = null;
+        if (IsActive)
+        {
+            StartAnimation();
+        }
+    }
+
     private void StartAnimation()
     {
-        if (_rings == null) return;
-
         if (_storyboard == null)
         {
             CreateAnimation();
@@ -244,71 +252,30 @@ public class LoadingRing : ContentControl
     private void StopAnimation()
     {
         _storyboard?.Stop();
+
+        // 重置旋转角度
+        if (_container?.RenderTransform is RotateTransform rotate)
+        {
+            rotate.Angle = 0;
+        }
     }
 
     private void CreateAnimation()
     {
         _storyboard = new Storyboard { RepeatBehavior = RepeatBehavior.Forever };
 
-        double centerX = SpinnerSize / 2;
-        double centerY = SpinnerSize / 2;
-
-        for (int i = 0; i < RingCount; i++)
+        // 创建旋转动画
+        var rotationAnimation = new DoubleAnimation
         {
-            var ring = _rings[i];
-            var delay = TimeSpan.FromSeconds(i * 0.15);
+            From = 0,
+            To = 360,
+            Duration = new Duration(TimeSpan.FromSeconds(RotationSpeed)),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
 
-            // 创建缩放动画
-            var scaleAnimation = new DoubleAnimationUsingKeyFrames();
-            scaleAnimation.BeginTime = delay;
+        Storyboard.SetTarget(rotationAnimation, _container);
+        Storyboard.SetTargetProperty(rotationAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
 
-            // 收缩和扩张效果
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.3, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)))
-            {
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            });
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1.2, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.2)))
-            {
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            });
-            scaleAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.8)))
-            {
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            });
-
-            // 为X和Y轴应用相同的动画
-            var scaleXAnimation = scaleAnimation.Clone();
-            var scaleYAnimation = scaleAnimation.Clone();
-
-            Storyboard.SetTarget(scaleXAnimation, ring);
-            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"));
-
-            Storyboard.SetTarget(scaleYAnimation, ring);
-            Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"));
-
-            // 创建透明度动画
-            var opacityAnimation = new DoubleAnimationUsingKeyFrames();
-            opacityAnimation.BeginTime = delay;
-
-            double baseOpacity = 1.0 - (i * 0.2);
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(baseOpacity, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(0.1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)))
-            {
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            });
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(baseOpacity, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.2)))
-            {
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            });
-            opacityAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(baseOpacity, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1.8))));
-
-            Storyboard.SetTarget(opacityAnimation, ring);
-            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
-
-            _storyboard.Children.Add(scaleXAnimation);
-            _storyboard.Children.Add(scaleYAnimation);
-            _storyboard.Children.Add(opacityAnimation);
-        }
+        _storyboard.Children.Add(rotationAnimation);
     }
 }

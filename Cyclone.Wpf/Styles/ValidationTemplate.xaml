@@ -29,7 +29,9 @@
                 <VisualStateGroup x:Name="OpenStates">
                     <VisualStateGroup.Transitions>
                         <VisualTransition GeneratedDuration="0" />
-                        <VisualTransition GeneratedDuration="0:0:0.2" To="Open">
+                        <VisualTransition
+                            GeneratedDuration="0:0:0.2"
+                            To="Open">
                             <Storyboard>
                                 <DoubleAnimation
                                     Storyboard.TargetName="XTransform"
@@ -37,7 +39,9 @@
                                     To="0"
                                     Duration="0:0:0.2">
                                     <DoubleAnimation.EasingFunction>
-                                        <BackEase Amplitude=".3" EasingMode="EaseOut" />
+                                        <BackEase
+                                            Amplitude=".3"
+                                            EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                                 <DoubleAnimation

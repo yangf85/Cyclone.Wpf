@@ -8,7 +8,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RadioButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="RadioButtonGroup.ControlTemplate.Basic" TargetType="ctl:RadioButtonGroup">
+    <ControlTemplate
+        x:Key="RadioButtonGroup.ControlTemplate.Basic"
+        TargetType="ctl:RadioButtonGroup">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
@@ -33,5 +35,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource RadioButtonGroup.Style.Basic}" TargetType="ctl:RadioButtonGroup" />
+    <Style
+        BasedOn="{StaticResource RadioButtonGroup.Style.Basic}"
+        TargetType="ctl:RadioButtonGroup" />
 </ResourceDictionary>

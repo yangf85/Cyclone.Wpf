@@ -63,17 +63,29 @@
                                             RepeatBehavior="Forever"
                                             Storyboard.TargetName="AnimationScaleTransform"
                                             Storyboard.TargetProperty="ScaleX">
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.1" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0"
+                                                Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.5"
+                                                Value="1.1" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:1"
+                                                Value="1.0" />
                                         </DoubleAnimationUsingKeyFrames>
                                         <DoubleAnimationUsingKeyFrames
                                             RepeatBehavior="Forever"
                                             Storyboard.TargetName="AnimationScaleTransform"
                                             Storyboard.TargetProperty="ScaleY">
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.1" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0"
+                                                Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.5"
+                                                Value="1.1" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:1"
+                                                Value="1.0" />
                                         </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -125,17 +137,29 @@
                                             RepeatBehavior="Forever"
                                             Storyboard.TargetName="AnimationScaleTransform"
                                             Storyboard.TargetProperty="ScaleX">
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.25" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0"
+                                                Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.3"
+                                                Value="1.25" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.5"
+                                                Value="1.0" />
                                         </DoubleAnimationUsingKeyFrames>
                                         <DoubleAnimationUsingKeyFrames
                                             RepeatBehavior="Forever"
                                             Storyboard.TargetName="AnimationScaleTransform"
                                             Storyboard.TargetProperty="ScaleY">
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.0" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.25" />
-                                            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0"
+                                                Value="1.0" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.3"
+                                                Value="1.25" />
+                                            <EasingDoubleKeyFrame
+                                                KeyTime="0:0:0.5"
+                                                Value="1.0" />
                                         </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
