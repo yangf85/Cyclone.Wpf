@@ -8,17 +8,13 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="FormSeperater.Style.Basic"
-        TargetType="ctl:FormSeperater">
+    <Style x:Key="FormSeperater.Style.Basic" TargetType="ctl:FormSeperater">
         <Setter Property="SeperaterBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="SeperaterThickness" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:FormSeperater">
-                    <Grid
-                        x:Name="RootGrid"
-                        SnapsToDevicePixels="True">
+                    <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
@@ -45,18 +41,12 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        BasedOn="{StaticResource FormSeperater.Style.Basic}"
-        TargetType="ctl:FormSeperater" />
+    <Style BasedOn="{StaticResource FormSeperater.Style.Basic}" TargetType="ctl:FormSeperater" />
 
-    <ControlTemplate
-        x:Key="FormItem.ControlTemplate.Basic"
-        TargetType="{x:Type ctl:FormItem}">
+    <ControlTemplate x:Key="FormItem.ControlTemplate.Basic" TargetType="{x:Type ctl:FormItem}">
         <Grid HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto"
-                    SharedSizeGroup="{TemplateBinding SharedName}" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -64,24 +54,22 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid
-                Grid.Row="0"
-                Grid.Column="0">
+            <Grid Grid.Row="0" Grid.Column="0">
                 <StackPanel
                     HorizontalAlignment="{TemplateBinding LabelHorizontalAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding LabelVerticalAlignment}"
                     Orientation="Horizontal">
-                    <TextBlock
+                    <Path
+                        x:Name="RequiredMark"
+                        Width="10"
+                        Height="10"
                         Margin="0,0,3,0"
                         VerticalAlignment="Center"
-                        FontSize="16"
-                        Foreground="Red"
-                        Text="*"
-                        Visibility="{TemplateBinding IsRequired,
-                                                     Converter={x:Static conv:BooleanConverter.ToVisibility}}" />
-                    <ContentPresenter
-                        VerticalAlignment="Center"
-                        Content="{TemplateBinding Label}" />
+                        Data="M470.272 320H553.6l-5.12 147.84 129.536-51.584L704 497.472l-133.76 41.728 90.048 111.36L595.968 704 512 582.592 428.032 704l-64.32-53.44 90.048-111.36L320 497.472l25.92-81.216 130.176 51.584z"
+                        Fill="Red"
+                        Stretch="Uniform"
+                        Visibility="Collapsed" />
+                    <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding Label}" />
                 </StackPanel>
             </Grid>
 
@@ -105,41 +93,38 @@
                 Foreground="{DynamicResource Text.Prompt}"
                 Text="{TemplateBinding Description}" />
         </Grid>
-        <ControlTemplate.Triggers />
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsRequired" Value="True">
+                <Setter TargetName="RequiredMark" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style
         x:Key="FormItem.Style.Basic"
         BasedOn="{StaticResource Control.Style.Basic}"
         TargetType="{x:Type ctl:FormItem}">
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="LabelHorizontalAlignment" Value="Left" />
+        <Setter Property="LabelVerticalAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
         <Style.Triggers>
-            <DataTrigger
-                Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}"
-                Value="True">
+            <DataTrigger Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}" Value="True">
                 <Setter Property="LabelHorizontalAlignment" Value="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource FormItem.Style.Basic}"
-        TargetType="ctl:FormItem" />
+    <Style BasedOn="{StaticResource FormItem.Style.Basic}" TargetType="ctl:FormItem" />
 
-    <ControlTemplate
-        x:Key="Form.ControlTemplate.Basic"
-        TargetType="{x:Type ctl:Form}">
+    <ControlTemplate x:Key="Form.ControlTemplate.Basic" TargetType="{x:Type ctl:Form}">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             SnapsToDevicePixels="True">
-
-            <Grid>
+            <Grid Grid.IsSharedSizeScope="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -165,10 +150,7 @@
     </ControlTemplate>
 
     <!--  Form控件样式  -->
-    <Style
-        x:Key="Form.Style.Basic"
-        TargetType="{x:Type ctl:Form}">
-        <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+    <Style x:Key="Form.Style.Basic" TargetType="{x:Type ctl:Form}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -181,7 +163,5 @@
     </Style>
 
     <!--  默认样式  -->
-    <Style
-        BasedOn="{StaticResource Form.Style.Basic}"
-        TargetType="{x:Type ctl:Form}" />
+    <Style BasedOn="{StaticResource Form.Style.Basic}" TargetType="{x:Type ctl:Form}" />
 </ResourceDictionary>
