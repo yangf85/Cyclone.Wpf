@@ -78,6 +78,12 @@ internal static class WindowsNativeService
     // 用于DPI计算的默认值，用于非WPF环境
     private const double DEFAULT_DPI = 96.0;
 
+    // MonitorFromWindow的标志
+    private const uint MONITOR_DEFAULTTONULL = 0;
+
+    private const uint MONITOR_DEFAULTTOPRIMARY = 1;
+    private const uint MONITOR_DEFAULTTONEAREST = 2;
+
     #endregion 常量定义
 
     #region 委托定义
@@ -173,13 +179,13 @@ internal static class WindowsNativeService
     public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
     /// <summary>
-    /// 获取系统DPI设置
+    /// 获取系统DPI设置（Windows 8.1及以上）
     /// </summary>
-    [DllImport("user32.dll")]
-    public static extern bool GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
+    [DllImport("shcore.dll")]
+    public static extern int GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
 
     /// <summary>
-    /// 获取主显示器句柄
+    /// 获取窗口所在显示器的句柄
     /// </summary>
     [DllImport("user32.dll")]
     public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
@@ -195,6 +201,29 @@ internal static class WindowsNativeService
     /// </summary>
     [DllImport("user32.dll")]
     public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref RECT pvParam, uint fWinIni);
+
+    /// <summary>
+    /// 获取设备上下文的设备能力
+    /// </summary>
+    [DllImport("gdi32.dll")]
+    public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+    /// <summary>
+    /// 获取窗口DC
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetDC(IntPtr hWnd);
+
+    /// <summary>
+    /// 释放DC
+    /// </summary>
+    [DllImport("user32.dll")]
+    public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+    // GetDeviceCaps的索引常量
+    private const int LOGPIXELSX = 88;
+
+    private const int LOGPIXELSY = 90;
 
     // 用于获取工作区的常量
     private const uint SPI_GETWORKAREA = 0x0030;
@@ -489,14 +518,36 @@ internal static class WindowsNativeService
     {
         try
         {
-            // 获取桌面窗口的监视器
+            // 尝试使用新API（Windows 8.1+）
             IntPtr desktop = GetDesktopWindow();
-            IntPtr monitor = MonitorFromWindow(desktop, 0); // 0 = MONITOR_DEFAULTTONULL
+            IntPtr monitor = MonitorFromWindow(desktop, MONITOR_DEFAULTTOPRIMARY);
 
             // 获取监视器的DPI
-            if (monitor != IntPtr.Zero && GetDpiForMonitor(monitor, 0, out uint dpiX, out uint dpiY))
+            if (monitor != IntPtr.Zero)
             {
-                return dpiX / DEFAULT_DPI;
+                int result = GetDpiForMonitor(monitor, 0, out uint dpiX, out uint dpiY);
+                if (result == 0) // S_OK
+                {
+                    return dpiX / DEFAULT_DPI;
+                }
+            }
+
+            // 如果新API失败，尝试使用旧API
+            IntPtr hdc = GetDC(IntPtr.Zero);
+            if (hdc != IntPtr.Zero)
+            {
+                try
+                {
+                    int dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+                    if (dpiX > 0)
+                    {
+                        return dpiX / DEFAULT_DPI;
+                    }
+                }
+                finally
+                {
+                    ReleaseDC(IntPtr.Zero, hdc);
+                }
             }
 
             // 默认返回1.0（96 DPI）

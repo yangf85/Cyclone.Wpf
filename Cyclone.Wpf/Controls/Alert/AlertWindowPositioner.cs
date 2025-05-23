@@ -9,7 +9,7 @@ namespace Cyclone.Wpf.Controls;
 internal static class AlertWindowPositioner
 {
     /// <summary>
-    /// 将警告窗口定位在拥有者窗口的中心
+    /// 将警告窗口定位在拥有者窗口的中心（改进版）
     /// </summary>
     /// <param name="alertWindow">警告窗口</param>
     /// <param name="ownerHandle">拥有者窗口句柄</param>
@@ -22,38 +22,69 @@ internal static class AlertWindowPositioner
         try
         {
             // 获取拥有者窗口矩形
-            var ownerRect = WindowsNativeService.GetWindowRectAsWpfRect(ownerHandle);
-            if (!ownerRect.HasValue)
+            if (!WindowsNativeService.GetWindowRect(ownerHandle, out var rect))
                 return false;
 
-            // 计算中心点
-            double centerX = ownerRect.Value.Left + (ownerRect.Value.Width / 2);
-            double centerY = ownerRect.Value.Top + (ownerRect.Value.Height / 2);
+            // 获取窗口所在显示器的DPI
+            var monitor = WindowsNativeService.MonitorFromWindow(ownerHandle, 0);
+            uint dpiX = 96, dpiY = 96;
 
-            // 定位警告窗口
+            if (monitor != IntPtr.Zero)
+            {
+                try
+                {
+                    WindowsNativeService.GetDpiForMonitor(monitor, 0, out dpiX, out dpiY);
+                }
+                catch
+                {
+                    // 使用默认DPI
+                }
+            }
+
+            // 计算DPI缩放
+            double scaleX = 96.0 / dpiX;
+            double scaleY = 96.0 / dpiY;
+
+            // 转换owner窗口坐标到WPF单位
+            double ownerLeft = rect.Left * scaleX;
+            double ownerTop = rect.Top * scaleY;
+            double ownerWidth = (rect.Right - rect.Left) * scaleX;
+            double ownerHeight = (rect.Bottom - rect.Top) * scaleY;
+
+            // 确保Alert窗口已经测量过
+            if (alertWindow.ActualWidth == 0 || alertWindow.ActualHeight == 0)
+            {
+                alertWindow.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                alertWindow.Arrange(new Rect(alertWindow.DesiredSize));
+            }
+
+            // 使用实际尺寸或期望尺寸
+            double alertWidth = alertWindow.ActualWidth > 0 ? alertWindow.ActualWidth : alertWindow.DesiredSize.Width;
+            double alertHeight = alertWindow.ActualHeight > 0 ? alertWindow.ActualHeight : alertWindow.DesiredSize.Height;
+
+            // 如果仍然没有尺寸，使用默认值
+            if (alertWidth <= 0) alertWidth = 400;
+            if (alertHeight <= 0) alertHeight = 200;
+
+            // 计算中心位置
             alertWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+            alertWindow.Left = ownerLeft + (ownerWidth - alertWidth) / 2;
+            alertWindow.Top = ownerTop + (ownerHeight - alertHeight) / 2;
 
-            // 使用实际宽高或预设宽高
-            double alertWidth = alertWindow.ActualWidth > 0 ? alertWindow.ActualWidth : alertWindow.Width;
-            double alertHeight = alertWindow.ActualHeight > 0 ? alertWindow.ActualHeight : alertWindow.Height;
-
-            alertWindow.Left = centerX - (alertWidth / 2);
-            alertWindow.Top = centerY - (alertHeight / 2);
-
-            // 确保警告窗口在屏幕边界内
+            // 确保窗口在屏幕内
             EnsureWindowInScreenBounds(alertWindow);
 
             // 如果是蒙版窗口的Owner，也更新蒙版窗口位置和大小
             if (alertWindow.Owner is Window maskWindow)
             {
-                UpdateMaskWindow(maskWindow, ownerRect.Value);
+                UpdateMaskWindow(maskWindow, new Rect(ownerLeft, ownerTop, ownerWidth, ownerHeight));
             }
 
-            // 记录窗口位置信息，用于调试
-            System.Diagnostics.Debug.WriteLine($"Alert窗口位置: Left={alertWindow.Left}, Top={alertWindow.Top}, " +
-                                             $"Width={alertWidth}, Height={alertHeight}");
-            System.Diagnostics.Debug.WriteLine($"拥有者窗口: Left={ownerRect.Value.Left}, Top={ownerRect.Value.Top}, " +
-                                             $"Width={ownerRect.Value.Width}, Height={ownerRect.Value.Height}");
+            // 调试信息
+            System.Diagnostics.Debug.WriteLine($"DPI: {dpiX}x{dpiY}, Scale: {scaleX}x{scaleY}");
+            System.Diagnostics.Debug.WriteLine($"Owner原始位置: {rect.Left},{rect.Top} 大小: {rect.Right - rect.Left}x{rect.Bottom - rect.Top}");
+            System.Diagnostics.Debug.WriteLine($"Owner WPF位置: {ownerLeft},{ownerTop} 大小: {ownerWidth}x{ownerHeight}");
+            System.Diagnostics.Debug.WriteLine($"Alert位置: {alertWindow.Left},{alertWindow.Top} 大小: {alertWidth}x{alertHeight}");
 
             return true;
         }
@@ -76,9 +107,6 @@ internal static class AlertWindowPositioner
             maskWindow.Top = ownerRect.Top;
             maskWindow.Width = ownerRect.Width;
             maskWindow.Height = ownerRect.Height;
-
-            // 确保蒙版窗口置顶
-            maskWindow.Topmost = true;
 
             // 记录蒙版窗口位置信息
             System.Diagnostics.Debug.WriteLine($"蒙版窗口: Left={maskWindow.Left}, Top={maskWindow.Top}, " +
