@@ -304,6 +304,10 @@ public class AlertService : IAlertService, IDisposable
             Content = content,
             Topmost = false,
             ShowInTaskbar = false,
+            // 设置加载动画相关属性
+            IsShowLoadingOnAsync = Option.IsShowLoadingOnAsync,
+            LoadingContent = Option.LoadingContent,
+            LoadingMaskBrush = Option.LoadingMaskBrush
         };
 
         return window;

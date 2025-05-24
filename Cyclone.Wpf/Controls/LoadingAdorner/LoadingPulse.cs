@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 脉冲点加载动画控件 - 显示3个依次脉冲的圆点
 /// </summary>
-public class LoadingPulse : ContentControl
+public class LoadingPulse : ContentControl, ILoadingIndicator
 {
     #region 依赖属性
 

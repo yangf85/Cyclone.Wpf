@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 旋转圆环加载动画控件 - 显示旋转的圆环
 /// </summary>
-public class LoadingRing : ContentControl
+public class LoadingRing : ContentControl, ILoadingIndicator
 {
     #region 依赖属性
 

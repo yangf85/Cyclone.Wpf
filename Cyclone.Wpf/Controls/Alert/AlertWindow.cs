@@ -202,6 +202,62 @@ public class AlertWindow : Window
 
     #endregion AsyncValidationCallback
 
+    #region Loading相关属性
+
+    /// <summary>
+    /// 是否正在加载
+    /// </summary>
+    public bool IsLoading
+    {
+        get => (bool)GetValue(IsLoadingProperty);
+        set => SetValue(IsLoadingProperty, value);
+    }
+
+    public static readonly DependencyProperty IsLoadingProperty =
+        DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(AlertWindow),
+            new PropertyMetadata(false, OnIsLoadingChanged));
+
+    /// <summary>
+    /// 加载内容
+    /// </summary>
+    public object LoadingContent
+    {
+        get => GetValue(LoadingContentProperty);
+        set => SetValue(LoadingContentProperty, value);
+    }
+
+    public static readonly DependencyProperty LoadingContentProperty =
+        DependencyProperty.Register(nameof(LoadingContent), typeof(object), typeof(AlertWindow),
+            new PropertyMetadata(null));
+
+    /// <summary>
+    /// 加载遮罩背景
+    /// </summary>
+    public Brush LoadingMaskBrush
+    {
+        get => (Brush)GetValue(LoadingMaskBrushProperty);
+        set => SetValue(LoadingMaskBrushProperty, value);
+    }
+
+    public static readonly DependencyProperty LoadingMaskBrushProperty =
+        DependencyProperty.Register(nameof(LoadingMaskBrush), typeof(Brush), typeof(AlertWindow),
+            new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00))));
+
+    /// <summary>
+    /// 是否在异步验证时显示加载动画
+    /// </summary>
+    public bool IsShowLoadingOnAsync
+    {
+        get => (bool)GetValue(IsShowLoadingOnAsyncProperty);
+        set => SetValue(IsShowLoadingOnAsyncProperty, value);
+    }
+
+    public static readonly DependencyProperty IsShowLoadingOnAsyncProperty =
+        DependencyProperty.Register(nameof(IsShowLoadingOnAsync), typeof(bool), typeof(AlertWindow),
+            new PropertyMetadata(true));
+
+    #endregion Loading相关属性
+
     #region Command
 
     private void InitializeCommand()
@@ -235,8 +291,11 @@ public class AlertWindow : Window
         {
             try
             {
-                // 禁用窗口防止重复点击
-                IsEnabled = false;
+                // 如果启用了加载动画，显示加载状态
+                if (IsShowLoadingOnAsync)
+                {
+                    IsLoading = true;
+                }
 
                 // 执行异步验证
                 bool validationResult = await AsyncValidationCallback();
@@ -250,7 +309,7 @@ public class AlertWindow : Window
                 else
                 {
                     // 验证失败，恢复窗口状态，保持打开
-                    IsEnabled = true;
+                    IsLoading = false;
                     System.Diagnostics.Debug.WriteLine("异步验证失败，对话框保持打开");
                 }
             }
@@ -260,7 +319,7 @@ public class AlertWindow : Window
                 System.Diagnostics.Debug.WriteLine($"异步验证过程中出现异常: {ex.Message}");
 
                 // 恢复窗口状态
-                IsEnabled = true;
+                IsLoading = false;
 
                 // 可以选择是否关闭窗口，这里选择保持打开
                 // DialogResult = false;
@@ -299,6 +358,23 @@ public class AlertWindow : Window
             // 没有验证回调，直接关闭
             DialogResult = true;
             Close();
+        }
+    }
+
+    /// <summary>
+    /// 当IsLoading属性改变时的处理
+    /// </summary>
+    private static void OnIsLoadingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is AlertWindow window)
+        {
+            bool isLoading = (bool)e.NewValue;
+
+            // 如果LoadingContent实现了ILoadingIndicator接口，控制其动画状态
+            if (window.LoadingContent is ILoadingIndicator loadingIndicator)
+            {
+                loadingIndicator.IsActive = isLoading;
+            }
         }
     }
 

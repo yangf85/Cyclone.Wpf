@@ -46,4 +46,20 @@ public class AlertOption
     public HorizontalAlignment AlertButtonGroupHorizontalAlignment { get; set; } = HorizontalAlignment.Center;
 
     public AlertIcon AlertIcon { get; set; }
+
+    #region 加载动画相关属性
+
+    public bool IsShowLoadingOnAsync { get; set; } = true;
+
+    public object LoadingContent { get; set; } = new LoadingRing()
+    {
+        RingSize = 60,
+        RingThickness = 4,
+        RingColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x0D, 0x47, 0xA1)),
+        IsActive = false
+    };
+
+    public Brush LoadingMaskBrush { get; set; } = new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00));
+
+    #endregion 加载动画相关属性
 }

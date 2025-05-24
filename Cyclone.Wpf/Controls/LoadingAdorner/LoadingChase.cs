@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 追逐圆点加载动画控件 - 显示沿圆形轨迹追逐的圆点
 /// </summary>
-public class LoadingChase : ContentControl
+public class LoadingChase : ContentControl, ILoadingIndicator
 {
     #region 依赖属性
 
