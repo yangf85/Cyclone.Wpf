@@ -101,15 +101,68 @@ namespace Cyclone.Wpf.Demo.Views
         [ObservableProperty]
         public partial FakerData Data { get; set; } = new FakerData();
 
+        async Task<bool> Validate()
+        {
+            await Task.Delay(1000);
+            if (Data.HasErrors)
+            {
+                var errors = Data.GetErrors();
+                NotificationService.Instance.Error(string.Join("\n", errors.Select(x => x.ErrorMessage)));
+                return false;
+            }
+            else
+            {
+                NotificationService.Instance.Success("提交成功");
+                return true;
+            }
+        }
+
         [RelayCommand]
-        private void ShowForm()
+        async Task AysncShow()
         {
             var service = new Cyclone.Wpf.Controls.AlertService();
             service.SetOwner(App.Current.MainWindow);
             service.Option.Title = "Faker";
             service.Option.ButtonType = AlertButton.OkCancel;
-            service.Option.AlertButtonHorizontalAlignment = HorizontalAlignment.Right;
-            service.ShowWithValidation(new FakerForm()
+            service.Option.AlertButtonGroupHorizontalAlignment = HorizontalAlignment.Right;
+            await service.ShowAsync(new FakerForm() { DataContext = Data }, Validate);
+        }
+
+        [RelayCommand]
+        async Task AsyncShowWithParameter(object parameter)
+        {
+            var service = new Cyclone.Wpf.Controls.AlertService();
+            service.SetOwner(App.Current.MainWindow);
+            service.Option.Title = "Faker";
+            service.Option.ButtonType = AlertButton.OkCancel;
+            service.Option.AlertButtonGroupHorizontalAlignment = HorizontalAlignment.Right;
+            await service.ShowAsync<object>(new FakerForm() { DataContext = Data }, ShowWithParameterAsync, parameter);
+        }
+
+        async Task<bool> ShowWithParameterAsync(object parameter)
+        {
+            if (parameter is null)
+            {
+                NotificationService.Instance.Error("参数为空");
+                return false;
+            }
+            else
+            {
+                await Task.Delay(1000);
+                NotificationService.Instance.Success($"参数为：{parameter}");
+                return true;
+            }
+        }
+
+        [RelayCommand]
+        private void Show()
+        {
+            var service = new Cyclone.Wpf.Controls.AlertService();
+            service.SetOwner(App.Current.MainWindow);
+            service.Option.Title = "Faker";
+            service.Option.ButtonType = AlertButton.OkCancel;
+            service.Option.AlertButtonGroupHorizontalAlignment = HorizontalAlignment.Right;
+            service.Show(new FakerForm()
             {
                 DataContext = Data,
             },

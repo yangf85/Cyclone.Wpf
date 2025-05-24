@@ -11,6 +11,7 @@
     <Style x:Key="FormSeperater.Style.Basic" TargetType="ctl:FormSeperater">
         <Setter Property="SeperaterBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="SeperaterThickness" Value="2" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:FormSeperater">
@@ -107,6 +108,7 @@
         <Setter Property="LabelHorizontalAlignment" Value="Left" />
         <Setter Property="LabelVerticalAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}" Value="True">

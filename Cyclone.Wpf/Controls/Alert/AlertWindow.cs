@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.SymbolStore;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -185,45 +186,30 @@ public class AlertWindow : Window
 
     #endregion ValidationCallback
 
+    #region AsyncValidationCallback
+
+    /// <summary>
+    /// 异步验证回调函数，用于在确定按钮点击时进行异步验证
+    /// </summary>
+    public Func<Task<bool>> AsyncValidationCallback
+    {
+        get => (Func<Task<bool>>)GetValue(AsyncValidationCallbackProperty);
+        set => SetValue(AsyncValidationCallbackProperty, value);
+    }
+
+    public static readonly DependencyProperty AsyncValidationCallbackProperty =
+        DependencyProperty.Register(nameof(AsyncValidationCallback), typeof(Func<Task<bool>>), typeof(AlertWindow), new PropertyMetadata(null));
+
+    #endregion AsyncValidationCallback
+
     #region Command
 
     private void InitializeCommand()
     {
-        CommandBindings.Add(new CommandBinding(OkCommand, (sender, e) =>
+        // OK 命令处理 - 修改为异步处理
+        CommandBindings.Add(new CommandBinding(OkCommand, async (sender, e) =>
         {
-            // 如果有验证回调，先执行验证
-            if (ValidationCallback != null)
-            {
-                try
-                {
-                    bool validationResult = ValidationCallback();
-
-                    if (validationResult)
-                    {
-                        // 验证通过，正常关闭
-                        DialogResult = true;
-                        Close();
-                    }
-                    else
-                    {
-                        // 验证失败，阻止关闭，窗口保持打开
-                        System.Diagnostics.Debug.WriteLine("验证失败，对话框保持打开");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // 验证过程中出现异常，记录并允许关闭
-                    System.Diagnostics.Debug.WriteLine($"验证过程中出现异常: {ex.Message}");
-                    DialogResult = false;
-                    Close();
-                }
-            }
-            else
-            {
-                // 没有验证回调，直接关闭
-                DialogResult = true;
-                Close();
-            }
+            await HandleOkCommandAsync();
         }));
 
         CommandBindings.Add(new CommandBinding(CancelCommand, (sender, e) =>
@@ -237,6 +223,83 @@ public class AlertWindow : Window
             DialogResult = null;
             Close();
         }));
+    }
+
+    /// <summary>
+    /// 处理OK命令的异步方法
+    /// </summary>
+    private async Task HandleOkCommandAsync()
+    {
+        // 如果有异步验证回调，优先使用
+        if (AsyncValidationCallback != null)
+        {
+            try
+            {
+                // 禁用窗口防止重复点击
+                IsEnabled = false;
+
+                // 执行异步验证
+                bool validationResult = await AsyncValidationCallback();
+
+                if (validationResult)
+                {
+                    // 验证通过，正常关闭
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    // 验证失败，恢复窗口状态，保持打开
+                    IsEnabled = true;
+                    System.Diagnostics.Debug.WriteLine("异步验证失败，对话框保持打开");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 验证过程中出现异常
+                System.Diagnostics.Debug.WriteLine($"异步验证过程中出现异常: {ex.Message}");
+
+                // 恢复窗口状态
+                IsEnabled = true;
+
+                // 可以选择是否关闭窗口，这里选择保持打开
+                // DialogResult = false;
+                // Close();
+            }
+        }
+        // 如果有同步验证回调
+        else if (ValidationCallback != null)
+        {
+            try
+            {
+                bool validationResult = ValidationCallback();
+
+                if (validationResult)
+                {
+                    // 验证通过，正常关闭
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    // 验证失败，窗口保持打开
+                    System.Diagnostics.Debug.WriteLine("验证失败，对话框保持打开");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 验证过程中出现异常，记录并关闭
+                System.Diagnostics.Debug.WriteLine($"验证过程中出现异常: {ex.Message}");
+                DialogResult = false;
+                Close();
+            }
+        }
+        else
+        {
+            // 没有验证回调，直接关闭
+            DialogResult = true;
+            Close();
+        }
     }
 
     public static RoutedCommand OkCommand { get; private set; } = new RoutedCommand("Ok", typeof(AlertWindow));

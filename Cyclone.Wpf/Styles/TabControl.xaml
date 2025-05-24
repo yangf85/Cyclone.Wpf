@@ -8,9 +8,53 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="TabItem.Style.Horizontal"
-        TargetType="TabItem">
+    <Style x:Key="TabItem.Style.Vertical" TargetType="TabItem">
+        <Setter Property="Background" Value="{DynamicResource Background.Header}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border
+                        x:Name="RootBorder"
+                        Padding="{TemplateBinding Margin}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <Grid>
+                            <Rectangle
+                                x:Name="Indicator"
+                                Width="3"
+                                HorizontalAlignment="Right"
+                                Fill="Transparent" />
+                            <Grid Margin="10,0">
+                                <ContentPresenter
+                                    x:Name="ContentContainer"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentSource="Header"
+                                    Focusable="False" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Border.Selected}" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Right">
+                            <Setter TargetName="Indicator" Property="HorizontalAlignment" Value="Left" />
+                        </DataTrigger>
+                        <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Hover}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="Background" Value="{DynamicResource Background.Header}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -43,9 +87,7 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Border.Selected}" />
                         </Trigger>
-                        <DataTrigger
-                            Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}"
-                            Value="Bottom">
+                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Bottom">
                             <Setter TargetName="Indicator" Property="VerticalAlignment" Value="Top" />
                         </DataTrigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
@@ -57,9 +99,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="TableControl.ControlTemplate.Top"
-        TargetType="TabControl">
+    <ControlTemplate x:Key="TableControl.ControlTemplate.Top" TargetType="TabControl">
         <Border
             x:Name="Root"
             Background="{TemplateBinding Background}"
@@ -85,17 +125,13 @@
                     Grid.Row="1"
                     Width="{Binding ElementName=HeaderPanel, Path=ActualWidth}"
                     Background="Transparent">
-                    <ContentPresenter
-                        x:Name="PART_SelectedContentHost"
-                        ContentSource="SelectedContent" />
+                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
                 </Border>
             </Grid>
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate
-        x:Key="TableControl.ControlTemplate.Left"
-        TargetType="TabControl">
+    <ControlTemplate x:Key="TableControl.ControlTemplate.Left" TargetType="TabControl">
         <Grid
             KeyboardNavigation.TabNavigation="Local"
             SnapsToDevicePixels="True"
@@ -115,9 +151,7 @@
                 x:Name="ContentBorder"
                 Grid.Column="1"
                 Background="Transparent">
-                <ContentPresenter
-                    x:Name="PART_SelectedContentHost"
-                    ContentSource="SelectedContent" />
+                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
             </Border>
         </Grid>
     </ControlTemplate>
@@ -135,10 +169,9 @@
             </Trigger>
             <Trigger Property="TabStripPlacement" Value="Left">
                 <Setter Property="Template" Value="{StaticResource TableControl.ControlTemplate.Left}" />
+                <Setter Property="ItemContainerStyle" Value="{StaticResource TabItem.Style.Vertical}" />
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style
-        BasedOn="{StaticResource TabControl.Style.Basic}"
-        TargetType="TabControl" />
+    <Style BasedOn="{StaticResource TabControl.Style.Basic}" TargetType="TabControl" />
 </ResourceDictionary>

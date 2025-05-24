@@ -1,43 +1,49 @@
-﻿<UserControl x:Class="Cyclone.Wpf.Demo.Views.TabControlView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cy="https://www.cyclone/wpf"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
-             mc:Ignorable="d">
-    <Grid>
+﻿<UserControl
+    x:Class="Cyclone.Wpf.Demo.Views.TabControlView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cy="https://www.cyclone/wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <StackPanel>
         <HeaderedContentControl Header="Horizontal">
             <TabControl>
 
                 <TabItem Header="首页">
                     <StackPanel Margin="10">
                         <TextBlock FontSize="16" Text="欢迎使用本系统" />
-                        <Button Margin="0,10"
-                                Padding="10,5"
-                                Click="Button_Click"
-                                Content="点击这里" />
+                        <Button
+                            Margin="0,10"
+                            Padding="10,5"
+                            Click="Button_Click"
+                            Content="点击这里" />
                         <CheckBox Margin="0,5" Content="我已阅读协议" />
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="用户管理">
                     <Grid>
-                        <DataGrid x:Name="userDataGrid"
-                                  Margin="10"
-                                  AutoGenerateColumns="False">
+                        <DataGrid
+                            x:Name="userDataGrid"
+                            Margin="10"
+                            AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="6*"
-                                                    Binding="{Binding Name}"
-                                                    Header="姓名" />
-                                <DataGridTextColumn Width="6*"
-                                                    Binding="{Binding Age}"
-                                                    Header="年龄" />
-                                <DataGridTextColumn Width="10*"
-                                                    Binding="{Binding Email}"
-                                                    Header="邮箱" />
+                                <DataGridTextColumn
+                                    Width="6*"
+                                    Binding="{Binding Name}"
+                                    Header="姓名" />
+                                <DataGridTextColumn
+                                    Width="6*"
+                                    Binding="{Binding Age}"
+                                    Header="年龄" />
+                                <DataGridTextColumn
+                                    Width="10*"
+                                    Binding="{Binding Email}"
+                                    Header="邮箱" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -46,9 +52,10 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="settings.png" />
+                            <Image
+                                Width="16"
+                                Height="16"
+                                Source="settings.png" />
                             <TextBlock Margin="5,0,0,0" Text="设置" />
                         </StackPanel>
                     </TabItem.Header>
@@ -56,22 +63,42 @@
                         <GroupBox Header="界面设置">
                             <StackPanel>
                                 <CheckBox Margin="5" Content="夜间模式" />
-                                <CheckBox Margin="5"
-                                          Content="显示工具栏"
-                                          IsChecked="True" />
+                                <CheckBox
+                                    Margin="5"
+                                    Content="显示工具栏"
+                                    IsChecked="True" />
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Margin="0,10" Header="系统设置">
                             <StackPanel>
                                 <TextBox Margin="5" Text="默认配置路径..." />
-                                <Button Margin="5"
-                                        Padding="10,3"
-                                        Content="保存设置" />
+                                <Button
+                                    Margin="5"
+                                    Padding="10,3"
+                                    Content="保存设置" />
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
                 </TabItem>
             </TabControl>
         </HeaderedContentControl>
-    </Grid>
+        <HeaderedContentControl Header="Vertical">
+            <TabControl TabStripPlacement="Left">
+                <TabItem Header="首页">
+                    <StackPanel Margin="10">
+                        <TextBlock FontSize="16" Text="欢迎使用本系统" />
+                        <Button
+                            Margin="0,10"
+                            Padding="10,5"
+                            Content="点击这里" />
+                        <CheckBox Margin="0,5" Content="我已阅读协议" />
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="用户管理">
+                    <Grid Height="200" Background="AntiqueWhite" />
+                </TabItem>
+            </TabControl>
+        </HeaderedContentControl>
+    </StackPanel>
 </UserControl>

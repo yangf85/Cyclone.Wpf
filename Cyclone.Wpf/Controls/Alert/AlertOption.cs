@@ -43,7 +43,7 @@ public class AlertOption
 
     public Brush MaskBrush { get; set; } = new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00));
 
-    public HorizontalAlignment AlertButtonHorizontalAlignment { get; set; } = HorizontalAlignment.Center;
+    public HorizontalAlignment AlertButtonGroupHorizontalAlignment { get; set; } = HorizontalAlignment.Center;
 
     public AlertIcon AlertIcon { get; set; }
 }

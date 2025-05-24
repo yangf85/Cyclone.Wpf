@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Controls;
@@ -167,6 +168,29 @@ public class AlertService : IAlertService, IDisposable
     }
 
     /// <summary>
+    /// 异步在Dispatcher上执行操作
+    /// </summary>
+    private Task InvokeOnDispatcherAsync(Action action)
+    {
+        if (action == null)
+            return Task.CompletedTask;
+
+        var dispatcher = GetDispatcher();
+
+        if (dispatcher == null || dispatcher.CheckAccess())
+        {
+            // 如果无法获取任何Dispatcher或已在UI线程上，直接执行
+            action();
+            return Task.CompletedTask;
+        }
+        else
+        {
+            // 需要在UI线程上执行
+            return dispatcher.InvokeAsync(action).Task;
+        }
+    }
+
+    /// <summary>
     /// 将WPF窗口设置为警告框的所有者
     /// </summary>
     public void SetOwner(Window owner)
@@ -274,7 +298,7 @@ public class AlertService : IAlertService, IDisposable
             TitleForeground = Option.TitleForeground,
             AlertButtonGroupBackground = Option.AlertButtonGroupBackground,
             AlertButtonGroupHeight = Option.AlertButtonGroupHeight,
-            AlertButtonGroupHorizontalAlignment = Option.AlertButtonHorizontalAlignment,
+            AlertButtonGroupHorizontalAlignment = Option.AlertButtonGroupHorizontalAlignment,
             OkButtonText = Option.OkButtonText,
             CancelButtonText = Option.CancelButtonText,
             Content = content,
@@ -562,12 +586,13 @@ public class AlertService : IAlertService, IDisposable
     }
 
     /// <summary>
-    /// 显示带验证回调的警告框
+    /// 显示带同步验证回调的警告框
     /// </summary>
     /// <param name="content">窗口内容</param>
     /// <param name="validation">验证回调函数</param>
     /// <param name="title">窗口标题</param>
-    public void ShowWithValidation(object content, Func<bool> validation, string title = null)
+    /// <returns>对话框结果</returns>
+    public bool? Show(object content, Func<bool> validation, string title = null)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
@@ -578,10 +603,74 @@ public class AlertService : IAlertService, IDisposable
         }
 
         // 使用自定义的Dispatcher调用方法执行
+        return InvokeOnDispatcherWithResult(() =>
+        {
+            return ShowDialogWithValidationInternal(content, validation, title);
+        });
+    }
+
+    /// <summary>
+    /// 显示带异步验证回调的警告框
+    /// </summary>
+    /// <param name="content">窗口内容</param>
+    /// <param name="asyncValidation">异步验证回调函数，返回 true 允许关闭，false 阻止关闭</param>
+    /// <param name="title">窗口标题</param>
+    /// <returns>返回一个Task，当对话框关闭时完成</returns>
+    public Task ShowAsync(object content, Func<Task<bool>> asyncValidation, string title = null)
+    {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        if (asyncValidation == null)
+        {
+            throw new ArgumentNullException(nameof(asyncValidation), "异步验证回调函数不能为空");
+        }
+
+        // 创建一个TaskCompletionSource来控制任务完成
+        var tcs = new TaskCompletionSource<bool>();
+
+        // 使用自定义的Dispatcher调用方法执行
         InvokeOnDispatcher(() =>
         {
-            ShowDialogWithValidationInternal(content, validation, title);
+            try
+            {
+                ShowDialogWithAsyncValidationInternal(content, asyncValidation, title, tcs);
+            }
+            catch (Exception ex)
+            {
+                // 如果在显示对话框过程中出现异常，设置任务为失败状态
+                tcs.TrySetException(ex);
+            }
         });
+
+        // 返回不包含结果的Task
+        return tcs.Task.ContinueWith(t => { }, TaskContinuationOptions.OnlyOnRanToCompletion);
+    }
+
+    /// <summary>
+    /// 显示带泛型异步验证回调的警告框
+    /// </summary>
+    /// <typeparam name="T">数据类型</typeparam>
+    /// <param name="content">窗口内容</param>
+    /// <param name="asyncValidation">异步验证回调函数，接收类型为T的参数</param>
+    /// <param name="validationParameter">传递给验证函数的参数</param>
+    /// <param name="title">窗口标题</param>
+    /// <returns>返回一个Task，当对话框关闭时完成</returns>
+    public Task ShowAsync<T>(object content, Func<T, Task<bool>> asyncValidation, T validationParameter, string title = null)
+    {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        if (asyncValidation == null)
+        {
+            throw new ArgumentNullException(nameof(asyncValidation), "异步验证回调函数不能为空");
+        }
+
+        // 创建一个无参数的异步验证函数，内部调用带参数的版本
+        Func<Task<bool>> wrappedValidation = async () => await asyncValidation(validationParameter);
+
+        // 调用原有的无参数版本
+        return ShowAsync(content, wrappedValidation, title);
     }
 
     /// <summary>
@@ -671,12 +760,13 @@ public class AlertService : IAlertService, IDisposable
     }
 
     /// <summary>
-    /// 内部方法，用于显示带验证的对话框
+    /// 内部方法，用于显示带同步验证的对话框
     /// </summary>
     /// <param name="content">窗口内容</param>
     /// <param name="validation">验证回调函数</param>
     /// <param name="title">窗口标题</param>
-    private void ShowDialogWithValidationInternal(object content, Func<bool> validation, string title)
+    /// <returns>对话框结果</returns>
+    private bool? ShowDialogWithValidationInternal(object content, Func<bool> validation, string title)
     {
         // 检查是否已被处置
         ThrowIfDisposed();
@@ -718,10 +808,12 @@ public class AlertService : IAlertService, IDisposable
             PositionWindowInCenter(window);
             window.Owner = _maskWindow;
 
+            bool? result = null;
             try
             {
                 // 显示模态对话框
-                window.ShowDialog();
+                result = window.ShowDialog();
+                return result;
             }
             finally
             {
@@ -752,6 +844,108 @@ public class AlertService : IAlertService, IDisposable
         {
             // 记录任何显示过程中的异常
             System.Diagnostics.Debug.WriteLine($"显示验证警告对话框时出错: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 内部方法，用于显示带异步验证的对话框
+    /// </summary>
+    /// <param name="content">窗口内容</param>
+    /// <param name="asyncValidation">异步验证回调函数</param>
+    /// <param name="title">窗口标题</param>
+    /// <param name="tcs">任务完成源</param>
+    private void ShowDialogWithAsyncValidationInternal(object content, Func<Task<bool>> asyncValidation, string title, TaskCompletionSource<bool> tcs)
+    {
+        // 检查是否已被处置
+        ThrowIfDisposed();
+
+        try
+        {
+            // 如果启用了蒙版并且有所有者，显示蒙版
+            if (Option.IsShowMask && (_ownerWindow != null || _ownerHandle != IntPtr.Zero))
+            {
+                _maskWindow = CreateMaskWindow();
+                _maskWindow?.Show();
+            }
+
+            // 创建AlertWindow
+            var window = CreateAlertWindow(content, title);
+
+            // 设置异步验证回调 - 直接使用新的AsyncValidationCallback属性
+            window.AsyncValidationCallback = asyncValidation;
+
+            // 添加窗口关闭事件处理
+            window.Closed += (sender, e) =>
+            {
+                try
+                {
+                    // 确保蒙版窗口关闭
+                    if (_maskWindow != null && _maskWindow.IsLoaded)
+                    {
+                        _maskWindow.Close();
+                    }
+
+                    // 清理事件钩子
+                    UnhookEvents();
+
+                    // 设置任务完成状态（不需要返回具体的DialogResult值）
+                    tcs.TrySetResult(true);
+                }
+                catch (Exception ex)
+                {
+                    // 如果关闭过程中出现异常，设置任务为失败状态
+                    tcs.TrySetException(ex);
+                }
+            };
+
+            _currentAlertWindow = window;
+            PositionWindowInCenter(window);
+            window.Owner = _maskWindow;
+
+            try
+            {
+                // 显示模态对话框
+                window.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                // 如果ShowDialog过程中出现异常，设置任务为失败状态
+                tcs.TrySetException(ex);
+                throw;
+            }
+            finally
+            {
+                _currentAlertWindow = null;
+
+                // 关闭蒙版窗口
+                if (_maskWindow != null)
+                {
+                    try
+                    {
+                        _maskWindow.Close();
+                    }
+                    catch
+                    {
+                        // 忽略关闭时可能发生的异常
+                    }
+                    _maskWindow = null;
+                }
+
+                // 清理事件钩子
+                UnhookEvents();
+
+                // 在弹窗关闭后激活Owner窗口
+                ActivateOwnerWindow();
+            }
+        }
+        catch (Exception ex)
+        {
+            // 记录任何显示过程中的异常
+            System.Diagnostics.Debug.WriteLine($"显示异步验证警告对话框时出错: {ex.Message}");
+
+            // 确保任务不会永远挂起
+            tcs.TrySetException(ex);
         }
     }
 
