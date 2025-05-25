@@ -150,13 +150,16 @@
                                         StrokeThickness="1" />
                                 </Button>
                             </DockPanel>
-                            <Grid Grid.Row="1">
-                                <ContentPresenter
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Content="{TemplateBinding Content}"
-                                    TextElement.Foreground="{TemplateBinding ContentForeground}" />
-                            </Grid>
+                            <AdornerDecorator Grid.Row="1">
+                                <Grid>
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Content="{TemplateBinding Content}"
+                                        TextElement.Foreground="{TemplateBinding ContentForeground}" />
+                                </Grid>
+                            </AdornerDecorator>
+
                             <Grid Grid.Row="2">
                                 <Border
                                     Height="{TemplateBinding AlertButtonGroupHeight}"

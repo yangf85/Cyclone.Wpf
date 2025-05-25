@@ -46,7 +46,6 @@ public class TextBoxHelper
             {
                 textBox.CommandBindings.Remove(new CommandBinding(ClearCommand, OnClear, OnCanClear));
             }
-            VisualStateManager.GoToState(textBox, "Normal", true);
         }
     }
 
@@ -63,7 +62,8 @@ public class TextBoxHelper
 
     private static void OnCanClear(object sender, CanExecuteRoutedEventArgs e)
     {
-        e.CanExecute = true;
+        var textBox = sender as TextBox;
+        e.CanExecute = textBox?.Text.Length > 0 && !textBox.IsReadOnly;
     }
 
     private static void OnClear(object sender, ExecutedRoutedEventArgs e)
