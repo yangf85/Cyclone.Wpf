@@ -12,6 +12,7 @@
     <Title>Cyclone.Wpf.Theme</Title>
     <Description>wpf的主题资源</Description>
     <PackageOutputPath>E:\YangF\Code\Nugets</PackageOutputPath>
+    <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
 </Project>
