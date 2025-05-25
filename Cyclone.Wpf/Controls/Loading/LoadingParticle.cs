@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 加载动画控件 - 显示5个旋转的粒子
 /// </summary>
-public class LoadingParticle : ContentControl, ILoadingIndicator
+public class LoadingParticle : LoadingIndicator
 {
     #region 依赖属性
 

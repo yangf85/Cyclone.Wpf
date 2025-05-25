@@ -10,7 +10,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 四维立方体（超立方体）加载动画控件 - 显示四维空间投影效果
 /// </summary>
-public class LoadingTesseract : ContentControl, ILoadingIndicator
+public class LoadingTesseract : LoadingIndicator
 {
     #region 依赖属性
 

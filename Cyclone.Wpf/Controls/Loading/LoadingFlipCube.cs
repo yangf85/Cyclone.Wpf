@@ -11,7 +11,7 @@ namespace Cyclone.Wpf.Controls;
 /// <summary>
 /// 3D方块翻转加载动画控件 - 显示3D翻转效果的方块
 /// </summary>
-public class LoadingFlipCube : ContentControl, ILoadingIndicator
+public class LoadingFlipCube : LoadingIndicator
 {
     #region 依赖属性
 
