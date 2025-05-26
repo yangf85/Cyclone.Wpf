@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Cyclone.Wpf.Controls;
 using Cyclone.Wpf.Demo.Helper;
 using Cyclone.Wpf.Helpers;
@@ -34,13 +35,29 @@ namespace Cyclone.Wpf.Demo.Views
         }
     }
 
-    public partial class ButtonViewModel : ObservableObject
+    public partial class ButtonViewModel : ObservableObject, IRecipient<string>
     {
+        public ButtonViewModel()
+        {
+            WeakReferenceMessenger.Default.Register<string>(this);
+        }
+
         [ObservableProperty]
         public partial SplitButtonViewModel SplitButton { get; set; } = new SplitButtonViewModel();
 
         [ObservableProperty]
         public partial RadioButtonGroupEnum RadioButtonGroupEnum { get; set; } = RadioButtonGroupEnum.C;
+
+        public void Receive(string message)
+        {
+            MessageBox.Show(message);
+        }
+
+        [RelayCommand]
+        void SenderMessage(string message)
+        {
+            WeakReferenceMessenger.Default.Send(message);
+        }
 
         [RelayCommand]
         private void ShowSelectedRadioButton()

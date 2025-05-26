@@ -18,7 +18,10 @@
                 <Button Content="One" />
                 <Button Content="Two" />
                 <Button Content="Three" />
-                <Button Content="Four" />
+                <Button
+                    Command="{Binding SenderMessageCommand}"
+                    CommandParameter="Four"
+                    Content="Four" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="ToggleButton">
