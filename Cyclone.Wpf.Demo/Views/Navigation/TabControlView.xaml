@@ -4,101 +4,210 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cy="https://www.cyclone/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:Cyclone.Wpf.Demo.Helper"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="1200"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
-    <StackPanel>
-        <HeaderedContentControl Header="Horizontal">
-            <TabControl>
 
-                <TabItem Header="首页">
-                    <StackPanel Margin="10">
-                        <TextBlock FontSize="16" Text="欢迎使用本系统" />
-                        <Button
-                            Margin="0,10"
-                            Padding="10,5"
-                            Click="Button_Click"
-                            Content="点击这里" />
-                        <CheckBox Margin="0,5" Content="我已阅读协议" />
-                    </StackPanel>
-                </TabItem>
+    <UserControl.Resources>
+        <!--  TabItem的DataTemplate  -->
+        <DataTemplate DataType="{x:Type local:TabItemViewModel}">
+            <Border
+                Margin="5"
+                BorderBrush="LightGray"
+                BorderThickness="1">
+                <StackPanel Margin="10">
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text="{Binding Title}" />
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        Text="{Binding Description}"
+                        TextWrapping="Wrap" />
+                    <DataGrid
+                        Height="240"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding FakerDataList}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding FirstName}" Header="姓名" />
+                            <DataGridTextColumn Binding="{Binding LastName}" Header="姓氏" />
+                            <DataGridTextColumn Binding="{Binding Email}" Header="邮箱" />
+                            <DataGridTextColumn Binding="{Binding Age}" Header="年龄" />
+                            <DataGridTextColumn Binding="{Binding Status}" Header="状态" />
+                            <DataGridCheckBoxColumn Binding="{Binding IsVerified}" Header="已验证" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
 
-                <TabItem Header="用户管理">
-                    <Grid>
-                        <DataGrid
-                            x:Name="userDataGrid"
-                            Margin="10"
-                            AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="6*"
-                                    Binding="{Binding Name}"
-                                    Header="姓名" />
-                                <DataGridTextColumn
-                                    Width="6*"
-                                    Binding="{Binding Age}"
-                                    Header="年龄" />
-                                <DataGridTextColumn
-                                    Width="10*"
-                                    Binding="{Binding Email}"
-                                    Header="邮箱" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
+        <!--  底部TabItem样式  -->
+        <Style x:Key="BottomTabItemStyle" TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border
+                            x:Name="Border"
+                            Margin="2,0"
+                            BorderBrush="Gray"
+                            BorderThickness="1,0,1,1">
+                            <ContentPresenter
+                                x:Name="ContentSite"
+                                Margin="12,2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Black" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="2,0,2,2" />
+                                <Setter TargetName="ContentSite" Property="TextElement.FontWeight" Value="Bold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image
-                                Width="16"
-                                Height="16"
-                                Source="settings.png" />
-                            <TextBlock Margin="5,0,0,0" Text="设置" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <StackPanel Margin="10">
-                        <GroupBox Header="界面设置">
-                            <StackPanel>
-                                <CheckBox Margin="5" Content="夜间模式" />
-                                <CheckBox
-                                    Margin="5"
-                                    Content="显示工具栏"
-                                    IsChecked="True" />
+        <!--  右侧TabItem样式  -->
+        <Style x:Key="RightTabItemStyle" TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border
+                            x:Name="Border"
+                            Margin="0,2"
+                            BorderBrush="Gray"
+                            BorderThickness="0,1,1,1">
+                            <ContentPresenter
+                                x:Name="ContentSite"
+                                Margin="8,12"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Black" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0,2,2,2" />
+                                <Setter TargetName="ContentSite" Property="TextElement.FontWeight" Value="Bold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!--  Top方向  -->
+            <GroupBox
+                Height="300"
+                Margin="10"
+                Header="TabStripPlacement=Top (默认样式)">
+                <TabControl
+                    ItemsSource="{Binding TabItems}"
+                    SelectedItem="{Binding SelectedTab}"
+                    TabStripPlacement="Top">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Padding="10,5" Text="{Binding Header}" />
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                </TabControl>
+            </GroupBox>
+
+            <!--  Bottom方向  -->
+            <GroupBox
+                Height="300"
+                Margin="10"
+                Header="TabStripPlacement=Bottom (简洁样式)">
+                <TabControl
+                    ItemContainerStyle="{StaticResource BottomTabItemStyle}"
+                    ItemsSource="{Binding TabItems}"
+                    TabStripPlacement="Bottom">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse
+                                    Width="8"
+                                    Height="8"
+                                    Margin="0,0,5,0"
+                                    Fill="{Binding IconColor}" />
+                                <TextBlock Text="{Binding Header}" />
                             </StackPanel>
-                        </GroupBox>
-                        <GroupBox Margin="0,10" Header="系统设置">
-                            <StackPanel>
-                                <TextBox Margin="5" Text="默认配置路径..." />
-                                <Button
-                                    Margin="5"
-                                    Padding="10,3"
-                                    Content="保存设置" />
-                            </StackPanel>
-                        </GroupBox>
-                    </StackPanel>
-                </TabItem>
-            </TabControl>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="Vertical">
-            <TabControl TabStripPlacement="Left">
-                <TabItem Header="首页">
-                    <StackPanel Margin="10">
-                        <TextBlock FontSize="16" Text="欢迎使用本系统" />
-                        <Button
-                            Margin="0,10"
-                            Padding="10,5"
-                            Content="点击这里" />
-                        <CheckBox Margin="0,5" Content="我已阅读协议" />
-                    </StackPanel>
-                </TabItem>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                </TabControl>
+            </GroupBox>
 
-                <TabItem Header="用户管理">
-                    <Grid Height="200" Background="AntiqueWhite" />
-                </TabItem>
-            </TabControl>
-        </HeaderedContentControl>
-    </StackPanel>
+            <!--  Left方向  -->
+            <GroupBox
+                Height="300"
+                Margin="10"
+                Header="TabStripPlacement=Left (垂直布局)">
+                <TabControl ItemsSource="{Binding TabItems}" TabStripPlacement="Left">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Width="120"
+                                Margin="0,2"
+                                BorderBrush="LightGray"
+                                BorderThickness="0,0,1,0">
+                                <StackPanel Margin="10,8" Orientation="Horizontal">
+                                    <Rectangle
+                                        Width="3"
+                                        Height="16"
+                                        Margin="0,0,8,0"
+                                        Fill="{Binding IconColor}" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Header}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                </TabControl>
+            </GroupBox>
+
+            <!--  Right方向  -->
+            <GroupBox
+                Height="300"
+                Margin="10"
+                Header="TabStripPlacement=Right (图标样式)">
+                <TabControl
+                    ItemContainerStyle="{StaticResource RightTabItemStyle}"
+                    ItemsSource="{Binding TabItems}"
+                    TabStripPlacement="Right">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Width="80" Orientation="Vertical">
+                                <Rectangle
+                                    Width="20"
+                                    Height="20"
+                                    Margin="0,0,0,5"
+                                    HorizontalAlignment="Center"
+                                    Fill="{Binding IconColor}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Text="{Binding Header}"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                </TabControl>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

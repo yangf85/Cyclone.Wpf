@@ -17,7 +17,6 @@
                 <ControlTemplate TargetType="TabItem">
                     <Border
                         x:Name="RootBorder"
-                        Padding="{TemplateBinding Margin}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -64,7 +63,6 @@
                 <ControlTemplate TargetType="TabItem">
                     <Border
                         x:Name="RootBorder"
-                        Padding="{TemplateBinding Margin}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -101,7 +99,7 @@
 
     <ControlTemplate x:Key="TableControl.ControlTemplate.Top" TargetType="TabControl">
         <Border
-            x:Name="Root"
+            x:Name="RootBorder"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
@@ -115,7 +113,7 @@
                 <UniformGrid
                     x:Name="HeaderPanel"
                     Grid.Row="0"
-                    HorizontalAlignment="Stretch"
+                    HorizontalAlignment="Left"
                     Background="Transparent"
                     IsItemsHost="True"
                     KeyboardNavigation.TabIndex="1"
@@ -143,6 +141,7 @@
             <UniformGrid
                 x:Name="HeaderPanel"
                 Grid.Column="0"
+                VerticalAlignment="Top"
                 Background="Transparent"
                 Columns="1"
                 IsItemsHost="True"
