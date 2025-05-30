@@ -274,7 +274,10 @@ public class HintBox : Selector
         if (SelectedItem is IHintable hintable)
         {
             InputText = hintable.HintText;
-            _inputTextBox.CaretIndex = InputText.Length;
+            if (_inputTextBox != null)
+            {
+                _inputTextBox.Text = InputText;
+            }
         }
     }
 
