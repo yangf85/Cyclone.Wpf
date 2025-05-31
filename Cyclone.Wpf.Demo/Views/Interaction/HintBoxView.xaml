@@ -43,6 +43,7 @@
                         <cy:HintBox
                             Width="300"
                             HorizontalAlignment="Left"
+                            DisplayMemberPath="HintText"
                             ItemsSource="{Binding GameClasses}"
                             SelectedItem="{Binding SelectedGameClass}" />
                         <TextBlock
@@ -113,6 +114,7 @@
                         <cy:HintBox
                             Width="350"
                             HorizontalAlignment="Left"
+                            DisplayMemberPath="HintText"
                             InputText="{Binding SkillSearchText, UpdateSourceTrigger=PropertyChanged}"
                             ItemsSource="{Binding FilteredSkills}"
                             SelectedItem="{Binding SelectedSkill}" />
