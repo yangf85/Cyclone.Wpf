@@ -121,7 +121,6 @@
                 <Border
                     x:Name="ContentBorder"
                     Grid.Row="1"
-                    Width="{Binding ElementName=HeaderPanel, Path=ActualWidth}"
                     Background="Transparent">
                     <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
                 </Border>
