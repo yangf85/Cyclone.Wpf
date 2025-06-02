@@ -43,7 +43,7 @@
                         <cy:HintBox
                             Width="300"
                             HorizontalAlignment="Left"
-                            DisplayMemberPath="HintText"
+                            DisplayMemberPath="ClassName"
                             ItemsSource="{Binding GameClasses}"
                             SelectedItem="{Binding SelectedGameClass}" />
                         <TextBlock
@@ -68,6 +68,7 @@
                             InputText="{Binding PeopleSearchText, UpdateSourceTrigger=PropertyChanged}"
                             ItemsSource="{Binding FilteredPeople}"
                             MaxContainerHeight="400"
+                            SearchMemberPath="FullName"
                             SelectedItem="{Binding SelectedPerson}">
                             <cy:HintBox.ItemTemplate>
                                 <DataTemplate>
@@ -85,7 +86,7 @@
                                             HighlightBackground="Yellow"
                                             HighlightForeground="Red"
                                             QueriesText="{Binding DataContext.PeopleSearchText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            SourceText="{Binding HintText}" />
+                                            SourceText="{Binding FullName}" />
                                         <TextBlock
                                             Margin="10,0,0,0"
                                             FontSize="11"
@@ -114,7 +115,7 @@
                         <cy:HintBox
                             Width="350"
                             HorizontalAlignment="Left"
-                            DisplayMemberPath="HintText"
+                            DisplayMemberPath="SkillName"
                             InputText="{Binding SkillSearchText, UpdateSourceTrigger=PropertyChanged}"
                             ItemsSource="{Binding FilteredSkills}"
                             SelectedItem="{Binding SelectedSkill}" />
@@ -176,6 +177,7 @@
                             InputText="{Binding CompanySearchText, UpdateSourceTrigger=PropertyChanged}"
                             ItemsSource="{Binding CompaniesViewSource.View}"
                             MaxContainerHeight="350"
+                            SearchMemberPath="CompanyName"
                             SelectedItem="{Binding SelectedCompany}">
                             <cy:HintBox.GroupStyle>
                                 <GroupStyle>
@@ -211,7 +213,7 @@
                                         <StackPanel>
                                             <TextBlock
                                                 FontWeight="Medium"
-                                                Text="{Binding HintText}" />
+                                                Text="{Binding CompanyName}" />
                                             <StackPanel
                                                 Margin="0,2,0,0"
                                                 Orientation="Horizontal">

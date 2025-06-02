@@ -38,7 +38,7 @@ public enum UserStatus
     Pending
 }
 
-public partial class FakerData : ObservableValidator, IHintable
+public partial class FakerData : ObservableValidator
 {
     [NotifyDataErrorInfo]
     [ObservableProperty]
@@ -87,15 +87,13 @@ public partial class FakerData : ObservableValidator, IHintable
     [ObservableProperty]
     public partial string Lorem { get; set; }
 
-    [ObservableProperty]
-    public partial string HintText { get; set; }
+    public string FullName => $"{FirstName} {LastName}";
 
     [ObservableProperty]
     public partial Brush Background { get; set; }
 
     partial void OnFirstNameChanged(string value)
     {
-        HintText = value;
     }
 
     public FakerData()

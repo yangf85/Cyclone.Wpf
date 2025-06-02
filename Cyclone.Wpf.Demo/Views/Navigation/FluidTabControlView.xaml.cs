@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,15 @@ namespace Cyclone.Wpf.Demo.Views
         {
             InitializeComponent();
         }
+    }
+
+    public partial class FluidTabControlViewModel : ObservableObject
+    {
+    }
+
+    public partial class FluidTabItemViewModel : ObservableObject
+    {
+        [ObservableProperty]
+        public partial string Header { get; set; }
     }
 }

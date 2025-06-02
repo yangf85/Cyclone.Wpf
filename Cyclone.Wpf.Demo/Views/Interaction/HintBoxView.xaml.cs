@@ -78,9 +78,9 @@ namespace Cyclone.Wpf.Demo.Views
         {
             if (value != null)
             {
-                GameClassResult = $"Selected: {value.HintText}";
+                GameClassResult = $"Selected: {value.ClassName}";
                 _gameClassSelectionCount++;
-                LogEvent($"Game class selected: {value.HintText}");
+                LogEvent($"Game class selected: {value.ClassName}");
                 UpdateStatistics();
             }
         }
@@ -104,11 +104,11 @@ namespace Cyclone.Wpf.Demo.Views
 
         partial void OnSelectedSkillChanged(SkillData? value)
         {
-            if (value != null && !SelectedSkills.Contains(value.HintText))
+            if (value != null && !SelectedSkills.Contains(value.SkillName))
             {
-                SelectedSkills.Add(value.HintText);
+                SelectedSkills.Add(value.SkillName);
                 _skillSelectionCount++;
-                LogEvent($"Skill added: {value.HintText}");
+                LogEvent($"Skill added: {value.SkillName}");
                 UpdateStatistics();
 
                 // 清空搜索文本和选中项
@@ -124,9 +124,9 @@ namespace Cyclone.Wpf.Demo.Views
         {
             if (value != null)
             {
-                CompanyResult = $"Selected: {value.HintText} - {value.Industry} ({value.Country})";
+                CompanyResult = $"Selected: {value.CompanyName} - {value.Industry} ({value.Country})";
                 _companySelectionCount++;
-                LogEvent($"Company selected: {value.HintText} from {value.Industry}");
+                LogEvent($"Company selected: {value.CompanyName} from {value.Industry}");
                 UpdateStatistics();
             }
         }
@@ -222,16 +222,16 @@ namespace Cyclone.Wpf.Demo.Views
             // 初始化游戏职业数据
             GameClasses = new ObservableCollection<GameClassData>
             {
-                new GameClassData { HintText = "Demon Hunter" },
-                new GameClassData { HintText = "Death Knight" },
-                new GameClassData { HintText = "Blade Master" },
-                new GameClassData { HintText = "Paladin" },
-                new GameClassData { HintText = "Warrior" },
-                new GameClassData { HintText = "Mage" },
-                new GameClassData { HintText = "Warlock" },
-                new GameClassData { HintText = "Hunter" },
-                new GameClassData { HintText = "Rogue" },
-                new GameClassData { HintText = "Priest" }
+                new GameClassData { ClassName = "Demon Hunter" },
+                new GameClassData { ClassName = "Death Knight" },
+                new GameClassData { ClassName = "Blade Master" },
+                new GameClassData { ClassName = "Paladin" },
+                new GameClassData { ClassName = "Warrior" },
+                new GameClassData { ClassName = "Mage" },
+                new GameClassData { ClassName = "Warlock" },
+                new GameClassData { ClassName = "Hunter" },
+                new GameClassData { ClassName = "Rogue" },
+                new GameClassData { ClassName = "Priest" }
             };
 
             // 生成假数据
@@ -241,24 +241,24 @@ namespace Cyclone.Wpf.Demo.Views
             // 初始化技能数据
             AllSkills = new ObservableCollection<SkillData>
             {
-                new SkillData { HintText = "Project Management" },
-                new SkillData { HintText = "Software Development" },
-                new SkillData { HintText = "Data Analysis" },
-                new SkillData { HintText = "Machine Learning" },
-                new SkillData { HintText = "UI/UX Design" },
-                new SkillData { HintText = "Database Design" },
-                new SkillData { HintText = "Cloud Computing" },
-                new SkillData { HintText = "DevOps" },
-                new SkillData { HintText = "Cybersecurity" },
-                new SkillData { HintText = "Mobile Development" },
-                new SkillData { HintText = "Web Development" },
-                new SkillData { HintText = "API Development" },
-                new SkillData { HintText = "Quality Assurance" },
-                new SkillData { HintText = "Agile Methodology" },
-                new SkillData { HintText = "Technical Writing" },
-                new SkillData { HintText = "System Architecture" },
-                new SkillData { HintText = "Performance Optimization" },
-                new SkillData { HintText = "Team Leadership" }
+                new SkillData { SkillName = "Project Management" },
+                new SkillData { SkillName = "Software Development" },
+                new SkillData { SkillName = "Data Analysis" },
+                new SkillData { SkillName = "Machine Learning" },
+                new SkillData { SkillName = "UI/UX Design" },
+                new SkillData { SkillName = "Database Design" },
+                new SkillData { SkillName = "Cloud Computing" },
+                new SkillData { SkillName = "DevOps" },
+                new SkillData { SkillName = "Cybersecurity" },
+                new SkillData { SkillName = "Mobile Development" },
+                new SkillData { SkillName = "Web Development" },
+                new SkillData { SkillName = "API Development" },
+                new SkillData { SkillName = "Quality Assurance" },
+                new SkillData { SkillName = "Agile Methodology" },
+                new SkillData { SkillName = "Technical Writing" },
+                new SkillData { SkillName = "System Architecture" },
+                new SkillData { SkillName = "Performance Optimization" },
+                new SkillData { SkillName = "Team Leadership" }
             };
             FilteredSkills = new ObservableCollection<SkillData>(AllSkills);
 
@@ -266,71 +266,71 @@ namespace Cyclone.Wpf.Demo.Views
             AllCompanies = new ObservableCollection<CompanyData>
             {
                 // 科技行业
-                new CompanyData { HintText = "Apple Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Microsoft Corporation", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Google LLC", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Amazon.com Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Meta Platforms Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Tesla Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Netflix Inc.", Industry = "Technology", Country = "United States", Size = "Medium" },
-                new CompanyData { HintText = "Spotify Technology S.A.", Industry = "Technology", Country = "Sweden", Size = "Medium" },
-                new CompanyData { HintText = "Samsung Electronics", Industry = "Technology", Country = "South Korea", Size = "Large" },
-                new CompanyData { HintText = "Sony Corporation", Industry = "Technology", Country = "Japan", Size = "Large" },
+                new CompanyData { CompanyName = "Apple Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Microsoft Corporation", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Google LLC", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Amazon.com Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Meta Platforms Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Tesla Inc.", Industry = "Technology", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Netflix Inc.", Industry = "Technology", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "Spotify Technology S.A.", Industry = "Technology", Country = "Sweden", Size = "Medium" },
+                new CompanyData { CompanyName = "Samsung Electronics", Industry = "Technology", Country = "South Korea", Size = "Large" },
+                new CompanyData { CompanyName = "Sony Corporation", Industry = "Technology", Country = "Japan", Size = "Large" },
 
                 // 金融行业
-                new CompanyData { HintText = "JPMorgan Chase & Co.", Industry = "Finance", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Bank of America Corp.", Industry = "Finance", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Wells Fargo & Company", Industry = "Finance", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Goldman Sachs Group Inc.", Industry = "Finance", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Morgan Stanley", Industry = "Finance", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Credit Suisse Group AG", Industry = "Finance", Country = "Switzerland", Size = "Large" },
-                new CompanyData { HintText = "Deutsche Bank AG", Industry = "Finance", Country = "Germany", Size = "Large" },
-                new CompanyData { HintText = "HSBC Holdings plc", Industry = "Finance", Country = "United Kingdom", Size = "Large" },
-                new CompanyData { HintText = "Barclays PLC", Industry = "Finance", Country = "United Kingdom", Size = "Large" },
-                new CompanyData { HintText = "PayPal Holdings Inc.", Industry = "Finance", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "JPMorgan Chase & Co.", Industry = "Finance", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Bank of America Corp.", Industry = "Finance", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Wells Fargo & Company", Industry = "Finance", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Goldman Sachs Group Inc.", Industry = "Finance", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Morgan Stanley", Industry = "Finance", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Credit Suisse Group AG", Industry = "Finance", Country = "Switzerland", Size = "Large" },
+                new CompanyData { CompanyName = "Deutsche Bank AG", Industry = "Finance", Country = "Germany", Size = "Large" },
+                new CompanyData { CompanyName = "HSBC Holdings plc", Industry = "Finance", Country = "United Kingdom", Size = "Large" },
+                new CompanyData { CompanyName = "Barclays PLC", Industry = "Finance", Country = "United Kingdom", Size = "Large" },
+                new CompanyData { CompanyName = "PayPal Holdings Inc.", Industry = "Finance", Country = "United States", Size = "Medium" },
 
                 // 制造业
-                new CompanyData { HintText = "Toyota Motor Corporation", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
-                new CompanyData { HintText = "Volkswagen AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
-                new CompanyData { HintText = "General Motors Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Ford Motor Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "BMW AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
-                new CompanyData { HintText = "Mercedes-Benz Group AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
-                new CompanyData { HintText = "Honda Motor Co. Ltd.", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
-                new CompanyData { HintText = "Nissan Motor Co. Ltd.", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
-                new CompanyData { HintText = "Caterpillar Inc.", Industry = "Manufacturing", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "3M Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Toyota Motor Corporation", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
+                new CompanyData { CompanyName = "Volkswagen AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
+                new CompanyData { CompanyName = "General Motors Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Ford Motor Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "BMW AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
+                new CompanyData { CompanyName = "Mercedes-Benz Group AG", Industry = "Manufacturing", Country = "Germany", Size = "Large" },
+                new CompanyData { CompanyName = "Honda Motor Co. Ltd.", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
+                new CompanyData { CompanyName = "Nissan Motor Co. Ltd.", Industry = "Manufacturing", Country = "Japan", Size = "Large" },
+                new CompanyData { CompanyName = "Caterpillar Inc.", Industry = "Manufacturing", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "3M Company", Industry = "Manufacturing", Country = "United States", Size = "Large" },
 
                 // 零售业
-                new CompanyData { HintText = "Walmart Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "The Home Depot Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Costco Wholesale Corporation", Industry = "Retail", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Target Corporation", Industry = "Retail", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "IKEA", Industry = "Retail", Country = "Sweden", Size = "Large" },
-                new CompanyData { HintText = "H&M Hennes & Mauritz AB", Industry = "Retail", Country = "Sweden", Size = "Medium" },
-                new CompanyData { HintText = "Zara (Inditex)", Industry = "Retail", Country = "Spain", Size = "Medium" },
-                new CompanyData { HintText = "Best Buy Co. Inc.", Industry = "Retail", Country = "United States", Size = "Medium" },
-                new CompanyData { HintText = "Lowe's Companies Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Starbucks Corporation", Industry = "Retail", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "Walmart Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "The Home Depot Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Costco Wholesale Corporation", Industry = "Retail", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Target Corporation", Industry = "Retail", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "IKEA", Industry = "Retail", Country = "Sweden", Size = "Large" },
+                new CompanyData { CompanyName = "H&M Hennes & Mauritz AB", Industry = "Retail", Country = "Sweden", Size = "Medium" },
+                new CompanyData { CompanyName = "Zara (Inditex)", Industry = "Retail", Country = "Spain", Size = "Medium" },
+                new CompanyData { CompanyName = "Best Buy Co. Inc.", Industry = "Retail", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "Lowe's Companies Inc.", Industry = "Retail", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Starbucks Corporation", Industry = "Retail", Country = "United States", Size = "Medium" },
 
                 // 医疗保健
-                new CompanyData { HintText = "Johnson & Johnson", Industry = "Healthcare", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Pfizer Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Roche Holding AG", Industry = "Healthcare", Country = "Switzerland", Size = "Large" },
-                new CompanyData { HintText = "Novartis AG", Industry = "Healthcare", Country = "Switzerland", Size = "Large" },
-                new CompanyData { HintText = "Merck & Co. Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "AbbVie Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Bristol Myers Squibb Company", Industry = "Healthcare", Country = "United States", Size = "Large" },
-                new CompanyData { HintText = "Moderna Inc.", Industry = "Healthcare", Country = "United States", Size = "Medium" },
-                new CompanyData { HintText = "Gilead Sciences Inc.", Industry = "Healthcare", Country = "United States", Size = "Medium" },
-                new CompanyData { HintText = "Bayer AG", Industry = "Healthcare", Country = "Germany", Size = "Large" }
+                new CompanyData { CompanyName = "Johnson & Johnson", Industry = "Healthcare", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Pfizer Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Roche Holding AG", Industry = "Healthcare", Country = "Switzerland", Size = "Large" },
+                new CompanyData { CompanyName = "Novartis AG", Industry = "Healthcare", Country = "Switzerland", Size = "Large" },
+                new CompanyData { CompanyName = "Merck & Co. Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "AbbVie Inc.", Industry = "Healthcare", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Bristol Myers Squibb Company", Industry = "Healthcare", Country = "United States", Size = "Large" },
+                new CompanyData { CompanyName = "Moderna Inc.", Industry = "Healthcare", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "Gilead Sciences Inc.", Industry = "Healthcare", Country = "United States", Size = "Medium" },
+                new CompanyData { CompanyName = "Bayer AG", Industry = "Healthcare", Country = "Germany", Size = "Large" }
             };
 
             // 设置分组的CollectionViewSource
             CompaniesViewSource.Source = AllCompanies;
             CompaniesViewSource.GroupDescriptions.Add(new PropertyGroupDescription("Industry"));
             CompaniesViewSource.SortDescriptions.Add(new SortDescription("Industry", ListSortDirection.Ascending));
-            CompaniesViewSource.SortDescriptions.Add(new SortDescription("HintText", ListSortDirection.Ascending));
+            CompaniesViewSource.SortDescriptions.Add(new SortDescription("CompanyName", ListSortDirection.Ascending));
         }
 
         #endregion 数据初始化
@@ -346,7 +346,7 @@ namespace Cyclone.Wpf.Demo.Views
             else
             {
                 var filtered = AllPeople.Where(p =>
-                    p.HintText?.Contains(PeopleSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                    (p.FirstName + " " + p.LastName).Contains(PeopleSearchText, StringComparison.OrdinalIgnoreCase)).ToList();
                 FilteredPeople = new ObservableCollection<FakerData>(filtered);
             }
         }
@@ -360,7 +360,7 @@ namespace Cyclone.Wpf.Demo.Views
             else
             {
                 var filtered = AllSkills.Where(s =>
-                    s.HintText?.Contains(SkillSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                    s.SkillName?.Contains(SkillSearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
                 FilteredSkills = new ObservableCollection<SkillData>(filtered);
             }
         }
@@ -374,7 +374,7 @@ namespace Cyclone.Wpf.Demo.Views
             else
             {
                 var filtered = AllCompanies.Where(c =>
-                    c.HintText?.Contains(CompanySearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                    c.CompanyName?.Contains(CompanySearchText, StringComparison.OrdinalIgnoreCase) == true ||
                     c.Industry?.Contains(CompanySearchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
                 CompaniesViewSource.Source = filtered;
             }
@@ -431,19 +431,19 @@ namespace Cyclone.Wpf.Demo.Views
 
     #region 数据模型类
 
-    public class GameClassData : IHintable
+    public class GameClassData
     {
-        public string HintText { get; set; }
+        public string ClassName { get; set; }
     }
 
-    public class SkillData : IHintable
+    public class SkillData
     {
-        public string HintText { get; set; }
+        public string SkillName { get; set; }
     }
 
-    public class CompanyData : IHintable
+    public class CompanyData
     {
-        public string HintText { get; set; }
+        public string CompanyName { get; set; }
         public string Industry { get; set; }
         public string Country { get; set; }
         public string Size { get; set; }
@@ -457,6 +457,8 @@ namespace Cyclone.Wpf.Demo.Views
             "Healthcare" => new SolidColorBrush(Colors.Red),
             _ => new SolidColorBrush(Colors.Gray)
         };
+
+        public Brush Background { get; set; }
     }
 
     #endregion 数据模型类

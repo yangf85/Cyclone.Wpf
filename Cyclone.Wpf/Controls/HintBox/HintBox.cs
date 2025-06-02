@@ -1,26 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Cyclone.Wpf.Controls;
-
-public interface IHintable
-{
-    string HintText { get; }
-}
 
 [TemplatePart(Name = PART_ClearTextButton, Type = typeof(Button))]
 [TemplatePart(Name = PART_HintTextButton, Type = typeof(Button))]
@@ -31,19 +20,13 @@ public class HintBox : Selector
 {
     private const string PART_ContainerScrollViewer = nameof(PART_ContainerScrollViewer);
     private const string PART_ClearTextButton = nameof(PART_ClearTextButton);
-
     private const string PART_DisplayPopup = nameof(PART_DisplayPopup);
-
     private const string PART_InputTextBox = nameof(PART_InputTextBox);
-
     private const string PART_HintTextButton = nameof(PART_HintTextButton);
 
     private Popup _displayPopup;
-
     private TextBox _inputTextBox;
-
     public Button _clearTextButton;
-
     private ScrollViewer _scrollViewer;
 
     public HintBox()
@@ -52,36 +35,67 @@ public class HintBox : Selector
         Unloaded += HintBox_Unloaded;
     }
 
-    private void HintBox_Unloaded(object sender, RoutedEventArgs e)
-    {
-        RemoveHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked));
-    }
-
-    private void OnItemClicked(object sender, RoutedEventArgs e)
-    {
-        if (e.OriginalSource is HintBoxItem clickedItem)
-        {
-            var index = ItemContainerGenerator.IndexFromContainer(clickedItem);
-
-            SelectedItem = Items[index];
-        }
-        IsOpen = false;
-    }
-
-    private void HintBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked), true);
-    }
-
     static HintBox()
     {
         InitializeCommands();
+        // 重写 DisplayMemberPath 属性的元数据以添加回调
+        DisplayMemberPathProperty.OverrideMetadata(typeof(HintBox),
+            new FrameworkPropertyMetadata(string.Empty, OnDisplayMemberPathChanged));
     }
+
+    private static void OnDisplayMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var hintBox = (HintBox)d;
+        // 当 DisplayMemberPath 改变时，刷新过滤器
+        hintBox.Items?.Filter = hintBox.FilterPredicate;
+    }
+
+    #region SearchMemberPath
+
+    public static readonly DependencyProperty SearchMemberPathProperty =
+        DependencyProperty.Register(nameof(SearchMemberPath), typeof(string), typeof(HintBox),
+            new PropertyMetadata(null, OnSearchMemberPathChanged));
+
+    /// <summary>
+    /// 获取或设置用于搜索的属性路径。如果不设置，将使用 DisplayMemberPath
+    /// </summary>
+    public string SearchMemberPath
+    {
+        get => (string)GetValue(SearchMemberPathProperty);
+        set => SetValue(SearchMemberPathProperty, value);
+    }
+
+    private static void OnSearchMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var hintBox = (HintBox)d;
+        // 刷新过滤器
+        hintBox.Items?.Filter = hintBox.FilterPredicate;
+    }
+
+    #endregion SearchMemberPath
+
+    #region StringComparison
+
+    public static readonly DependencyProperty StringComparisonProperty =
+        DependencyProperty.Register(nameof(StringComparison), typeof(StringComparison), typeof(HintBox),
+            new PropertyMetadata(StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>
+    /// 获取或设置字符串比较方式
+    /// </summary>
+    public StringComparison StringComparison
+    {
+        get => (StringComparison)GetValue(StringComparisonProperty);
+        set => SetValue(StringComparisonProperty, value);
+    }
+
+    #endregion StringComparison
 
     #region InputText
 
     public static readonly DependencyProperty InputTextProperty =
-        DependencyProperty.Register(nameof(InputText), typeof(string), typeof(HintBox), new PropertyMetadata(default(string)));
+        DependencyProperty.Register(nameof(InputText), typeof(string), typeof(HintBox),
+            new PropertyMetadata(default(string)));
 
     public string InputText
     {
@@ -91,23 +105,11 @@ public class HintBox : Selector
 
     #endregion InputText
 
-    #region IsIgnoreCase
-
-    public static readonly DependencyProperty IsIgnoreCaseProperty =
-        DependencyProperty.Register(nameof(IsIgnoreCase), typeof(bool), typeof(HintBox), new PropertyMetadata(true));
-
-    public bool IsIgnoreCase
-    {
-        get => (bool)GetValue(IsIgnoreCaseProperty);
-        set => SetValue(IsIgnoreCaseProperty, value);
-    }
-
-    #endregion IsIgnoreCase
-
     #region IsOpen
 
     public static readonly DependencyProperty IsOpenProperty =
-        DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(HintBox), new PropertyMetadata(default(bool)));
+        DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(HintBox),
+            new PropertyMetadata(default(bool)));
 
     public bool IsOpen
     {
@@ -126,9 +128,32 @@ public class HintBox : Selector
     }
 
     public static readonly DependencyProperty MaxContainerHeightProperty =
-        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(HintBox), new PropertyMetadata(300d));
+        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(HintBox),
+            new PropertyMetadata(300d));
 
     #endregion MaxContainerHeight
+
+    #region Override Methods
+
+    private void HintBox_Unloaded(object sender, RoutedEventArgs e)
+    {
+        RemoveHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked));
+    }
+
+    private void OnItemClicked(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is HintBoxItem clickedItem)
+        {
+            var index = ItemContainerGenerator.IndexFromContainer(clickedItem);
+            SelectedItem = Items[index];
+        }
+        IsOpen = false;
+    }
+
+    private void HintBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked), true);
+    }
 
     private static void InitializeCommands()
     {
@@ -145,11 +170,10 @@ public class HintBox : Selector
                 Items.Filter = FilterPredicate;
             }
         }
+
         IsOpen = true;
         _inputTextBox?.Focus();
     }
-
-    #region Override
 
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
@@ -195,7 +219,6 @@ public class HintBox : Selector
                 }
             }
         }
-
         return -1;
     }
 
@@ -232,23 +255,17 @@ public class HintBox : Selector
         if (_scrollViewer == null)
             return;
 
-        // 确保元素已生成（禁用虚拟化时无需此步骤）
         item.BringIntoView();
 
-        // 获取元素相对于ScrollViewer的坐标
         var itemTransform = item.TransformToVisual(_scrollViewer);
         var itemTopPosition = itemTransform.Transform(new Point(0, 0)).Y;
         var itemBottomPosition = itemTopPosition + item.ActualHeight;
 
-        // 获取滚动视口的垂直范围
         var viewportTop = _scrollViewer.VerticalOffset;
         var viewportBottom = viewportTop + _scrollViewer.ViewportHeight;
 
-        // 检查元素是否完全在视口外
         if (itemBottomPosition <= viewportTop || itemTopPosition >= viewportBottom)
         {
-            // 元素完全不可见，滚动到可见位置
-            // 使用BringIntoView确保元素完全可见
             item.BringIntoView();
         }
     }
@@ -271,13 +288,88 @@ public class HintBox : Selector
     {
         base.OnSelectionChanged(e);
 
-        if (SelectedItem is IHintable hintable)
+        if (SelectedItem != null)
         {
-            InputText = hintable.HintText;
-            if (_inputTextBox != null)
+            // 获取显示文本
+            string displayText = GetItemText(SelectedItem);
+            if (!string.IsNullOrEmpty(displayText))
             {
-                _inputTextBox.Text = InputText;
+                InputText = displayText;
+                if (_inputTextBox != null)
+                {
+                    _inputTextBox.Text = InputText;
+                }
             }
+        }
+    }
+
+    /// <summary>
+    /// 获取项的显示文本
+    /// </summary>
+    private string GetItemText(object item)
+    {
+        if (item == null)
+            return string.Empty;
+
+        // 如果设置了 DisplayMemberPath，使用它
+        if (!string.IsNullOrEmpty(DisplayMemberPath))
+        {
+            return GetPropertyValue(item, DisplayMemberPath)?.ToString() ?? string.Empty;
+        }
+
+        // 使用 ToString()
+        return item.ToString();
+    }
+
+    /// <summary>
+    /// 获取项的搜索文本
+    /// </summary>
+    private string GetSearchText(object item)
+    {
+        if (item == null)
+            return string.Empty;
+
+        // 如果设置了 SearchMemberPath，使用它
+        if (!string.IsNullOrEmpty(SearchMemberPath))
+        {
+            return GetPropertyValue(item, SearchMemberPath)?.ToString() ?? string.Empty;
+        }
+
+        // 否则使用显示文本
+        return GetItemText(item);
+    }
+
+    /// <summary>
+    /// 通过属性路径获取属性值
+    /// </summary>
+    private object GetPropertyValue(object obj, string propertyPath)
+    {
+        if (obj == null || string.IsNullOrEmpty(propertyPath))
+            return null;
+
+        try
+        {
+            // 支持嵌套属性，如 "Address.City"
+            var properties = propertyPath.Split('.');
+            object currentValue = obj;
+
+            foreach (var propertyName in properties)
+            {
+                if (currentValue == null)
+                    return null;
+
+                var property = currentValue.GetType().GetProperty(propertyName);
+                if (property == null)
+                    return null;
+
+                currentValue = property.GetValue(currentValue);
+            }
+
+            return currentValue;
+        }
+        catch
+        {
+            return null;
         }
     }
 
@@ -288,23 +380,11 @@ public class HintBox : Selector
             return true;
         }
 
-        string text;
-        if (item is IHintable hintable)
-        {
-            text = hintable.HintText;
-        }
-        else
-        {
-            text = item.ToString();
-        }
-        if (IsIgnoreCase)
-        {
-            return text.ToUpper().Contains(InputText.ToUpper());
-        }
-        else
-        {
-            return text.Contains(InputText);
-        }
+        // 获取搜索文本
+        var searchText = GetSearchText(item);
+
+        // 检查是否包含输入文本
+        return searchText.IndexOf(InputText, StringComparison) >= 0;
     }
 
     protected override DependencyObject GetContainerForItemOverride()
@@ -340,11 +420,12 @@ public class HintBox : Selector
         _scrollViewer = GetTemplateChild(PART_ContainerScrollViewer) as ScrollViewer;
     }
 
-    #endregion Override
+    #endregion Override Methods
 
-    #region TextChanged
+    #region TextChanged Event
 
-    public static readonly RoutedEvent TextChangedEvent = EventManager.RegisterRoutedEvent("TextChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBox));
+    public static readonly RoutedEvent TextChangedEvent = EventManager.RegisterRoutedEvent(
+        "TextChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBox));
 
     public event RoutedEventHandler TextChanged
     {
@@ -352,5 +433,5 @@ public class HintBox : Selector
         remove { RemoveHandler(TextChangedEvent, value); }
     }
 
-    #endregion TextChanged
+    #endregion TextChanged Event
 }

@@ -48,13 +48,6 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Style.Triggers>
-            <DataTrigger
-                Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}"
-                Value="{x:Null}">
-                <Setter Property="Content" Value="{Binding HintText, RelativeSource={RelativeSource Self}}" />
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
     <Style
@@ -64,7 +57,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid>
-
                         <ContentPresenter Content="{TemplateBinding Content}" />
                     </Grid>
                     <ControlTemplate.Triggers />
@@ -159,7 +151,7 @@
                 <Setter TargetName="ExpansionBorder" Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
             </Trigger>
             <Trigger SourceName="PART_InputTextBox" Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="IsOpen" Value="True" />
+                <Setter TargetName="PART_DisplayPopup" Property="IsOpen" Value="True" />
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
             </Trigger>
         </ControlTemplate.Triggers>
