@@ -171,6 +171,7 @@
             </Trigger>
 
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter Property="IsDropDownOpen" Value="True" />
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
             </Trigger>
             <Trigger Property="HasItems" Value="False">
