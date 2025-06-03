@@ -20,7 +20,13 @@ namespace Cyclone.Wpf.Demo.Views
     public partial class HintBoxViewModel : ObservableObject
     {
         [ObservableProperty]
-        public partial ObservableCollection<FakerData> People { get; set; }
+        public partial ObservableCollection<FakerData> People1 { get; set; }
+
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> People2 { get; set; }
+
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> People3 { get; set; }
 
         [ObservableProperty]
         public partial FakerData? SelectedPerson { get; set; }
@@ -29,33 +35,13 @@ namespace Cyclone.Wpf.Demo.Views
         public partial FakerData? HighlightedPerson { get; set; }
 
         [ObservableProperty]
-        public partial FakerData? SelectedGroupedPerson { get; set; }
-
-        [ObservableProperty]
-        public partial string BasicResult { get; set; } = "Selected: None";
-
-        [ObservableProperty]
-        public partial string GroupedResult { get; set; } = "Selected: None";
-
-        partial void OnSelectedPersonChanged(FakerData? value)
-        {
-            BasicResult = value != null
-                ? $"Selected: {value.FullName}"
-                : "Selected: None";
-        }
-
-        partial void OnSelectedGroupedPersonChanged(FakerData? value)
-        {
-            GroupedResult = value != null
-                ? $"Selected: {value.FullName} from {value.City}"
-                : "Selected: None";
-        }
+        public partial FakerData? GroupedPerson { get; set; }
 
         public HintBoxViewModel()
         {
-            People = new ObservableCollection<FakerData>(
-                FakerDataHelper.GenerateFakerDataCollection(100)
-            );
+            People1 = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(100));
+            People2 = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(100));
+            People3 = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(100));
         }
     }
 }

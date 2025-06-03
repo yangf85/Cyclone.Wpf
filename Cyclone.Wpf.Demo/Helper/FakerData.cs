@@ -132,11 +132,6 @@ public partial class FakerData : ObservableValidator
     {
         MessageBox.Show($"{FirstName}-{LastName}");
     }
-
-    public override string ToString()
-    {
-        return $"{FirstName}";
-    }
 }
 
 public partial class TreeFakerData : ObservableObject

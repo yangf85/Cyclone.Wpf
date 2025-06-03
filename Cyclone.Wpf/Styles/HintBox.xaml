@@ -24,11 +24,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         SnapsToDevicePixels="True">
-                        <ContentPresenter
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
@@ -120,8 +116,7 @@
                     ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                     ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                     IsHitTestVisible="False"
-                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                    Visibility="Collapsed" />
+                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                 <TextBox
                     x:Name="PART_EditableTextBox"
                     Grid.Column="0"
@@ -133,6 +128,7 @@
                     Width="16"
                     Height="16"
                     Margin="5,0"
+                    Command="{x:Static ctl:HintBox.ClearTextCommand}"
                     Focusable="False"
                     Style="{StaticResource HintBox.ClearButtonStyle}" />
                 <Popup
@@ -162,8 +158,11 @@
                 </Popup>
             </Grid>
         </Border>
-
         <ControlTemplate.Triggers>
+            <Trigger Property="IsEditable" Value="True">
+                <Setter TargetName="ContentPresenter" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+
             <Trigger SourceName="PART_EditableTextBox" Property="Text" Value="">
                 <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
             </Trigger>
@@ -190,14 +189,11 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="MaxDropDownHeight" Value="300" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="IsEditable" Value="True" />
         <Setter Property="IsTextSearchEnabled" Value="False" />
-        <Setter Property="StaysOpenOnEdit" Value="True" />
     </Style>
 </ResourceDictionary>
