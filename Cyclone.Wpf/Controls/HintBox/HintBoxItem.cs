@@ -1,51 +1,33 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace Cyclone.Wpf.Controls;
-
-public class HintBoxItem : ComboBoxItem
+namespace Cyclone.Wpf.Controls
 {
-    static HintBoxItem()
+    /// <summary>
+    /// HintBox 的项容器，继承自 ComboBoxItem
+    /// </summary>
+    public class HintBoxItem : ComboBoxItem
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(HintBoxItem), new FrameworkPropertyMetadata(typeof(HintBoxItem)));
-    }
+        static HintBoxItem()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(HintBoxItem),
+                new FrameworkPropertyMetadata(typeof(HintBoxItem)));
+        }
 
-    public HintBoxItem()
-    {
-    }
+        public HintBoxItem()
+        {
+        }
 
-    #region Clicked
+        // 如果需要自定义行为，可以重写相应方法
+        protected override void OnSelected(RoutedEventArgs e)
+        {
+            base.OnSelected(e);
 
-    public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent(
-        "Clicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBoxItem));
-
-    protected virtual void OnClicked(RoutedEventArgs e)
-    {
-        RaiseEvent(e);
-    }
-
-    public event RoutedEventHandler Clicked
-    {
-        add { AddHandler(ClickedEvent, value); }
-        remove { RemoveHandler(ClickedEvent, value); }
-    }
-
-    #endregion Clicked
-
-    #region Override
-
-    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-    {
-        base.OnMouseLeftButtonDown(e);
-        OnClicked(new RoutedEventArgs(ClickedEvent));
-    }
-
-    #endregion Override
-
-    internal void ChangeHighlightState(bool isHighlight)
-    {
-        IsHighlighted = isHighlight;
+            // 选中时关闭下拉框
+            if (Parent is HintBox hintBox)
+            {
+                hintBox.IsDropDownOpen = false;
+            }
+        }
     }
 }

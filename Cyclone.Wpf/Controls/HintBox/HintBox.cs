@@ -1,437 +1,345 @@
 ﻿using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace Cyclone.Wpf.Controls;
-
-[TemplatePart(Name = PART_ClearTextButton, Type = typeof(Button))]
-[TemplatePart(Name = PART_HintTextButton, Type = typeof(Button))]
-[TemplatePart(Name = PART_InputTextBox, Type = typeof(TextBox))]
-[TemplatePart(Name = PART_DisplayPopup, Type = typeof(Popup))]
-[TemplatePart(Name = PART_ContainerScrollViewer, Type = typeof(ScrollViewer))]
-public class HintBox : Selector
+namespace Cyclone.Wpf.Controls
 {
-    private const string PART_ContainerScrollViewer = nameof(PART_ContainerScrollViewer);
-    private const string PART_ClearTextButton = nameof(PART_ClearTextButton);
-    private const string PART_DisplayPopup = nameof(PART_DisplayPopup);
-    private const string PART_InputTextBox = nameof(PART_InputTextBox);
-    private const string PART_HintTextButton = nameof(PART_HintTextButton);
-
-    private Popup _displayPopup;
-    private TextBox _inputTextBox;
-    public Button _clearTextButton;
-    private ScrollViewer _scrollViewer;
-
-    public HintBox()
-    {
-        Loaded += HintBox_Loaded;
-        Unloaded += HintBox_Unloaded;
-    }
-
-    static HintBox()
-    {
-        InitializeCommands();
-        // 重写 DisplayMemberPath 属性的元数据以添加回调
-        DisplayMemberPathProperty.OverrideMetadata(typeof(HintBox),
-            new FrameworkPropertyMetadata(string.Empty, OnDisplayMemberPathChanged));
-    }
-
-    private static void OnDisplayMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var hintBox = (HintBox)d;
-        // 当 DisplayMemberPath 改变时，刷新过滤器
-        hintBox.Items?.Filter = hintBox.FilterPredicate;
-    }
-
-    #region SearchMemberPath
-
-    public static readonly DependencyProperty SearchMemberPathProperty =
-        DependencyProperty.Register(nameof(SearchMemberPath), typeof(string), typeof(HintBox),
-            new PropertyMetadata(null, OnSearchMemberPathChanged));
-
     /// <summary>
-    /// 获取或设置用于搜索的属性路径。如果不设置，将使用 DisplayMemberPath
+    /// 继承自 ComboBox 的智能提示框控件
     /// </summary>
-    public string SearchMemberPath
+    [TemplatePart(Name = "PART_EditableTextBox", Type = typeof(TextBox))]
+    [TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
+    public class HintBox : ComboBox
     {
-        get => (string)GetValue(SearchMemberPathProperty);
-        set => SetValue(SearchMemberPathProperty, value);
-    }
+        private TextBox _editableTextBox;
+        private string _currentFilter = string.Empty;
 
-    private static void OnSearchMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var hintBox = (HintBox)d;
-        // 刷新过滤器
-        hintBox.Items?.Filter = hintBox.FilterPredicate;
-    }
-
-    #endregion SearchMemberPath
-
-    #region StringComparison
-
-    public static readonly DependencyProperty StringComparisonProperty =
-        DependencyProperty.Register(nameof(StringComparison), typeof(StringComparison), typeof(HintBox),
-            new PropertyMetadata(StringComparison.OrdinalIgnoreCase));
-
-    /// <summary>
-    /// 获取或设置字符串比较方式
-    /// </summary>
-    public StringComparison StringComparison
-    {
-        get => (StringComparison)GetValue(StringComparisonProperty);
-        set => SetValue(StringComparisonProperty, value);
-    }
-
-    #endregion StringComparison
-
-    #region InputText
-
-    public static readonly DependencyProperty InputTextProperty =
-        DependencyProperty.Register(nameof(InputText), typeof(string), typeof(HintBox),
-            new PropertyMetadata(default(string)));
-
-    public string InputText
-    {
-        get => (string)GetValue(InputTextProperty);
-        set => SetValue(InputTextProperty, value);
-    }
-
-    #endregion InputText
-
-    #region IsOpen
-
-    public static readonly DependencyProperty IsOpenProperty =
-        DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(HintBox),
-            new PropertyMetadata(default(bool)));
-
-    public bool IsOpen
-    {
-        get => (bool)GetValue(IsOpenProperty);
-        set => SetValue(IsOpenProperty, value);
-    }
-
-    #endregion IsOpen
-
-    #region MaxContainerHeight
-
-    public double MaxContainerHeight
-    {
-        get => (double)GetValue(MaxContainerHeightProperty);
-        set => SetValue(MaxContainerHeightProperty, value);
-    }
-
-    public static readonly DependencyProperty MaxContainerHeightProperty =
-        DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(HintBox),
-            new PropertyMetadata(300d));
-
-    #endregion MaxContainerHeight
-
-    #region Override Methods
-
-    private void HintBox_Unloaded(object sender, RoutedEventArgs e)
-    {
-        RemoveHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked));
-    }
-
-    private void OnItemClicked(object sender, RoutedEventArgs e)
-    {
-        if (e.OriginalSource is HintBoxItem clickedItem)
+        static HintBox()
         {
-            var index = ItemContainerGenerator.IndexFromContainer(clickedItem);
-            SelectedItem = Items[index];
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(HintBox),
+                new FrameworkPropertyMetadata(typeof(HintBox)));
+
+            // 重写这些属性以确保正确的默认行为
+            IsEditableProperty.OverrideMetadata(typeof(HintBox),
+                new FrameworkPropertyMetadata(true));
+
+            IsTextSearchEnabledProperty.OverrideMetadata(typeof(HintBox),
+                new FrameworkPropertyMetadata(false));
+
+            StaysOpenOnEditProperty.OverrideMetadata(typeof(HintBox),
+                new FrameworkPropertyMetadata(true));
         }
-        IsOpen = false;
-    }
 
-    private void HintBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        AddHandler(HintBoxItem.ClickedEvent, new RoutedEventHandler(OnItemClicked), true);
-    }
-
-    private static void InitializeCommands()
-    {
-    }
-
-    private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
-
-        if (Items != null)
+        public HintBox()
         {
-            if (Items.Filter == null || Items.Filter == FilterPredicate)
+            // 确保默认值
+            IsEditable = true;
+            IsTextSearchEnabled = false;
+            StaysOpenOnEdit = true;
+        }
+
+        #region SearchMemberPath
+
+        public static readonly DependencyProperty SearchMemberPathProperty =
+            DependencyProperty.Register(nameof(SearchMemberPath), typeof(string), typeof(HintBox),
+                new PropertyMetadata(null, OnSearchMemberPathChanged));
+
+        /// <summary>
+        /// 获取或设置用于搜索的属性路径。如果不设置，将使用 DisplayMemberPath
+        /// </summary>
+        public string SearchMemberPath
+        {
+            get => (string)GetValue(SearchMemberPathProperty);
+            set => SetValue(SearchMemberPathProperty, value);
+        }
+
+        private static void OnSearchMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var hintBox = (HintBox)d;
+            hintBox.RefreshFilter();
+        }
+
+        #endregion SearchMemberPath
+
+        #region StringComparison
+
+        public static readonly DependencyProperty StringComparisonProperty =
+            DependencyProperty.Register(nameof(StringComparison), typeof(StringComparison), typeof(HintBox),
+                new PropertyMetadata(StringComparison.OrdinalIgnoreCase, OnStringComparisonChanged));
+
+        /// <summary>
+        /// 获取或设置字符串比较方式
+        /// </summary>
+        public StringComparison StringComparison
+        {
+            get => (StringComparison)GetValue(StringComparisonProperty);
+            set => SetValue(StringComparisonProperty, value);
+        }
+
+        private static void OnStringComparisonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var hintBox = (HintBox)d;
+            hintBox.RefreshFilter();
+        }
+
+        #endregion StringComparison
+
+        #region MaxDropDownHeight Override
+
+        // ComboBox 已经有 MaxDropDownHeight 属性，我们可以直接使用
+        // 不需要再定义 MaxContainerHeight
+
+        #endregion MaxDropDownHeight Override
+
+        #region Override Methods
+
+        public override void OnApplyTemplate()
+        {
+            // 先解除旧的事件处理
+            if (_editableTextBox != null)
+            {
+                _editableTextBox.TextChanged -= OnEditableTextBoxTextChanged;
+            }
+
+            base.OnApplyTemplate();
+
+            // 获取模板部件
+            _editableTextBox = GetTemplateChild("PART_EditableTextBox") as TextBox;
+
+            if (_editableTextBox != null)
+            {
+                _editableTextBox.TextChanged += OnEditableTextBoxTextChanged;
+            }
+
+            // 处理清除按钮
+            var clearButton = GetTemplateChild("PART_ClearButton") as Button;
+            if (clearButton != null)
+            {
+                clearButton.Click += OnClearButtonClick;
+            }
+        }
+
+        private void OnEditableTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _currentFilter = _editableTextBox?.Text ?? string.Empty;
+
+            // 应用过滤
+            RefreshFilter();
+
+            // 打开下拉框
+            if (!IsDropDownOpen && Items.Count > 0)
+            {
+                IsDropDownOpen = true;
+            }
+
+            // 触发自定义的 TextChanged 事件
+            RaiseEvent(new RoutedEventArgs(TextChangedEvent, this));
+        }
+
+        private void OnClearButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (_editableTextBox != null)
+            {
+                _editableTextBox.Clear();
+                _editableTextBox.Focus();
+            }
+
+            SelectedItem = null;
+            _currentFilter = string.Empty;
+            RefreshFilter();
+        }
+
+        protected override void OnDropDownOpened(EventArgs e)
+        {
+            base.OnDropDownOpened(e);
+
+            // 确保有焦点
+            _editableTextBox?.Focus();
+        }
+
+        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+        {
+            base.OnSelectionChanged(e);
+
+            // 选择项改变时，更新文本框内容
+            if (SelectedItem != null && _editableTextBox != null)
+            {
+                var displayText = GetItemText(SelectedItem);
+                if (!string.IsNullOrEmpty(displayText))
+                {
+                    _editableTextBox.Text = displayText;
+                }
+            }
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    // 如果有高亮项，选择它；否则选择第一项
+                    if (IsDropDownOpen)
+                    {
+                        var highlightedItem = GetHighlightedItem();
+                        if (highlightedItem != null)
+                        {
+                            SelectedItem = highlightedItem;
+                        }
+                        else if (Items.Count > 0)
+                        {
+                            SelectedItem = Items[0];
+                        }
+
+                        IsDropDownOpen = false;
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Key.Escape:
+                    if (IsDropDownOpen)
+                    {
+                        IsDropDownOpen = false;
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Key.Down:
+                case Key.Up:
+                    // ComboBox 已经处理了上下键导航
+                    if (!IsDropDownOpen && Items.Count > 0)
+                    {
+                        IsDropDownOpen = true;
+                    }
+                    break;
+            }
+
+            base.OnPreviewKeyDown(e);
+        }
+
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new HintBoxItem();
+        }
+
+        protected override bool IsItemItsOwnContainerOverride(object item)
+        {
+            return item is HintBoxItem;
+        }
+
+        #endregion Override Methods
+
+        #region Private Methods
+
+        private void RefreshFilter()
+        {
+            if (Items.CanFilter)
             {
                 Items.Filter = FilterPredicate;
             }
         }
 
-        IsOpen = true;
-        _inputTextBox?.Focus();
-    }
-
-    protected override void OnPreviewKeyDown(KeyEventArgs e)
-    {
-        base.OnPreviewKeyDown(e);
-        switch (e.Key)
+        private bool FilterPredicate(object item)
         {
-            case Key.Enter:
-                HandleKeyEnter();
-                break;
-
-            case Key.Up:
-                HandleKeyUpDown(true);
-                break;
-
-            case Key.Down:
-                HandleKeyUpDown(false);
-                break;
-
-            case Key.Escape:
-                HandleKeyCancel();
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    private void HandleKeyCancel()
-    {
-        IsOpen = false;
-    }
-
-    private int GetHighlightedIndex()
-    {
-        for (int i = 0; i < Items.Count; i++)
-        {
-            var item = ItemContainerGenerator.ContainerFromIndex(i);
-            if (item is HintBoxItem hintBoxItem)
+            if (string.IsNullOrEmpty(_currentFilter) || item == null)
             {
-                if (hintBoxItem.IsHighlighted)
+                return true;
+            }
+
+            var searchText = GetSearchText(item);
+            return searchText.IndexOf(_currentFilter, StringComparison) >= 0;
+        }
+
+        private string GetItemText(object item)
+        {
+            if (item == null)
+                return string.Empty;
+
+            // 如果设置了 DisplayMemberPath，使用它
+            if (!string.IsNullOrEmpty(DisplayMemberPath))
+            {
+                return GetPropertyValue(item, DisplayMemberPath)?.ToString() ?? string.Empty;
+            }
+
+            // 否则使用 ToString()
+            return item.ToString();
+        }
+
+        private string GetSearchText(object item)
+        {
+            if (item == null)
+                return string.Empty;
+
+            // 如果设置了 SearchMemberPath，使用它
+            if (!string.IsNullOrEmpty(SearchMemberPath))
+            {
+                return GetPropertyValue(item, SearchMemberPath)?.ToString() ?? string.Empty;
+            }
+
+            // 否则使用显示文本
+            return GetItemText(item);
+        }
+
+        private object GetPropertyValue(object obj, string propertyPath)
+        {
+            if (obj == null || string.IsNullOrEmpty(propertyPath))
+                return null;
+
+            try
+            {
+                // 支持嵌套属性
+                var properties = propertyPath.Split('.');
+                object currentValue = obj;
+
+                foreach (var propertyName in properties)
                 {
-                    return i;
+                    if (currentValue == null)
+                        return null;
+
+                    var property = currentValue.GetType().GetProperty(propertyName);
+                    if (property == null)
+                        return null;
+
+                    currentValue = property.GetValue(currentValue);
+                }
+
+                return currentValue;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private object GetHighlightedItem()
+        {
+            // 获取当前高亮的项
+            foreach (var item in Items)
+            {
+                var container = ItemContainerGenerator.ContainerFromItem(item) as ComboBoxItem;
+                if (container != null && container.IsHighlighted)
+                {
+                    return item;
                 }
             }
-        }
-        return -1;
-    }
-
-    private void HandleKeyUpDown(bool isUp)
-    {
-        int itemCount = Items.Count;
-        if (itemCount == 0)
-        {
-            return;
-        }
-
-        int currentIndex = GetHighlightedIndex();
-        currentIndex = currentIndex == -1 ? 0 : currentIndex;
-
-        // 计算新索引并处理循环
-        int newIndex = (currentIndex + (isUp ? -1 : 1) + itemCount) % itemCount;
-
-        // 取消当前高亮项
-        if (ItemContainerGenerator.ContainerFromIndex(currentIndex) is HintBoxItem currentItem)
-        {
-            currentItem.ChangeHighlightState(false);
-        }
-
-        // 设置新高亮项
-        if (ItemContainerGenerator.ContainerFromIndex(newIndex) is HintBoxItem newItem)
-        {
-            newItem.ChangeHighlightState(true);
-            ScrollToHighlightedItem(newItem);
-        }
-    }
-
-    private void ScrollToHighlightedItem(HintBoxItem item)
-    {
-        if (_scrollViewer == null)
-            return;
-
-        item.BringIntoView();
-
-        var itemTransform = item.TransformToVisual(_scrollViewer);
-        var itemTopPosition = itemTransform.Transform(new Point(0, 0)).Y;
-        var itemBottomPosition = itemTopPosition + item.ActualHeight;
-
-        var viewportTop = _scrollViewer.VerticalOffset;
-        var viewportBottom = viewportTop + _scrollViewer.ViewportHeight;
-
-        if (itemBottomPosition <= viewportTop || itemTopPosition >= viewportBottom)
-        {
-            item.BringIntoView();
-        }
-    }
-
-    private void HandleKeyEnter()
-    {
-        var index = GetHighlightedIndex();
-
-        if (index == -1)
-        {
-            IsOpen = false;
-            return;
-        }
-
-        SelectedItem = Items[index];
-        IsOpen = false;
-    }
-
-    protected override void OnSelectionChanged(SelectionChangedEventArgs e)
-    {
-        base.OnSelectionChanged(e);
-
-        if (SelectedItem != null)
-        {
-            // 获取显示文本
-            string displayText = GetItemText(SelectedItem);
-            if (!string.IsNullOrEmpty(displayText))
-            {
-                InputText = displayText;
-                if (_inputTextBox != null)
-                {
-                    _inputTextBox.Text = InputText;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 获取项的显示文本
-    /// </summary>
-    private string GetItemText(object item)
-    {
-        if (item == null)
-            return string.Empty;
-
-        // 如果设置了 DisplayMemberPath，使用它
-        if (!string.IsNullOrEmpty(DisplayMemberPath))
-        {
-            return GetPropertyValue(item, DisplayMemberPath)?.ToString() ?? string.Empty;
-        }
-
-        // 使用 ToString()
-        return item.ToString();
-    }
-
-    /// <summary>
-    /// 获取项的搜索文本
-    /// </summary>
-    private string GetSearchText(object item)
-    {
-        if (item == null)
-            return string.Empty;
-
-        // 如果设置了 SearchMemberPath，使用它
-        if (!string.IsNullOrEmpty(SearchMemberPath))
-        {
-            return GetPropertyValue(item, SearchMemberPath)?.ToString() ?? string.Empty;
-        }
-
-        // 否则使用显示文本
-        return GetItemText(item);
-    }
-
-    /// <summary>
-    /// 通过属性路径获取属性值
-    /// </summary>
-    private object GetPropertyValue(object obj, string propertyPath)
-    {
-        if (obj == null || string.IsNullOrEmpty(propertyPath))
-            return null;
-
-        try
-        {
-            // 支持嵌套属性，如 "Address.City"
-            var properties = propertyPath.Split('.');
-            object currentValue = obj;
-
-            foreach (var propertyName in properties)
-            {
-                if (currentValue == null)
-                    return null;
-
-                var property = currentValue.GetType().GetProperty(propertyName);
-                if (property == null)
-                    return null;
-
-                currentValue = property.GetValue(currentValue);
-            }
-
-            return currentValue;
-        }
-        catch
-        {
             return null;
         }
-    }
 
-    private bool FilterPredicate(object item)
-    {
-        if (string.IsNullOrEmpty(InputText) || item == null)
+        #endregion Private Methods
+
+        #region TextChanged Event
+
+        public static readonly RoutedEvent TextChangedEvent = EventManager.RegisterRoutedEvent(
+            "TextChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBox));
+
+        public event RoutedEventHandler TextChanged
         {
-            return true;
+            add { AddHandler(TextChangedEvent, value); }
+            remove { RemoveHandler(TextChangedEvent, value); }
         }
 
-        // 获取搜索文本
-        var searchText = GetSearchText(item);
-
-        // 检查是否包含输入文本
-        return searchText.IndexOf(InputText, StringComparison) >= 0;
+        #endregion TextChanged Event
     }
-
-    protected override DependencyObject GetContainerForItemOverride()
-    {
-        return new HintBoxItem();
-    }
-
-    protected override bool IsItemItsOwnContainerOverride(object item)
-    {
-        return item is HintBoxItem;
-    }
-
-    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-    {
-        base.PrepareContainerForItemOverride(element, item);
-
-        if (element is HintBoxItem container)
-        {
-            container.DataContext = item;
-        }
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-        _inputTextBox = GetTemplateChild(PART_InputTextBox) as TextBox;
-        if (_inputTextBox != null)
-        {
-            _inputTextBox.TextChanged -= InputTextBox_TextChanged;
-            _inputTextBox.TextChanged += InputTextBox_TextChanged;
-        }
-        _displayPopup = GetTemplateChild(PART_DisplayPopup) as Popup;
-        _scrollViewer = GetTemplateChild(PART_ContainerScrollViewer) as ScrollViewer;
-    }
-
-    #endregion Override Methods
-
-    #region TextChanged Event
-
-    public static readonly RoutedEvent TextChangedEvent = EventManager.RegisterRoutedEvent(
-        "TextChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HintBox));
-
-    public event RoutedEventHandler TextChanged
-    {
-        add { AddHandler(TextChangedEvent, value); }
-        remove { RemoveHandler(TextChangedEvent, value); }
-    }
-
-    #endregion TextChanged Event
 }

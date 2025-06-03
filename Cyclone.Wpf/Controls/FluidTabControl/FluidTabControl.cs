@@ -1,24 +1,26 @@
-﻿using System;
+﻿// 完整的 FluidTabControl.cs 修复
+
+using Cyclone.Wpf.Helpers;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Collections.Specialized;
-using System.Collections;
-using System.Windows.Media;
-using Cyclone.Wpf.Helpers;
-using System.Windows.Media.Animation;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Cyclone.Wpf.Controls;
 
 public enum FluidTabPlacement
 {
     Left,
-
     Right,
 }
 
@@ -80,67 +82,62 @@ public class FluidTabControl : Selector
 
     #region Private
 
-    private static FluidTabItem FindContentOwner(DependencyObject element)
-    {
-        while (element != null)
-        {
-            if (element is Border border && border.Child != null)
-            {
-                return FluidTabItem.GetContentOwner(border.Child);
-            }
-
-            if (element is FluidTabItem tabItem)
-            {
-                return tabItem;
-            }
-
-            element = VisualTreeHelper.GetParent(element);
-        }
-        return null;
-    }
-
-    private void UpdateItemsContent()
+    internal void UpdateItemsContent()
     {
         if (_container == null || _itemsPanel == null) return;
 
         _itemsPanel.Children.Clear();
 
-        foreach (var item in GetValidItems())
+        for (int i = 0; i < Items.Count; i++)
         {
-            var content = new Border
+            var item = Items[i];
+            var container = GetFluidTabItem(item);
+
+            // 创建内容包装器
+            var contentWrapper = new Border
             {
                 Background = Brushes.Transparent,
-                Child = GetItemContent(item)
+                Tag = i  // 使用索引作为标识
             };
 
-            _itemsPanel.Children.Add(content);
-        }
-    }
+            // 使用 ContentPresenter 来显示内容，避免直接使用已有父元素的内容
+            ContentPresenter contentPresenter = null;
 
-    private IEnumerable<FluidTabItem> GetValidItems() =>
-        Items.OfType<object>()
-            .Select(GetFluidTabItem)
-            .Where(item => item != null);
+            if (item is FluidTabItem tabItem)
+            {
+                // 对于 FluidTabItem，创建 ContentPresenter 并绑定到其 Content
+                contentPresenter = new ContentPresenter();
+                contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding("Content") { Source = tabItem });
 
-    private UIElement GetItemContent(FluidTabItem item) =>
-        item?.Content as UIElement ?? new FrameworkElement();
+                // 绑定 DataContext
+                var dataContextBinding = new Binding("DataContext")
+                {
+                    Source = tabItem,
+                    Mode = BindingMode.OneWay
+                };
+                contentWrapper.SetBinding(Border.DataContextProperty, dataContextBinding);
+            }
+            else
+            {
+                // 对于通过 ItemsSource 绑定的项，使用 ItemTemplate
+                contentPresenter = new ContentPresenter
+                {
+                    ContentTemplate = ItemTemplate,
+                    Content = item
+                };
+                contentWrapper.DataContext = item;
+            }
 
-    private void HandleScrollPosition(FluidTabItem targetItem, double verticalOffset)
-    {
-        if (targetItem == null) return;
+            // 设置 ContentOwner，建立关联
+            if (container != null && contentPresenter != null)
+            {
+                FluidTabItem.SetContentOwner(contentPresenter, container);
+                // 同时在 wrapper 上也设置，以便查找
+                FluidTabItem.SetContentOwner(contentWrapper, container);
+            }
 
-        bool atBottom = verticalOffset > _container.ScrollableHeight - 1;
-        var finalItem = atBottom ? GetLastItem() : targetItem;
-
-        var rawItem = finalItem != null
-            ? ItemContainerGenerator.ItemFromContainer(finalItem)
-            : null;
-
-        if (rawItem != null && !Equals(SelectedItem, rawItem))
-        {
-            _isScrolling = true;
-            SelectedItem = rawItem;
-            _isScrolling = false;
+            contentWrapper.Child = contentPresenter;
+            _itemsPanel.Children.Add(contentWrapper);
         }
     }
 
@@ -153,37 +150,47 @@ public class FluidTabControl : Selector
 
     private void ScrollToSelectedItem()
     {
-        var selectedItem = GetSelectedContainer();
-        if (selectedItem?.Content is not FrameworkElement content) return;
+        if (SelectedItem == null) return;
 
-        if (VisualTreeHelper.GetParent(content) is Border border)
+        // 获取选中项的索引
+        int selectedIndex = Items.IndexOf(SelectedItem);
+        if (selectedIndex < 0) return;
+
+        // 查找对应索引的内容元素
+        FrameworkElement targetElement = null;
+
+        foreach (var child in _itemsPanel.Children)
         {
-            var position = border.TranslatePoint(new Point(), _itemsPanel);
+            if (child is Border border && border.Tag is int index && index == selectedIndex)
+            {
+                targetElement = border;
+                break;
+            }
+        }
+
+        if (targetElement != null)
+        {
+            var position = targetElement.TranslatePoint(new Point(), _itemsPanel);
             ScrollToOffset(position.Y);
         }
-    }
-
-    private FluidTabItem GetSelectedContainer()
-    {
-        if (SelectedItem == null) return null;
-
-        return ItemContainerGenerator.ContainerFromItem(SelectedItem) as FluidTabItem
-            ?? GetFluidTabItem(SelectedItem);
     }
 
     private FluidTabItem GetFluidTabItem(object item)
     {
         if (item is FluidTabItem tabItem) return tabItem;
 
-        if (item != null)
+        // 当使用 ItemsSource 时，ItemContainerGenerator 会为每个数据项生成容器
+        var container = ItemContainerGenerator.ContainerFromItem(item) as FluidTabItem;
+        if (container != null) return container;
+
+        // 如果还没有生成容器，通过索引查找
+        int index = Items.IndexOf(item);
+        if (index >= 0)
         {
-            int index = Items.IndexOf(item);
-            if (index >= 0)
-            {
-                return ItemContainerGenerator.ContainerFromIndex(index) as FluidTabItem;
-            }
+            return ItemContainerGenerator.ContainerFromIndex(index) as FluidTabItem;
         }
-        return default;
+
+        return null;
     }
 
     private void ScrollToOffset(double targetOffset)
@@ -221,13 +228,33 @@ public class FluidTabControl : Selector
     {
         if (_isSelecting || _container == null || _currentStoryboard != null) return;
 
-        var hitTestPoint = new Point(1, e.VerticalOffset);
-        var hitTestResult = _itemsPanel.InputHitTest(hitTestPoint);
+        // 找到当前可见的内容项
+        var hitTestPoint = new Point(_container.ActualWidth / 2, e.VerticalOffset + _container.ActualHeight / 2);
+        var hitTestResult = VisualTreeHelper.HitTest(_itemsPanel, hitTestPoint);
 
-        if (hitTestResult is DependencyObject element)
+        if (hitTestResult?.VisualHit != null)
         {
-            var targetItem = FindContentOwner(element);
-            HandleScrollPosition(targetItem, e.VerticalOffset);
+            // 向上查找 Border
+            DependencyObject current = hitTestResult.VisualHit;
+            while (current != null && !(current is Border border && border.Tag is int))
+            {
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            if (current is Border targetBorder && targetBorder.Tag is int index)
+            {
+                // 通过索引获取对应的项
+                if (index >= 0 && index < Items.Count)
+                {
+                    var item = Items[index];
+                    if (!Equals(SelectedItem, item))
+                    {
+                        _isScrolling = true;
+                        SelectedItem = item;
+                        _isScrolling = false;
+                    }
+                }
+            }
         }
     }
 
@@ -238,7 +265,10 @@ public class FluidTabControl : Selector
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
-        UpdateItemsContent();
+
+        // 延迟更新内容，确保容器已经生成
+        Dispatcher.BeginInvoke(new Action(() => UpdateItemsContent()),
+            System.Windows.Threading.DispatcherPriority.Loaded);
     }
 
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
@@ -256,6 +286,28 @@ public class FluidTabControl : Selector
     protected override DependencyObject GetContainerForItemOverride() => new FluidTabItem();
 
     protected override bool IsItemItsOwnContainerOverride(object item) => item is FluidTabItem;
+
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        if (element is FluidTabItem container && !(item is FluidTabItem))
+        {
+            var itemType = item.GetType();
+            var headerProperty = itemType.GetProperty("Header");
+            if (headerProperty != null)
+            {
+                var headerBinding = new Binding("Header")
+                {
+                    Source = item,
+                    Mode = BindingMode.OneWay
+                };
+                container.SetBinding(FluidTabItem.HeaderProperty, headerBinding);
+            }
+
+            container.DataContext = item;
+        }
+    }
 
     public override void OnApplyTemplate()
     {

@@ -14,6 +14,21 @@ namespace Cyclone.Wpf.Controls;
 [ContentProperty("Content")]//不能继承ContentControl 会导致视觉元素连接错误
 public class FluidTabItem : Control
 {
+    public FluidTabItem()
+    {
+        // 监听 DataContext 变化
+        DataContextChanged += OnDataContextChanged;
+    }
+
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        // 触发父控件更新内容
+        if (Parent is FluidTabControl tabControl)
+        {
+            tabControl.UpdateItemsContent();
+        }
+    }
+
     static FluidTabItem()
     {
         FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(FluidTabItem), new FrameworkPropertyMetadata(typeof(FluidTabItem)));
@@ -116,9 +131,22 @@ public class FluidTabItem : Control
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonDown(e);
-        if (ItemsControl.ItemsControlFromItemContainer(this) is Selector selector)
+
+        if (ItemsControl.ItemsControlFromItemContainer(this) is FluidTabControl tabControl)
         {
-            selector.SelectedItem = this;
+            // 获取当前 FluidTabItem 对应的数据项
+            var dataItem = tabControl.ItemContainerGenerator.ItemFromContainer(this);
+
+            if (dataItem != null)
+            {
+                // 如果找到了数据项，设置它为选中项
+                tabControl.SelectedItem = dataItem;
+            }
+            else
+            {
+                // 如果没有找到数据项（可能是直接添加的 FluidTabItem），则设置控件本身
+                tabControl.SelectedItem = this;
+            }
         }
     }
 

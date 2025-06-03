@@ -6,288 +6,144 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     d:DataContext="{d:DesignInstance Type=local:HintBoxViewModel}"
-    d:DesignHeight="800"
-    d:DesignWidth="1200"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
     mc:Ignorable="d">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <!--  标题  -->
-            <TextBlock
-                Grid.Row="0"
-                Margin="0,0,0,20"
-                HorizontalAlignment="Center"
-                FontSize="24"
-                FontWeight="Bold"
-                Text="HintBox Control MVVM Demo" />
+    <UserControl.Resources>
+        <!--  在Resources中定义CollectionViewSource进行分组  -->
+        <CollectionViewSource x:Key="GroupedPeopleSource" Source="{Binding People}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Country" />
+            </CollectionViewSource.GroupDescriptions>
+            <!--<CollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="City" />
+                <scm:SortDescription Direction="Ascending" PropertyName="FullName" />
+            </CollectionViewSource.SortDescriptions>-->
+        </CollectionViewSource>
+    </UserControl.Resources>
 
-            <cy:SpacingStackPanel
-                Grid.Row="2"
-                Spacing="30">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                <!--  基础静态数据示例  -->
-                <GroupBox
-                    Padding="15"
-                    Header="1. Basic Static Data Example (MVVM)">
-                    <StackPanel>
-                        <TextBlock
-                            Margin="0,0,0,10"
-                            FontWeight="SemiBold"
-                            Text="Static predefined items with game classes:" />
-                        <cy:HintBox
-                            Width="300"
-                            HorizontalAlignment="Left"
-                            DisplayMemberPath="ClassName"
-                            ItemsSource="{Binding GameClasses}"
-                            SelectedItem="{Binding SelectedGameClass}" />
-                        <TextBlock
-                            Margin="0,10,0,0"
-                            Foreground="Blue"
-                            Text="{Binding GameClassResult}" />
-                    </StackPanel>
-                </GroupBox>
+        <!--  标题  -->
+        <TextBlock
+            Grid.Row="0"
+            Margin="0,0,0,20"
+            HorizontalAlignment="Center"
+            FontSize="24"
+            FontWeight="Bold"
+            Text="HintBox Control Demo" />
 
-                <!--  动态数据绑定示例  -->
-                <GroupBox
-                    Padding="15"
-                    Header="2. Dynamic Data with Highlighting (MVVM)">
-                    <StackPanel>
-                        <TextBlock
-                            Margin="0,0,0,10"
-                            FontWeight="SemiBold"
-                            Text="Data binding with custom item template and text highlighting:" />
-                        <cy:HintBox
-                            Width="400"
-                            HorizontalAlignment="Left"
-                            InputText="{Binding PeopleSearchText, UpdateSourceTrigger=PropertyChanged}"
-                            ItemsSource="{Binding FilteredPeople}"
-                            MaxContainerHeight="400"
-                            SearchMemberPath="FullName"
-                            SelectedItem="{Binding SelectedPerson}">
-                            <cy:HintBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel
-                                        Margin="5"
-                                        Orientation="Horizontal">
-                                        <Ellipse
-                                            Width="8"
-                                            Height="8"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            Fill="{Binding Background}" />
-                                        <cy:HighlightTextBlock
-                                            FontWeight="Medium"
-                                            HighlightBackground="Yellow"
-                                            HighlightForeground="Red"
-                                            QueriesText="{Binding DataContext.PeopleSearchText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            SourceText="{Binding FullName}" />
+        <StackPanel Grid.Row="2">
+
+            <GroupBox Padding="15" Header="1. Basic HintBox Example">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontWeight="SemiBold"
+                        Text="Search people by name:" />
+                    <cy:HintBox
+                        ItemsSource="{Binding People}"
+                        SearchMemberPath="FirstName"
+                        SelectedItem="{Binding SelectedPerson}" />
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        Foreground="Blue"
+                        Text="{Binding BasicResult}" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Padding="15" Header="2. Highlighted HintBox Example">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontWeight="SemiBold"
+                        Text="Search people by name:" />
+                    <cy:HintBox
+                        ItemsSource="{Binding People}"
+                        SearchMemberPath="FirstName"
+                        SelectedItem="{Binding HighlightedPerson}">
+                        <cy:HintBox.ItemTemplate>
+                            <DataTemplate>
+                                <cy:HighlightTextBlock
+                                    HighlightForeground="Red"
+                                    QueriesText="{Binding Path=Text, RelativeSource={RelativeSource AncestorType=cy:HintBox}}"
+                                    SourceText="{Binding FirstName}" />
+                            </DataTemplate>
+                        </cy:HintBox.ItemTemplate>
+                    </cy:HintBox>
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        Foreground="Blue"
+                        Text="{Binding BasicResult}" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Padding="15" Header="3. Grouped HintBox Example">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontWeight="SemiBold"
+                        Text="People grouped by city with custom templates:" />
+                    <cy:HintBox
+                        Width="450"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding Source={StaticResource GroupedPeopleSource}}"
+                        SearchMemberPath="FullName"
+                        SelectedItem="{Binding SelectedGroupedPerson}">
+                        <cy:HintBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Margin="2,4,2,2"
+                                            Padding="8,4"
+                                            Background="#E3F2FD"
+                                            BorderBrush="#1976D2"
+                                            BorderThickness="0,0,0,1">
+                                            <TextBlock
+                                                FontSize="13"
+                                                FontWeight="Bold"
+                                                Foreground="#1976D2"
+                                                Text="{Binding Name}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </cy:HintBox.GroupStyle>
+                        <cy:HintBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="8,4" Orientation="Horizontal">
+                                    <Ellipse
+                                        Width="8"
+                                        Height="8"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Fill="{Binding Background}" />
+                                    <StackPanel>
+                                        <TextBlock FontWeight="Medium" Text="{Binding FullName}" />
                                         <TextBlock
-                                            Margin="10,0,0,0"
                                             FontSize="11"
                                             Foreground="Gray"
                                             Text="{Binding Email}" />
                                     </StackPanel>
-                                </DataTemplate>
-                            </cy:HintBox.ItemTemplate>
-                        </cy:HintBox>
-                        <TextBlock
-                            Margin="0,10,0,0"
-                            Foreground="Blue"
-                            Text="{Binding PeopleResult}" />
-                    </StackPanel>
-                </GroupBox>
-
-                <!--  多选模拟示例  -->
-                <GroupBox
-                    Padding="15"
-                    Header="3. Multi-Selection Simulation (MVVM)">
-                    <StackPanel>
-                        <TextBlock
-                            Margin="0,0,0,10"
-                            FontWeight="SemiBold"
-                            Text="Simulate multi-selection by maintaining a selected items list:" />
-                        <cy:HintBox
-                            Width="350"
-                            HorizontalAlignment="Left"
-                            DisplayMemberPath="SkillName"
-                            InputText="{Binding SkillSearchText, UpdateSourceTrigger=PropertyChanged}"
-                            ItemsSource="{Binding FilteredSkills}"
-                            SelectedItem="{Binding SelectedSkill}" />
-                        <TextBlock
-                            Margin="0,10,0,5"
-                            FontWeight="SemiBold"
-                            Text="Selected Skills:" />
-                        <ItemsControl
-                            Margin="0,0,0,10"
-                            ItemsSource="{Binding SelectedSkills}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="2"
-                                        Padding="8,4"
-                                        Background="LightBlue"
-                                        CornerRadius="3">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontSize="12"
-                                                Text="{Binding}" />
-                                            <Button
-                                                Width="16"
-                                                Height="16"
-                                                Margin="5,0,0,0"
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                Command="{Binding DataContext.RemoveSkillCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Content="×"
-                                                Cursor="Hand"
-                                                FontSize="10" />
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-                </GroupBox>
-
-                <!--  公司分组显示示例  -->
-                <GroupBox
-                    Padding="15"
-                    Header="4. Company Selection with Industry Grouping (MVVM)">
-                    <StackPanel>
-                        <TextBlock
-                            Margin="0,0,0,10"
-                            FontWeight="SemiBold"
-                            Text="Companies grouped by industry with custom group headers:" />
-                        <cy:HintBox
-                            Width="450"
-                            HorizontalAlignment="Left"
-                            InputText="{Binding CompanySearchText, UpdateSourceTrigger=PropertyChanged}"
-                            ItemsSource="{Binding CompaniesViewSource.View}"
-                            MaxContainerHeight="350"
-                            SearchMemberPath="CompanyName"
-                            SelectedItem="{Binding SelectedCompany}">
-                            <cy:HintBox.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <Border
-                                                Margin="2,4,2,2"
-                                                Padding="8,4"
-                                                Background="#E3F2FD"
-                                                BorderBrush="#1976D2"
-                                                BorderThickness="0,0,0,1">
-                                                <TextBlock
-                                                    FontSize="13"
-                                                    FontWeight="Bold"
-                                                    Foreground="#1976D2"
-                                                    Text="{Binding Name}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </cy:HintBox.GroupStyle>
-                            <cy:HintBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel
-                                        Margin="8,2"
-                                        Orientation="Horizontal">
-                                        <Border
-                                            Width="4"
-                                            Height="20"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            Background="{Binding IndustryColor}" />
-                                        <StackPanel>
-                                            <TextBlock
-                                                FontWeight="Medium"
-                                                Text="{Binding CompanyName}" />
-                                            <StackPanel
-                                                Margin="0,2,0,0"
-                                                Orientation="Horizontal">
-                                                <TextBlock
-                                                    FontSize="10"
-                                                    Foreground="Gray"
-                                                    Text="{Binding Country}" />
-                                                <TextBlock
-                                                    Margin="10,0,0,0"
-                                                    FontSize="10"
-                                                    Foreground="DarkBlue"
-                                                    Text="{Binding Size}" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </cy:HintBox.ItemTemplate>
-                        </cy:HintBox>
-                        <TextBlock
-                            Margin="0,10,0,0"
-                            Foreground="Blue"
-                            Text="{Binding CompanyResult}" />
-                    </StackPanel>
-                </GroupBox>
-
-                <!--  统计信息  -->
-                <GroupBox
-                    Padding="15"
-                    Header="Statistics">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock
-                                Margin="0,0,0,10"
-                                FontWeight="SemiBold"
-                                Text="Selection Statistics:" />
-                            <TextBlock
-                                FontFamily="Consolas"
-                                FontSize="11"
-                                Text="{Binding SelectionStatistics}" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1">
-                            <TextBlock
-                                Margin="0,0,0,10"
-                                FontWeight="SemiBold"
-                                Text="Event Log:" />
-                            <Border
-                                Height="120"
-                                Background="WhiteSmoke"
-                                BorderBrush="Gray"
-                                BorderThickness="1">
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                    <TextBlock
-                                        Margin="10"
-                                        FontFamily="Consolas"
-                                        FontSize="10"
-                                        Text="{Binding EventLog}" />
-                                </ScrollViewer>
-                            </Border>
-                            <Button
-                                Width="100"
-                                Margin="0,10,0,0"
-                                HorizontalAlignment="Left"
-                                Command="{Binding ClearLogCommand}"
-                                Content="Clear Log" />
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
-            </cy:SpacingStackPanel>
-        </Grid>
-    </ScrollViewer>
+                                </StackPanel>
+                            </DataTemplate>
+                        </cy:HintBox.ItemTemplate>
+                    </cy:HintBox>
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        Foreground="Blue"
+                        Text="{Binding GroupedResult}" />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
 </UserControl>
