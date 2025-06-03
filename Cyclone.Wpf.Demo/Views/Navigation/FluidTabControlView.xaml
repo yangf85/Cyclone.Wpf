@@ -28,16 +28,24 @@
             Grid.Row="1"
             FluidTabPlacement="Left"
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-            <cy:FluidTabItem DataContext="{Binding First}" Header="{Binding Header}">
-                <Grid Height="300" Background="{Binding Background}">
+            <cy:FluidTabItem
+                DataContext="{Binding First}"
+                Header="{Binding Header}">
+                <Grid
+                    Height="300"
+                    Background="{Binding Background}">
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Text="{Binding Content}" />
                 </Grid>
             </cy:FluidTabItem>
-            <cy:FluidTabItem DataContext="{Binding Second}" Header="{Binding Header}">
-                <Grid Height="300" Background="{Binding Background}">
+            <cy:FluidTabItem
+                DataContext="{Binding Second}"
+                Header="{Binding Header}">
+                <Grid
+                    Height="300"
+                    Background="{Binding Background}">
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -45,7 +53,9 @@
                 </Grid>
             </cy:FluidTabItem>
             <cy:FluidTabItem Header="Third">
-                <Grid Height="300" Background="CadetBlue">
+                <Grid
+                    Height="300"
+                    Background="CadetBlue">
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -66,7 +76,9 @@
             ItemsSource="{Binding Items}">
             <cy:FluidTabControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:FluidTabItemViewModel}">
-                    <Grid Height="300" Background="{Binding Background}">
+                    <Grid
+                        Height="300"
+                        Background="{Binding Background}">
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"

@@ -141,13 +141,6 @@ public class FluidTabControl : Selector
         }
     }
 
-    private FluidTabItem GetLastItem()
-    {
-        if (Items.Count == 0) { return null; }
-        var lastItem = Items[Items.Count - 1];
-        return GetFluidTabItem(lastItem);
-    }
-
     private void ScrollToSelectedItem()
     {
         if (SelectedItem == null) return;
@@ -313,19 +306,15 @@ public class FluidTabControl : Selector
     {
         base.OnApplyTemplate();
 
-        if (_container != null)
-        {
-            _container.ScrollChanged -= OnContainerScrollChanged;
-        }
-
         _container = GetTemplateChild("PART_Container") as ScrollViewer;
         _itemsPanel = new VirtualizingStackPanel();
         VirtualizingPanel.SetVirtualizationMode(_itemsPanel, VirtualizationMode.Recycling);
 
         if (_container != null)
         {
-            _container.Content = _itemsPanel;
+            _container.ScrollChanged -= OnContainerScrollChanged;
             _container.ScrollChanged += OnContainerScrollChanged;
+            _container.Content = _itemsPanel;
         }
 
         UpdateItemsContent();
