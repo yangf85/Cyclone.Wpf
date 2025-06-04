@@ -274,24 +274,33 @@ namespace Cyclone.Wpf.Controls
         #region Command
 
         #region Increase
+
         public static RoutedCommand IncreaseCommand { get; private set; }
+
         private static void OnIncreaseCommand(object sender, ExecutedRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
             numberBox.Value += numberBox.Step;
         }
+
         private static void OnCanIncreaseCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            e.CanExecute = numberBox.Value <= numberBox.Maximum;
+            // 应该是 < 而不是 <=，这样当值等于最大值时就不能再增加了
+            e.CanExecute = numberBox.Value < numberBox.Maximum;
         }
-        #endregion
+
+        #endregion Increase
+
         #region Decrease
+
         public static RoutedCommand DecreaseCommand { get; private set; }
+
         private static void OnCanDecreaseCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            e.CanExecute = numberBox.Value >= numberBox.Minimum;
+            // 应该是 > 而不是 >=，这样当值等于最小值时就不能再减少了
+            e.CanExecute = numberBox.Value > numberBox.Minimum;
         }
 
         private static void OnDecreaseCommand(object sender, ExecutedRoutedEventArgs e)
@@ -299,10 +308,8 @@ namespace Cyclone.Wpf.Controls
             var numberBox = sender as NumberBox;
             numberBox.Value -= numberBox.Step;
         }
-        #endregion
 
-
-
+        #endregion Decrease
 
         private static void InitializeCommand()
         {
@@ -313,12 +320,6 @@ namespace Cyclone.Wpf.Controls
             CommandManager.RegisterClassCommandBinding(typeof(NumberBox),
                 new CommandBinding(DecreaseCommand, OnDecreaseCommand, OnCanDecreaseCommand));
         }
-
-      
-
-      
-
-       
 
         #endregion Command
 
@@ -345,17 +346,29 @@ namespace Cyclone.Wpf.Controls
 
         private void InputTextBox_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            // 判断滚动方向，向上则增加值，向下则减少值
+            // 判断滚动方向，使用命令来增加或减少值
             if (e.Delta > 0)
             {
-                Value += Step;
+                // 向上滚动，增加值
+                if (IncreaseCommand.CanExecute(null, this))
+                {
+                    IncreaseCommand.Execute(null, this);
+                }
             }
             else
             {
-                Value -= Step;
+                // 向下滚动，减少值
+                if (DecreaseCommand.CanExecute(null, this))
+                {
+                    DecreaseCommand.Execute(null, this);
+                }
             }
+
             // 将光标放置在输入框的末尾
-            _inputTextBox.CaretIndex = _inputTextBox.Text.Length + 1;
+            _inputTextBox.CaretIndex = _inputTextBox.Text.Length;
+
+            // 标记事件已处理，防止冒泡
+            e.Handled = true;
         }
 
         // 此方法预览输入文本事件
