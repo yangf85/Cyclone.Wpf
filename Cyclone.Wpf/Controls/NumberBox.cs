@@ -21,31 +21,20 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Cyclone.Wpf.Controls
 {
     [TemplatePart(Name = PART_InputTextBox, Type = typeof(TextBox))]
-    [TemplatePart(Name = PART_ValueSlider, Type = typeof(Slider))]
-    [TemplatePart(Name = PART_ValueSliderPopup, Type = typeof(Popup))]
     [TemplatePart(Name = PART_IncreaseRepeatButton, Type = typeof(RepeatButton))]
     [TemplatePart(Name = PART_DecreaseRepeatButton, Type = typeof(RepeatButton))]
+    [TemplatePart(Name = PART_ClearButton, Type = typeof(Button))]
     public class NumberBox : Control
     {
         private const string PART_IncreaseRepeatButton = nameof(PART_IncreaseRepeatButton);
-
         private const string PART_InputTextBox = nameof(PART_InputTextBox);
-
         private const string PART_DecreaseRepeatButton = nameof(PART_DecreaseRepeatButton);
+        private const string PART_ClearButton = nameof(PART_ClearButton);
 
-        private const string PART_ValueSlider = nameof(PART_ValueSlider);
-
-        private const string PART_ValueSliderPopup = nameof(PART_ValueSliderPopup);
-
-        private RepeatButton _additionRepeatButton;
-
+        private RepeatButton _increaseRepeatButton;
         private TextBox _inputTextBox;
-
-        private RepeatButton _subtractionRepeatButton;
-
-        private Slider _valueSlider;
-
-        private Popup _valueSliderPopup;
+        private RepeatButton _decreaseRepeatButton;
+        private Button _clearButton;
 
         static NumberBox()
         {
@@ -87,10 +76,10 @@ namespace Cyclone.Wpf.Controls
         {
             var box = (NumberBox)d;
             var textBox = box.GetTemplateChild(PART_InputTextBox) as TextBox;
-            if (textBox != null)
-            {
-                textBox.Text = box.Value.ToString();
-            }
+            textBox?.Text = box.FormatValue(box.Value);
+
+            // 触发 ValueChanged 事件
+            box.RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
         }
 
         #endregion Value
@@ -111,7 +100,8 @@ namespace Cyclone.Wpf.Controls
             var num = (double)baseValue;
             var box = (NumberBox)d;
 
-            if (box.NumberStyle.HasFlag(NumberStyles.Integer))
+            // 只有当不允许小数点时才取整
+            if (!box.NumberStyle.HasFlag(NumberStyles.AllowDecimalPoint))
             {
                 num = Math.Ceiling(num);
             }
@@ -125,6 +115,7 @@ namespace Cyclone.Wpf.Controls
 
         private static void OnStepChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"Step changed from {e.OldValue} to {e.NewValue}");
         }
 
         #endregion Step
@@ -153,9 +144,47 @@ namespace Cyclone.Wpf.Controls
         {
             var box = d as NumberBox;
             box.Value = Math.Round(box.Value, (int)e.NewValue);
+
+            // 更新文本框显示
+            box._inputTextBox?.Text = box.FormatValue(box.Value);
         }
 
         #endregion DecimalPlaces
+
+        #region Prefix
+
+        public object Prefix
+        {
+            get => (object)GetValue(PrefixProperty);
+            set => SetValue(PrefixProperty, value);
+        }
+
+        public static readonly DependencyProperty PrefixProperty =
+            DependencyProperty.Register(nameof(Prefix), typeof(object), typeof(NumberBox), new PropertyMetadata(default(object)));
+
+        #endregion Prefix
+
+        #region IsReadOnly
+
+        public bool IsReadOnly
+        {
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
+        }
+
+        public static readonly DependencyProperty IsReadOnlyProperty =
+            DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(NumberBox), new PropertyMetadata(default(bool), OnIsReadOnlyChanged));
+
+        private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var box = (NumberBox)d;
+            if (box._inputTextBox != null)
+            {
+                box._inputTextBox.IsReadOnly = (bool)e.NewValue;
+            }
+        }
+
+        #endregion IsReadOnly
 
         #region Minimum
 
@@ -219,44 +248,44 @@ namespace Cyclone.Wpf.Controls
 
         #endregion ValueChanged
 
-        #region IsVisibleSlider
+        #region IsVisibleSpinButton
 
-        public static readonly DependencyProperty IsVisibleSliderProperty =
-            DependencyProperty.Register(nameof(IsVisibleSlider), typeof(bool), typeof(NumberBox), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsVisibleSpinButtonProperty =
+            DependencyProperty.Register(nameof(IsVisibleSpinButton), typeof(bool), typeof(NumberBox), new PropertyMetadata(true));
 
-        public bool IsVisibleSlider
+        public bool IsVisibleSpinButton
         {
-            get => (bool)GetValue(IsVisibleSliderProperty);
-            set => SetValue(IsVisibleSliderProperty, value);
+            get => (bool)GetValue(IsVisibleSpinButtonProperty);
+            set => SetValue(IsVisibleSpinButtonProperty, value);
         }
 
-        #endregion IsVisibleSlider
+        #endregion IsVisibleSpinButton
 
-        #region IsVisibleButton
+        #region IsVisibleClearButton
 
-        public static readonly DependencyProperty IsVisibleButtonProperty =
-            DependencyProperty.Register(nameof(IsVisibleButton), typeof(bool), typeof(NumberBox), new PropertyMetadata(true));
+        public static readonly DependencyProperty IsVisibleClearButtonProperty =
+            DependencyProperty.Register(nameof(IsVisibleClearButton), typeof(bool), typeof(NumberBox), new PropertyMetadata(false));
 
-        public bool IsVisibleButton
+        public bool IsVisibleClearButton
         {
-            get => (bool)GetValue(IsVisibleButtonProperty);
-            set => SetValue(IsVisibleButtonProperty, value);
+            get => (bool)GetValue(IsVisibleClearButtonProperty);
+            set => SetValue(IsVisibleClearButtonProperty, value);
         }
 
-        #endregion IsVisibleButton
+        #endregion IsVisibleClearButton
 
-        #region ButtonOrientation
+        #region SpinButtonOrientation
 
-        public static readonly DependencyProperty ButtonOrientationProperty =
-            DependencyProperty.Register(nameof(ButtonOrientation), typeof(Orientation), typeof(NumberBox), new PropertyMetadata(Orientation.Vertical));
+        public static readonly DependencyProperty SpinButtonOrientationProperty =
+            DependencyProperty.Register(nameof(SpinButtonOrientation), typeof(Orientation), typeof(NumberBox), new PropertyMetadata(Orientation.Vertical));
 
-        public Orientation ButtonOrientation
+        public Orientation SpinButtonOrientation
         {
-            get => (Orientation)GetValue(ButtonOrientationProperty);
-            set => SetValue(ButtonOrientationProperty, value);
+            get => (Orientation)GetValue(SpinButtonOrientationProperty);
+            set => SetValue(SpinButtonOrientationProperty, value);
         }
 
-        #endregion ButtonOrientation
+        #endregion SpinButtonOrientation
 
         #region NumberStyle
 
@@ -280,14 +309,16 @@ namespace Cyclone.Wpf.Controls
         private static void OnIncreaseCommand(object sender, ExecutedRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            numberBox.Value += numberBox.Step;
+            if (!numberBox.IsReadOnly)
+            {
+                numberBox.Value += numberBox.Step;
+            }
         }
 
         private static void OnCanIncreaseCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            // 应该是 < 而不是 <=，这样当值等于最大值时就不能再增加了
-            e.CanExecute = numberBox.Value < numberBox.Maximum;
+            e.CanExecute = !numberBox.IsReadOnly && numberBox.Value + numberBox.Step <= numberBox.Maximum;
         }
 
         #endregion Increase
@@ -299,26 +330,55 @@ namespace Cyclone.Wpf.Controls
         private static void OnCanDecreaseCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            // 应该是 > 而不是 >=，这样当值等于最小值时就不能再减少了
-            e.CanExecute = numberBox.Value > numberBox.Minimum;
+            e.CanExecute = !numberBox.IsReadOnly && numberBox.Value - numberBox.Step >= numberBox.Minimum;
         }
 
         private static void OnDecreaseCommand(object sender, ExecutedRoutedEventArgs e)
         {
             var numberBox = sender as NumberBox;
-            numberBox.Value -= numberBox.Step;
+            if (!numberBox.IsReadOnly)
+            {
+                numberBox.Value -= numberBox.Step;
+            }
         }
 
         #endregion Decrease
+
+        #region Clear
+
+        public static RoutedCommand ClearCommand { get; private set; }
+
+        private static void OnClearCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            var numberBox = sender as NumberBox;
+            if (!numberBox.IsReadOnly)
+            {
+                // 将值设置为0，但要确保0在允许的范围内
+                var clearValue = Math.Max(0, numberBox.Minimum);
+                numberBox.Value = clearValue;
+            }
+        }
+
+        private static void OnCanClearCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            var numberBox = sender as NumberBox;
+            e.CanExecute = !numberBox.IsReadOnly && numberBox.Value != numberBox.Minimum;
+        }
+
+        #endregion Clear
 
         private static void InitializeCommand()
         {
             IncreaseCommand = new RoutedCommand("Increase", typeof(NumberBox));
             DecreaseCommand = new RoutedCommand("Decrease", typeof(NumberBox));
+            ClearCommand = new RoutedCommand("Clear", typeof(NumberBox));
+
             CommandManager.RegisterClassCommandBinding(typeof(NumberBox),
                 new CommandBinding(IncreaseCommand, OnIncreaseCommand, OnCanIncreaseCommand));
             CommandManager.RegisterClassCommandBinding(typeof(NumberBox),
                 new CommandBinding(DecreaseCommand, OnDecreaseCommand, OnCanDecreaseCommand));
+            CommandManager.RegisterClassCommandBinding(typeof(NumberBox),
+                new CommandBinding(ClearCommand, OnClearCommand, OnCanClearCommand));
         }
 
         #endregion Command
@@ -334,18 +394,98 @@ namespace Cyclone.Wpf.Controls
             _inputTextBox = GetTemplateChild(PART_InputTextBox) as TextBox;
             if (_inputTextBox != null)
             {
-                _inputTextBox.Text = Value.ToString();
+                _inputTextBox.Text = FormatValue(Value);
+                _inputTextBox.IsReadOnly = IsReadOnly;
                 _inputTextBox.PreviewTextInput -= InputTextBox_PreviewTextInput;
                 _inputTextBox.PreviewTextInput += InputTextBox_PreviewTextInput;
                 _inputTextBox.MouseWheel -= InputTextBox_MouseWheel;
                 _inputTextBox.MouseWheel += InputTextBox_MouseWheel;
                 _inputTextBox.TextChanged -= InputTextBox_TextChanged;
                 _inputTextBox.TextChanged += InputTextBox_TextChanged;
+                _inputTextBox.PreviewKeyDown -= InputTextBox_PreviewKeyDown;
+                _inputTextBox.PreviewKeyDown += InputTextBox_PreviewKeyDown;
+
+                // 添加粘贴事件处理
+                DataObject.RemovePastingHandler(_inputTextBox, OnPasting);
+                DataObject.AddPastingHandler(_inputTextBox, OnPasting);
+            }
+
+            _clearButton = GetTemplateChild(PART_ClearButton) as Button;
+        }
+
+        private void InputTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (IsReadOnly)
+            {
+                // 在只读模式下，阻止上下键操作
+                if (e.Key == Key.Up || e.Key == Key.Down)
+                {
+                    e.Handled = true;
+                }
+                return;
+            }
+
+            switch (e.Key)
+            {
+                case Key.Up:
+                    if (IncreaseCommand.CanExecute(null, this))
+                    {
+                        IncreaseCommand.Execute(null, this);
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Key.Down:
+                    if (DecreaseCommand.CanExecute(null, this))
+                    {
+                        DecreaseCommand.Execute(null, this);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+        }
+
+        private void OnPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            // 如果是只读模式，取消粘贴操作
+            if (IsReadOnly)
+            {
+                e.CancelCommand();
+                return;
+            }
+
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                var text = (string)e.DataObject.GetData(typeof(string));
+                var selectionStart = _inputTextBox.SelectionStart;
+                var selectionLength = _inputTextBox.SelectionLength;
+                var currentText = _inputTextBox.Text;
+
+                // 模拟粘贴后的文本
+                var newText = currentText.Remove(selectionStart, selectionLength).Insert(selectionStart, text);
+
+                if (!IsValidNumericInput(newText))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
             }
         }
 
         private void InputTextBox_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            // 如果是只读模式，不处理滚轮事件
+            if (IsReadOnly)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Current Step: {this.Step}");
+
             // 判断滚动方向，使用命令来增加或减少值
             if (e.Delta > 0)
             {
@@ -374,73 +514,96 @@ namespace Cyclone.Wpf.Controls
         // 此方法预览输入文本事件
         private void InputTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // 获取选定文本
-            var selectedText = _inputTextBox.SelectedText;
-            // 获取全部文本
+            // 如果是只读模式，阻止输入
+            if (IsReadOnly)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            var selectionStart = _inputTextBox.SelectionStart;
+            var selectionLength = _inputTextBox.SelectionLength;
             var fullText = _inputTextBox.Text;
 
-            // 移除选定的文本
-            var textWithoutSelection = fullText.Remove(_inputTextBox.SelectionStart, selectedText.Length);
+            // 移除选中的文本并在正确位置插入新文本
+            var newText = fullText.Remove(selectionStart, selectionLength).Insert(selectionStart, e.Text);
 
-            // 在当前光标位置插入新输入的文本
-            var newText = textWithoutSelection.Insert(_inputTextBox.CaretIndex, e.Text);
-
-            // 检查新文本是否为有效的数字输入
-            var flag = IsValidNumericInput(newText);
-
-            // 如果不是有效的数字输入，则阻止输入
-            e.Handled = !flag;
+            e.Handled = !IsValidNumericInput(newText);
         }
 
         // 当输入框文本发生改变时，此方法会被调用
         private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // 获取输入框的文本
+            // 如果是只读模式，不处理文本变化
+            if (IsReadOnly)
+            {
+                return;
+            }
+
             var text = _inputTextBox.Text;
 
-            // 尝试将文本转换为双精度浮点数
+            // 允许空文本或只有负号
+            if (string.IsNullOrEmpty(text) || text == "-")
+            {
+                return;
+            }
+
             if (double.TryParse(text, NumberStyle, CultureInfo.InvariantCulture, out var value))
             {
-                // 对值进行四舍五入，保留10位小数
-                value = Math.Round(value, 10);
-                // 如果值小于最小值，则将输入框的文本设置为最小值
+                value = Math.Round(value, DecimalPlaces);
+
                 if (value < Minimum)
                 {
-                    _inputTextBox.Text = Minimum.ToString(CultureInfo.InvariantCulture);
+                    value = Minimum;
+                    _inputTextBox.Text = FormatValue(value);
                 }
-                // 如果值大于最大值，则将输入框的文本设置为最大值
                 else if (value > Maximum)
                 {
-                    _inputTextBox.Text = Maximum.ToString(CultureInfo.InvariantCulture);
+                    value = Maximum;
+                    _inputTextBox.Text = FormatValue(value);
                 }
-                // 更新当前的值
                 Value = value;
             }
             else
             {
-                // 如果无法转换为双精度浮点数，则将输入框的文本设置为"0"
-                _inputTextBox.Text = "0";
-                Value = 0d;
+                // 如果解析失败，设置为最小值
+                Value = Minimum;
+                _inputTextBox.Text = FormatValue(Minimum);
             }
         }
 
         // 检查给定的文本是否是有效的数字输入
         private bool IsValidNumericInput(string text)
         {
-            // 如果文本包含"."
+            // 允许空文本或只有负号
+            if (string.IsNullOrEmpty(text) || text == "-")
+                return true;
+
+            // 检查是否有多个小数点
+            if (text.Count(c => c == '.') > 1)
+                return false;
+
+            // 检查是否有多个负号或负号不在开头
+            if (text.Count(c => c == '-') > 1 || (text.Contains('-') && text.IndexOf('-') != 0))
+                return false;
+
             if (text.Contains('.'))
             {
-                // 获取"."的位置
                 var index = text.IndexOf('.');
                 // 判断小数点后的位数是否小于等于允许的最大小数位数
-                var flag = DecimalPlaces >= text.Length - index - 1;
-
-                // 返回标志和尝试将文本转换为双精度浮点数的结果
-                return flag && double.TryParse(text, NumberStyle, CultureInfo.InvariantCulture, out _);
+                var decimalDigits = text.Length - index - 1;
+                if (decimalDigits > DecimalPlaces)
+                    return false;
             }
 
             // 尝试将文本转换为双精度浮点数
             return double.TryParse(text, NumberStyle, CultureInfo.InvariantCulture, out _);
+        }
+
+        private string FormatValue(double value)
+        {
+            // 根据 DecimalPlaces 格式化数字
+            return value.ToString($"F{DecimalPlaces}", CultureInfo.InvariantCulture);
         }
 
         #endregion Override

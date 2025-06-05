@@ -8,9 +8,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="SideMenu.ToggleButtonStyle"
-        TargetType="ToggleButton">
+    <Style x:Key="SideMenu.ToggleButtonStyle" TargetType="ToggleButton">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
@@ -58,9 +56,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="SideMenuItem.Style.Basic"
-        TargetType="ctl:SideMenuItem">
+    <Style x:Key="SideMenuItem.Style.Basic" TargetType="ctl:SideMenuItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:SideMenuItem">
@@ -72,15 +68,9 @@
                                 Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{Binding Indent, RelativeSource={RelativeSource TemplatedParent}}" />
-                                    <ColumnDefinition
-                                        x:Name="IconColumn"
-                                        Width="Auto" />
-                                    <ColumnDefinition
-                                        x:Name="HeaderColumn"
-                                        Width="*" />
-                                    <ColumnDefinition
-                                        x:Name="ArrowColumn"
-                                        Width="Auto" />
+                                    <ColumnDefinition x:Name="IconColumn" Width="Auto" />
+                                    <ColumnDefinition x:Name="HeaderColumn" Width="*" />
+                                    <ColumnDefinition x:Name="ArrowColumn" Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter
                                     x:Name="IconContainer"
@@ -108,9 +98,7 @@
                                     Stretch="Uniform"
                                     StrokeThickness="0" />
                             </Grid>
-                            <ItemsPresenter
-                                x:Name="ItemsContainer"
-                                Visibility="Collapsed" />
+                            <ItemsPresenter x:Name="ItemsContainer" Visibility="Collapsed" />
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -133,9 +121,7 @@
                             <Setter TargetName="Arrow" Property="Data" Value="M512 417.706667L233.301333 682.666667 170.666667 623.146667 512 298.666667l341.333333 324.48L790.698667 682.666667z" />
                             <Setter TargetName="ItemsContainer" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <DataTrigger
-                            Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}"
-                            Value="True">
+                        <DataTrigger Binding="{Binding IsCompact, RelativeSource={RelativeSource AncestorType=ctl:SideMenu}}" Value="True">
                             <Setter TargetName="HeaderContainer" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Arrow" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="IconContainer" Property="HorizontalAlignment" Value="Center" />
@@ -147,9 +133,7 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource SideMenuItem.Style.Basic}"
-        TargetType="ctl:SideMenuItem" />
+    <Style BasedOn="{StaticResource SideMenuItem.Style.Basic}" TargetType="ctl:SideMenuItem" />
 
     <Style
         x:Key="SideMenu.Style.Basic"
@@ -174,18 +158,12 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <DockPanel
-                                x:Name="HeaderContainer"
-                                Grid.Row="0">
-                                <ContentPresenter
-                                    Grid.Column="0"
-                                    Content="{TemplateBinding Header}" />
+                            <DockPanel x:Name="HeaderContainer" Grid.Row="0">
+                                <ContentPresenter Grid.Column="0" Content="{TemplateBinding Header}" />
                             </DockPanel>
 
                             <ItemsPresenter Grid.Row="1" />
-                            <ContentPresenter
-                                Grid.Row="2"
-                                Content="{TemplateBinding Footer}" />
+                            <ContentPresenter Grid.Row="2" Content="{TemplateBinding Footer}" />
                             <ToggleButton
                                 x:Name="ToggleCompactButton"
                                 Grid.RowSpan="3"
@@ -202,7 +180,5 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource SideMenu.Style.Basic}"
-        TargetType="ctl:SideMenu" />
+    <Style BasedOn="{StaticResource SideMenu.Style.Basic}" TargetType="ctl:SideMenu" />
 </ResourceDictionary>

@@ -4,15 +4,12 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Slider.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/RepeatButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="NumberBox.SpinButtonStyle"
-        TargetType="RepeatButton">
+    <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
         <Setter Property="Width" Value="Auto" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
@@ -21,9 +18,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="Transparent">
+                    <Grid x:Name="RootGrid" Background="Transparent">
                         <ContentPresenter
                             x:Name="ContentContainer"
                             HorizontalAlignment="Center"
@@ -37,24 +32,77 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Pressed}" />
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="NumberBox.SliderStyle"
-        TargetType="Slider">
-        <Setter Property="MinWidth" Value="25" />
-        <Setter Property="Height" Value="Auto" />
+    <Style x:Key="NumberBox.ClearButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="Margin" Value="2,0" />
+        <Setter Property="Foreground" Value="{Binding Path=BorderBrush, RelativeSource={RelativeSource AncestorType=ctl:NumberBox}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Background="Transparent">
+                        <ContentPresenter
+                            x:Name="ContentContainer"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Pressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="NumberBox.ControlTemplate.Basic"
-        TargetType="ctl:NumberBox">
+    <Style x:Key="NumberBox.InputTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="2,0" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ScrollViewer
+                            x:Name="PART_ContentHost"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter Property="Cursor" Value="Arrow" />
+                            <Setter Property="Opacity" Value="0.8" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic" TargetType="ctl:NumberBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -64,61 +112,54 @@
             SnapsToDevicePixels="True">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition
-                        Width="Auto"
-                        MinWidth="24" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <ContentPresenter
+                    x:Name="PrefixContainer"
+                    Grid.Column="0"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding Prefix}" />
                 <TextBox
                     x:Name="PART_InputTextBox"
-                    Grid.Column="0"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                    Background="Transparent"
-                    BorderThickness="0"
+                    Grid.Column="1"
                     Foreground="{TemplateBinding Foreground}"
                     InputMethod.IsInputMethodEnabled="False"
-                    KeyboardNavigation.TabNavigation="Local" />
+                    IsReadOnly="{TemplateBinding IsReadOnly}"
+                    KeyboardNavigation.TabNavigation="Local"
+                    Style="{StaticResource NumberBox.InputTextBoxStyle}" />
+                <Button
+                    x:Name="PART_ClearButton"
+                    Grid.Column="2"
+                    Command="{x:Static ctl:NumberBox.ClearCommand}"
+                    Style="{StaticResource NumberBox.ClearButtonStyle}"
+                    Visibility="Collapsed">
+                    <Button.Content>
+                        <Path
+                            Width="12"
+                            Height="12"
+                            Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
+                            Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                            Stretch="Uniform" />
+                    </Button.Content>
+                </Button>
+
                 <Rectangle
                     x:Name="VerticalSeperater"
-                    Grid.Column="1"
+                    Grid.Column="3"
                     Width="1"
                     Fill="{TemplateBinding BorderBrush}" />
-                <Popup
-                    x:Name="PART_ValueSliderPopup"
-                    Grid.Column="0"
-                    AllowsTransparency="True"
-                    PlacementTarget="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                    PopupAnimation="Slide"
-                    VerticalOffset="5"
-                    Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                    <Grid
-                        Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                        Visibility="{Binding Path=IsVisibleSlider, Converter={x:Static conv:BooleanConverter.ToVisibility}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                        <Border
-                            Margin="5"
-                            Focusable="True">
-                            <Slider
-                                x:Name="PART_ValueSlider"
-                                IsMoveToPointEnabled="True"
-                                IsSnapToTickEnabled="True"
-                                LargeChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                Maximum="{Binding Path=Maximum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                Minimum="{Binding Path=Minimum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                SmallChange="{Binding Path=Step, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                TickFrequency="{TemplateBinding Step}"
-                                Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                            <Border.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="5"
-                                    Opacity="0.5"
-                                    ShadowDepth="0" />
-                            </Border.Effect>
-                        </Border>
-                    </Grid>
-                </Popup>
-                <Grid Grid.Column="2">
+
+                <Grid
+                    x:Name="SpinButtonGrid"
+                    Grid.Column="4"
+                    MinWidth="24"
+                    Visibility="Visible">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
@@ -162,19 +203,29 @@
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
+            <Trigger Property="Prefix" Value="{x:Null}">
+                <Setter TargetName="PrefixContainer" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="IsVisibleSpinButton" Value="False">
+                <Setter TargetName="VerticalSeperater" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="SpinButtonGrid" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="IsVisibleClearButton" Value="True">
+                <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Visible" />
+            </Trigger>
             <Trigger SourceName="PART_InputTextBox" Property="IsFocused" Value="True">
-                <Setter TargetName="PART_ValueSliderPopup" Property="IsOpen" Value="True" />
                 <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Editing}" />
                 <Setter TargetName="VerticalSeperater" Property="Fill" Value="{DynamicResource Border.Editing}" />
                 <Setter TargetName="SpinButtonSeperater" Property="Fill" Value="{DynamicResource Border.Editing}" />
             </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition SourceName="PART_InputTextBox" Property="IsFocused" Value="False" />
-                    <Condition SourceName="PART_ValueSlider" Property="IsKeyboardFocusWithin" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter TargetName="PART_ValueSliderPopup" Property="IsOpen" Value="True" />
-            </MultiTrigger>
+            <Trigger Property="IsReadOnly" Value="True">
+                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource Background.Inactive}" />
+                <Setter TargetName="PART_InputTextBox" Property="Foreground" Value="{DynamicResource Border.Inactive}" />
+                <Setter TargetName="PART_IncreaseRepeatButton" Property="IsEnabled" Value="False" />
+                <Setter TargetName="PART_DecreaseRepeatButton" Property="IsEnabled" Value="False" />
+                <Setter TargetName="PART_ClearButton" Property="IsEnabled" Value="False" />
+                <Setter TargetName="SpinButtonGrid" Property="Opacity" Value="0.5" />
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -189,7 +240,5 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
-    <Style
-        BasedOn="{StaticResource NumberBox.Style.Basic}"
-        TargetType="ctl:NumberBox" />
+    <Style BasedOn="{StaticResource NumberBox.Style.Basic}" TargetType="ctl:NumberBox" />
 </ResourceDictionary>

@@ -60,7 +60,5 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource SwitchButton.Style.Basic}"
-        TargetType="ctl:SwitchButton" />
+    <Style BasedOn="{StaticResource SwitchButton.Style.Basic}" TargetType="ctl:SwitchButton" />
 </ResourceDictionary>

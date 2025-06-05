@@ -19,16 +19,12 @@
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="Auto"
-                                    SharedSizeGroup="{TemplateBinding LabelSharedSizeGroup}" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding LabelSharedSizeGroup}" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition
-                                    Height="Auto"
-                                    SharedSizeGroup="{TemplateBinding DescriptionSharedSizeGroup}" />
+                                <RowDefinition Height="Auto" SharedSizeGroup="{TemplateBinding DescriptionSharedSizeGroup}" />
                             </Grid.RowDefinitions>
 
                             <TextBlock

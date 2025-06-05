@@ -17,9 +17,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="Transparent">
+                    <Grid x:Name="RootGrid" Background="Transparent">
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -32,9 +30,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate
-        x:Key="PreviousButtonTemplate"
-        TargetType="{x:Type Button}">
+    <ControlTemplate x:Key="PreviousButtonTemplate" TargetType="{x:Type Button}">
         <Grid Cursor="Hand">
             <Grid>
                 <Path
@@ -74,9 +70,7 @@
         </Grid>
     </ControlTemplate>
 
-    <ControlTemplate
-        x:Key="NextButtonTemplate"
-        TargetType="{x:Type Button}">
+    <ControlTemplate x:Key="NextButtonTemplate" TargetType="{x:Type Button}">
         <Grid Cursor="Hand">
             <Grid>
                 <Path
@@ -174,9 +168,7 @@
                             BorderThickness="0">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition
-                                        Height="Auto"
-                                        MinHeight="36" />
+                                    <RowDefinition Height="Auto" MinHeight="36" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
@@ -238,9 +230,7 @@
                                     Padding="3"
                                     BorderBrush="{DynamicResource Border.Default}"
                                     BorderThickness="1">
-                                    <Grid
-                                        x:Name="PART_MonthView"
-                                        Visibility="Visible">
+                                    <Grid x:Name="PART_MonthView" Visibility="Visible">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
@@ -283,15 +273,11 @@
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <DataTrigger
-                            Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Calendar}}}"
-                            Value="Year">
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Calendar}}}" Value="Year">
                             <Setter TargetName="PART_MonthView" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="PART_YearView" Property="Visibility" Value="Visible" />
                         </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Calendar}}}"
-                            Value="Decade">
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Calendar}}}" Value="Decade">
                             <Setter TargetName="PART_MonthView" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="PART_YearView" Property="Visibility" Value="Visible" />
                         </DataTrigger>
@@ -445,7 +431,5 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource Calendar.Style.Basic}"
-        TargetType="Calendar" />
+    <Style BasedOn="{StaticResource Calendar.Style.Basic}" TargetType="Calendar" />
 </ResourceDictionary>

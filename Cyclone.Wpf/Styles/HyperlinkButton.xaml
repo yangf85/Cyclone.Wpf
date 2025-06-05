@@ -7,12 +7,8 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="HyperlinkButton.ControlTemplate.Basic"
-        TargetType="ctl:HyperlinkButton">
-        <Button
-            x:Name="PART_NavigationButton"
-            Command="{x:Static ctl:HyperlinkButton.OpenUrlCommand}">
+    <ControlTemplate x:Key="HyperlinkButton.ControlTemplate.Basic" TargetType="ctl:HyperlinkButton">
+        <Button x:Name="PART_NavigationButton" Command="{x:Static ctl:HyperlinkButton.OpenUrlCommand}">
             <TextBlock
                 x:Name="PART_DisplayTextBlock"
                 Text="{TemplateBinding DisplayText}"
@@ -47,7 +43,5 @@
         <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
     </Style>
 
-    <Style
-        BasedOn="{StaticResource HyperlinkButton.Style.Basic}"
-        TargetType="ctl:HyperlinkButton" />
+    <Style BasedOn="{StaticResource HyperlinkButton.Style.Basic}" TargetType="ctl:HyperlinkButton" />
 </ResourceDictionary>

@@ -1,13 +1,9 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="Expander.OpenButtonStyle"
-        TargetType="ToggleButton">
+    <Style x:Key="Expander.OpenButtonStyle" TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -38,9 +34,7 @@
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="Arrow" Property="Data" Value="M533.333333 358.4l-332.8 332.8-29.866666-29.866667L533.333333 298.666667l362.666667 362.666666-29.866667 29.866667-332.8-332.8z" />
                         </MultiDataTrigger>
-                        <DataTrigger
-                            Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}}"
-                            Value="Up">
+                        <DataTrigger Binding="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}}" Value="Up">
                             <Setter TargetName="Arrow" Property="Data" Value="M533.333333 358.4l-332.8 332.8-29.866666-29.866667L533.333333 298.666667l362.666667 362.666666-29.866667 29.866667-332.8-332.8z" />
                         </DataTrigger>
                         <MultiDataTrigger>
@@ -129,12 +123,8 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="Visibility">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0:0:0"
-                                                Value="{x:Static Visibility.Visible}" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <DoubleAnimation
                                             Storyboard.TargetName="ContentBorder"
@@ -174,12 +164,8 @@
                                                 <CubicEase EasingMode="EaseIn" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
-                                        <ObjectAnimationUsingKeyFrames
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="Visibility">
-                                            <DiscreteObjectKeyFrame
-                                                KeyTime="0:0:0.2"
-                                                Value="{x:Static Visibility.Collapsed}" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -203,7 +189,5 @@
     </Style>
 
     <!--  替换默认样式  -->
-    <Style
-        BasedOn="{StaticResource Expander.Style.Animation}"
-        TargetType="Expander" />
+    <Style BasedOn="{StaticResource Expander.Style.Animation}" TargetType="Expander" />
 </ResourceDictionary>

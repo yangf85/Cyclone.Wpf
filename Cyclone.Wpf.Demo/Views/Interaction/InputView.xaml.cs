@@ -43,7 +43,13 @@ namespace Cyclone.Wpf.Demo.Views
         public partial string Password { get; set; }
 
         [ObservableProperty]
-        public partial double Number { get; set; } = 1800d;
+        public partial double Number { get; set; } = 10d;
+
+        [ObservableProperty]
+        public partial int NumberInt { get; set; } = 10;
+
+        [ObservableProperty]
+        public partial double NumberDouble { get; set; } = 10d;
 
         [ObservableProperty]
         public partial string SourceText { get; set; } = "ABCDEFGabcdefg一二三四五";

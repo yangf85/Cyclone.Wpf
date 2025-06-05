@@ -18,9 +18,7 @@
                             Visibility="Collapsed" />
 
                         <!--  新内容呈现器  -->
-                        <ContentPresenter
-                            x:Name="PART_NewContentPresenter"
-                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                        <ContentPresenter x:Name="PART_NewContentPresenter" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
