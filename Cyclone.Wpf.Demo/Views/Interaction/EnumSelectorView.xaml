@@ -17,9 +17,8 @@
                 Rows="2"
                 SelectedEnum="{Binding WeekDays}" />
             <cy:EnumSelector
-                Columns="2"
                 EnumType="{x:Type local:VipLevel}"
-                Rows="3"
+                Rows="1"
                 SelectedEnum="{Binding VipLevel}" />
             <Button Command="{Binding ShowFlagEnumCommand}" Content="ShowFlagEnum" />
             <Button Command="{Binding ShowEnumCommand}" Content="ShowEnum" />

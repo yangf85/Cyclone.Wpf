@@ -30,13 +30,31 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <CheckBox Content="{Binding}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
+        <!--  为 Flags 枚举提供 CheckBox 模板  -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=HasFlags, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}" Value="True">
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <!--  为非 Flags 枚举提供 RadioButton 模板  -->
+            <DataTrigger Binding="{Binding Path=HasFlags, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}" Value="False">
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <RadioButton
+                                Content="{Binding}"
+                                GroupName="{Binding Path=RadioButtonGroupName, RelativeSource={RelativeSource AncestorType=ctl:EnumSelector}}"
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style

@@ -43,11 +43,6 @@ namespace Cyclone.Wpf.Controls
             set => Set(ref field, value);
         }
 
-        public override string ToString()
-        {
-            return IsUseAlias ? GetEnumDescription() : Enum.ToString();
-        }
-
         private string GetEnumDescription()
         {
             // 获取枚举值的字段信息
@@ -61,6 +56,11 @@ namespace Cyclone.Wpf.Controls
                 ? attr.Description
                 : Enum.ToString();
         }
+
+        public override string ToString()
+        {
+            return IsUseAlias ? GetEnumDescription() : Enum.ToString();
+        }
     }
 
     /// <summary>
@@ -69,6 +69,7 @@ namespace Cyclone.Wpf.Controls
     [TemplatePart(Name = "PART_ItemsContainer", Type = typeof(ListBox))]
     public class EnumSelector : Control
     {
+        private readonly string _radioButtonGroupName;
         private ListBox _listBox;
         private bool _isUpdatingSelection = false;
 
@@ -79,11 +80,16 @@ namespace Cyclone.Wpf.Controls
 
         public EnumSelector()
         {
+            // 为每个实例生成唯一的 RadioButton 组名
+            _radioButtonGroupName = $"EnumSelector_{Guid.NewGuid():N}";
         }
 
         #region 依赖属性
 
         #region Rows
+
+        public static readonly DependencyProperty RowsProperty =
+            DependencyProperty.Register(nameof(Rows), typeof(int), typeof(EnumSelector), new PropertyMetadata(0));
 
         public int Rows
         {
@@ -91,12 +97,12 @@ namespace Cyclone.Wpf.Controls
             set => SetValue(RowsProperty, value);
         }
 
-        public static readonly DependencyProperty RowsProperty =
-            DependencyProperty.Register(nameof(Rows), typeof(int), typeof(EnumSelector), new PropertyMetadata(0));
-
         #endregion Rows
 
         #region Columns
+
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register(nameof(Columns), typeof(string), typeof(EnumSelector), new PropertyMetadata(string.Empty));
 
         public string Columns
         {
@@ -104,14 +110,14 @@ namespace Cyclone.Wpf.Controls
             set => SetValue(ColumnsProperty, value);
         }
 
-        public static readonly DependencyProperty ColumnsProperty =
-            DependencyProperty.Register(nameof(Columns), typeof(string), typeof(EnumSelector), new PropertyMetadata(string.Empty));
-
         #endregion Columns
 
         #region EnumType
 
         private ObservableCollection<EnumObject> _enums;
+
+        public static readonly DependencyProperty EnumTypeProperty =
+            DependencyProperty.Register(nameof(EnumType), typeof(Type), typeof(EnumSelector), new PropertyMetadata(OnEnumTypeChanged));
 
         public Type EnumType
         {
@@ -119,15 +125,13 @@ namespace Cyclone.Wpf.Controls
             set => SetValue(EnumTypeProperty, value);
         }
 
-        public static readonly DependencyProperty EnumTypeProperty =
-            DependencyProperty.Register(nameof(EnumType), typeof(Type), typeof(EnumSelector), new PropertyMetadata(OnEnumTypeChanged));
-
         private static void OnEnumTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var selector = d as EnumSelector;
             selector?.Dispatcher.BeginInvoke(new Action(() =>
             {
                 selector.UpdateItemsSource();
+                selector.UpdateHasFlags();
             }), DispatcherPriority.Loaded);
         }
 
@@ -135,15 +139,15 @@ namespace Cyclone.Wpf.Controls
 
         #region SelectedEnum
 
+        public static readonly DependencyProperty SelectedEnumProperty =
+            DependencyProperty.Register(nameof(SelectedEnum), typeof(Enum), typeof(EnumSelector),
+                new FrameworkPropertyMetadata(default(Enum), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedEnumChanged));
+
         public Enum SelectedEnum
         {
             get => (Enum)GetValue(SelectedEnumProperty);
             set => SetValue(SelectedEnumProperty, value);
         }
-
-        public static readonly DependencyProperty SelectedEnumProperty =
-            DependencyProperty.Register(nameof(SelectedEnum), typeof(Enum), typeof(EnumSelector),
-                new FrameworkPropertyMetadata(default(Enum), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedEnumChanged));
 
         private static void OnSelectedEnumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -160,14 +164,14 @@ namespace Cyclone.Wpf.Controls
 
         #region IsUseAlias
 
+        public static readonly DependencyProperty IsUseAliasProperty =
+            DependencyProperty.Register(nameof(IsUseAlias), typeof(bool), typeof(EnumSelector), new PropertyMetadata(true, OnIsUseAliasChanged));
+
         public bool IsUseAlias
         {
             get => (bool)GetValue(IsUseAliasProperty);
             set => SetValue(IsUseAliasProperty, value);
         }
-
-        public static readonly DependencyProperty IsUseAliasProperty =
-            DependencyProperty.Register(nameof(IsUseAlias), typeof(bool), typeof(EnumSelector), new PropertyMetadata(true, OnIsUseAliasChanged));
 
         private static void OnIsUseAliasChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -182,6 +186,31 @@ namespace Cyclone.Wpf.Controls
         }
 
         #endregion IsUseAlias
+
+        #region HasFlags
+
+        private static readonly DependencyPropertyKey HasFlagsPropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(HasFlags), typeof(bool), typeof(EnumSelector),
+                new PropertyMetadata(false));
+
+        public static readonly DependencyProperty HasFlagsProperty = HasFlagsPropertyKey.DependencyProperty;
+
+        public bool HasFlags
+        {
+            get => (bool)GetValue(HasFlagsProperty);
+            private set => SetValue(HasFlagsPropertyKey, value);
+        }
+
+        #endregion HasFlags
+
+        #region RadioButtonGroupName
+
+        public string RadioButtonGroupName
+        {
+            get => _radioButtonGroupName;
+        }
+
+        #endregion RadioButtonGroupName
 
         #endregion 依赖属性
 
@@ -239,11 +268,24 @@ namespace Cyclone.Wpf.Controls
                 }
                 else
                 {
-                    // 处理普通枚举...
-                    var selectedItem = _enums.FirstOrDefault(i => i.IsSelected);
-                    if (selectedItem != null)
+                    // 处理普通枚举（RadioButton 模式）
+                    // 对于 RadioButton，我们需要处理互斥逻辑
+                    if (e.AddedItems.Count > 0)
                     {
-                        SelectedEnum = selectedItem.Enum;
+                        var selectedItem = e.AddedItems[0] as EnumObject;
+                        if (selectedItem != null)
+                        {
+                            // 确保只有一个项被选中
+                            foreach (var item in _enums)
+                            {
+                                if (item != selectedItem)
+                                {
+                                    item.IsSelected = false;
+                                }
+                            }
+                            selectedItem.IsSelected = true;
+                            SelectedEnum = selectedItem.Enum;
+                        }
                     }
                 }
             }
@@ -272,6 +314,13 @@ namespace Cyclone.Wpf.Controls
 
                 var values = Enum.GetValues(EnumType).Cast<Enum>().Select(i => new EnumObject(i, IsUseAlias));
                 _enums = new ObservableCollection<EnumObject>(values);
+
+                // 订阅每个 EnumObject 的 PropertyChanged 事件以处理 RadioButton 的选择
+                foreach (var enumObj in _enums)
+                {
+                    enumObj.PropertyChanged += EnumObject_PropertyChanged;
+                }
+
                 _listBox.ItemsSource = _enums;
 
                 for (int i = 0; i < _enums.Count; i++)
@@ -292,6 +341,39 @@ namespace Cyclone.Wpf.Controls
                     UpdateSelectionFromSelectedEnum();
                 }
             }
+        }
+
+        private void EnumObject_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(EnumObject.IsSelected) && !_isUpdatingSelection && !HasFlaggsAttribute())
+            {
+                _isUpdatingSelection = true;
+                try
+                {
+                    var changedItem = sender as EnumObject;
+                    if (changedItem != null && changedItem.IsSelected)
+                    {
+                        // 对于 RadioButton 模式，确保只有一个选中
+                        foreach (var item in _enums)
+                        {
+                            if (item != changedItem)
+                            {
+                                item.IsSelected = false;
+                            }
+                        }
+                        SelectedEnum = changedItem.Enum;
+                    }
+                }
+                finally
+                {
+                    _isUpdatingSelection = false;
+                }
+            }
+        }
+
+        private void UpdateHasFlags()
+        {
+            HasFlags = HasFlaggsAttribute();
         }
 
         private void UpdateSelectionFromSelectedEnum()
@@ -329,7 +411,7 @@ namespace Cyclone.Wpf.Controls
             }
             else
             {
-                // 处理普通枚举
+                // 处理普通枚举（RadioButton 模式）
                 int selectedValue = Convert.ToInt32(SelectedEnum);
                 foreach (var item in _enums)
                 {

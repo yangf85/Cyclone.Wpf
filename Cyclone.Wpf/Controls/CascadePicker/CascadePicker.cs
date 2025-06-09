@@ -63,14 +63,14 @@ public class CascadePicker : Selector
 
     #region IsReadOnly
 
+    public static readonly DependencyProperty IsReadOnlyProperty =
+        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
+
     public bool IsReadOnly
     {
         get => (bool)GetValue(IsReadOnlyProperty);
         set => SetValue(IsReadOnlyProperty, value);
     }
-
-    public static readonly DependencyProperty IsReadOnlyProperty =
-        DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(CascadePicker), new PropertyMetadata(default(bool)));
 
     #endregion IsReadOnly
 
