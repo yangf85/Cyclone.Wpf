@@ -323,18 +323,6 @@ namespace Cyclone.Wpf.Controls
 
                 _listBox.ItemsSource = _enums;
 
-                for (int i = 0; i < _enums.Count; i++)
-                {
-                    var item = _listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                    if (item != null)
-                    {
-                        var binding = new Binding("IsSelected");
-                        binding.Source = _enums[i];
-                        binding.Mode = BindingMode.TwoWay;
-                        BindingOperations.SetBinding(item, ListBoxItem.IsSelectedProperty, binding);
-                    }
-                }
-
                 // 更新初始选择
                 if (SelectedEnum != null)
                 {

@@ -60,7 +60,7 @@ public partial class MainViewModel : ObservableObject
             "Expander" => new ExpanderView(),
             "Carousel" => new CarouselView(),
             "Drawer" => new DrawerView(),
-            "Description" => new DescriptionBoxView(),
+
             "Stepper" => new StepperView(),
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
@@ -173,11 +173,7 @@ public partial class SideMenuViewModel : ObservableObject
                     Header="Carousel",
                     Icon= "\xe6d2",
                 },
-                new SideMenuItemViewModel()
-                {
-                    Header="Description",
-                    Icon= "\xe719",
-                },
+
             ]
         });
         Items.Add(new SideMenuItemViewModel()
