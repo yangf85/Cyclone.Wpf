@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>25.6.14.49</AssemblyVersion>
-    <FileVersion>25.6.14.49</FileVersion>
+    <AssemblyVersion>25.6.14.50</AssemblyVersion>
+    <FileVersion>25.6.14.50</FileVersion>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
