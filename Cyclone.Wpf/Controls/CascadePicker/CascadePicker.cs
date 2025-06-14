@@ -24,7 +24,7 @@ namespace Cyclone.Wpf.Controls;
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(CascadePickerItem))]
 [TemplatePart(Name = PART_DisplayedTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = PART_ItemsPopup, Type = typeof(Popup))]
-public class CascadePicker : Selector
+public class CascadePicker : ItemsControl
 {
     private const string PART_DisplayedTextBox = "PART_DisplayedTextBox";
 
@@ -74,6 +74,63 @@ public class CascadePicker : Selector
 
     #endregion IsReadOnly
 
+    #region NodePathMemberPath
+
+    public static readonly DependencyProperty NodePathMemberPathProperty =
+        DependencyProperty.Register(nameof(NodePathMemberPath), typeof(string), typeof(CascadePicker),
+            new PropertyMetadata(null, OnNodePathMemberPathChanged));
+
+    public string NodePathMemberPath
+    {
+        get => (string)GetValue(NodePathMemberPathProperty);
+        set => SetValue(NodePathMemberPathProperty, value);
+    }
+
+    private static void OnNodePathMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CascadePicker picker)
+        {
+            // 当 NodePathMemberPath 改变时，需要更新所有已存在的 Item
+            picker.UpdateAllItemsNodePath();
+        }
+    }
+
+    private void UpdateAllItemsNodePath()
+    {
+        // 遍历所有容器并更新其 NodePath
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (ItemContainerGenerator.ContainerFromIndex(i) is CascadePickerItem container)
+            {
+                container.UpdateNodePath();
+            }
+        }
+    }
+
+    #endregion NodePathMemberPath
+
+    #region SelectedItem
+
+    public static readonly DependencyProperty SelectedItemProperty =
+        DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(CascadePicker),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
+
+    public object SelectedItem
+    {
+        get => GetValue(SelectedItemProperty);
+        set => SetValue(SelectedItemProperty, value);
+    }
+
+    private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CascadePicker picker)
+        {
+            picker.RaiseEvent(new RoutedEventArgs(SelectedChangedEvent));
+        }
+    }
+
+    #endregion SelectedItem
+
     #region Item_Click
 
     private void Item_Click(object sender, RoutedEventArgs e)
@@ -82,7 +139,6 @@ public class CascadePicker : Selector
         {
             SetValue(TextProperty, GetSelectedPath(item));
             SetCurrentValue(SelectedItemProperty, item.DataContext);
-            RaiseEvent(new RoutedEventArgs(CascadePicker.SelectedChangedEvent));
             if (!item.HasItems)
             {
                 SetValue(IsOpenedProperty, false);
@@ -211,6 +267,8 @@ public class CascadePicker : Selector
         if (element is CascadePickerItem container)
         {
             container.DataContext = item;
+            // 传递 NodePathMemberPath 到子项
+            container.NodePathMemberPath = this.NodePathMemberPath;
         }
     }
 

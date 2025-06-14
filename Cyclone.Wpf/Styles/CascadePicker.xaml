@@ -40,10 +40,10 @@
                             <Popup
                                 x:Name="PART_ItemsPopup"
                                 AllowsTransparency="True"
-                                HorizontalOffset="3"
+                                HorizontalOffset="0"
                                 Placement="Right"
-                                PlacementTarget="{Binding ElementName=RootBoder}"
-                                VerticalOffset="-4">
+                                PlacementTarget="{Binding ElementName=RootBorder}"
+                                VerticalOffset="-1">
                                 <Border
                                     MinWidth="150"
                                     BorderBrush="{DynamicResource Border.Default}"

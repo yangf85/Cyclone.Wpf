@@ -40,6 +40,10 @@ namespace Cyclone.Wpf.Demo.Views
 
     public partial class TreeViewModel : ObservableObject
     {
+        public TreeViewModel()
+        {
+        }
+
         [ObservableProperty]
         public partial City City { get; set; }
 
@@ -48,90 +52,6 @@ namespace Cyclone.Wpf.Demo.Views
 
         [ObservableProperty]
         public partial string Text { get; set; } = "NewYork";
-
-        public TreeViewModel()
-        {
-            Cities =
-            [
-                new City
-            {
-                NodePath = "北京",
-                Cyties =
-                    [
-                        new City {NodePath = "西城区"}, new City {NodePath = "东城区"}, new City {NodePath = "海淀区"},
-                        new City {NodePath = "朝阳区"}, new City {NodePath = "丰台区"}, new City {NodePath = "石景山区"}
-                    ]
-            },
-            new City
-            {
-                NodePath = "四川",
-                Cyties =
-                    [
-                        new City {NodePath = "成都市"},
-                        new City
-                        {
-                            NodePath = "巴中市", Cyties =
-                            [
-                                new City
-                                {
-                                    NodePath = "恩阳区"
-                                },
-                                new City
-                                {
-                                    NodePath = "南江县"
-                                },
-                                new City
-                                {
-                                    NodePath = "通江县"
-                                }
-                            ]
-                        }
-                    ]
-            },
-            new City
-            {
-                NodePath = "山东",
-                Cyties =
-                    [
-                        new City {NodePath = "青岛市"},
-                        new City {NodePath = "烟台市"},
-                        new City {NodePath = "威海市"},
-                        new City {NodePath = "枣庄市"},
-                        new City
-                        {
-                            NodePath = "潍坊市",
-                            Cyties =
-                            [
-                                new City
-                                {
-                                    NodePath = "青州市"
-                                },
-                                new City
-                                {
-                                    NodePath = "诸城市"
-                                },
-                                new City
-                                {
-                                    NodePath = "寿光市"
-                                },
-                                new City
-                                {
-                                    NodePath = "安丘市"
-                                },
-                                new City
-                                {
-                                    NodePath = "高密市"
-                                },
-                                new City
-                                {
-                                    NodePath = "昌邑市"
-                                }
-                            ]
-                        }
-                    ]
-            },
-        ];
-        }
 
         [RelayCommand]
         private void GetCity()
