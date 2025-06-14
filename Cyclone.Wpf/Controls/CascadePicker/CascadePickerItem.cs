@@ -1,4 +1,5 @@
-﻿using Cyclone.Wpf.Helpers;
+﻿// CascadePickerItem.cs - 添加键盘支持的版本
+using Cyclone.Wpf.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,16 +20,49 @@ public class CascadePickerItem : HeaderedItemsControl
     private const string PART_ItemsPopup = "PART_ItemsPopup";
 
     private Popup _popup;
-
     private CascadePicker _root;
-
-    // 用于缓存绑定对象，避免重复创建
     private Binding _nodePathBinding;
 
     static CascadePickerItem()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(CascadePickerItem), new FrameworkPropertyMetadata(typeof(CascadePickerItem)));
     }
+
+    #region IsHighlighted
+
+    public static readonly DependencyProperty IsHighlightedProperty =
+        DependencyProperty.Register(nameof(IsHighlighted), typeof(bool), typeof(CascadePickerItem),
+            new PropertyMetadata(false));
+
+    public bool IsHighlighted
+    {
+        get => (bool)GetValue(IsHighlightedProperty);
+        set => SetValue(IsHighlightedProperty, value);
+    }
+
+    #endregion IsHighlighted
+
+    #region IsExpanded
+
+    public static readonly DependencyProperty IsExpandedProperty =
+        DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(CascadePickerItem),
+            new PropertyMetadata(false, OnIsExpandedChanged));
+
+    public bool IsExpanded
+    {
+        get => (bool)GetValue(IsExpandedProperty);
+        set => SetValue(IsExpandedProperty, value);
+    }
+
+    private static void OnIsExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is CascadePickerItem item && item._popup != null)
+        {
+            item._popup.IsOpen = (bool)e.NewValue;
+        }
+    }
+
+    #endregion IsExpanded
 
     #region NodePathMemberPath
 
@@ -46,7 +80,7 @@ public class CascadePickerItem : HeaderedItemsControl
     {
         if (d is CascadePickerItem item)
         {
-            item._nodePathBinding = null; // 清除缓存的绑定
+            item._nodePathBinding = null;
             item.UpdateNodePath();
         }
     }
@@ -59,6 +93,45 @@ public class CascadePickerItem : HeaderedItemsControl
     {
         base.OnHeaderChanged(oldHeader, newHeader);
         UpdateNodePath();
+    }
+
+    protected override void OnMouseEnter(MouseEventArgs e)
+    {
+        base.OnMouseEnter(e);
+
+        // 鼠标悬停时展开子菜单
+        if (HasItems && !IsExpanded)
+        {
+            IsExpanded = true;
+        }
+    }
+
+    protected override void OnMouseLeave(MouseEventArgs e)
+    {
+        base.OnMouseLeave(e);
+
+        // 检查鼠标是否真的离开了项目区域（包括弹出菜单）
+        if (!IsMouseOverWithPopup())
+        {
+            IsExpanded = false;
+        }
+    }
+
+    private bool IsMouseOverWithPopup()
+    {
+        // 检查鼠标是否在项目上
+        if (IsMouseOver)
+            return true;
+
+        // 检查鼠标是否在弹出菜单上
+        if (_popup != null && _popup.IsOpen && _popup.Child != null)
+        {
+            var popupPosition = Mouse.GetPosition(_popup.Child);
+            var hitTest = _popup.Child.InputHitTest(popupPosition);
+            return hitTest != null;
+        }
+
+        return false;
     }
 
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -98,7 +171,6 @@ public class CascadePickerItem : HeaderedItemsControl
 
         if (element is CascadePickerItem container)
         {
-            // 传递 NodePathMemberPath 到子项
             container.NodePathMemberPath = this.NodePathMemberPath;
         }
     }
@@ -106,12 +178,19 @@ public class CascadePickerItem : HeaderedItemsControl
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
+
+        _popup = GetTemplateChild(PART_ItemsPopup) as Popup;
         _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
 
-        // 如果还没有设置 NodePathMemberPath，尝试从根 CascadePicker 获取
         if (string.IsNullOrEmpty(NodePathMemberPath) && _root != null)
         {
             NodePathMemberPath = _root.NodePathMemberPath;
+        }
+
+        // 同步弹出状态
+        if (_popup != null)
+        {
+            _popup.IsOpen = IsExpanded;
         }
     }
 
@@ -136,7 +215,6 @@ public class CascadePickerItem : HeaderedItemsControl
 
         try
         {
-            // 使用缓存的绑定或创建新的绑定
             if (_nodePathBinding == null || _nodePathBinding.Path.Path != memberPath)
             {
                 _nodePathBinding = new Binding(memberPath) { Source = source };
@@ -146,19 +224,16 @@ public class CascadePickerItem : HeaderedItemsControl
                 _nodePathBinding.Source = source;
             }
 
-            // 创建临时对象来评估绑定
             var evaluator = new BindingEvaluator();
             BindingOperations.SetBinding(evaluator, BindingEvaluator.ValueProperty, _nodePathBinding);
             var value = evaluator.Value;
 
-            // 清理绑定
             BindingOperations.ClearBinding(evaluator, BindingEvaluator.ValueProperty);
 
             return value;
         }
         catch
         {
-            // 如果绑定失败，返回 null
             return null;
         }
     }
@@ -172,7 +247,6 @@ public class CascadePickerItem : HeaderedItemsControl
             return;
         }
 
-        // 优先使用 NodePathMemberPath
         if (!string.IsNullOrEmpty(NodePathMemberPath))
         {
             var value = GetValueFromMemberPath(dataContext, NodePathMemberPath);
@@ -183,11 +257,9 @@ public class CascadePickerItem : HeaderedItemsControl
             }
         }
 
-        // 如果没有设置 NodePathMemberPath，使用 Header 或 ToString()
         SetCurrentValue(NodePathProperty, Header?.ToString() ?? dataContext.ToString() ?? string.Empty);
     }
 
-    // 辅助类用于评估绑定
     private class BindingEvaluator : DependencyObject
     {
         public static readonly DependencyProperty ValueProperty =

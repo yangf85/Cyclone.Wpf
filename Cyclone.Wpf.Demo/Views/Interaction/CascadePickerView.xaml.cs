@@ -1,27 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿// CascadePickerView.xaml.cs
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Cyclone.Wpf.Controls;
-using Cyclone.Wpf.Demo.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Cyclone.Wpf.Demo.Views;
 
 /// <summary>
-/// SelectorView.xaml 的交互逻辑
+/// CascadePickerView.xaml 的交互逻辑
 /// </summary>
 public partial class CascadePickerView : UserControl
 {
@@ -32,292 +22,182 @@ public partial class CascadePickerView : UserControl
     }
 }
 
+/// <summary>
+/// CascadePicker 示例的 ViewModel
+/// </summary>
 public partial class CascadePickerViewModel : ObservableObject
 {
-    [ObservableProperty]
-    public partial CascadeItemViewModel CascadePicker { get; set; } = new CascadeItemViewModel();
-
-    [ObservableProperty]
-    public partial CategoryViewModel CategoryPicker { get; set; } = new CategoryViewModel();
-
-    [ObservableProperty]
-    public partial DepartmentViewModel DepartmentPicker { get; set; } = new DepartmentViewModel();
-}
-
-// 示例1：保持兼容性的城市数据（但不再需要实现接口）
-public partial class CascadeItemViewModel : ObservableObject
-{
-    public CascadeItemViewModel()
+    public CascadePickerViewModel()
     {
-        Cities =
-        [
-            new City
-            {
-                Name = "北京",
-                Children =
-                    [
-                        new City {Name = "西城区"}, new City {Name = "东城区"}, new City {Name = "海淀区"},
-                        new City {Name = "朝阳区"}, new City {Name = "丰台区"}, new City {Name = "石景山区"}
-                    ]
-            },
-            new City
-            {
-                Name = "四川",
-                Children =
-                    [
-                        new City {Name = "成都市"},
-                        new City
-                        {
-                            Name = "巴中市", Children =
-                            [
-                                new City
-                                {
-                                    Name = "恩阳区"
-                                },
-                                new City
-                                {
-                                    Name = "南江县"
-                                },
-                                new City
-                                {
-                                    Name = "通江县"
-                                }
-                            ]
-                        }
-                    ]
-            },
-            new City
-            {
-                Name = "山东",
-                Children =
-                    [
-                        new City {Name = "青岛市"},
-                        new City {Name = "烟台市"},
-                        new City {Name = "威海市"},
-                        new City {Name = "枣庄市"},
-                        new City
-                        {
-                            Name = "潍坊市",
-                            Children =
-                            [
-                                new City
-                                {
-                                    Name = "青州市"
-                                },
-                                new City
-                                {
-                                    Name = "诸城市"
-                                },
-                                new City
-                                {
-                                    Name = "寿光市"
-                                },
-                                new City
-                                {
-                                    Name = "安丘市"
-                                },
-                                new City
-                                {
-                                    Name = "高密市"
-                                },
-                                new City
-                                {
-                                    Name = "昌邑市"
-                                }
-                            ]
-                        }
-                    ]
-            },
-        ];
+        InitializeCities();
+        InitializeDepartments();
     }
 
-    [ObservableProperty]
-    public partial City City { get; set; }
+    #region 城市数据（示例2和示例4使用）
 
     [ObservableProperty]
-    public partial ObservableCollection<City> Cities { get; set; }
+    private ObservableCollection<City> cities;
 
     [ObservableProperty]
-    public partial string Text { get; set; } = "山东/潍坊市/青州市";
+    private City selectedCity;
 
-    partial void OnCityChanged(City value)
+    private void InitializeCities()
+    {
+        Cities = new ObservableCollection<City>
+        {
+            new City
+            {
+                Name = "北京市",
+                Children = new List<City>
+                {
+                    new City { Name = "东城区" },
+                    new City { Name = "西城区" },
+                    new City { Name = "朝阳区" },
+                    new City { Name = "海淀区" }
+                }
+            },
+            new City
+            {
+                Name = "上海市",
+                Children = new List<City>
+                {
+                    new City { Name = "黄浦区" },
+                    new City { Name = "徐汇区" },
+                    new City { Name = "浦东新区" }
+                }
+            },
+            new City
+            {
+                Name = "广东省",
+                Children = new List<City>
+                {
+                    new City
+                    {
+                        Name = "广州市",
+                        Children = new List<City>
+                        {
+                            new City { Name = "天河区" },
+                            new City { Name = "越秀区" },
+                            new City { Name = "白云区" }
+                        }
+                    },
+                    new City
+                    {
+                        Name = "深圳市",
+                        Children = new List<City>
+                        {
+                            new City { Name = "福田区" },
+                            new City { Name = "南山区" },
+                            new City { Name = "宝安区" }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    partial void OnSelectedCityChanged(City value)
     {
         if (value != null)
-            NotificationService.Instance.Show($"选择的城市为：{value.Name}");
-    }
-
-    [RelayCommand]
-    private void GetCity()
-    {
-        if (City != null)
         {
-            System.Windows.MessageBox.Show($"选择的城市为：{City.Name}");
+            // 可以在这里处理选中城市变化的逻辑
+            System.Diagnostics.Debug.WriteLine($"选中城市: {value.Name}");
         }
     }
-}
 
-// 示例2：使用 NodePathMemberPath 的方式
-public partial class CategoryViewModel : ObservableObject
-{
-    public CategoryViewModel()
-    {
-        Categories =
-        [
-            new Category
-            {
-                Name = "电子产品",
-                Description = "数码科技类",
-                SubCategories =
-                [
-                    new Category
-                    {
-                        Name = "手机",
-                        Description = "移动通讯设备",
-                        SubCategories =
-                        [
-                            new Category { Name = "智能手机", Description = "Android/iOS" },
-                            new Category { Name = "功能手机", Description = "基础通话" }
-                        ]
-                    },
-                    new Category
-                    {
-                        Name = "电脑",
-                        Description = "计算机设备",
-                        SubCategories =
-                        [
-                            new Category { Name = "笔记本", Description = "便携式" },
-                            new Category { Name = "台式机", Description = "高性能" },
-                            new Category { Name = "平板电脑", Description = "触控设备" }
-                        ]
-                    }
-                ]
-            },
-            new Category
-            {
-                Name = "服装",
-                Description = "服饰鞋帽",
-                SubCategories =
-                [
-                    new Category
-                    {
-                        Name = "男装",
-                        Description = "男士服饰",
-                        SubCategories =
-                        [
-                            new Category { Name = "上衣", Description = "T恤/衬衫" },
-                            new Category { Name = "裤子", Description = "牛仔裤/休闲裤" }
-                        ]
-                    },
-                    new Category
-                    {
-                        Name = "女装",
-                        Description = "女士服饰",
-                        SubCategories =
-                        [
-                            new Category { Name = "连衣裙", Description = "各式裙装" },
-                            new Category { Name = "上衣", Description = "衬衫/T恤" },
-                            new Category { Name = "裤子", Description = "裤装" }
-                        ]
-                    }
-                ]
-            }
-        ];
-    }
+    #endregion 城市数据（示例2和示例4使用）
+
+    #region 部门数据（示例3使用）
 
     [ObservableProperty]
-    public partial Category SelectedCategory { get; set; }
+    private ObservableCollection<Department> departments;
 
     [ObservableProperty]
-    public partial ObservableCollection<Category> Categories { get; set; }
+    private Department selectedDepartment;
 
-    partial void OnSelectedCategoryChanged(Category value)
-    {
-        if (value != null)
-            NotificationService.Instance.Show($"选择的分类为：{value.Name}");
-    }
-}
+    [ObservableProperty]
+    private bool showFullPath = true;
 
-// 示例3：使用复杂路径的方式
-public partial class DepartmentViewModel : ObservableObject
-{
-    public DepartmentViewModel()
+    private void InitializeDepartments()
     {
-        Departments =
-        [
+        Departments = new ObservableCollection<Department>
+        {
             new Department
             {
-                Info = new DepartmentInfo { Code = "HR", Name = "人力资源部" },
-                SubDepartments =
-                [
-                    new Department { Info = new DepartmentInfo { Code = "HR-REC", Name = "招聘组" }},
-                    new Department { Info = new DepartmentInfo { Code = "HR-TRA", Name = "培训组" }}
-                ]
+                Name = "总经办",
+                Code = "CEO",
+                EmployeeCount = 5,
+                SubDepartments = new List<Department>
+                {
+                    new Department { Name = "秘书处", Code = "CEO-SEC", EmployeeCount = 3 },
+                    new Department { Name = "战略发展部", Code = "CEO-STR", EmployeeCount = 8 }
+                }
             },
             new Department
             {
-                Info = new DepartmentInfo { Code = "IT", Name = "信息技术部" },
-                SubDepartments =
-                [
+                Name = "技术中心",
+                Code = "TECH",
+                EmployeeCount = 120,
+                SubDepartments = new List<Department>
+                {
                     new Department
                     {
-                        Info = new DepartmentInfo { Code = "IT-DEV", Name = "开发组" },
-                        SubDepartments =
-                        [
-                            new Department { Info = new DepartmentInfo { Code = "IT-DEV-FE", Name = "前端团队" }},
-                            new Department { Info = new DepartmentInfo { Code = "IT-DEV-BE", Name = "后端团队" }}
-                        ]
+                        Name = "研发部",
+                        Code = "TECH-DEV",
+                        EmployeeCount = 80,
+                        SubDepartments = new List<Department>
+                        {
+                            new Department { Name = "前端组", Code = "TECH-DEV-FE", EmployeeCount = 25 },
+                            new Department { Name = "后端组", Code = "TECH-DEV-BE", EmployeeCount = 35 },
+                            new Department { Name = "移动端组", Code = "TECH-DEV-MOB", EmployeeCount = 20 }
+                        }
                     },
-                    new Department { Info = new DepartmentInfo { Code = "IT-OPS", Name = "运维组" }}
-                ]
+                    new Department { Name = "测试部", Code = "TECH-QA", EmployeeCount = 25 },
+                    new Department { Name = "运维部", Code = "TECH-OPS", EmployeeCount = 15 }
+                }
             },
             new Department
             {
-                Info = new DepartmentInfo { Code = "FIN", Name = "财务部" },
-                SubDepartments =
-                [
-                    new Department { Info = new DepartmentInfo { Code = "FIN-ACC", Name = "会计组" }},
-                    new Department { Info = new DepartmentInfo { Code = "FIN-AUD", Name = "审计组" }}
-                ]
+                Name = "市场营销中心",
+                Code = "MARKET",
+                EmployeeCount = 45,
+                SubDepartments = new List<Department>
+                {
+                    new Department { Name = "品牌部", Code = "MARKET-BRAND", EmployeeCount = 12 },
+                    new Department { Name = "推广部", Code = "MARKET-PR", EmployeeCount = 18 },
+                    new Department { Name = "客户服务部", Code = "MARKET-CS", EmployeeCount = 15 }
+                }
             }
-        ];
+        };
     }
 
-    [ObservableProperty]
-    public partial Department SelectedDepartment { get; set; }
-
-    [ObservableProperty]
-    public partial ObservableCollection<Department> Departments { get; set; }
+    #endregion 部门数据（示例3使用）
 }
 
-// 简化的 City 类，不再需要实现接口
+#region 数据模型
+
+/// <summary>
+/// 城市数据模型
+/// </summary>
 public class City
 {
     public string Name { get; set; } = string.Empty;
-    public List<City> Children { get; set; } = [];
+    public List<City> Children { get; set; } = new List<City>();
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }
 
-// Category 类
-public class Category
-{
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public List<Category> SubCategories { get; set; } = [];
-}
-
-// 使用复杂对象路径的 Department 类
+/// <summary>
+/// 部门数据模型
+/// </summary>
 public class Department
 {
-    public DepartmentInfo Info { get; set; } = new DepartmentInfo();
-    public List<Department> SubDepartments { get; set; } = [];
+    public string Name { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
+    public int EmployeeCount { get; set; }
+    public List<Department> SubDepartments { get; set; } = new List<Department>();
+
+    public override string ToString() => Name;
 }
 
-public class DepartmentInfo
-{
-    public string Code { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-}
+#endregion 数据模型
