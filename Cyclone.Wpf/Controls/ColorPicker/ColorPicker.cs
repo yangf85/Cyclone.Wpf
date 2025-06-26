@@ -46,17 +46,17 @@ public class ColorPicker : Control
 
     #region SelectedColor - 当前选中的颜色
 
-    public Color SelectedColor
-    {
-        get => (Color)GetValue(SelectedColorProperty);
-        set => SetValue(SelectedColorProperty, value);
-    }
-
     public static readonly DependencyProperty SelectedColorProperty =
         DependencyProperty.Register(nameof(SelectedColor), typeof(Color), typeof(ColorPicker),
             new FrameworkPropertyMetadata(Colors.Red,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                 OnSelectedColorChanged));
+
+    public Color SelectedColor
+    {
+        get => (Color)GetValue(SelectedColorProperty);
+        set => SetValue(SelectedColorProperty, value);
+    }
 
     private static void OnSelectedColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -70,17 +70,17 @@ public class ColorPicker : Control
 
     #region IsOpen - 下拉框是否打开
 
-    public bool IsOpen
-    {
-        get => (bool)GetValue(IsOpenProperty);
-        set => SetValue(IsOpenProperty, value);
-    }
-
     public static readonly DependencyProperty IsOpenProperty =
         DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(ColorPicker),
             new FrameworkPropertyMetadata(false,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                 OnIsOpenChanged));
+
+    public bool IsOpen
+    {
+        get => (bool)GetValue(IsOpenProperty);
+        set => SetValue(IsOpenProperty, value);
+    }
 
     private static void OnIsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -90,29 +90,29 @@ public class ColorPicker : Control
 
     #region DisplayColorText - 是否显示颜色文本
 
+    public static readonly DependencyProperty DisplayColorTextProperty =
+        DependencyProperty.Register(nameof(DisplayColorText), typeof(bool), typeof(ColorPicker),
+            new PropertyMetadata(true));
+
     public bool DisplayColorText
     {
         get => (bool)GetValue(DisplayColorTextProperty);
         set => SetValue(DisplayColorTextProperty, value);
     }
 
-    public static readonly DependencyProperty DisplayColorTextProperty =
-        DependencyProperty.Register(nameof(DisplayColorText), typeof(bool), typeof(ColorPicker),
-            new PropertyMetadata(true));
-
     #endregion DisplayColorText - 是否显示颜色文本
 
     #region ColorTextFormat - 颜色文本格式
+
+    public static readonly DependencyProperty ColorTextFormatProperty =
+        DependencyProperty.Register(nameof(ColorTextFormat), typeof(ColorTextMode), typeof(ColorPicker),
+            new PropertyMetadata(ColorTextMode.HEX, OnColorTextFormatChanged));
 
     public ColorTextMode ColorTextFormat
     {
         get => (ColorTextMode)GetValue(ColorTextFormatProperty);
         set => SetValue(ColorTextFormatProperty, value);
     }
-
-    public static readonly DependencyProperty ColorTextFormatProperty =
-        DependencyProperty.Register(nameof(ColorTextFormat), typeof(ColorTextMode), typeof(ColorPicker),
-            new PropertyMetadata(ColorTextMode.HEX, OnColorTextFormatChanged));
 
     private static void OnColorTextFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -126,17 +126,17 @@ public class ColorPicker : Control
 
     #region ColorText - 颜色文本显示
 
+    private static readonly DependencyPropertyKey ColorTextPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(ColorText), typeof(string), typeof(ColorPicker),
+            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty ColorTextProperty = ColorTextPropertyKey.DependencyProperty;
+
     public string ColorText
     {
         get => (string)GetValue(ColorTextProperty);
         private set => SetValue(ColorTextPropertyKey, value);
     }
-
-    private static readonly DependencyPropertyKey ColorTextPropertyKey =
-        DependencyProperty.RegisterReadOnly(nameof(ColorText), typeof(string), typeof(ColorPicker),
-            new PropertyMetadata(string.Empty));
-
-    public static readonly DependencyProperty ColorTextProperty = ColorTextPropertyKey.DependencyProperty;
 
     #endregion ColorText - 颜色文本显示
 
@@ -204,21 +204,10 @@ public class ColorPicker : Control
     // 更新颜色文本显示
     private void UpdateColorText()
     {
-        if (_isUpdatingColor) { return; }
-
-        try
-        {
-            _isUpdatingColor = true;
-
-            // 使用ColorHelper处理颜色文本转换
-            ColorText = ColorTextFormat == ColorTextMode.HEX
-                ? ColorHelper.ColorToHexString(SelectedColor, true)
-                : ColorHelper.ColorToRgbString(SelectedColor, true);
-        }
-        finally
-        {
-            _isUpdatingColor = false;
-        }
+        // 使用ColorHelper处理颜色文本转换
+        ColorText = ColorTextFormat == ColorTextMode.HEX
+            ? ColorHelper.ColorToHexString(SelectedColor, true)
+            : ColorHelper.ColorToRgbString(SelectedColor, true);
     }
 
     #endregion 私有方法
@@ -234,10 +223,7 @@ public class ColorPicker : Control
                 _isUpdatingColor = true;
 
                 // 更新选择器颜色
-                if (_colorSelector != null)
-                {
-                    _colorSelector.SelectedColor = newColor;
-                }
+                _colorSelector?.SelectedColor = newColor;
 
                 // 更新文本显示
                 UpdateColorText();
