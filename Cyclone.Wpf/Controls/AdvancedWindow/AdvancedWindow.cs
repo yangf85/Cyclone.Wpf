@@ -20,20 +20,6 @@ namespace Cyclone.Wpf.Controls;
 [TemplatePart(Name = PART_TopmostButton, Type = typeof(ToggleButton))]
 public class AdvancedWindow : System.Windows.Window
 {
-    static AdvancedWindow()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedWindow), new FrameworkPropertyMetadata(typeof(AdvancedWindow)));
-    }
-
-    public AdvancedWindow()
-    {
-        CommandBindings.Add(new CommandBinding(CloseCommand, OnClose, OnCanClose));
-        CommandBindings.Add(new CommandBinding(MaximizeCommand, OnMaximize, OnCanMaximize));
-        CommandBindings.Add(new CommandBinding(RestoreCommand, OnRestore, OnCanRestore));
-        CommandBindings.Add(new CommandBinding(MinimizeCommand, OnMinimize, OnCanMinimize));
-        CommandBindings.Add(new CommandBinding(TopmostCommand, OnTopmost, OnCanTopmost));
-    }
-
     private const string PART_CloseButton = nameof(PART_CloseButton);
 
     private const string PART_RestoreButton = nameof(PART_RestoreButton);
@@ -53,6 +39,20 @@ public class AdvancedWindow : System.Windows.Window
     private Button _minimize;
 
     private ToggleButton _topmost;
+
+    static AdvancedWindow()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(AdvancedWindow), new FrameworkPropertyMetadata(typeof(AdvancedWindow)));
+    }
+
+    public AdvancedWindow()
+    {
+        CommandBindings.Add(new CommandBinding(CloseCommand, OnClose, OnCanClose));
+        CommandBindings.Add(new CommandBinding(MaximizeCommand, OnMaximize, OnCanMaximize));
+        CommandBindings.Add(new CommandBinding(RestoreCommand, OnRestore, OnCanRestore));
+        CommandBindings.Add(new CommandBinding(MinimizeCommand, OnMinimize, OnCanMinimize));
+        CommandBindings.Add(new CommandBinding(TopmostCommand, OnTopmost, OnCanTopmost));
+    }
 
     #region Icon
 
@@ -82,18 +82,21 @@ public class AdvancedWindow : System.Windows.Window
 
     #region CaptionButtonType
 
+    public static readonly DependencyProperty CaptionButtonTypeProperty =
+        DependencyProperty.Register(nameof(CaptionButtonType), typeof(CaptionButtonType), typeof(AdvancedWindow), new PropertyMetadata(default(CaptionButtonType)));
+
     public CaptionButtonType CaptionButtonType
     {
         get => (CaptionButtonType)GetValue(CaptionButtonTypeProperty);
         set => SetValue(CaptionButtonTypeProperty, value);
     }
 
-    public static readonly DependencyProperty CaptionButtonTypeProperty =
-        DependencyProperty.Register(nameof(CaptionButtonType), typeof(CaptionButtonType), typeof(AdvancedWindow), new PropertyMetadata(default(CaptionButtonType)));
-
     #endregion CaptionButtonType
 
     #region TitleBrush
+
+    public static readonly DependencyProperty TitleBrushProperty =
+        DependencyProperty.Register(nameof(TitleBrush), typeof(Brush), typeof(AdvancedWindow), new PropertyMetadata(default(Brush)));
 
     public Brush TitleBrush
     {
@@ -101,21 +104,18 @@ public class AdvancedWindow : System.Windows.Window
         set => SetValue(TitleBrushProperty, value);
     }
 
-    public static readonly DependencyProperty TitleBrushProperty =
-        DependencyProperty.Register(nameof(TitleBrush), typeof(Brush), typeof(AdvancedWindow), new PropertyMetadata(default(Brush)));
-
     #endregion TitleBrush
 
     #region CaptionHeight
+
+    public static readonly DependencyProperty CaptionHeightProperty =
+        DependencyProperty.Register(nameof(CaptionHeight), typeof(double), typeof(AdvancedWindow), new PropertyMetadata(default(double)));
 
     public double CaptionHeight
     {
         get => (double)GetValue(CaptionHeightProperty);
         set => SetValue(CaptionHeightProperty, value);
     }
-
-    public static readonly DependencyProperty CaptionHeightProperty =
-        DependencyProperty.Register(nameof(CaptionHeight), typeof(double), typeof(AdvancedWindow), new PropertyMetadata(default(double)));
 
     #endregion CaptionHeight
 
@@ -157,6 +157,8 @@ public class AdvancedWindow : System.Windows.Window
 
     #region Maximize
 
+    public static RoutedCommand MaximizeCommand { get; private set; } = new RoutedCommand("Maximize", typeof(AdvancedWindow));
+
     public static void OnMaximize(object sender, ExecutedRoutedEventArgs e)
     {
         if (sender is Window window)
@@ -178,11 +180,11 @@ public class AdvancedWindow : System.Windows.Window
         e.CanExecute = false;
     }
 
-    public static RoutedCommand MaximizeCommand { get; private set; } = new RoutedCommand("Maximize", typeof(AdvancedWindow));
-
     #endregion Maximize
 
     #region Restore
+
+    public static RoutedCommand RestoreCommand { get; private set; } = new RoutedCommand("Restore", typeof(AdvancedWindow));
 
     public static void OnCanRestore(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -205,11 +207,11 @@ public class AdvancedWindow : System.Windows.Window
         }
     }
 
-    public static RoutedCommand RestoreCommand { get; private set; } = new RoutedCommand("Restore", typeof(AdvancedWindow));
-
     #endregion Restore
 
     #region Minimize
+
+    public static RoutedCommand MinimizeCommand { get; private set; } = new RoutedCommand("Minimize", typeof(AdvancedWindow));
 
     public static void OnCanMinimize(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -232,11 +234,11 @@ public class AdvancedWindow : System.Windows.Window
         }
     }
 
-    public static RoutedCommand MinimizeCommand { get; private set; } = new RoutedCommand("Minimize", typeof(AdvancedWindow));
-
     #endregion Minimize
 
     #region Topmost
+
+    public static RoutedCommand TopmostCommand { get; private set; } = new RoutedCommand("Topmost", typeof(AdvancedWindow));
 
     public static void OnCanTopmost(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -258,8 +260,6 @@ public class AdvancedWindow : System.Windows.Window
         window.Topmost = button.IsChecked ?? false;
     }
 
-    public static RoutedCommand TopmostCommand { get; private set; } = new RoutedCommand("Topmost", typeof(AdvancedWindow));
-
     #endregion Topmost
 
     #region Override
@@ -267,11 +267,6 @@ public class AdvancedWindow : System.Windows.Window
     protected override void OnInitialized(EventArgs e)
     {
         base.OnInitialized(e);
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -283,6 +278,11 @@ public class AdvancedWindow : System.Windows.Window
         {
             InvalidateMeasure();
         }
+    }
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
     }
 
     #endregion Override
