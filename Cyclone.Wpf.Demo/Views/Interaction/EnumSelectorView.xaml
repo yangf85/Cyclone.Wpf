@@ -6,22 +6,129 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignInstance Type={x:Type local:EnumSelectorViewModel}}"
-    d:DesignHeight="450"
+    d:DataContext="{d:DesignInstance Type={x:Type local:EnumSelectorDemoViewModel}}"
+    d:DesignHeight="600"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <cy:SpacingStackPanel Spacing="10">
-            <cy:EnumSelector
-                EnumType="{x:Type local:WeekDays}"
-                Rows="2"
-                SelectedEnum="{Binding WeekDays}" />
-            <cy:EnumSelector
-                EnumType="{x:Type local:VipLevel}"
-                Rows="1"
-                SelectedEnum="{Binding VipLevel}" />
-            <Button Command="{Binding ShowFlagEnumCommand}" Content="ShowFlagEnum" />
-            <Button Command="{Binding ShowEnumCommand}" Content="ShowEnum" />
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <cy:SpacingStackPanel Margin="20" Spacing="20">
+
+            <!--  标题  -->
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="18"
+                FontWeight="Bold"
+                Text="EnumSelector 控件功能演示" />
+
+            <!--  基本功能演示  -->
+            <GroupBox Padding="15" Header="基本功能演示">
+                <cy:SpacingStackPanel Spacing="15">
+
+                    <!--  普通枚举 - 自动模式  -->
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="Bold"
+                            Text="普通枚举 (Auto模式 - RadioButton):" />
+                        <cy:EnumSelector
+                            Columns="2"
+                            EnumType="{x:Type local:UserRole}"
+                            IsUseAlias="True"
+                            SelectedEnum="{Binding UserRole, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Foreground="Blue"
+                            Text="{Binding UserRole, StringFormat='当前选择: {0}'}" />
+                    </StackPanel>
+
+                    <!--  Flags枚举 - 自动模式  -->
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="Bold"
+                            Text="Flags枚举 (Auto模式 - CheckBox):" />
+                        <cy:EnumSelector
+                            Columns="3"
+                            EnumType="{x:Type local:FilePermissions}"
+                            IsUseAlias="True"
+                            SelectedEnum="{Binding FilePermissions, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Foreground="Green"
+                            Text="{Binding FilePermissions, StringFormat='当前选择: {0} (值: {0:D})'}" />
+                    </StackPanel>
+                </cy:SpacingStackPanel>
+            </GroupBox>
+
+            <!--  DisplayMode 演示  -->
+            <GroupBox Padding="15" Header="DisplayMode 强制模式演示">
+                <cy:SpacingStackPanel Spacing="15">
+
+                    <!--  普通枚举强制使用CheckBox  -->
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="Bold"
+                            Text="普通枚举强制CheckBox模式 (仍然单选):" />
+                        <cy:EnumSelector
+                            Columns="2"
+                            DisplayMode="CheckBox"
+                            EnumType="{x:Type local:Priority}"
+                            IsUseAlias="True"
+                            SelectedEnum="{Binding Priority, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Foreground="Purple"
+                            Text="{Binding Priority, StringFormat='当前选择: {0}'}" />
+                    </StackPanel>
+
+                    <!--  Flags枚举强制使用RadioButton  -->
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="Bold"
+                            Text="Flags枚举强制RadioButton模式 (失去多选能力):" />
+                        <cy:EnumSelector
+                            Columns="3"
+                            DisplayMode="RadioButton"
+                            EnumType="{x:Type local:WorkDays}"
+                            IsUseAlias="True"
+                            SelectedEnum="{Binding WorkDays, Mode=TwoWay}" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Foreground="Orange"
+                            Text="{Binding WorkDays, StringFormat='当前选择: {0} (值: {0:D})'}" />
+                    </StackPanel>
+                </cy:SpacingStackPanel>
+            </GroupBox>
+
+            <!--  控制按钮  -->
+            <GroupBox Padding="15" Header="控制操作">
+                <cy:SpacingStackPanel Orientation="Horizontal" Spacing="10">
+                    <Button
+                        Background="Green"
+                        Command="{Binding SetDefaultsCommand}"
+                        Content="设置默认值"
+                        Foreground="White" />
+                    <Button
+                        Background="OrangeRed"
+                        Command="{Binding ResetAllCommand}"
+                        Content="重置所有"
+                        Foreground="White" />
+                </cy:SpacingStackPanel>
+            </GroupBox>
+
+            <!--  功能说明  -->
+            <GroupBox Padding="15" Header="主要特性">
+                <cy:SpacingStackPanel Spacing="6">
+                    <TextBlock FontSize="12" Text="✓ DisplayMode: Auto(自动) | RadioButton(强制单选) | CheckBox(强制多选)" />
+                    <TextBlock FontSize="12" Text="✓ 自动识别: 普通枚举→RadioButton, Flags枚举→CheckBox" />
+                    <TextBlock FontSize="12" Text="✓ Description特性支持: 显示中文描述 (IsUseAlias控制)" />
+                    <TextBlock FontSize="12" Text="✓ 双向绑定: SelectedEnum属性支持TwoWay绑定" />
+                    <TextBlock FontSize="12" Text="✓ 灵活布局: Rows和Columns属性控制网格排列" />
+                </cy:SpacingStackPanel>
+            </GroupBox>
         </cy:SpacingStackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

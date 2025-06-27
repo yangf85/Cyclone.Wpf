@@ -50,27 +50,27 @@ public class FluidTabControl : Selector
 
     #region FluidTabPlacement
 
+    public static readonly DependencyProperty FluidTabPlacementProperty =
+        DependencyProperty.Register(nameof(FluidTabPlacement), typeof(FluidTabPlacement), typeof(FluidTabControl), new PropertyMetadata(default(FluidTabPlacement)));
+
     public FluidTabPlacement FluidTabPlacement
     {
         get => (FluidTabPlacement)GetValue(FluidTabPlacementProperty);
         set => SetValue(FluidTabPlacementProperty, value);
     }
 
-    public static readonly DependencyProperty FluidTabPlacementProperty =
-        DependencyProperty.Register(nameof(FluidTabPlacement), typeof(FluidTabPlacement), typeof(FluidTabControl), new PropertyMetadata(default(FluidTabPlacement)));
-
     #endregion FluidTabPlacement
 
     #region ItemHeaderHorizontal
+
+    public static readonly DependencyProperty ItemHeaderHorizontalProperty =
+        DependencyProperty.Register(nameof(ItemHeaderHorizontal), typeof(HorizontalAlignment), typeof(FluidTabControl), new PropertyMetadata(default(HorizontalAlignment)));
 
     public HorizontalAlignment ItemHeaderHorizontal
     {
         get => (HorizontalAlignment)GetValue(ItemHeaderHorizontalProperty);
         set => SetValue(ItemHeaderHorizontalProperty, value);
     }
-
-    public static readonly DependencyProperty ItemHeaderHorizontalProperty =
-        DependencyProperty.Register(nameof(ItemHeaderHorizontal), typeof(HorizontalAlignment), typeof(FluidTabControl), new PropertyMetadata(default(HorizontalAlignment)));
 
     #endregion ItemHeaderHorizontal
 
@@ -81,65 +81,6 @@ public class FluidTabControl : Selector
     }
 
     #region Private
-
-    internal void UpdateItemsContent()
-    {
-        if (_container == null || _itemsPanel == null) return;
-
-        _itemsPanel.Children.Clear();
-
-        for (int i = 0; i < Items.Count; i++)
-        {
-            var item = Items[i];
-            var container = GetFluidTabItem(item);
-
-            // 创建内容包装器
-            var contentWrapper = new Border
-            {
-                Background = Brushes.Transparent,
-                Tag = i  // 使用索引作为标识
-            };
-
-            // 使用 ContentPresenter 来显示内容，避免直接使用已有父元素的内容
-            ContentPresenter contentPresenter = null;
-
-            if (item is FluidTabItem tabItem)
-            {
-                // 对于 FluidTabItem，创建 ContentPresenter 并绑定到其 Content
-                contentPresenter = new ContentPresenter();
-                contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding("Content") { Source = tabItem });
-
-                // 绑定 DataContext
-                var dataContextBinding = new Binding("DataContext")
-                {
-                    Source = tabItem,
-                    Mode = BindingMode.OneWay
-                };
-                contentWrapper.SetBinding(Border.DataContextProperty, dataContextBinding);
-            }
-            else
-            {
-                // 对于通过 ItemsSource 绑定的项，使用 ItemTemplate
-                contentPresenter = new ContentPresenter
-                {
-                    ContentTemplate = ItemTemplate,
-                    Content = item
-                };
-                contentWrapper.DataContext = item;
-            }
-
-            // 设置 ContentOwner，建立关联
-            if (container != null && contentPresenter != null)
-            {
-                FluidTabItem.SetContentOwner(contentPresenter, container);
-                // 同时在 wrapper 上也设置，以便查找
-                FluidTabItem.SetContentOwner(contentWrapper, container);
-            }
-
-            contentWrapper.Child = contentPresenter;
-            _itemsPanel.Children.Add(contentWrapper);
-        }
-    }
 
     private void ScrollToSelectedItem()
     {
@@ -251,9 +192,92 @@ public class FluidTabControl : Selector
         }
     }
 
+    internal void UpdateItemsContent()
+    {
+        if (_container == null || _itemsPanel == null) return;
+
+        _itemsPanel.Children.Clear();
+
+        for (int i = 0; i < Items.Count; i++)
+        {
+            var item = Items[i];
+            var container = GetFluidTabItem(item);
+
+            // 创建内容包装器
+            var contentWrapper = new Border
+            {
+                Background = Brushes.Transparent,
+                Tag = i  // 使用索引作为标识
+            };
+
+            // 使用 ContentPresenter 来显示内容，避免直接使用已有父元素的内容
+            ContentPresenter contentPresenter = null;
+
+            if (item is FluidTabItem tabItem)
+            {
+                // 对于 FluidTabItem，创建 ContentPresenter 并绑定到其 Content
+                contentPresenter = new ContentPresenter();
+                contentPresenter.SetBinding(ContentPresenter.ContentProperty, new Binding("Content") { Source = tabItem });
+
+                // 绑定 DataContext
+                var dataContextBinding = new Binding("DataContext")
+                {
+                    Source = tabItem,
+                    Mode = BindingMode.OneWay
+                };
+                contentWrapper.SetBinding(Border.DataContextProperty, dataContextBinding);
+            }
+            else
+            {
+                // 对于通过 ItemsSource 绑定的项，使用 ItemTemplate
+                contentPresenter = new ContentPresenter
+                {
+                    ContentTemplate = ItemTemplate,
+                    Content = item
+                };
+                contentWrapper.DataContext = item;
+            }
+
+            // 设置 ContentOwner，建立关联
+            if (container != null && contentPresenter != null)
+            {
+                FluidTabItem.SetContentOwner(contentPresenter, container);
+                // 同时在 wrapper 上也设置，以便查找
+                FluidTabItem.SetContentOwner(contentWrapper, container);
+            }
+
+            contentWrapper.Child = contentPresenter;
+            _itemsPanel.Children.Add(contentWrapper);
+        }
+    }
+
     #endregion Private
 
     #region Override
+
+    // 使用普通的 MouseWheel 事件，只有当其他控件没有处理时才会到达这里
+    private void FluidTabControl_MouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        // 如果事件已经被处理，则不再处理
+        if (e.Handled || _container == null || _isScrolling) return;
+
+        // 检查鼠标是否在内容区域内
+        var containerPosition = e.GetPosition(_container);
+        var contentBounds = new Rect(0, 0, _container.ActualWidth, _container.ActualHeight);
+
+        if (contentBounds.Contains(containerPosition))
+        {
+            // 计算新的垂直偏移
+            double newOffset = _container.VerticalOffset - (e.Delta / 3.0);
+            newOffset = Math.Max(0, Math.Min(newOffset, _container.ScrollableHeight));
+
+            // 滚动到新位置
+            _container.ScrollToVerticalOffset(newOffset);
+
+            // 标记事件为已处理
+            e.Handled = true;
+        }
+    }
 
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
@@ -319,24 +343,10 @@ public class FluidTabControl : Selector
 
         UpdateItemsContent();
 
-        PreviewMouseWheel += FluidTabControl_PreviewMouseWheel;
-    }
-
-    // 修复在Item区域滚动时，鼠标滚轮事件被拦截的问题
-    private void FluidTabControl_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-    {
-        if (_container != null && !_isScrolling)
-        {
-            // 计算新的垂直偏移
-            double newOffset = _container.VerticalOffset - (e.Delta / 3.0);
-            newOffset = Math.Max(0, Math.Min(newOffset, _container.ScrollableHeight));
-
-            // 滚动到新位置
-            _container.ScrollToVerticalOffset(newOffset);
-
-            // 标记事件为已处理
-            e.Handled = true;
-        }
+        // 移除旧的事件处理器（如果存在）
+        MouseWheel -= FluidTabControl_MouseWheel;
+        // 使用普通的 MouseWheel 事件而不是 PreviewMouseWheel
+        MouseWheel += FluidTabControl_MouseWheel;
     }
 
     #endregion Override
@@ -347,10 +357,6 @@ public class FluidTabControl : Selector
             DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(ScrollViewerBehavior),
                 new FrameworkPropertyMetadata(0.0, OnVerticalOffsetChanged));
 
-        public static double GetVerticalOffset(ScrollViewer obj) => obj.VerticalOffset;
-
-        public static void SetVerticalOffset(ScrollViewer obj, double value) => obj.ScrollToVerticalOffset(value);
-
         private static void OnVerticalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ScrollViewer scrollViewer)
@@ -358,5 +364,9 @@ public class FluidTabControl : Selector
                 scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
             }
         }
+
+        public static double GetVerticalOffset(ScrollViewer obj) => obj.VerticalOffset;
+
+        public static void SetVerticalOffset(ScrollViewer obj, double value) => obj.ScrollToVerticalOffset(value);
     }
 }

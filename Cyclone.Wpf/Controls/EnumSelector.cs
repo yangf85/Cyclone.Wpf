@@ -15,6 +15,27 @@ using System.Windows.Threading;
 namespace Cyclone.Wpf.Controls
 {
     /// <summary>
+    /// 枚举显示模式
+    /// </summary>
+    public enum EnumDisplayMode
+    {
+        /// <summary>
+        /// 自动模式：根据枚举类型自动选择（Flags用CheckBox，普通枚举用RadioButton）
+        /// </summary>
+        Auto,
+
+        /// <summary>
+        /// 强制使用RadioButton模式
+        /// </summary>
+        RadioButton,
+
+        /// <summary>
+        /// 强制使用CheckBox模式
+        /// </summary>
+        CheckBox
+    }
+
+    /// <summary>
     /// 表示枚举项的包装类，用于UI绑定
     /// </summary>
     internal class EnumObject : NotificationObject
@@ -132,6 +153,7 @@ namespace Cyclone.Wpf.Controls
             {
                 selector.UpdateItemsSource();
                 selector.UpdateHasFlags();
+                selector.UpdateEffectiveDisplayMode();
             }), DispatcherPriority.Loaded);
         }
 
@@ -187,6 +209,26 @@ namespace Cyclone.Wpf.Controls
 
         #endregion IsUseAlias
 
+        #region DisplayMode
+
+        public static readonly DependencyProperty DisplayModeProperty =
+            DependencyProperty.Register(nameof(DisplayMode), typeof(EnumDisplayMode), typeof(EnumSelector),
+                new PropertyMetadata(EnumDisplayMode.Auto, OnDisplayModeChanged));
+
+        public EnumDisplayMode DisplayMode
+        {
+            get => (EnumDisplayMode)GetValue(DisplayModeProperty);
+            set => SetValue(DisplayModeProperty, value);
+        }
+
+        private static void OnDisplayModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var selector = d as EnumSelector;
+            selector?.UpdateEffectiveDisplayMode();
+        }
+
+        #endregion DisplayMode
+
         #region HasFlags
 
         private static readonly DependencyPropertyKey HasFlagsPropertyKey =
@@ -202,6 +244,22 @@ namespace Cyclone.Wpf.Controls
         }
 
         #endregion HasFlags
+
+        #region EffectiveDisplayMode
+
+        private static readonly DependencyPropertyKey EffectiveDisplayModePropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(EffectiveDisplayMode), typeof(EnumDisplayMode), typeof(EnumSelector),
+                new PropertyMetadata(EnumDisplayMode.RadioButton));
+
+        public static readonly DependencyProperty EffectiveDisplayModeProperty = EffectiveDisplayModePropertyKey.DependencyProperty;
+
+        public EnumDisplayMode EffectiveDisplayMode
+        {
+            get => (EnumDisplayMode)GetValue(EffectiveDisplayModeProperty);
+            private set => SetValue(EffectiveDisplayModePropertyKey, value);
+        }
+
+        #endregion EffectiveDisplayMode
 
         #region RadioButtonGroupName
 
@@ -247,7 +305,7 @@ namespace Cyclone.Wpf.Controls
 
             try
             {
-                if (HasFlaggsAttribute())
+                if (IsMultiSelectMode())
                 {
                     // 检查是否有新选中的项
                     foreach (EnumObject addedItem in e.AddedItems)
@@ -303,7 +361,7 @@ namespace Cyclone.Wpf.Controls
         {
             if (_listBox != null && EnumType != null)
             {
-                if (HasFlaggsAttribute())
+                if (IsMultiSelectMode())
                 {
                     _listBox.SelectionMode = SelectionMode.Multiple;
                 }
@@ -333,7 +391,7 @@ namespace Cyclone.Wpf.Controls
 
         private void EnumObject_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(EnumObject.IsSelected) && !_isUpdatingSelection && !HasFlaggsAttribute())
+            if (e.PropertyName == nameof(EnumObject.IsSelected) && !_isUpdatingSelection && !IsMultiSelectMode())
             {
                 _isUpdatingSelection = true;
                 try
@@ -364,42 +422,80 @@ namespace Cyclone.Wpf.Controls
             HasFlags = HasFlaggsAttribute();
         }
 
+        private void UpdateEffectiveDisplayMode()
+        {
+            switch (DisplayMode)
+            {
+                case EnumDisplayMode.Auto:
+                    EffectiveDisplayMode = HasFlaggsAttribute() ? EnumDisplayMode.CheckBox : EnumDisplayMode.RadioButton;
+                    break;
+
+                case EnumDisplayMode.RadioButton:
+                    EffectiveDisplayMode = EnumDisplayMode.RadioButton;
+                    break;
+
+                case EnumDisplayMode.CheckBox:
+                    EffectiveDisplayMode = EnumDisplayMode.CheckBox;
+                    break;
+
+                default:
+                    EffectiveDisplayMode = EnumDisplayMode.RadioButton;
+                    break;
+            }
+        }
+
+        private bool IsMultiSelectMode()
+        {
+            return EffectiveDisplayMode == EnumDisplayMode.CheckBox;
+        }
+
         private void UpdateSelectionFromSelectedEnum()
         {
             if (_enums == null || SelectedEnum == null)
                 return;
 
-            if (HasFlaggsAttribute())
+            if (IsMultiSelectMode())
             {
-                // 处理[Flags]枚举
+                // 处理多选模式（CheckBox）
                 int selectedValue = Convert.ToInt32(SelectedEnum);
 
-                // 创建枚举值关系映射
-                var enumValueMap = CreateEnumValueMap();
-
-                // 首先取消所有选择
-                foreach (var item in _enums)
+                if (HasFlaggsAttribute())
                 {
-                    item.IsSelected = false;
-                }
+                    // 对于Flags枚举，使用位运算处理
+                    var enumValueMap = CreateEnumValueMap();
 
-                // 然后设置基本选择
-                foreach (var item in _enums)
-                {
-                    int itemValue = Convert.ToInt32(item.Enum);
-                    // 检查当前标志位是否被设置
-                    if (itemValue != 0 && (selectedValue & itemValue) == itemValue)
+                    // 首先取消所有选择
+                    foreach (var item in _enums)
                     {
-                        item.IsSelected = true;
+                        item.IsSelected = false;
+                    }
+
+                    // 然后设置基本选择
+                    foreach (var item in _enums)
+                    {
+                        int itemValue = Convert.ToInt32(item.Enum);
+                        // 检查当前标志位是否被设置
+                        if (itemValue != 0 && (selectedValue & itemValue) == itemValue)
+                        {
+                            item.IsSelected = true;
+                        }
+                    }
+
+                    // 最后更新复合选项状态
+                    UpdateAllCompositeItems(enumValueMap);
+                }
+                else
+                {
+                    // 对于非Flags枚举的CheckBox模式，只选中匹配的项
+                    foreach (var item in _enums)
+                    {
+                        item.IsSelected = Convert.ToInt32(item.Enum) == selectedValue;
                     }
                 }
-
-                // 最后更新复合选项状态
-                UpdateAllCompositeItems(enumValueMap);
             }
             else
             {
-                // 处理普通枚举（RadioButton 模式）
+                // 处理单选模式（RadioButton）
                 int selectedValue = Convert.ToInt32(SelectedEnum);
                 foreach (var item in _enums)
                 {
@@ -416,30 +512,34 @@ namespace Cyclone.Wpf.Controls
             // 首先更新当前项
             item.IsSelected = isSelected;
 
-            // 创建所有枚举值的映射表，用于分析组合关系
-            var enumValueMap = CreateEnumValueMap();
-
-            if (isSelected)
+            // 只有在Flags枚举的CheckBox模式下才处理复合关系
+            if (HasFlaggsAttribute() && IsMultiSelectMode())
             {
-                // 当选中一个项时，选中其所有子项（包含在该值中的所有基本标志）
-                UpdateChildItemsSelection(itemValue, true, enumValueMap);
-            }
-            else
-            {
-                // 当取消选中一个项时，有两种情况处理：
+                // 创建所有枚举值的映射表，用于分析组合关系
+                var enumValueMap = CreateEnumValueMap();
 
-                // 1. 如果是组合值，取消选中它的所有子项
-                if (IsCompositeValue(itemValue))
+                if (isSelected)
                 {
-                    UpdateChildItemsSelection(itemValue, false, enumValueMap);
+                    // 当选中一个项时，选中其所有子项（包含在该值中的所有基本标志）
+                    UpdateChildItemsSelection(itemValue, true, enumValueMap);
+                }
+                else
+                {
+                    // 当取消选中一个项时，有两种情况处理：
+
+                    // 1. 如果是组合值，取消选中它的所有子项
+                    if (IsCompositeValue(itemValue))
+                    {
+                        UpdateChildItemsSelection(itemValue, false, enumValueMap);
+                    }
+
+                    // 2. 总是取消选中包含它的所有复合项（父项）
+                    UpdateParentItemsSelection(itemValue, false, enumValueMap);
                 }
 
-                // 2. 总是取消选中包含它的所有复合项（父项）
-                UpdateParentItemsSelection(itemValue, false, enumValueMap);
+                // 最后检查和更新所有复合项的状态
+                UpdateAllCompositeItems(enumValueMap);
             }
-
-            // 最后检查和更新所有复合项的状态
-            UpdateAllCompositeItems(enumValueMap);
         }
 
         // 创建枚举值的组合关系映射
@@ -541,19 +641,31 @@ namespace Cyclone.Wpf.Controls
         // 根据当前选择更新SelectedEnum属性
         private void UpdateSelectedEnumFromSelections()
         {
-            int result = 0;
-
-            // 使用所有选中项计算结果
-            foreach (var item in _enums)
+            if (IsMultiSelectMode())
             {
-                if (item.IsSelected)
+                int result = 0;
+
+                // 使用所有选中项计算结果
+                foreach (var item in _enums)
                 {
-                    int itemValue = Convert.ToInt32(item.Enum);
-                    result |= itemValue;
+                    if (item.IsSelected)
+                    {
+                        int itemValue = Convert.ToInt32(item.Enum);
+                        result |= itemValue;
+                    }
+                }
+
+                SelectedEnum = (Enum)Enum.ToObject(EnumType, result);
+            }
+            else
+            {
+                // 单选模式，找到选中的项
+                var selectedItem = _enums.FirstOrDefault(e => e.IsSelected);
+                if (selectedItem != null)
+                {
+                    SelectedEnum = selectedItem.Enum;
                 }
             }
-
-            SelectedEnum = (Enum)Enum.ToObject(EnumType, result);
         }
 
         // 判断一个值是否是组合值（由多个基本值组合而成）

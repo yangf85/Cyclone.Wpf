@@ -1,108 +1,164 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Cyclone.Wpf.Controls;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Reflection;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Cyclone.Wpf.Demo.Views;
-
-/// <summary>
-/// EnumSelectorView.xaml 的交互逻辑
-/// </summary>
-public partial class EnumSelectorView : UserControl
+namespace Cyclone.Wpf.Demo.Views
 {
-    public EnumSelectorView()
+    /// <summary>
+    /// EnumSelector 控件使用案例演示
+    /// </summary>
+    public partial class EnumSelectorView : UserControl
     {
-        InitializeComponent();
-        DataContext = new EnumSelectorViewModel();
-    }
-}
-
-public partial class EnumSelectorViewModel : ObservableObject
-{
-    [ObservableProperty]
-    public partial WeekDays WeekDays { get; set; } = WeekDays.Sunday | WeekDays.Monday;
-
-    [ObservableProperty]
-    public partial VipLevel VipLevel { get; set; } = VipLevel.Silver;
-
-    [RelayCommand]
-    private void ShowFlagEnum()
-    {
-        NotificationService.Instance.Information("当前选择的星期: " + WeekDays.ToString());
+        public EnumSelectorView()
+        {
+            InitializeComponent();
+            DataContext = new EnumSelectorDemoViewModel();
+        }
     }
 
-    [RelayCommand]
-    private void ShowEnum()
+    public partial class EnumSelectorDemoViewModel : ObservableObject
     {
-        NotificationService.Instance.Information("当前选择的会员等级: " + VipLevel.ToString());
+        #region 属性
+
+        [ObservableProperty]
+        public partial UserRole UserRole { get; set; } = UserRole.User;
+
+        [ObservableProperty]
+        public partial Priority Priority { get; set; } = Priority.Medium;
+
+        [ObservableProperty]
+        public partial FilePermissions FilePermissions { get; set; } = FilePermissions.Read | FilePermissions.Write;
+
+        [ObservableProperty]
+        public partial WorkDays WorkDays { get; set; } = WorkDays.Monday;
+
+        #endregion 属性
+
+        #region 命令
+
+        [RelayCommand]
+        private void SetDefaults()
+        {
+            UserRole = UserRole.Admin;
+            Priority = Priority.High;
+            FilePermissions = FilePermissions.ReadWrite;
+            WorkDays = WorkDays.Weekdays;
+        }
+
+        [RelayCommand]
+        private void ResetAll()
+        {
+            UserRole = UserRole.Guest;
+            Priority = Priority.Low;
+            FilePermissions = FilePermissions.None;
+            WorkDays = WorkDays.None;
+        }
+
+        #endregion 命令
     }
-}
 
-[Flags]
-public enum WeekDays
-{
-    [Description("无")]
-    None = 0,
+    #region 枚举定义
 
-    [Description("星期一")]
-    Monday = 1,
+    /// <summary>
+    /// 用户角色 - 普通枚举
+    /// </summary>
+    public enum UserRole
+    {
+        [Description("访客")]
+        Guest = 0,
 
-    [Description("星期二")]
-    Tuesday = 2,
+        [Description("普通用户")]
+        User = 1,
 
-    [Description("星期三")]
-    Wednesday = 4,
+        [Description("管理员")]
+        Admin = 2,
 
-    [Description("星期四")]
-    Thursday = 8,
+        [Description("超级管理员")]
+        SuperAdmin = 3
+    }
 
-    [Description("星期五")]
-    Friday = 16,
+    /// <summary>
+    /// 优先级 - 普通枚举
+    /// </summary>
+    public enum Priority
+    {
+        [Description("低")]
+        Low = 1,
 
-    [Description("星期六")]
-    Saturday = 32,
+        [Description("中")]
+        Medium = 2,
 
-    [Description("星期天")]
-    Sunday = 64,
+        [Description("高")]
+        High = 3,
 
-    [Description("工作日")]
-    WorkDay = Monday | Tuesday | Wednesday | Thursday | Friday,
+        [Description("紧急")]
+        Critical = 4
+    }
 
-    [Description("周末")]
-    Weekend = Saturday | Sunday,
+    /// <summary>
+    /// 文件权限 - Flags枚举
+    /// </summary>
+    [Flags]
+    public enum FilePermissions
+    {
+        [Description("无权限")]
+        None = 0,
 
-    [Description("所有")]
-    All = Saturday | Sunday | Friday | Thursday | Wednesday | Tuesday | Monday
-}
+        [Description("读取")]
+        Read = 1,
 
-public enum VipLevel
-{
-    [Description("无")]
-    None = 0,
+        [Description("写入")]
+        Write = 2,
 
-    [Description("青铜")]
-    Bronze = 1,
+        [Description("执行")]
+        Execute = 4,
 
-    [Description("白银")]
-    Silver = 2,
+        [Description("删除")]
+        Delete = 8,
 
-    [Description("黄金")]
-    Gold = 3,
+        [Description("读写")]
+        ReadWrite = Read | Write,
 
-    [Description("铂金")]
-    Diamond = 4
+        [Description("完全控制")]
+        FullControl = Read | Write | Execute | Delete
+    }
+
+    /// <summary>
+    /// 工作日 - Flags枚举
+    /// </summary>
+    [Flags]
+    public enum WorkDays
+    {
+        [Description("无")]
+        None = 0,
+
+        [Description("周一")]
+        Monday = 1,
+
+        [Description("周二")]
+        Tuesday = 2,
+
+        [Description("周三")]
+        Wednesday = 4,
+
+        [Description("周四")]
+        Thursday = 8,
+
+        [Description("周五")]
+        Friday = 16,
+
+        [Description("工作日")]
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday,
+
+        [Description("周末")]
+        Weekend = 32 | 64, // Saturday | Sunday
+
+        [Description("全周")]
+        AllDays = Weekdays | Weekend
+    }
+
+    #endregion 枚举定义
 }
