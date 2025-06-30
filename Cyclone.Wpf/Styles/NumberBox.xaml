@@ -27,7 +27,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Pressed}" />
@@ -60,7 +60,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="RootGrid" Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Pressed}" />

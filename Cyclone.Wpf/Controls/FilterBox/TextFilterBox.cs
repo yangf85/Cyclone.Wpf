@@ -14,10 +14,10 @@ public enum TextOperator
     [Description("≠")]           // NotEqual
     NotEqual,
 
-    [Description("~")]           // Contains
+    [Description("∋")]           // Contains
     Contains,
 
-    [Description("!~")]          // NotContains
+    [Description("∌")]          // NotContains
     NotContains,
 
     [Description("^")]           // StartsWith
@@ -26,7 +26,7 @@ public enum TextOperator
     [Description("$")]           // EndsWith
     EndsWith,
 
-    [Description("R")]      // Regex（无法用单符号，但可缩短为"R"）
+    [Description("*")]      // Regex（无法用单符号，但可缩短为"R"）
     Regex
 }
 
@@ -59,6 +59,19 @@ public class TextFilterBox : Control
 
     #endregion Label
 
+    #region Description
+
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(object), typeof(TextFilterBox), new PropertyMetadata(default(object)));
+
+    public object Description
+    {
+        get => (object)GetValue(DescriptionProperty);
+        set => SetValue(DescriptionProperty, value);
+    }
+
+    #endregion Description
+
     #region IsActived
 
     public static readonly DependencyProperty IsActivedProperty =
@@ -88,37 +101,12 @@ public class TextFilterBox : Control
     #region SharedName
 
     public static readonly DependencyProperty SharedNameProperty =
-                       FormItem.SharedNameProperty.AddOwner(typeof(TextFilterBox), new PropertyMetadata(default(string), OnSharedNameChanged));
+                       FormItem.SharedNameProperty.AddOwner(typeof(TextFilterBox), new PropertyMetadata(default(string)));
 
     public string SharedName
     {
         get => (string)GetValue(SharedNameProperty);
         set => SetValue(SharedNameProperty, value);
-    }
-
-    private static void OnSharedNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var filterBox = d as TextFilterBox;
-        if (filterBox != null)
-        {
-            if (!string.IsNullOrEmpty(e.NewValue?.ToString()))
-            {
-                filterBox.Loaded += TextFilterBox_Loaded;
-            }
-            else
-            {
-                filterBox.Loaded -= TextFilterBox_Loaded;
-            }
-        }
-    }
-
-    private static void TextFilterBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        var filterBox = sender as TextFilterBox;
-        if (filterBox != null && filterBox.Parent is Panel panel)
-        {
-            panel.SetValue(Grid.IsSharedSizeScopeProperty, true);
-        }
     }
 
     #endregion SharedName

@@ -76,6 +76,19 @@ public class NumberFilterBox : Control
 
     #endregion Label
 
+    #region Description
+
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(object), typeof(NumberFilterBox), new PropertyMetadata(default(object)));
+
+    public object Description
+    {
+        get => (object)GetValue(DescriptionProperty);
+        set => SetValue(DescriptionProperty, value);
+    }
+
+    #endregion Description
+
     #region IsActived
 
     public static readonly DependencyProperty IsActivedProperty =
@@ -101,6 +114,19 @@ public class NumberFilterBox : Control
     }
 
     #endregion Value
+
+    #region Step
+
+    public static readonly DependencyProperty StepProperty =
+            DependencyProperty.Register(nameof(Step), typeof(double), typeof(NumberFilterBox), new PropertyMetadata(1d));
+
+    public double Step
+    {
+        get => (double)GetValue(StepProperty);
+        set => SetValue(StepProperty, value);
+    }
+
+    #endregion Step
 
     #region Tolerance
 
@@ -131,37 +157,12 @@ public class NumberFilterBox : Control
     #region SharedName
 
     public static readonly DependencyProperty SharedNameProperty =
-                        FormItem.SharedNameProperty.AddOwner(typeof(NumberFilterBox), new FrameworkPropertyMetadata(default(string), OnSharedNameChanged));
+                        FormItem.SharedNameProperty.AddOwner(typeof(NumberFilterBox), new FrameworkPropertyMetadata(default(string)));
 
     public string SharedName
     {
         get => (string)GetValue(SharedNameProperty);
         set => SetValue(SharedNameProperty, value);
-    }
-
-    private static void NumberFilterBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        var filterBox = sender as NumberFilterBox;
-        if (filterBox != null && filterBox.Parent is Panel panel)
-        {
-            panel.SetValue(Grid.IsSharedSizeScopeProperty, true);
-        }
-    }
-
-    private static void OnSharedNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var filterBox = d as NumberFilterBox;
-        if (filterBox != null)
-        {
-            if (!string.IsNullOrEmpty(e.NewValue?.ToString()))
-            {
-                filterBox.Loaded += NumberFilterBox_Loaded;
-            }
-            else
-            {
-                filterBox.Loaded -= NumberFilterBox_Loaded;
-            }
-        }
     }
 
     #endregion SharedName

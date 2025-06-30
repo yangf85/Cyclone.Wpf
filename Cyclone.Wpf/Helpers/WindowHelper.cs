@@ -187,4 +187,49 @@ public static class WindowHelper
     }
 
     #endregion IsShowSystemMenuOnRightClick
+
+    #region IsHideOnCloseEnabled
+
+    public static readonly DependencyProperty IsHideOnCloseEnabledProperty =
+        DependencyProperty.RegisterAttached(
+            "IsHideOnCloseEnabled",
+            typeof(bool),
+            typeof(WindowHelper),
+            new PropertyMetadata(false, OnIsHideOnCloseEnabledChanged));
+
+    private static void OnIsHideOnCloseEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is Window window)
+        {
+            if ((bool)e.NewValue)
+            {
+                window.Closing += Window_Closing;
+            }
+            else
+            {
+                window.Closing -= Window_Closing;
+            }
+        }
+    }
+
+    private static void Window_Closing(object sender, CancelEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            e.Cancel = true;
+            window.Hide();
+        }
+    }
+
+    public static bool GetIsHideOnCloseEnabled(Window window)
+    {
+        return (bool)window.GetValue(IsHideOnCloseEnabledProperty);
+    }
+
+    public static void SetIsHideOnCloseEnabled(Window window, bool value)
+    {
+        window.SetValue(IsHideOnCloseEnabledProperty, value);
+    }
+
+    #endregion IsHideOnCloseEnabled
 }
