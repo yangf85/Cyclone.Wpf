@@ -68,7 +68,7 @@ public partial class MainViewModel : ObservableObject
             "CountDown" => new CountDownView(),
             "LcdDisplayer" => new LcdDisplayerView(),
             "EnumSelector" => new EnumSelectorView(),
-            "SectionTitle" => new SectionTitleView(),
+            "SectionHeader" => new SectionHeaderView(),
             "Test" => new TestView(),
             _ => null,
         };
@@ -138,7 +138,7 @@ public partial class SideMenuViewModel : ObservableObject
                 },
                 new SideMenuItemViewModel
                 {
-                    Header="SectionTitle",
+                    Header="SectionHeader",
                     Icon= "\xe888",
                 },
                 new SideMenuItemViewModel

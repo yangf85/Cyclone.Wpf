@@ -18,9 +18,9 @@ namespace Cyclone.Wpf.Demo.Views
     /// <summary>
     /// SectionTitleView.xaml 的交互逻辑
     /// </summary>
-    public partial class SectionTitleView : UserControl
+    public partial class SectionHeaderView : UserControl
     {
-        public SectionTitleView()
+        public SectionHeaderView()
         {
             InitializeComponent();
         }
