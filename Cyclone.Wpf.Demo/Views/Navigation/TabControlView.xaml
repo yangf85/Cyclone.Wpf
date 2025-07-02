@@ -107,7 +107,6 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <!--  Top方向  -->
             <GroupBox
                 Height="300"
                 Margin="10"
@@ -116,6 +115,11 @@
                     ItemsSource="{Binding TabItems}"
                     SelectedItem="{Binding SelectedTab}"
                     TabStripPlacement="Top">
+                    <TabControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid HorizontalAlignment="Stretch" Rows="1" />
+                        </ItemsPanelTemplate>
+                    </TabControl.ItemsPanel>
                     <TabControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Header}" />
@@ -124,7 +128,6 @@
                 </TabControl>
             </GroupBox>
 
-            <!--  Bottom方向  -->
             <GroupBox
                 Height="300"
                 Margin="10"
@@ -148,7 +151,6 @@
                 </TabControl>
             </GroupBox>
 
-            <!--  Left方向  -->
             <GroupBox
                 Height="300"
                 Margin="10"
@@ -156,31 +158,12 @@
                 <TabControl ItemsSource="{Binding TabItems}" TabStripPlacement="Left">
                     <TabControl.ItemTemplate>
                         <DataTemplate>
-                            <Border
-                                Width="120"
-                                Margin="0,2"
-                                BorderBrush="LightGray"
-                                BorderThickness="0,0,1,0">
-                                <StackPanel Margin="10,8" Orientation="Horizontal">
-                                    <Rectangle
-                                        Width="3"
-                                        Height="16"
-                                        Margin="0,0,8,0"
-                                        Fill="{Binding IconColor}" />
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Header}" />
-                                </StackPanel>
-                            </Border>
+                            <TextBlock Text="{Binding Header}" />
                         </DataTemplate>
                     </TabControl.ItemTemplate>
-                    <TabControl.ItemContainerStyle>
-                        <Style TargetType="TabItem">
-                            <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        </Style>
-                    </TabControl.ItemContainerStyle>
                 </TabControl>
             </GroupBox>
 
-            <!--  Right方向  -->
             <GroupBox
                 Height="300"
                 Margin="10"

@@ -104,21 +104,16 @@
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+            SnapsToDevicePixels="True">
             <Grid KeyboardNavigation.TabNavigation="Local">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <UniformGrid
+                <ItemsPresenter
                     x:Name="HeaderPanel"
                     Grid.Row="0"
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    IsItemsHost="True"
-                    KeyboardNavigation.TabIndex="1"
-                    Rows="1" />
+                    KeyboardNavigation.TabIndex="1" />
                 <Border
                     x:Name="ContentBorder"
                     Grid.Row="1"
@@ -130,21 +125,14 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="TableControl.ControlTemplate.Left" TargetType="TabControl">
-        <Grid
-            KeyboardNavigation.TabNavigation="Local"
-            SnapsToDevicePixels="True"
-            UseLayoutRounding="True">
+        <Grid KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <UniformGrid
+            <ItemsPresenter
                 x:Name="HeaderPanel"
                 Grid.Column="0"
-                VerticalAlignment="Top"
-                Background="Transparent"
-                Columns="1"
-                IsItemsHost="True"
                 KeyboardNavigation.TabIndex="1" />
             <Border
                 x:Name="ContentBorder"

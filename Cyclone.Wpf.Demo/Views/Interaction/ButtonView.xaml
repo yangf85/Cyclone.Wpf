@@ -50,10 +50,30 @@
         </HeaderedContentControl>
         <HeaderedContentControl Header="Switch">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:SwitchButton Content="One" />
-                <cy:SwitchButton Content="Two" />
-                <cy:SwitchButton Content="Three" />
-                <cy:SwitchButton Content="Four" />
+                <cy:SwitchButton Content="Default Style" />
+
+                <cy:SwitchButton
+                    AnimationDuration="0:0:0.25"
+                    CheckedBackground="#FF4444"
+                    Content="Large Thumb Style"
+                    ThumbBackground="White"
+                    ThumbCornerRadius="16"
+                    ThumbMargin="2,0,2,0"
+                    ThumbSize="32"
+                    TrackCornerRadius="7.5"
+                    TrackHeight="15"
+                    TrackWidth="60"
+                    UncheckedBackground="#FFB3B3" />
+
+                <cy:SwitchButton
+                    CheckedBackground="#9C27B0"
+                    Content="Rectangle Style"
+                    ThumbCornerRadius="0"
+                    ThumbMargin="2,2,2,2"
+                    ThumbSize="20"
+                    TrackCornerRadius="0"
+                    TrackHeight="24"
+                    TrackWidth="60" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Background="Gray" Header="SplitButton">
