@@ -7,8 +7,6 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
     <ControlTemplate x:Key="MultiComboBox.TextBox" TargetType="TextBox">
         <Border
             x:Name="PART_ContentHost"
@@ -46,7 +44,38 @@
         </Setter>
     </Style>
 
-    <!--  MultiComboBoxItem Style  -->
+    <Style x:Key="MultiComboBox.ClearButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Background="Transparent">
+                        <Path
+                            x:Name="IconPath"
+                            Width="12"
+                            Height="12"
+                            Data="M558.933333 529.066667l285.866667 285.866666-29.866667 29.866667-285.866666-285.866667-285.866667 285.866667-29.866667-29.866667 285.866667-285.866666L213.333333 243.2l29.866667-29.866667 285.866667 285.866667L814.933333 213.333333l29.866667 29.866667-285.866667 285.866667z"
+                            Fill="{DynamicResource Icon.Foreground.Default}"
+                            Stretch="Uniform" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Icon.Foreground.Hover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Icon.Foreground.Pressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Icon.Foreground.Disabled}" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type ctl:MultiComboBoxItem}">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Item}" />
         <Setter Property="Padding" Value="{DynamicResource Padding.Horizontal}" />
@@ -101,9 +130,8 @@
         </Setter>
     </Style>
 
-    <!--  MultiComboBox Style  -->
     <Style TargetType="{x:Type ctl:MultiComboBox}">
-        <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
@@ -117,10 +145,12 @@
                         x:Name="RootBorder"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
@@ -147,13 +177,23 @@
                                     Text="{TemplateBinding Watermark}"
                                     Visibility="Visible" />
                             </Grid>
+
+                            <Button
+                                x:Name="PART_ClearButton"
+                                Grid.Column="1"
+                                Margin="5,0"
+                                Command="{x:Static ctl:MultiComboBox.ClearCommand}"
+                                Focusable="False"
+                                Style="{StaticResource MultiComboBox.ClearButtonStyle}" />
+
                             <ToggleButton
                                 x:Name="PART_ToggleButton"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Margin="0,0,5,0"
                                 Focusable="False"
                                 IsChecked="{Binding IsOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                 Style="{StaticResource MultiComboBox.OpenButtonStyle}" />
+
                             <Popup
                                 x:Name="PART_ItemsContainer"
                                 AllowsTransparency="True"
@@ -174,23 +214,19 @@
                                             HorizontalScrollBarVisibility="Disabled"
                                             VerticalScrollBarVisibility="Auto">
                                             <StackPanel>
-                                                <!--  全选项  -->
                                                 <CheckBox
                                                     x:Name="PART_SelectAllCheckBox"
                                                     Margin="2,0,0,0"
                                                     VerticalAlignment="Center"
                                                     Content="{Binding SelectAllText, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    FontWeight="Bold"
-                                                    Visibility="{Binding ShowSelectAll, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static conv:BooleanConverter.ToVisibility}}" />
+                                                    FontWeight="Bold" />
 
-                                                <!--  分隔线  -->
                                                 <Rectangle
-                                                    Height="1"
+                                                    x:Name="Separator"
+                                                    Height="0.5"
                                                     Margin="2,0"
-                                                    Fill="{Binding ElementName=ContainerBorder, Path=BorderBrush}"
-                                                    Visibility="{Binding ShowSelectAll, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static conv:BooleanConverter.ToVisibility}}" />
+                                                    Fill="{Binding ElementName=ContainerBorder, Path=BorderBrush}" />
 
-                                                <!--  项目列表  -->
                                                 <ItemsPresenter x:Name="PART_ItemsPresenter" />
                                             </StackPanel>
                                         </ScrollViewer>
@@ -209,6 +245,19 @@
                         <Trigger Property="IsOpen" Value="True">
                             <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource Border.Active}" />
                         </Trigger>
+
+                        <Trigger Property="IsShowSelectAll" Value="False">
+                            <Setter TargetName="PART_SelectAllCheckBox" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Separator" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <Trigger Property="IsShowClearButton" Value="False">
+                            <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <DataTrigger Binding="{Binding SelectedItems.Count, RelativeSource={RelativeSource Self}}" Value="0">
+                            <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

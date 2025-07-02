@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -15,6 +16,7 @@ namespace Cyclone.Wpf.Controls;
 [TemplatePart(Name = PART_DisplayedTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = PART_Watermark, Type = typeof(TextBlock))]
 [TemplatePart(Name = PART_ToggleButton, Type = typeof(ToggleButton))]
+[TemplatePart(Name = PART_ClearButton, Type = typeof(Button))]
 [TemplatePart(Name = PART_ItemsContainer, Type = typeof(Popup))]
 [TemplatePart(Name = PART_SelectAllCheckBox, Type = typeof(CheckBox))]
 public class MultiComboBox : ItemsControl
@@ -22,27 +24,36 @@ public class MultiComboBox : ItemsControl
     private const string PART_DisplayedTextBox = "PART_DisplayedTextBox";
     private const string PART_Watermark = "PART_Watermark";
     private const string PART_ToggleButton = "PART_ToggleButton";
+    private const string PART_ClearButton = "PART_ClearButton";
     private const string PART_ItemsContainer = "PART_ItemsContainer";
     private const string PART_SelectAllCheckBox = "PART_SelectAllCheckBox";
 
     private TextBox _textBox;
     private TextBlock _watermark;
     private ToggleButton _toggleButton;
+    private Button _clearButton;
     private bool _isInternalUpdate = false;
     private Popup _itemsContainer;
     private CheckBox _selectAllCheckBox;
 
+    #region 路由命令
+
+    public static readonly RoutedCommand ClearCommand = new RoutedCommand(
+        "Clear", typeof(MultiComboBox));
+
+    #endregion 路由命令
+
     #region SelectedItems
+
+    public static readonly DependencyProperty SelectedItemsProperty =
+        DependencyProperty.Register(nameof(SelectedItems), typeof(IList), typeof(MultiComboBox),
+            new FrameworkPropertyMetadata(new List<object>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemsChanged));
 
     public IList SelectedItems
     {
         get => (IList)GetValue(SelectedItemsProperty);
         set => SetValue(SelectedItemsProperty, value);
     }
-
-    public static readonly DependencyProperty SelectedItemsProperty =
-        DependencyProperty.Register(nameof(SelectedItems), typeof(IList), typeof(MultiComboBox),
-            new FrameworkPropertyMetadata(new List<object>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemsChanged));
 
     private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -129,9 +140,6 @@ public class MultiComboBox : ItemsControl
         DependencyProperty.Register(nameof(MaxContainerHeight), typeof(double), typeof(MultiComboBox),
             new PropertyMetadata(200.0));
 
-    /// <summary>
-    /// 获取或设置下拉列表的最大高度
-    /// </summary>
     public double MaxContainerHeight
     {
         get => (double)GetValue(MaxContainerHeightProperty);
@@ -140,22 +148,19 @@ public class MultiComboBox : ItemsControl
 
     #endregion MaxContainerHeight
 
-    #region ShowSelectAll
+    #region IsShowSelectAll
 
-    public static readonly DependencyProperty ShowSelectAllProperty =
-        DependencyProperty.Register(nameof(ShowSelectAll), typeof(bool), typeof(MultiComboBox),
+    public static readonly DependencyProperty IsShowSelectAllProperty =
+        DependencyProperty.Register(nameof(IsShowSelectAll), typeof(bool), typeof(MultiComboBox),
             new PropertyMetadata(false));
 
-    /// <summary>
-    /// 获取或设置是否显示"全选"选项
-    /// </summary>
-    public bool ShowSelectAll
+    public bool IsShowSelectAll
     {
-        get => (bool)GetValue(ShowSelectAllProperty);
-        set => SetValue(ShowSelectAllProperty, value);
+        get => (bool)GetValue(IsShowSelectAllProperty);
+        set => SetValue(IsShowSelectAllProperty, value);
     }
 
-    #endregion ShowSelectAll
+    #endregion IsShowSelectAll
 
     #region SelectAllText
 
@@ -163,9 +168,6 @@ public class MultiComboBox : ItemsControl
         DependencyProperty.Register(nameof(SelectAllText), typeof(string), typeof(MultiComboBox),
             new PropertyMetadata("全选"));
 
-    /// <summary>
-    /// 获取或设置"全选"选项的显示文本
-    /// </summary>
     public string SelectAllText
     {
         get => (string)GetValue(SelectAllTextProperty);
@@ -173,6 +175,34 @@ public class MultiComboBox : ItemsControl
     }
 
     #endregion SelectAllText
+
+    #region IsShowClearButton
+
+    public static readonly DependencyProperty IsShowClearButtonProperty =
+        DependencyProperty.Register(nameof(IsShowClearButton), typeof(bool), typeof(MultiComboBox),
+            new PropertyMetadata(true));
+
+    public bool IsShowClearButton
+    {
+        get => (bool)GetValue(IsShowClearButtonProperty);
+        set => SetValue(IsShowClearButtonProperty, value);
+    }
+
+    #endregion IsShowClearButton
+
+    #region HasSelectedItems
+
+    public static readonly DependencyProperty HasSelectedItemsProperty =
+        DependencyProperty.Register(nameof(HasSelectedItems), typeof(bool), typeof(MultiComboBox),
+            new PropertyMetadata(false));
+
+    public bool HasSelectedItems
+    {
+        get => (bool)GetValue(HasSelectedItemsProperty);
+        private set => SetValue(HasSelectedItemsProperty, value);
+    }
+
+    #endregion HasSelectedItems
 
     #region 路由事件
 
@@ -183,9 +213,6 @@ public class MultiComboBox : ItemsControl
 
     #region 事件
 
-    /// <summary>
-    /// 当选择变更时发生
-    /// </summary>
     public event SelectionChangedEventHandler SelectionChanged
     {
         add => AddHandler(SelectionChangedEvent, value);
@@ -197,6 +224,10 @@ public class MultiComboBox : ItemsControl
     static MultiComboBox()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiComboBox), new FrameworkPropertyMetadata(typeof(MultiComboBox)));
+
+        // 注册命令绑定
+        CommandManager.RegisterClassCommandBinding(typeof(MultiComboBox),
+            new CommandBinding(ClearCommand, OnClearCommandExecuted, OnClearCommandCanExecute));
     }
 
     public MultiComboBox()
@@ -242,6 +273,19 @@ public class MultiComboBox : ItemsControl
 
         if (element is MultiComboBoxItem multiComboBoxItem)
         {
+            // 处理 DisplayMemberPath
+            if (!string.IsNullOrEmpty(DisplayMemberPath) && !(item is string))
+            {
+                var binding = new Binding(DisplayMemberPath) { Source = item };
+                var textBlock = new TextBlock();
+                textBlock.SetBinding(TextBlock.TextProperty, binding);
+                multiComboBoxItem.Content = textBlock;
+            }
+            else
+            {
+                multiComboBoxItem.Content = item;
+            }
+
             // 移除任何现有的事件处理器，避免重复订阅
             multiComboBoxItem.Selected -= Item_Selected;
             multiComboBoxItem.Unselected -= Item_Unselected;
@@ -279,6 +323,7 @@ public class MultiComboBox : ItemsControl
         _textBox = GetTemplateChild(PART_DisplayedTextBox) as TextBox;
         _watermark = GetTemplateChild(PART_Watermark) as TextBlock;
         _toggleButton = GetTemplateChild(PART_ToggleButton) as ToggleButton;
+        _clearButton = GetTemplateChild(PART_ClearButton) as Button;
         _itemsContainer = GetTemplateChild(PART_ItemsContainer) as Popup;
         _selectAllCheckBox = GetTemplateChild(PART_SelectAllCheckBox) as CheckBox;
 
@@ -295,6 +340,26 @@ public class MultiComboBox : ItemsControl
         UpdateDisplayText();
         UpdateSelectAllState();
     }
+
+    #region 命令处理
+
+    private static void OnClearCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (sender is MultiComboBox multiComboBox)
+        {
+            multiComboBox.UnselectAll();
+        }
+    }
+
+    private static void OnClearCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender is MultiComboBox multiComboBox)
+        {
+            e.CanExecute = multiComboBox.SelectedItems != null && multiComboBox.SelectedItems.Count > 0;
+        }
+    }
+
+    #endregion 命令处理
 
     #region 事件处理器
 
@@ -443,9 +508,6 @@ public class MultiComboBox : ItemsControl
 
     #region 公共方法
 
-    /// <summary>
-    /// 选择所有项
-    /// </summary>
     public void SelectAll()
     {
         if (Items.Count == 0)
@@ -495,9 +557,6 @@ public class MultiComboBox : ItemsControl
         RaiseEvent(args);
     }
 
-    /// <summary>
-    /// 取消选择所有项
-    /// </summary>
     public void UnselectAll()
     {
         if (SelectedItems.Count == 0)
@@ -609,7 +668,7 @@ public class MultiComboBox : ItemsControl
 
     private void UpdateSelectAllState()
     {
-        if (_selectAllCheckBox == null || !ShowSelectAll || Items.Count == 0)
+        if (_selectAllCheckBox == null || !IsShowSelectAll || Items.Count == 0)
             return;
 
         _isInternalUpdate = true;

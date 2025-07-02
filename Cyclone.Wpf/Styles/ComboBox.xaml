@@ -136,7 +136,7 @@
                                     SnapsToDevicePixels="True">
                                     <Border
                                         x:Name="DropDownBorder"
-                                        Background="Transparent"
+                                        Background="{DynamicResource Background.Container}"
                                         BorderBrush="{DynamicResource Border.Default}"
                                         BorderThickness="1">
                                         <ScrollViewer
