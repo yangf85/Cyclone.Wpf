@@ -87,6 +87,9 @@ namespace Cyclone.Wpf.Demo.Views
             // 设置分组数据源
             GroupedEmployees = new CollectionViewSource();
             GroupedEmployees.Source = Employees;
+            // 设置分组数据源
+            GroupedEmployees = new CollectionViewSource();
+            GroupedEmployees.Source = Employees;
             GroupedEmployees.GroupDescriptions.Add(new PropertyGroupDescription("Department"));
         }
 
