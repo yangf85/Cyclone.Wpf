@@ -14,6 +14,7 @@
     <SolidColorBrush x:Key="Background.Disabled" Color="{StaticResource GrayLighten3}" />
     <SolidColorBrush x:Key="Background.Hover" Color="{StaticResource BlueLighten4}" />
     <SolidColorBrush x:Key="Background.Pressed" Color="{StaticResource GrayLighten2}" />
+    <SolidColorBrush x:Key="Background.UnChecked" Color="{StaticResource GrayLighten1}" />
     <SolidColorBrush x:Key="Background.Checked" Color="{StaticResource BlueLighten2}" />
     <SolidColorBrush x:Key="Background.Focused" Color="{StaticResource BlueLighten3}" />
     <SolidColorBrush x:Key="Background.Highlighted" Color="{StaticResource BlueDefault}" />

@@ -15,18 +15,16 @@
         <Setter Property="ThumbHorizontalAlignment" Value="Left" />
         <Setter Property="TrackCornerRadius" Value="13" />
         <Setter Property="ThumbCornerRadius" Value="11" />
-        <Setter Property="UncheckedBackground" Value="{DynamicResource Background.Inactive}" />
+        <Setter Property="UncheckedBackground" Value="{DynamicResource Background.UnChecked}" />
         <Setter Property="CheckedBackground" Value="{DynamicResource Background.Checked}" />
-        <Setter Property="ThumbBackground" Value="{DynamicResource Background.Global}" />
+        <Setter Property="ThumbBackground" Value="{DynamicResource Background.Default}" />
         <Setter Property="AnimationDuration" Value="0:0:0.2" />
-        <Setter Property="Width" Value="50" />
-        <Setter Property="Height" Value="26" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SwitchButton}">
                     <BulletDecorator>
                         <BulletDecorator.Bullet>
-                            <Grid x:Name="RootGrid">
+                            <Grid>
                                 <Border
                                     x:Name="PART_Track"
                                     Width="{TemplateBinding TrackWidth}"
@@ -36,6 +34,7 @@
                                     Background="{TemplateBinding UncheckedBackground}"
                                     BorderThickness="0"
                                     CornerRadius="{TemplateBinding TrackCornerRadius}" />
+
                                 <Border
                                     x:Name="PART_Thumb"
                                     Width="{TemplateBinding ThumbSize}"
@@ -60,10 +59,9 @@
                             </Grid>
                         </BulletDecorator.Bullet>
                         <ContentPresenter
-                            Margin="5,0,0,0"
+                            Margin="8,0,0,0"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
                             RecognizesAccessKey="True" />
                     </BulletDecorator>
 

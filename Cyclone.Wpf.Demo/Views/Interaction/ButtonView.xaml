@@ -56,13 +56,14 @@
                     AnimationDuration="0:0:0.25"
                     CheckedBackground="#FF4444"
                     Content="Large Thumb Style"
+                    Foreground="Black"
                     ThumbBackground="White"
-                    ThumbCornerRadius="16"
+                    ThumbCornerRadius="12"
                     ThumbMargin="2,0,2,0"
-                    ThumbSize="32"
-                    TrackCornerRadius="7.5"
-                    TrackHeight="15"
-                    TrackWidth="60"
+                    ThumbSize="24"
+                    TrackCornerRadius="5"
+                    TrackHeight="10"
+                    TrackWidth="50"
                     UncheckedBackground="#FFB3B3" />
 
                 <cy:SwitchButton

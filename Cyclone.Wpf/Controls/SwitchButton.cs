@@ -126,15 +126,18 @@ namespace Cyclone.Wpf.Controls
 
         private void UpdateControlSize()
         {
-            // 确保控件有合适的最小尺寸
+            // 设置最小尺寸确保开关部分正确显示
             MinWidth = TrackWidth;
             MinHeight = Math.Max(TrackHeight, ThumbSize);
 
-            // 如果没有显式设置Width和Height，使用计算值
-            if (double.IsNaN(Width))
-                Width = TrackWidth;
+            // 不要强制设置Width，让BulletDecorator自动计算
+            // 这样可以包含Content的宽度
             if (double.IsNaN(Height))
                 Height = Math.Max(TrackHeight, ThumbSize);
+
+            // 注释掉Width设置，让控件自动适应Content
+            // if (double.IsNaN(Width))
+            //     Width = TrackWidth;
         }
 
         #endregion Private Methods
