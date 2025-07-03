@@ -36,59 +36,59 @@ public partial class CascadePickerViewModel : ObservableObject
     #region 城市数据（示例2和示例4使用）
 
     [ObservableProperty]
-    private ObservableCollection<City> cities;
+    private ObservableCollection<CityInfo> cities;
 
     [ObservableProperty]
-    private City selectedCity;
+    private CityInfo selectedCity;
 
     private void InitializeCities()
     {
-        Cities = new ObservableCollection<City>
+        Cities = new ObservableCollection<CityInfo>
         {
-            new City
+            new CityInfo
             {
                 Name = "北京市",
-                Children = new List<City>
+                Children = new List<CityInfo>
                 {
-                    new City { Name = "东城区" },
-                    new City { Name = "西城区" },
-                    new City { Name = "朝阳区" },
-                    new City { Name = "海淀区" }
+                    new CityInfo { Name = "东城区" },
+                    new CityInfo { Name = "西城区" },
+                    new CityInfo { Name = "朝阳区" },
+                    new CityInfo { Name = "海淀区" }
                 }
             },
-            new City
+            new CityInfo
             {
                 Name = "上海市",
-                Children = new List<City>
+                Children = new List<CityInfo>
                 {
-                    new City { Name = "黄浦区" },
-                    new City { Name = "徐汇区" },
-                    new City { Name = "浦东新区" }
+                    new CityInfo { Name = "黄浦区" },
+                    new CityInfo { Name = "徐汇区" },
+                    new CityInfo { Name = "浦东新区" }
                 }
             },
-            new City
+            new CityInfo
             {
                 Name = "广东省",
-                Children = new List<City>
+                Children = new List<CityInfo>
                 {
-                    new City
+                    new CityInfo
                     {
                         Name = "广州市",
-                        Children = new List<City>
+                        Children = new List<CityInfo>
                         {
-                            new City { Name = "天河区" },
-                            new City { Name = "越秀区" },
-                            new City { Name = "白云区" }
+                            new CityInfo { Name = "天河区" },
+                            new CityInfo { Name = "越秀区" },
+                            new CityInfo { Name = "白云区" }
                         }
                     },
-                    new City
+                    new CityInfo
                     {
                         Name = "深圳市",
-                        Children = new List<City>
+                        Children = new List<CityInfo>
                         {
-                            new City { Name = "福田区" },
-                            new City { Name = "南山区" },
-                            new City { Name = "宝安区" }
+                            new CityInfo { Name = "福田区" },
+                            new CityInfo { Name = "南山区" },
+                            new CityInfo { Name = "宝安区" }
                         }
                     }
                 }
@@ -96,7 +96,7 @@ public partial class CascadePickerViewModel : ObservableObject
         };
     }
 
-    partial void OnSelectedCityChanged(City value)
+    partial void OnSelectedCityChanged(CityInfo value)
     {
         if (value != null)
         {
@@ -179,10 +179,10 @@ public partial class CascadePickerViewModel : ObservableObject
 /// <summary>
 /// 城市数据模型
 /// </summary>
-public class City
+public class CityInfo
 {
     public string Name { get; set; } = string.Empty;
-    public List<City> Children { get; set; } = new List<City>();
+    public List<CityInfo> Children { get; set; } = new List<CityInfo>();
 
     public override string ToString() => Name;
 }

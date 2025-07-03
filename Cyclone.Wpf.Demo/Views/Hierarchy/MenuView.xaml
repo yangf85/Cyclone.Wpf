@@ -6,45 +6,844 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type=local:MenuViewModel}"
+    d:DesignHeight="700"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
-    <cy:SpacingStackPanel Spacing="20">
-        <HeaderedContentControl Header="Menu">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <Menu>
-                    <MenuItem Header="File">
-                        <MenuItem Header="New">
-                            <MenuItem Header="New Project" />
-                            <MenuItem Header="New Item" />
-                            <MenuItem Header="New Folder">
-                                <MenuItem Header="New Folder" />
-                                <MenuItem Header="New Folder" />
-                                <MenuItem Header="New Folder" />
-                            </MenuItem>
-                        </MenuItem>
-                        <MenuItem Header="Open" />
-                        <MenuItem Header="Save" />
-                    </MenuItem>
-                </Menu>
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
 
-        <HeaderedContentControl Header="ContextMenu">
-            <Rectangle Width="300" Height="100" Fill="OldLace">
-                <Rectangle.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="New Project" />
-                        <MenuItem Header="New Project">
-                            <MenuItem Header="New Project" />
-                            <MenuItem Header="New Project" />
-                            <MenuItem Header="New Project" />
-                        </MenuItem>
-                        <MenuItem Header="New Project" />
-                        <MenuItem Header="New Project" />
-                    </ContextMenu>
-                </Rectangle.ContextMenu>
-            </Rectangle>
-        </HeaderedContentControl>
-    </cy:SpacingStackPanel>
+    <UserControl.Resources>
+        <!--  卡片样式  -->
+        <Style
+            x:Key="CardStyle"
+            TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect
+                        BlurRadius="4"
+                        Direction="270"
+                        Opacity="0.2"
+                        ShadowDepth="2"
+                        Color="Gray" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  标题样式  -->
+        <Style
+            x:Key="TitleStyle"
+            TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#2C3E50" />
+            <Setter Property="Margin" Value="0,0,0,15" />
+        </Style>
+
+        <!--  描述样式  -->
+        <Style
+            x:Key="DescriptionStyle"
+            TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#7F8C8D" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+
+        <!--  演示区域样式  -->
+        <Style
+            x:Key="DemoAreaStyle"
+            TargetType="Border">
+            <Setter Property="Background" Value="#F8F9FA" />
+            <Setter Property="BorderBrush" Value="#DEE2E6" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="15" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <cy:SpacingStackPanel
+            Margin="20"
+            Spacing="0">
+
+            <!--  页面标题  -->
+            <TextBlock
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="菜单控件展示" />
+
+            <!--  Menu 主菜单展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="🍽️ Menu - 主菜单" />
+                        <TextBlock
+                            Style="{StaticResource DescriptionStyle}"
+                            Text="应用程序主菜单，支持多级嵌套、图标、快捷键等功能" />
+                    </StackPanel>
+
+                    <!--  完整功能菜单  -->
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="Bold"
+                            Text="完整功能菜单：" />
+                        <Menu
+                            Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1">
+                            <!--  文件菜单  -->
+                            <MenuItem Header="文件(_F)">
+                                <MenuItem
+                                    Command="{Binding NewFileCommand}"
+                                    Header="新建(_N)"
+                                    InputGestureText="Ctrl+N">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📄" />
+                                    </MenuItem.Icon>
+                                    <MenuItem
+                                        Command="{Binding NewProjectCommand}"
+                                        Header="项目">
+                                        <MenuItem.Icon>
+                                            <TextBlock
+                                                FontSize="12"
+                                                Text="📁" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem
+                                        Command="{Binding NewFileCommand}"
+                                        Header="文件">
+                                        <MenuItem.Icon>
+                                            <TextBlock
+                                                FontSize="12"
+                                                Text="📄" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem
+                                        Command="{Binding NewFolderCommand}"
+                                        Header="文件夹">
+                                        <MenuItem.Icon>
+                                            <TextBlock
+                                                FontSize="12"
+                                                Text="📂" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding OpenCommand}"
+                                    Header="打开(_O)"
+                                    InputGestureText="Ctrl+O">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📂" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Header="最近文件"
+                                    IsEnabled="{Binding HasRecentFiles}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🕐" />
+                                    </MenuItem.Icon>
+                                    <MenuItem
+                                        Command="{Binding OpenRecentCommand}"
+                                        CommandParameter="{Binding RecentFile1}"
+                                        Header="{Binding RecentFile1}" />
+                                    <MenuItem
+                                        Command="{Binding OpenRecentCommand}"
+                                        CommandParameter="{Binding RecentFile2}"
+                                        Header="{Binding RecentFile2}" />
+                                    <MenuItem
+                                        Command="{Binding OpenRecentCommand}"
+                                        CommandParameter="{Binding RecentFile3}"
+                                        Header="{Binding RecentFile3}" />
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{Binding ClearRecentCommand}"
+                                        Header="清除列表" />
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding SaveCommand}"
+                                    Header="保存(_S)"
+                                    InputGestureText="Ctrl+S"
+                                    IsEnabled="{Binding CanSave}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="💾" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding SaveAsCommand}"
+                                    Header="另存为(_A)"
+                                    InputGestureText="Ctrl+Shift+S">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="💾" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding ExitCommand}"
+                                    Header="退出(_X)"
+                                    InputGestureText="Alt+F4">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="❌" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+
+                            <!--  编辑菜单  -->
+                            <MenuItem Header="编辑(_E)">
+                                <MenuItem
+                                    Command="{Binding UndoCommand}"
+                                    Header="撤销(_U)"
+                                    InputGestureText="Ctrl+Z"
+                                    IsEnabled="{Binding CanUndo}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="↶" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding RedoCommand}"
+                                    Header="重做(_R)"
+                                    InputGestureText="Ctrl+Y"
+                                    IsEnabled="{Binding CanRedo}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="↷" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding CutCommand}"
+                                    Header="剪切(_T)"
+                                    InputGestureText="Ctrl+X">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="✂️" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding CopyCommand}"
+                                    Header="复制(_C)"
+                                    InputGestureText="Ctrl+C">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📋" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding PasteCommand}"
+                                    Header="粘贴(_P)"
+                                    InputGestureText="Ctrl+V">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📄" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding SelectAllCommand}"
+                                    Header="全选(_A)"
+                                    InputGestureText="Ctrl+A" />
+                                <MenuItem
+                                    Command="{Binding FindCommand}"
+                                    Header="查找(_F)"
+                                    InputGestureText="Ctrl+F">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🔍" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding ReplaceCommand}"
+                                    Header="替换(_H)"
+                                    InputGestureText="Ctrl+H" />
+                            </MenuItem>
+
+                            <!--  视图菜单  -->
+                            <MenuItem Header="视图(_V)">
+                                <MenuItem
+                                    Header="工具栏"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding ShowToolbar}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🔧" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Header="状态栏"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding ShowStatusBar}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📊" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Header="侧边栏"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding ShowSidebar}">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📑" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="缩放">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🔍" />
+                                    </MenuItem.Icon>
+                                    <MenuItem
+                                        Command="{Binding ZoomInCommand}"
+                                        Header="放大"
+                                        InputGestureText="Ctrl++" />
+                                    <MenuItem
+                                        Command="{Binding ZoomOutCommand}"
+                                        Header="缩小"
+                                        InputGestureText="Ctrl+-" />
+                                    <MenuItem
+                                        Command="{Binding ZoomResetCommand}"
+                                        Header="实际大小"
+                                        InputGestureText="Ctrl+0" />
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{Binding FitToWindowCommand}"
+                                        Header="适合窗口" />
+                                </MenuItem>
+                                <MenuItem Header="主题">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🎨" />
+                                    </MenuItem.Icon>
+                                    <MenuItem
+                                        Command="{Binding SetLightThemeCommand}"
+                                        Header="浅色主题"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding IsLightTheme, Mode=OneWay}" />
+                                    <MenuItem
+                                        Command="{Binding SetDarkThemeCommand}"
+                                        Header="深色主题"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding IsDarkTheme, Mode=OneWay}" />
+                                    <MenuItem
+                                        Command="{Binding SetAutoThemeCommand}"
+                                        Header="自动主题"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding IsAutoTheme, Mode=OneWay}" />
+                                </MenuItem>
+                            </MenuItem>
+
+                            <!--  工具菜单  -->
+                            <MenuItem Header="工具(_T)">
+                                <MenuItem
+                                    Command="{Binding OptionsCommand}"
+                                    Header="选项(_O)">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="⚙️" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding CustomizeCommand}"
+                                    Header="自定义(_C)" />
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding PluginManagerCommand}"
+                                    Header="插件管理器">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🔌" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+
+                            <!--  帮助菜单  -->
+                            <MenuItem Header="帮助(_H)">
+                                <MenuItem
+                                    Command="{Binding DocumentationCommand}"
+                                    Header="文档(_D)">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="📖" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding ShortcutsCommand}"
+                                    Header="快捷键列表">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="⌨️" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    Command="{Binding CheckUpdatesCommand}"
+                                    Header="检查更新">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="🔄" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding AboutCommand}"
+                                    Header="关于(_A)">
+                                    <MenuItem.Icon>
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="ℹ️" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                        </Menu>
+                    </StackPanel>
+
+                    <!--  状态显示  -->
+                    <Border Style="{StaticResource DemoAreaStyle}">
+                        <cy:SpacingStackPanel Spacing="5">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Text="🔔 菜单操作状态：" />
+                            <TextBlock
+                                FontFamily="Consolas"
+                                Foreground="#666"
+                                Text="{Binding LastMenuAction}" />
+                        </cy:SpacingStackPanel>
+                    </Border>
+                </cy:SpacingStackPanel>
+            </Border>
+
+            <!--  ContextMenu 右键菜单展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="🖱️ ContextMenu - 右键菜单" />
+                        <TextBlock
+                            Style="{StaticResource DescriptionStyle}"
+                            Text="各种场景下的右键菜单，支持条件显示、动态内容等功能" />
+                    </StackPanel>
+
+                    <cy:SpacingUniformGrid
+                        Columns="2"
+                        HorizontalSpacing="15"
+                        VerticalSpacing="15">
+
+                        <!--  文本编辑右键菜单  -->
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,5"
+                                FontWeight="Bold"
+                                Text="文本编辑菜单：" />
+                            <TextBox
+                                Height="80"
+                                Padding="8"
+                                AcceptsReturn="True"
+                                Background="#FFF8DC"
+                                BorderBrush="#DDD"
+                                BorderThickness="1"
+                                Text="{Binding SampleText}"
+                                TextWrapping="Wrap">
+                                <TextBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="ApplicationCommands.Undo"
+                                            Header="撤销"
+                                            InputGestureText="Ctrl+Z">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="↶" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="ApplicationCommands.Redo"
+                                            Header="重做"
+                                            InputGestureText="Ctrl+Y">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="↷" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Command="ApplicationCommands.Cut"
+                                            Header="剪切"
+                                            InputGestureText="Ctrl+X">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="✂️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="ApplicationCommands.Copy"
+                                            Header="复制"
+                                            InputGestureText="Ctrl+C">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="📋" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="ApplicationCommands.Paste"
+                                            Header="粘贴"
+                                            InputGestureText="Ctrl+V">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="📄" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Command="ApplicationCommands.SelectAll"
+                                            Header="全选"
+                                            InputGestureText="Ctrl+A" />
+                                        <MenuItem
+                                            Command="{Binding FindCommand}"
+                                            Header="查找"
+                                            InputGestureText="Ctrl+F">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="🔍" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </TextBox.ContextMenu>
+                            </TextBox>
+                        </StackPanel>
+
+                        <!--  文件操作右键菜单  -->
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,5"
+                                FontWeight="Bold"
+                                Text="文件操作菜单：" />
+                            <Border
+                                Height="80"
+                                Padding="10"
+                                Background="#E8F5E8"
+                                BorderBrush="#90EE90"
+                                BorderThickness="2"
+                                CornerRadius="5">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Text="📁 示例文件夹" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="10"
+                                        Foreground="Gray"
+                                        Text="右击查看文件操作" />
+                                </StackPanel>
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="{Binding OpenFileCommand}"
+                                            Header="打开">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="📂" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding EditFileCommand}"
+                                            Header="编辑">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="✏️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Command="{Binding CopyFileCommand}"
+                                            Header="复制">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="📋" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding CutFileCommand}"
+                                            Header="剪切">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="✂️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding DeleteFileCommand}"
+                                            Header="删除">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="🗑️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Command="{Binding RenameFileCommand}"
+                                            Header="重命名"
+                                            InputGestureText="F2" />
+                                        <MenuItem
+                                            Command="{Binding FilePropertiesCommand}"
+                                            Header="属性">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="ℹ️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                            </Border>
+                        </StackPanel>
+
+                        <!--  条件显示菜单  -->
+                        <StackPanel>
+                            <DockPanel>
+                                <CheckBox
+                                    x:Name="AdminMode"
+                                    VerticalAlignment="Center"
+                                    Content="管理员模式"
+                                    DockPanel.Dock="Right"
+                                    IsChecked="{Binding IsAdminMode}" />
+                                <TextBlock
+                                    Margin="0,0,0,5"
+                                    FontWeight="Bold"
+                                    Text="条件显示菜单：" />
+                            </DockPanel>
+                            <Border
+                                Height="80"
+                                Padding="10"
+                                Background="#FFE4E1"
+                                BorderBrush="#FF6B6B"
+                                BorderThickness="2"
+                                CornerRadius="5">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Text="🔐 权限控制区域" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="10"
+                                        Foreground="Gray"
+                                        Text="菜单项根据权限显示" />
+                                </StackPanel>
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="{Binding ViewCommand}"
+                                            Header="查看">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="👁️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding EditCommand}"
+                                            Header="编辑"
+                                            IsEnabled="{Binding CanEdit}">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="✏️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding DeleteCommand}"
+                                            Header="删除"
+                                            IsEnabled="{Binding CanDelete}">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="🗑️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Header="管理员功能"
+                                            Visibility="{Binding AdminMenuVisibility}">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="⚙️" />
+                                            </MenuItem.Icon>
+                                            <MenuItem
+                                                Command="{Binding SystemSettingsCommand}"
+                                                Header="系统设置" />
+                                            <MenuItem
+                                                Command="{Binding UserManagementCommand}"
+                                                Header="用户管理" />
+                                            <MenuItem
+                                                Command="{Binding ViewLogsCommand}"
+                                                Header="日志查看" />
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                            </Border>
+                        </StackPanel>
+
+                        <!--  列表项右键菜单  -->
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,5"
+                                FontWeight="Bold"
+                                Text="列表项菜单：" />
+                            <ListBox
+                                Height="80"
+                                Background="#F0F8FF"
+                                BorderBrush="#4169E1"
+                                BorderThickness="1"
+                                ItemsSource="{Binding Items}"
+                                SelectedItem="{Binding SelectedItem}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Padding="5,2"
+                                            Text="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="{Binding AddItemCommand}"
+                                            Header="添加项目">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="➕" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding EditItemCommand}"
+                                            Header="编辑项目"
+                                            IsEnabled="{Binding HasSelectedItem}">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="✏️" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem
+                                            Command="{Binding DeleteItemCommand}"
+                                            Header="删除项目"
+                                            IsEnabled="{Binding HasSelectedItem}">
+                                            <MenuItem.Icon>
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Text="➖" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator />
+                                        <MenuItem
+                                            Command="{Binding MoveUpCommand}"
+                                            Header="向上移动"
+                                            IsEnabled="{Binding CanMoveUp}" />
+                                        <MenuItem
+                                            Command="{Binding MoveDownCommand}"
+                                            Header="向下移动"
+                                            IsEnabled="{Binding CanMoveDown}" />
+                                        <Separator />
+                                        <MenuItem
+                                            Command="{Binding ClearAllCommand}"
+                                            Header="全部清除"
+                                            IsEnabled="{Binding HasItems}" />
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </StackPanel>
+                    </cy:SpacingUniformGrid>
+
+                    <!--  右键菜单状态显示  -->
+                    <Border Style="{StaticResource DemoAreaStyle}">
+                        <cy:SpacingStackPanel Spacing="5">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Text="🔔 右键菜单操作状态：" />
+                            <TextBlock
+                                FontFamily="Consolas"
+                                Foreground="#666"
+                                Text="{Binding LastContextAction}" />
+                        </cy:SpacingStackPanel>
+                    </Border>
+                </cy:SpacingStackPanel>
+            </Border>
+
+            <!--  使用提示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="10">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="💡 使用提示" />
+                    <cy:SpacingStackPanel Spacing="5">
+                        <TextBlock
+                            FontSize="12"
+                            Text="• 主菜单支持快捷键访问，如 Alt+F 打开文件菜单" />
+                        <TextBlock
+                            FontSize="12"
+                            Text="• 菜单项可以显示图标、快捷键提示和状态检查" />
+                        <TextBlock
+                            FontSize="12"
+                            Text="• 右键菜单可以根据上下文动态显示或隐藏项目" />
+                        <TextBlock
+                            FontSize="12"
+                            Text="• 使用分隔符可以将相关功能分组显示" />
+                        <TextBlock
+                            FontSize="12"
+                            Text="• 菜单项支持绑定命令和参数，实现 MVVM 模式" />
+                    </cy:SpacingStackPanel>
+                </cy:SpacingStackPanel>
+            </Border>
+        </cy:SpacingStackPanel>
+    </ScrollViewer>
 </UserControl>

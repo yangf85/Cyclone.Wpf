@@ -1,5 +1,4 @@
-﻿<!--  Themes/Generic.xaml  -->
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
@@ -33,7 +32,8 @@
                             VerticalAlignment="Center"
                             Data="M967.52 97.76C675.68 276.8 464 502.88 368.48 616.16l-233.28-182.88-103.2 83.04 402.72 409.92c69.12-177.6 288.96-524.64 557.28-771.36l-24.48-57.12m0 0z"
                             Fill="{DynamicResource Icon.Foreground.Focused}"
-                            Stretch="UniformToFill" />
+                            Stretch="UniformToFill"
+                            Visibility="Collapsed" />
                         <TextBlock
                             x:Name="PART_TextBlock"
                             Grid.Column="1"
@@ -45,9 +45,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsCopyed" Value="True">
                             <Setter TargetName="CopyedPath" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="IsCopyed" Value="False">
-                            <Setter TargetName="CopyedPath" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

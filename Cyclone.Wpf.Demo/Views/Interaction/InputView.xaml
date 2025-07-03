@@ -7,128 +7,355 @@
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance Type=local:InputViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="700"
+    d:DesignWidth="1000"
     mc:Ignorable="d">
-    <cy:SpacingStackPanel Spacing="20">
-        <HeaderedContentControl Header="TextBox">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <TextBox cy:TextBoxHelper.Watermark="请输入123" Text="{Binding Text, ValidatesOnNotifyDataErrors=True}" />
-                <TextBox
-                    cy:TextBoxHelper.HasClearButton="False"
-                    cy:TextBoxHelper.Watermark="请输入文本。。。。"
-                    Text="Two" />
-                <TextBox Text="Three" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="PasswordBox">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <PasswordBox
-                    cy:PasswordBoxHelper.HasClearButton="False"
-                    cy:PasswordBoxHelper.Password="{Binding Password}"
-                    cy:PasswordBoxHelper.Watermark="请输入密码" />
-                <PasswordBox cy:PasswordBoxHelper.HasClearButton="False" cy:PasswordBoxHelper.HasPasswordVisibilityToggle="False" />
-                <PasswordBox />
-                <Button Command="{Binding ShowPasswordCommand}" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="NumberBox">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:NumberBox
-                    DecimalPlaces="3"
-                    IsVisibleClearButton="True"
-                    Maximum="20"
-                    Minimum="-50"
-                    NumberStyle="Float"
-                    Step="0.1"
-                    Value="{Binding NumberDouble}" />
-                <cy:NumberBox
-                    DecimalPlaces="0"
-                    IsVisibleSpinButton="False"
-                    Maximum="999"
-                    Minimum="0"
-                    NumberStyle="Integer"
-                    Step="1"
-                    Value="{Binding NumberInt}">
-                    <cy:NumberBox.Prefix>
+
+    <UserControl.Resources>
+        <!--  卡片样式  -->
+        <Style
+            x:Key="CardStyle"
+            TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect
+                        BlurRadius="4"
+                        Direction="270"
+                        Opacity="0.2"
+                        ShadowDepth="2"
+                        Color="Gray" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  标题样式  -->
+        <Style
+            x:Key="TitleStyle"
+            TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#2C3E50" />
+            <Setter Property="Margin" Value="0,0,0,15" />
+        </Style>
+
+        <!--  标签样式  -->
+        <Style
+            x:Key="LabelStyle"
+            TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <cy:SpacingStackPanel
+            Margin="20"
+            Spacing="0">
+
+            <!--  页面标题  -->
+            <TextBlock
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="Cyclone 控件展示" />
+
+            <!--  TextBox 展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="📝 TextBox 文本输入框" />
+
+                    <cy:SpacingUniformGrid
+                        Columns="2"
+                        HorizontalSpacing="15"
+                        VerticalSpacing="10">
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="带验证的文本框:" />
+                            <TextBox
+                                cy:TextBoxHelper.Watermark="请输入文本..."
+                                Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="搜索文本框:" />
+                            <TextBox
+                                cy:TextBoxHelper.Watermark="🔍 搜索..."
+                                Text="{Binding SearchText}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="多行文本框:" />
+                            <TextBox
+                                Height="60"
+                                cy:TextBoxHelper.Watermark="支持多行输入..."
+                                AcceptsReturn="True"
+                                Text="{Binding MultilineText}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="无清除按钮:" />
+                            <TextBox
+                                cy:TextBoxHelper.HasClearButton="False"
+                                cy:TextBoxHelper.Watermark="无清除按钮"
+                                Text="示例文本" />
+                        </StackPanel>
+                    </cy:SpacingUniformGrid>
+                </cy:SpacingStackPanel>
+            </Border>
+
+            <!--  PasswordBox 展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="🔒 PasswordBox 密码输入框" />
+
+                    <cy:SpacingUniformGrid
+                        Columns="2"
+                        HorizontalSpacing="15"
+                        VerticalSpacing="10">
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="标准密码框:" />
+                            <PasswordBox
+                                cy:PasswordBoxHelper.Password="{Binding Password}"
+                                cy:PasswordBoxHelper.Watermark="请输入密码" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="确认密码:" />
+                            <PasswordBox
+                                cy:PasswordBoxHelper.Password="{Binding ConfirmPassword}"
+                                cy:PasswordBoxHelper.Watermark="确认密码">
+                                <PasswordBox.Style>
+                                    <Style TargetType="PasswordBox">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding IsPasswordMatch}"
+                                                Value="True">
+                                                <Setter Property="BorderBrush" Value="Green" />
+                                                <Setter Property="BorderThickness" Value="2" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </PasswordBox.Style>
+                            </PasswordBox>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="无切换按钮:" />
+                            <PasswordBox
+                                cy:PasswordBoxHelper.HasPasswordVisibilityToggle="False"
+                                cy:PasswordBoxHelper.Watermark="安全模式" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <Button
+                                Command="{Binding ShowPasswordCommand}"
+                                Content="显示密码" />
+                        </StackPanel>
+                    </cy:SpacingUniformGrid>
+                </cy:SpacingStackPanel>
+            </Border>
+
+            <!--  NumberBox 展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="🔢 NumberBox 数字输入框" />
+
+                    <cy:SpacingUniformGrid
+                        Columns="2"
+                        HorizontalSpacing="15"
+                        VerticalSpacing="10">
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="小数输入 (-50~20):" />
+                            <cy:NumberBox
+                                DecimalPlaces="2"
+                                Maximum="20"
+                                Minimum="-50"
+                                Step="0.1"
+                                Value="{Binding NumberDouble}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="整数输入 (0~999):" />
+                            <cy:NumberBox
+                                Maximum="999"
+                                Minimum="0"
+                                NumberStyle="Integer"
+                                Step="1"
+                                Value="{Binding NumberInt}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="价格输入:" />
+                            <cy:NumberBox
+                                DecimalPlaces="2"
+                                Maximum="9999"
+                                Minimum="0"
+                                Value="{Binding Price}">
+                                <cy:NumberBox.Prefix>
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="Green"
+                                        Text="¥" />
+                                </cy:NumberBox.Prefix>
+                            </cy:NumberBox>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="百分比:" />
+                            <cy:NumberBox
+                                DecimalPlaces="1"
+                                Maximum="100"
+                                Minimum="0"
+                                Value="{Binding Percentage}" />
+                        </StackPanel>
+                    </cy:SpacingUniformGrid>
+                </cy:SpacingStackPanel>
+            </Border>
+
+            <!--  高级控件展示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="15">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="🚀 高级控件" />
+
+                    <!--  可编辑文本  -->
+                    <StackPanel>
                         <TextBlock
-                            VerticalAlignment="Center"
-                            FontWeight="Black"
-                            Foreground="Gray"
-                            Text="$" />
-                    </cy:NumberBox.Prefix>
-                </cy:NumberBox>
-                <cy:NumberBox
-                    IsVisibleClearButton="True"
-                    Maximum="100"
-                    Minimum="20"
-                    Value="{Binding Number}" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="EditTextBlock">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:EditableTextBlock Text="One" />
-                <cy:EditableTextBlock Text="Two" />
-                <cy:EditableTextBlock Text="Three" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
+                            Style="{StaticResource LabelStyle}"
+                            Text="可编辑文本 (双击编辑):" />
+                        <cy:SpacingUniformGrid
+                            Columns="3"
+                            HorizontalSpacing="10">
+                            <cy:EditableTextBlock Text="{Binding EditableTitle}" />
+                            <cy:EditableTextBlock Text="{Binding EditableDescription}" />
+                            <cy:EditableTextBlock Text="{Binding EditableQuantity}" />
+                        </cy:SpacingUniformGrid>
+                    </StackPanel>
 
-        <HeaderedContentControl Header="CopyableTextBlock">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:CopyableTextBlock Text="One" />
-                <cy:CopyableTextBlock Text="Two" />
-                <cy:CopyableTextBlock Text="Three" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
+                    <!--  可复制文本  -->
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource LabelStyle}"
+                            Text="可复制文本 (点击复制):" />
+                        <cy:SpacingUniformGrid
+                            Columns="2"
+                            HorizontalSpacing="10">
+                            <cy:CopyableTextBlock
+                                FontFamily="Consolas"
+                                Text="{Binding ApiKey}" />
+                            <cy:CopyableTextBlock
+                                FontFamily="Consolas"
+                                Text="{Binding ConfigPath}" />
+                        </cy:SpacingUniformGrid>
+                    </StackPanel>
 
-        <HeaderedContentControl Header="HighlightTextBlock">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:HighlightTextBlock
-                    HighlightForeground="Red"
-                    IsIgnoreCase="False"
-                    QueriesText="{Binding ElementName=InputTextBox, Path=Text}"
-                    SourceText="ABCDEFGabcdefg一二三四五"
-                    TextWrapping="WrapWithOverflow" />
-                <cy:HighlightTextBlock
-                    HighlightBackground="{DynamicResource Highlighted.Background}"
-                    HighlightForeground="{DynamicResource Highlight.Default}"
-                    QueriesText="{Binding ElementName=InputTextBox, Path=Text}"
-                    SourceText="{Binding SourceText}" />
-                <TextBox x:Name="InputTextBox" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
+                    <!--  文本高亮  -->
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource LabelStyle}"
+                            Text="文本高亮 (输入关键词):" />
+                        <cy:HighlightTextBlock
+                            HighlightBackground="Yellow"
+                            HighlightForeground="Black"
+                            QueriesText="{Binding SearchText}"
+                            SourceText="{Binding HighlightText}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
 
-        <HeaderedContentControl Header="NumberFilterBox">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:NumberFilterBox Label="高度" />
-                <cy:NumberFilterBox Label="宽度" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
+                    <!--  滚动文本  -->
+                    <StackPanel>
+                        <DockPanel>
+                            <CheckBox
+                                x:Name="RunningToggle"
+                                Content="启用滚动"
+                                DockPanel.Dock="Right"
+                                IsChecked="True" />
+                            <TextBlock
+                                Style="{StaticResource LabelStyle}"
+                                Text="滚动文本:" />
+                        </DockPanel>
+                        <Border
+                            Height="40"
+                            Background="#F8F9FA"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
+                            <cy:RunningBlock
+                                Content="🎉 欢迎使用 Cyclone 控件库！这是滚动文本演示。"
+                                Direction="Horizontal"
+                                IsRunning="{Binding ElementName=RunningToggle, Path=IsChecked}"
+                                Duration="0:0:3" />
+                        </Border>
+                    </StackPanel>
+                </cy:SpacingStackPanel>
+            </Border>
 
-        <HeaderedContentControl Header="TextFilterBox">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:TextFilterBox Label="名称" />
-                <cy:TextFilterBox Label="类型" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
-
-        <HeaderedContentControl Header="RunningBlock">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
-                <cy:RunningBlock
-                    Content="Running Text"
-                    Direction="Horizontal"
-                    IsRunning="{Binding ElementName=Running, Path=IsChecked}"
-                    LoopMode="Reverse"
-                    Duration="0:0:2" />
-                <cy:SwitchButton x:Name="Running" />
-
-                <cy:RunningBlock
-                    Content="Running Text"
-                    Direction="Vertical"
-                    IsRunning="{Binding ElementName=Running, Path=IsChecked}"
-                    LoopMode="Reverse"
-                    Duration="0:0:3" />
-            </cy:SpacingUniformGrid>
-        </HeaderedContentControl>
-    </cy:SpacingStackPanel>
+            <!--  状态显示  -->
+            <Border Style="{StaticResource CardStyle}">
+                <cy:SpacingStackPanel Spacing="10">
+                    <TextBlock
+                        Style="{StaticResource TitleStyle}"
+                        Text="📊 实时状态" />
+                    <Border
+                        Padding="15"
+                        Background="#F8F9FA"
+                        BorderBrush="#DEE2E6"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                        <cy:SpacingStackPanel Spacing="5">
+                            <TextBlock>
+                                <Run Text="文本长度: " />
+                                <Run
+                                    FontWeight="Bold"
+                                    Text="{Binding TextLength, Mode=OneWay}" />
+                                <Run Text=" | 密码匹配: " />
+                                <Run
+                                    FontWeight="Bold"
+                                    Text="{Binding IsPasswordMatch, Mode=OneWay}" />
+                                <Run Text=" | 总价: ¥" />
+                                <Run
+                                    FontWeight="Bold"
+                                    Text="{Binding TotalValue, StringFormat=F2, Mode=OneWay}" />
+                            </TextBlock>
+                        </cy:SpacingStackPanel>
+                    </Border>
+                </cy:SpacingStackPanel>
+            </Border>
+        </cy:SpacingStackPanel>
+    </ScrollViewer>
 </UserControl>
