@@ -6,7 +6,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="SwitchButton.Style.Basic" TargetType="{x:Type ctl:SwitchButton}">
+    <Style
+        x:Key="SwitchButton.Style.Basic"
+        TargetType="{x:Type ctl:SwitchButton}">
         <Setter Property="TrackWidth" Value="50" />
         <Setter Property="TrackHeight" Value="26" />
         <Setter Property="ThumbSize" Value="22" />
@@ -88,5 +90,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource SwitchButton.Style.Basic}" TargetType="ctl:SwitchButton" />
+    <Style
+        BasedOn="{StaticResource SwitchButton.Style.Basic}"
+        TargetType="ctl:SwitchButton" />
 </ResourceDictionary>

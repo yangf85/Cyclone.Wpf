@@ -9,7 +9,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="NumberBox.SpinButtonStyle" TargetType="RepeatButton">
+    <Style
+        x:Key="NumberBox.SpinButtonStyle"
+        TargetType="RepeatButton">
         <Setter Property="Width" Value="Auto" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="IsTabStop" Value="False" />
@@ -18,7 +20,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
                         <ContentPresenter
                             x:Name="ContentContainer"
                             HorizontalAlignment="Center"
@@ -41,7 +45,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="NumberBox.ClearButtonStyle" TargetType="Button">
+    <Style
+        x:Key="NumberBox.ClearButtonStyle"
+        TargetType="Button">
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />
         <Setter Property="IsTabStop" Value="False" />
@@ -51,7 +57,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid" Background="Transparent">
+                    <Grid
+                        x:Name="RootGrid"
+                        Background="Transparent">
                         <ContentPresenter
                             x:Name="ContentContainer"
                             HorizontalAlignment="Center"
@@ -74,7 +82,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="NumberBox.InputTextBoxStyle" TargetType="TextBox">
+    <Style
+        x:Key="NumberBox.InputTextBoxStyle"
+        TargetType="TextBox">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource Default.Foreground}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -84,7 +94,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                    <Grid
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
                         <ScrollViewer
                             x:Name="PART_ContentHost"
                             Margin="{TemplateBinding Padding}"
@@ -102,7 +114,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="NumberBox.ControlTemplate.Basic" TargetType="ctl:NumberBox">
+    <ControlTemplate
+        x:Key="NumberBox.ControlTemplate.Basic"
+        TargetType="ctl:NumberBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -240,5 +254,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
-    <Style BasedOn="{StaticResource NumberBox.Style.Basic}" TargetType="ctl:NumberBox" />
+    <Style
+        BasedOn="{StaticResource NumberBox.Style.Basic}"
+        TargetType="ctl:NumberBox" />
 </ResourceDictionary>

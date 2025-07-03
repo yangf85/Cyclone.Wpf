@@ -8,7 +8,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="TabItem.Style.Vertical" TargetType="TabItem">
+    <Style
+        x:Key="TabItem.Style.Vertical"
+        TargetType="TabItem">
         <Setter Property="Background" Value="{DynamicResource Background.Header}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
@@ -42,7 +44,9 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Border.Selected}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Right">
+                        <DataTrigger
+                            Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}"
+                            Value="Right">
                             <Setter TargetName="Indicator" Property="HorizontalAlignment" Value="Left" />
                         </DataTrigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
@@ -54,7 +58,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TabItem.Style.Horizontal" TargetType="TabItem">
+    <Style
+        x:Key="TabItem.Style.Horizontal"
+        TargetType="TabItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="Background" Value="{DynamicResource Background.Header}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -86,7 +92,9 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Indicator" Property="Fill" Value="{DynamicResource Border.Selected}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}" Value="Bottom">
+                        <DataTrigger
+                            Binding="{Binding Path=TabStripPlacement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabControl}}"
+                            Value="Bottom">
                             <Setter TargetName="Indicator" Property="VerticalAlignment" Value="Top" />
                         </DataTrigger>
                         <Trigger SourceName="RootBorder" Property="IsMouseOver" Value="True">
@@ -98,7 +106,9 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="TableControl.ControlTemplate.Top" TargetType="TabControl">
+    <ControlTemplate
+        x:Key="TableControl.ControlTemplate.Top"
+        TargetType="TabControl">
         <Border
             x:Name="RootBorder"
             Background="{TemplateBinding Background}"
@@ -118,14 +128,20 @@
                     x:Name="ContentBorder"
                     Grid.Row="1"
                     Background="{DynamicResource Background.Container}">
-                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                    <ContentPresenter
+                        x:Name="PART_SelectedContentHost"
+                        ContentSource="SelectedContent" />
                 </Border>
             </Grid>
         </Border>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="TableControl.ControlTemplate.Left" TargetType="TabControl">
-        <Grid KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="True">
+    <ControlTemplate
+        x:Key="TableControl.ControlTemplate.Left"
+        TargetType="TabControl">
+        <Grid
+            KeyboardNavigation.TabNavigation="Local"
+            SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -138,7 +154,9 @@
                 x:Name="ContentBorder"
                 Grid.Column="1"
                 Background="{DynamicResource Background.Container}">
-                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                <ContentPresenter
+                    x:Name="PART_SelectedContentHost"
+                    ContentSource="SelectedContent" />
             </Border>
         </Grid>
     </ControlTemplate>
@@ -160,5 +178,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style BasedOn="{StaticResource TabControl.Style.Basic}" TargetType="TabControl" />
+    <Style
+        BasedOn="{StaticResource TabControl.Style.Basic}"
+        TargetType="TabControl" />
 </ResourceDictionary>

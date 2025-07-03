@@ -14,7 +14,9 @@
     <!--  最后一项（右侧平直）  -->
     <Geometry x:Key="LastItemGeometry">M 0,0 L 110,0 120,0 120,32 0,32 10,16 Z</Geometry>
 
-    <Style BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:BreadCrumbBarItem">
+    <Style
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:BreadCrumbBarItem">
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Header}" />
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="Template">
@@ -67,7 +69,9 @@
     </Style>
 
     <!--  BreadCrumbBar 样式  -->
-    <Style BasedOn="{StaticResource Control.Style.Basic}" TargetType="ctl:BreadCrumbBar">
+    <Style
+        BasedOn="{StaticResource Control.Style.Basic}"
+        TargetType="ctl:BreadCrumbBar">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />

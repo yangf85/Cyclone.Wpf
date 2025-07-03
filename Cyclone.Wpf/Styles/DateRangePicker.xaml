@@ -8,7 +8,9 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="DateRangePicker.OpenButtonStyle" TargetType="{x:Type Button}">
+    <Style
+        x:Key="DateRangePicker.OpenButtonStyle"
+        TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Default}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Focusable" Value="False" />
@@ -29,7 +31,9 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Hover}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Path=IsOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:DateRangePicker}}" Value="True">
+                        <DataTrigger
+                            Binding="{Binding Path=IsOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctl:DateRangePicker}}"
+                            Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource Icon.Foreground.Selected}" />
                             <Setter TargetName="IconPath" Property="Data" Value="M384 256h256V213.333333h85.333333v42.666667h128v554.666667H170.666667V256h128V213.333333h85.333333v42.666667zM256 341.333333v384h512V341.333333H256z m170.666667 42.666667v85.333333H298.666667V384h128z" />
                         </DataTrigger>
@@ -40,7 +44,9 @@
         <Style.Triggers />
     </Style>
 
-    <Style x:Key="DateRangePicker.TextBoxStyle" TargetType="{x:Type DatePickerTextBox}">
+    <Style
+        x:Key="DateRangePicker.TextBoxStyle"
+        TargetType="{x:Type DatePickerTextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="IsReadOnly" Value="True" />
@@ -160,5 +166,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource DateRangePicker.Style.Basic}" TargetType="{x:Type ctl:DateRangePicker}" />
+    <Style
+        BasedOn="{StaticResource DateRangePicker.Style.Basic}"
+        TargetType="{x:Type ctl:DateRangePicker}" />
 </ResourceDictionary>

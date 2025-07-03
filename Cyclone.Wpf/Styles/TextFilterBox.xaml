@@ -19,7 +19,9 @@
         <Setter Property="Focusable" Value="False" />
     </Style>
 
-    <Style x:Key="TextFilterBox.OperatorComboBoxStyle" TargetType="ComboBox">
+    <Style
+        x:Key="TextFilterBox.OperatorComboBoxStyle"
+        TargetType="ComboBox">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
@@ -92,7 +94,9 @@
                                             Focusable="False"
                                             HorizontalScrollBarVisibility="Auto"
                                             VerticalScrollBarVisibility="Auto">
-                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                            <ItemsPresenter
+                                                x:Name="ItemsPresenter"
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
                                         </ScrollViewer>
                                     </Border>
                                 </Grid>
@@ -121,7 +125,9 @@
         BasedOn="{StaticResource TextBox.Style.Basic}"
         TargetType="TextBox" />
 
-    <ControlTemplate x:Key="TextFilterBox.ControlTemplate.Basic" TargetType="ctl:TextFilterBox">
+    <ControlTemplate
+        x:Key="TextFilterBox.ControlTemplate.Basic"
+        TargetType="ctl:TextFilterBox">
         <Border
             x:Name="RootBorder"
             Margin="{TemplateBinding Padding}"
@@ -131,11 +137,15 @@
             SnapsToDevicePixels="True">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" MinHeight="{DynamicResource Height.Horizontal.Control}" />
+                    <RowDefinition
+                        Height="*"
+                        MinHeight="{DynamicResource Height.Horizontal.Control}" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="{TemplateBinding SharedName}" />
+                    <ColumnDefinition
+                        Width="Auto"
+                        SharedSizeGroup="{TemplateBinding SharedName}" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -181,7 +191,9 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TextFilterBox.Style.Basic" TargetType="ctl:TextFilterBox">
+    <Style
+        x:Key="TextFilterBox.Style.Basic"
+        TargetType="ctl:TextFilterBox">
         <Setter Property="Template" Value="{StaticResource TextFilterBox.ControlTemplate.Basic}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Background" Value="Transparent" />
@@ -191,5 +203,7 @@
         <Style.Triggers />
     </Style>
 
-    <Style BasedOn="{StaticResource TextFilterBox.Style.Basic}" TargetType="ctl:TextFilterBox" />
+    <Style
+        BasedOn="{StaticResource TextFilterBox.Style.Basic}"
+        TargetType="ctl:TextFilterBox" />
 </ResourceDictionary>
