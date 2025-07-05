@@ -6,8 +6,8 @@
 	  <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>25.7.3.10</AssemblyVersion>
-    <FileVersion>25.7.3.10</FileVersion>
+    <AssemblyVersion>25.7.5.10</AssemblyVersion>
+    <FileVersion>25.7.5.10</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf.Theme</Title>
     <Description>wpf的主题资源</Description>
