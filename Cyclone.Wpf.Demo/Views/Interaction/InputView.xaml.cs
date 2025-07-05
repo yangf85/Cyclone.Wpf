@@ -52,7 +52,9 @@ namespace Cyclone.Wpf.Demo.Views
         [NotifyPropertyChangedFor(nameof(TotalValue))]
         public partial double NumberDouble { get; set; } = 10.5;
 
+        [NotifyDataErrorInfo]
         [ObservableProperty]
+        [Range(1, 100, ErrorMessage = "数量必须在1-100之间")]
         [NotifyPropertyChangedFor(nameof(TotalValue))]
         public partial int NumberInt { get; set; } = 100;
 

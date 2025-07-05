@@ -32,12 +32,12 @@ namespace Cyclone.Wpf.Demo.Views
 
     public partial class WaterfallPanelViewModel : ObservableObject
     {
-        [ObservableProperty]
-        public partial ObservableCollection<FakerData> Data { get; set; } = [];
-
         public WaterfallPanelViewModel()
         {
             Data = new ObservableCollection<FakerData>(FakerDataHelper.GenerateFakerDataCollection(56));
         }
+
+        [ObservableProperty]
+        public partial ObservableCollection<FakerData> Data { get; set; } = [];
     }
 }
