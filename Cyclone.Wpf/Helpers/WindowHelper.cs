@@ -232,4 +232,69 @@ public static class WindowHelper
     }
 
     #endregion IsHideOnCloseEnabled
+
+    #region IsClosing
+
+    /// <summary>
+    /// 绑定需要使用Mode=OneWayToSource，否则窗口关闭事件会导致绑定失效
+    /// </summary>
+    public static readonly DependencyProperty IsClosingProperty =
+        DependencyProperty.RegisterAttached(
+            "IsClosing",
+            typeof(bool),
+            typeof(WindowHelper),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    public static readonly DependencyProperty IsClosingMonitorEnabledProperty =
+        DependencyProperty.RegisterAttached(
+            "IsClosingMonitorEnabled",
+            typeof(bool),
+            typeof(WindowHelper),
+            new PropertyMetadata(false, OnIsClosingMonitorEnabledChanged));
+
+    private static void OnIsClosingMonitorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is Window window)
+        {
+            if ((bool)e.NewValue)
+            {
+                window.Closing += Window_ClosingTracker;
+            }
+            else
+            {
+                window.Closing -= Window_ClosingTracker;
+                window.SetValue(IsClosingProperty, false);
+            }
+        }
+    }
+
+    private static void Window_ClosingTracker(object sender, CancelEventArgs e)
+    {
+        if (sender is Window window)
+        {
+            window.SetValue(IsClosingProperty, true);
+        }
+    }
+
+    public static bool GetIsClosing(Window window)
+    {
+        return (bool)window.GetValue(IsClosingProperty);
+    }
+
+    public static void SetIsClosing(Window window, bool value)
+    {
+        throw new InvalidOperationException("IsClosing is a read-only property.");
+    }
+
+    public static bool GetIsClosingMonitorEnabled(Window window)
+    {
+        return (bool)window.GetValue(IsClosingMonitorEnabledProperty);
+    }
+
+    public static void SetIsClosingMonitorEnabled(Window window, bool value)
+    {
+        window.SetValue(IsClosingMonitorEnabledProperty, value);
+    }
+
+    #endregion IsClosing
 }
