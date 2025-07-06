@@ -19,7 +19,5 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Invert}" />
     </Style>
 
-    <Style
-        BasedOn="{StaticResource CircularGauge.Style.Basic}"
-        TargetType="ctl:CircularGauge" />
+    <Style BasedOn="{StaticResource CircularGauge.Style.Basic}" TargetType="ctl:CircularGauge" />
 </ResourceDictionary>

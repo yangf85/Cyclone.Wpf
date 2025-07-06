@@ -6,9 +6,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="Card.Style.Basic.Shadow"
-        TargetType="{x:Type ctl:Card}">
+    <Style x:Key="Card.Style.Basic.Shadow" TargetType="{x:Type ctl:Card}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
@@ -158,7 +156,5 @@
     </Style>
 
     <!--  Default Style  -->
-    <Style
-        BasedOn="{StaticResource Card.Style.Basic.Shadow}"
-        TargetType="{x:Type ctl:Card}" />
+    <Style BasedOn="{StaticResource Card.Style.Basic.Shadow}" TargetType="{x:Type ctl:Card}" />
 </ResourceDictionary>

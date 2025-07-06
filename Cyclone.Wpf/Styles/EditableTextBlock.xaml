@@ -45,7 +45,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        BasedOn="{StaticResource EditableTextBlock.Style.Basic}"
-        TargetType="ctl:EditableTextBlock" />
+    <Style BasedOn="{StaticResource EditableTextBlock.Style.Basic}" TargetType="ctl:EditableTextBlock" />
 </ResourceDictionary>

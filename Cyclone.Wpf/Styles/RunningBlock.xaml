@@ -7,9 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="RunningBlock.ControlTemplate.Basic"
-        TargetType="{x:Type ctl:RunningBlock}">
+    <ControlTemplate x:Key="RunningBlock.ControlTemplate.Basic" TargetType="{x:Type ctl:RunningBlock}">
         <Border
             x:Name="RootBorder"
             Width="{TemplateBinding Width}"
@@ -45,7 +43,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style
-        BasedOn="{StaticResource RunningBlock.Style.Basic}"
-        TargetType="{x:Type ctl:RunningBlock}" />
+    <Style BasedOn="{StaticResource RunningBlock.Style.Basic}" TargetType="{x:Type ctl:RunningBlock}" />
 </ResourceDictionary>

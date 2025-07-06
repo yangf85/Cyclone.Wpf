@@ -9,9 +9,7 @@
         <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="DataGrid.SelectAllButtonStyle"
-        TargetType="{x:Type Button}">
+    <Style x:Key="DataGrid.SelectAllButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -47,9 +45,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGridCell.Style.Basic"
-        TargetType="{x:Type DataGridCell}">
+    <Style x:Key="DataGridCell.Style.Basic" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
@@ -79,14 +75,10 @@
                             <Setter Property="BorderThickness" Value="1" />
                             <Setter Property="Background" Value="{DynamicResource Background.Container}" />
                         </Trigger>
-                        <DataTrigger
-                            Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
-                            Value="True">
+                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                             <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground.Invert}" />
                         </DataTrigger>
-                        <DataTrigger
-                            Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
-                            Value="True">
+                        <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                             <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground.Hover}" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -95,26 +87,20 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.ColumnHeaderGripperStyle"
-        TargetType="{x:Type Thumb}">
+    <Style x:Key="DataGrid.ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Width" Value="8" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeWE" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGridColumnHeader.Style.Basic"
-        TargetType="{x:Type DataGridColumnHeader}">
+    <Style x:Key="DataGridColumnHeader.Style.Basic" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
@@ -130,9 +116,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid
-                            x:Name="RootGrid"
-                            SnapsToDevicePixels="True">
+                        <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
                             <ContentPresenter
                                 Margin="2,0"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -184,26 +168,20 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowHeaderGripperStyle"
-        TargetType="{x:Type Thumb}">
+    <Style x:Key="DataGrid.RowHeaderGripperStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Height" Value="8" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeNS" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border
-                        Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowHeaderStyle"
-        TargetType="{x:Type DataGridRowHeader}">
+    <Style x:Key="DataGrid.RowHeaderStyle" TargetType="{x:Type DataGridRowHeader}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="Background" Value="Transparent" />
@@ -251,9 +229,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="DataGrid.RowStyle"
-        TargetType="{x:Type DataGridRow}">
+    <Style x:Key="DataGrid.RowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -272,9 +248,7 @@
                             x:Name="CellContainer"
                             Grid.Column="1"
                             Background="{TemplateBinding Background}">
-                            <DataGridCellsPresenter
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Grid>
                         <DataGridDetailsPresenter
                             Grid.Row="1"
@@ -387,9 +361,7 @@
                                             ViewportSize="{TemplateBinding ViewportHeight}"
                                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                             Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        <Grid
-                                            Grid.Row="2"
-                                            Grid.Column="1">
+                                        <Grid Grid.Row="2" Grid.Column="1">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                                 <ColumnDefinition Width="*" />
@@ -425,7 +397,5 @@
         </Style.Triggers>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource DataGrid.Style.Basic}"
-        TargetType="{x:Type DataGrid}" />
+    <Style BasedOn="{StaticResource DataGrid.Style.Basic}" TargetType="{x:Type DataGrid}" />
 </ResourceDictionary>

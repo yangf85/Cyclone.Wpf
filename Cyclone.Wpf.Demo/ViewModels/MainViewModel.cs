@@ -61,7 +61,7 @@ public partial class MainViewModel : ObservableObject
             "Carousel" => new CarouselView(),
             "Drawer" => new DrawerView(),
             "FilterBox" => new FilterBoxView(),
-
+            "IconBox" => new IconBoxView(),
             "Stepper" => new StepperView(),
             "Breadcrumb" => new BreadcrumbBarView(),
             "ColorPicker" => new ColorPickerView(),
@@ -129,7 +129,7 @@ public partial class SideMenuViewModel : ObservableObject
                 new SideMenuItemViewModel
                 {
                     Header="FilterBox",
-                    Icon= "\xe71a",
+                    Icon= "\xe74c",
                 },
                 new SideMenuItemViewModel
                 {
@@ -312,13 +312,18 @@ public partial class SideMenuViewModel : ObservableObject
                {
                    Header="LcdDisplayer",
                    Icon = "\xe699",
+               },
+               new SideMenuItemViewModel
+               {
+                   Header="IconBox",
+                   Icon = "\xe617",
                }
             ]
         });
         Items.Add(new SideMenuItemViewModel
         {
             Header = "Test",
-            Icon = "\xe61a",
+            Icon = "\xe629",
         });
     }
 

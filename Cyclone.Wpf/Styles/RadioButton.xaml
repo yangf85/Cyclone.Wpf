@@ -8,9 +8,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="RadioButton.ControlTemplate.Basic"
-        TargetType="RadioButton">
+    <ControlTemplate x:Key="RadioButton.ControlTemplate.Basic" TargetType="RadioButton">
         <StackPanel
             Margin="{TemplateBinding Padding}"
             Background="Transparent"
@@ -82,7 +80,5 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
-    <Style
-        BasedOn="{StaticResource RadioButton.Style.Basic}"
-        TargetType="RadioButton" />
+    <Style BasedOn="{StaticResource RadioButton.Style.Basic}" TargetType="RadioButton" />
 </ResourceDictionary>

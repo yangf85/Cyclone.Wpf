@@ -6,9 +6,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="Drawer.ControlTemplate.Basic"
-        TargetType="{x:Type ctl:Drawer}">
+    <ControlTemplate x:Key="Drawer.ControlTemplate.Basic" TargetType="{x:Type ctl:Drawer}">
         <Grid>
             <ContentPresenter Content="{TemplateBinding Content}" />
             <Border
@@ -25,9 +23,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}">
-                <ContentPresenter
-                    Margin="{TemplateBinding Padding}"
-                    Content="{TemplateBinding DrawerContent}" />
+                <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding DrawerContent}" />
             </Border>
         </Grid>
 
@@ -51,9 +47,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style
-        x:Key="Drawer.Style.Basic"
-        TargetType="{x:Type ctl:Drawer}">
+    <Style x:Key="Drawer.Style.Basic" TargetType="{x:Type ctl:Drawer}">
         <Setter Property="Background" Value="{DynamicResource Background.Container}" />
 
         <Setter Property="BorderThickness" Value="0" />
@@ -62,7 +56,5 @@
         <Setter Property="Template" Value="{StaticResource Drawer.ControlTemplate.Basic}" />
     </Style>
 
-    <Style
-        BasedOn="{StaticResource Drawer.Style.Basic}"
-        TargetType="ctl:Drawer" />
+    <Style BasedOn="{StaticResource Drawer.Style.Basic}" TargetType="ctl:Drawer" />
 </ResourceDictionary>
