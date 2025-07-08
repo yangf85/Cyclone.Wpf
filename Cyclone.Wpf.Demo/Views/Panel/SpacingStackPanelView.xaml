@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cy="https://www.cyclone/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hp="clr-namespace:Cyclone.Wpf.Demo.Helper"
     xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance Type=local:SpacingStackPanelViewModel}"
@@ -13,15 +14,9 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  案例1: 水平布局 - 展示权重分配特性  -->
         <StackPanel Grid.Row="0">
             <TextBlock
                 Margin="0,0,0,10"
@@ -35,25 +30,18 @@
                     Height="40"
                     Orientation="Horizontal"
                     Spacing="10">
-                    <!--  Auto尺寸 - 根据内容自动调整  -->
                     <Button
                         cy:SpacingStackPanel.Weight="Auto"
                         Background="LightBlue"
                         Content="Auto" />
-
-                    <!--  固定尺寸 - 120像素  -->
                     <Button
                         cy:SpacingStackPanel.Weight="120"
                         Background="LightGreen"
                         Content="固定120px" />
-
-                    <!--  Star尺寸 - 占用1/3剩余空间  -->
                     <Button
                         cy:SpacingStackPanel.Weight="1*"
                         Background="LightCoral"
                         Content="1*" />
-
-                    <!--  Star尺寸 - 占用2/3剩余空间  -->
                     <Button
                         cy:SpacingStackPanel.Weight="2*"
                         Background="LightYellow"
@@ -67,62 +55,26 @@
                 Text="说明：Auto按钮自适应内容，固定120px按钮占120像素，1*和2*按钮按1:2比例分配剩余空间" />
         </StackPanel>
 
-        <!--  案例2: 垂直布局 - 展示间距和布局特性  -->
-        <StackPanel Grid.Row="2">
-            <TextBlock
-                Margin="0,0,0,10"
-                FontWeight="Bold"
-                Text="案例2: 垂直布局间距展示" />
-            <Border
-                Padding="10"
-                BorderBrush="Gray"
-                BorderThickness="1">
-                <cy:SpacingStackPanel
-                    Height="200"
-                    Orientation="Vertical"
-                    Spacing="15">
-                    <!--  标题区域 - Auto尺寸  -->
-                    <TextBlock
-                        Padding="10,5"
-                        cy:SpacingStackPanel.Weight="Auto"
-                        Background="Navy"
-                        Foreground="White"
-                        Text="标题区域"
-                        TextAlignment="Center" />
-
-                    <!--  内容区域 - 占用剩余空间  -->
-                    <Border
-                        Padding="10"
-                        cy:SpacingStackPanel.Weight="1*"
-                        Background="LightSteelBlue">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="这是主要内容区域，会占用剩余的所有空间"
-                            TextWrapping="Wrap" />
-                    </Border>
-
-                    <!--  底部按钮区域 - 固定高度  -->
-                    <StackPanel
-                        HorizontalAlignment="Right"
-                        cy:SpacingStackPanel.Weight="50"
-                        Background="LightGray"
-                        Orientation="Horizontal">
-                        <Button
-                            Width="60"
-                            Margin="5"
-                            Content="取消" />
-                        <Button
-                            Width="60"
-                            Margin="5"
-                            Content="确定" />
-                    </StackPanel>
-                </cy:SpacingStackPanel>
-            </Border>
-            <TextBlock
-                Margin="0,5,0,0"
-                FontSize="12"
-                Foreground="Gray"
-                Text="说明：标题自适应高度，内容区域占用剩余空间，底部按钮固定50像素高度，元素间距15像素" />
-        </StackPanel>
+        <cy:SpacingStackPanel
+            Grid.Row="1"
+            Orientation="Vertical"
+            Spacing="5">
+            <cy:FormItem Label="姓名:" SharedName="Model">
+                <TextBox />
+            </cy:FormItem>
+            <cy:FormItem
+                Description="请输入年龄..."
+                Label="年龄:"
+                SharedName="Model">
+                <cy:NumberBox />
+            </cy:FormItem>
+            <cy:FormItem
+                VerticalContentAlignment="Center"
+                Label="状态:"
+                SharedName="Model">
+                <cy:EnumSelector EnumType="{x:Type hp:UserStatus}" Rows="1" />
+            </cy:FormItem>
+            <TextBox />
+        </cy:SpacingStackPanel>
     </Grid>
 </UserControl>

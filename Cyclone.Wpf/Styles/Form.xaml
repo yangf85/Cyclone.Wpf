@@ -86,6 +86,7 @@
                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                 Content="{TemplateBinding AttachedObject}" />
             <TextBlock
+                x:Name="DescriptionTextBlock"
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
@@ -97,6 +98,12 @@
         <ControlTemplate.Triggers>
             <Trigger Property="IsRequired" Value="True">
                 <Setter TargetName="RequiredMark" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger SourceName="DescriptionTextBlock" Property="Text" Value="{x:Null}">
+                <Setter TargetName="DescriptionTextBlock" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger SourceName="DescriptionTextBlock" Property="Text" Value="">
+                <Setter TargetName="DescriptionTextBlock" Property="Visibility" Value="Collapsed" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
