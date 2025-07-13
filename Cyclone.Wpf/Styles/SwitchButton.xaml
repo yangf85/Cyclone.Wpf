@@ -88,5 +88,20 @@
         </Setter>
     </Style>
 
+    <Style
+        x:Key="SwitchButton.Style.Toggle"
+        BasedOn="{StaticResource SwitchButton.Style.Basic}"
+        TargetType="{x:Type ctl:SwitchButton}">
+        <Setter Property="ThumbBackground" Value="{DynamicResource Background.Container}" />
+        <Setter Property="ThumbCornerRadius" Value="12" />
+        <Setter Property="ThumbMargin" Value="0" />
+        <Setter Property="ThumbSize" Value="24" />
+        <Setter Property="TrackCornerRadius" Value="5" />
+        <Setter Property="TrackHeight" Value="10" />
+        <Setter Property="TrackWidth" Value="45" />
+        <Setter Property="CheckedBackground" Value="{DynamicResource Background.Checked}" />
+        <Setter Property="UncheckedBackground" Value="{DynamicResource Background.UnChecked}" />
+    </Style>
+
     <Style BasedOn="{StaticResource SwitchButton.Style.Basic}" TargetType="ctl:SwitchButton" />
 </ResourceDictionary>

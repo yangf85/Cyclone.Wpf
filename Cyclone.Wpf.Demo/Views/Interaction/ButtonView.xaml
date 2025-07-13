@@ -14,9 +14,7 @@
 
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="Button">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <Button Content="One" />
                 <Button Content="Two" />
                 <Button Content="Three" />
@@ -27,9 +25,7 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="ToggleButton">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <ToggleButton Content="One" />
                 <ToggleButton Content="Two" />
                 <ToggleButton Content="Three" />
@@ -37,9 +33,7 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="RadioButton">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <RadioButton Content="One" />
                 <RadioButton Content="Two" />
                 <RadioButton Content="Three" />
@@ -47,9 +41,7 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="CheckBox">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <CheckBox Content="One" />
                 <CheckBox Content="Two" />
                 <CheckBox Content="Three" />
@@ -57,24 +49,10 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="Switch">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <cy:SwitchButton Content="Default Style" />
 
-                <cy:SwitchButton
-                    AnimationDuration="0:0:0.25"
-                    CheckedBackground="#FF4444"
-                    Content="Large Thumb Style"
-                    Foreground="Black"
-                    ThumbBackground="White"
-                    ThumbCornerRadius="12"
-                    ThumbMargin="2,0,2,0"
-                    ThumbSize="24"
-                    TrackCornerRadius="5"
-                    TrackHeight="10"
-                    TrackWidth="50"
-                    UncheckedBackground="#FFB3B3" />
+                <cy:SwitchButton Style="{StaticResource SwitchButton.Style.Toggle}" />
 
                 <cy:SwitchButton
                     CheckedBackground="#9C27B0"
@@ -87,12 +65,8 @@
                     TrackWidth="60" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
-        <HeaderedContentControl
-            Background="Gray"
-            Header="SplitButton">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
+        <HeaderedContentControl Background="Gray" Header="SplitButton">
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <cy:SplitButton
                     ItemClickCommand="{Binding SplitButton.TestCommand}"
                     ItemClickCommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
@@ -110,9 +84,7 @@
                     ItemClickCommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
                     ItemsSource="{Binding SplitButton.FakerData}"
                     Label="Two" />
-                <cy:SplitButton
-                    ItemsSource="{Binding SplitButton.FakerData}"
-                    Label="Three">
+                <cy:SplitButton ItemsSource="{Binding SplitButton.FakerData}" Label="Three">
                     <cy:SplitButton.ItemTemplate>
                         <DataTemplate>
                             <Button
@@ -128,21 +100,11 @@
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
         <HeaderedContentControl Header="HyperlinkButton">
-            <cy:SpacingUniformGrid
-                HorizontalSpacing="5"
-                Rows="1">
-                <cy:HyperlinkButton
-                    DisplayText="百度"
-                    NavigateUri="http://www.baidu.com" />
-                <cy:HyperlinkButton
-                    DisplayText="百度"
-                    NavigateUri="http://www.baidu.com" />
-                <cy:HyperlinkButton
-                    DisplayText="百度"
-                    NavigateUri="http://www.baidu.com" />
-                <cy:HyperlinkButton
-                    DisplayText="百度"
-                    NavigateUri="http://www.baidu.com" />
+            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+                <cy:HyperlinkButton DisplayText="百度" NavigateUri="http://www.baidu.com" />
+                <cy:HyperlinkButton DisplayText="百度" NavigateUri="http://www.baidu.com" />
+                <cy:HyperlinkButton DisplayText="百度" NavigateUri="http://www.baidu.com" />
+                <cy:HyperlinkButton DisplayText="百度" NavigateUri="http://www.baidu.com" />
             </cy:SpacingUniformGrid>
         </HeaderedContentControl>
     </cy:SpacingStackPanel>
