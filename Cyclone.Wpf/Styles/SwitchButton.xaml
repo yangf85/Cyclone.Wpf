@@ -6,17 +6,15 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style
-        x:Key="SwitchButton.Style.Basic"
-        TargetType="{x:Type ctl:SwitchButton}">
-        <Setter Property="TrackWidth" Value="50" />
-        <Setter Property="TrackHeight" Value="26" />
-        <Setter Property="ThumbSize" Value="22" />
-        <Setter Property="ThumbMargin" Value="2" />
+    <Style x:Key="SwitchButton.Style.Basic" TargetType="{x:Type ctl:SwitchButton}">
+        <Setter Property="TrackWidth" Value="40" />
+        <Setter Property="TrackHeight" Value="22" />
+        <Setter Property="ThumbSize" Value="16" />
+        <Setter Property="ThumbMargin" Value="3" />
         <Setter Property="ThumbVerticalAlignment" Value="Center" />
         <Setter Property="ThumbHorizontalAlignment" Value="Left" />
-        <Setter Property="TrackCornerRadius" Value="13" />
-        <Setter Property="ThumbCornerRadius" Value="11" />
+        <Setter Property="TrackCornerRadius" Value="11" />
+        <Setter Property="ThumbCornerRadius" Value="8" />
         <Setter Property="UncheckedBackground" Value="{DynamicResource Background.UnChecked}" />
         <Setter Property="CheckedBackground" Value="{DynamicResource Background.Checked}" />
         <Setter Property="ThumbBackground" Value="{DynamicResource Background.Default}" />
@@ -90,7 +88,5 @@
         </Setter>
     </Style>
 
-    <Style
-        BasedOn="{StaticResource SwitchButton.Style.Basic}"
-        TargetType="ctl:SwitchButton" />
+    <Style BasedOn="{StaticResource SwitchButton.Style.Basic}" TargetType="ctl:SwitchButton" />
 </ResourceDictionary>
