@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!--  拇指样式 - 保持原有样式  -->
     <Style x:Key="RangeSlider.ThumbStyle" TargetType="Thumb">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
@@ -31,6 +31,7 @@
         </Setter>
     </Style>
 
+    <!--  水平重复按钮样式  -->
     <Style x:Key="RangeSlider.RepeatButtonStyle.Horizontal" TargetType="RepeatButton">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
@@ -43,6 +44,7 @@
         </Setter>
     </Style>
 
+    <!--  垂直重复按钮样式  -->
     <Style x:Key="RangeSlider.RepeatButtonStyle.Vertical" TargetType="RepeatButton">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
@@ -58,6 +60,7 @@
         </Setter>
     </Style>
 
+    <!--  水平范围滑块模板（带刻度线）  -->
     <ControlTemplate x:Key="RangeSlider.ControlTemplate.Horizontal.Basic" TargetType="ctl:RangeSlider">
         <Grid x:Name="RootGrid" SnapsToDevicePixels="True">
             <Grid.RowDefinitions>
@@ -65,12 +68,26 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--<TickBar x:Name="TopTickBar"
-                         Grid.Row="0" />-->
+
+            <!--  顶部刻度线  -->
+            <TickBar
+                x:Name="TopTickBar"
+                Grid.Row="0"
+                Height="4"
+                Fill="{TemplateBinding Foreground}"
+                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                Maximum="{TemplateBinding Maximum}"
+                Minimum="{TemplateBinding Minimum}"
+                Placement="Top"
+                TickFrequency="{TemplateBinding TickFrequency}"
+                Ticks="{TemplateBinding Ticks}"
+                Visibility="Collapsed" />
+
             <Grid
-                x:Name="RangGrid"
+                x:Name="RangeGrid"
                 Grid.Row="1"
-                HorizontalAlignment="Stretch">
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -78,12 +95,16 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+
+                <!--  开始区域  -->
                 <RepeatButton
                     x:Name="PART_StartRegion"
                     Grid.Column="0"
                     Height="{TemplateBinding TrackThickness}"
                     Background="{TemplateBinding InactiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
+
+                <!--  开始拇指  -->
                 <Thumb
                     x:Name="PART_StartThumb"
                     Grid.Column="1"
@@ -97,12 +118,16 @@
                             PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
                     </Thumb.ToolTip>
                 </Thumb>
+
+                <!--  中间区域（活动区域）  -->
                 <RepeatButton
                     x:Name="PART_MiddleRegion"
                     Grid.Column="2"
                     Height="{TemplateBinding TrackThickness}"
                     Background="{TemplateBinding ActiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
+
+                <!--  结束拇指  -->
                 <Thumb
                     x:Name="PART_EndThumb"
                     Grid.Column="3"
@@ -116,6 +141,8 @@
                             PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
                     </Thumb.ToolTip>
                 </Thumb>
+
+                <!--  结束区域  -->
                 <RepeatButton
                     x:Name="PART_EndRegion"
                     Grid.Column="4"
@@ -123,13 +150,38 @@
                     Background="{TemplateBinding InactiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Horizontal}" />
             </Grid>
-            <!--<TickBar x:Name="BottomTickBar"
-                         Grid.Row="2"
-                         Height="20"
-                         Fill="Black" />-->
+
+            <!--  底部刻度线  -->
+            <TickBar
+                x:Name="BottomTickBar"
+                Grid.Row="2"
+                Height="4"
+                Fill="{TemplateBinding Foreground}"
+                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                Maximum="{TemplateBinding Maximum}"
+                Minimum="{TemplateBinding Minimum}"
+                Placement="Bottom"
+                TickFrequency="{TemplateBinding TickFrequency}"
+                Ticks="{TemplateBinding Ticks}"
+                Visibility="Collapsed" />
         </Grid>
+
+        <!--  刻度线显示触发器  -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="TickPlacement" Value="TopLeft">
+                <Setter TargetName="TopTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="BottomRight">
+                <Setter TargetName="BottomTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="Both">
+                <Setter TargetName="TopTickBar" Property="Visibility" Value="Visible" />
+                <Setter TargetName="BottomTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--  垂直范围滑块模板（带刻度线）  -->
     <ControlTemplate x:Key="RangeSlider.ControlTemplate.Vertical.Basic" TargetType="ctl:RangeSlider">
         <Grid
             x:Name="RootGrid"
@@ -140,9 +192,26 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <!--<TickBar x:Name="TopTickBar"
-                     Grid.Column="0" />-->
-            <Grid x:Name="RangGrid" Grid.Column="1">
+
+            <!--  左侧刻度线  -->
+            <TickBar
+                x:Name="LeftTickBar"
+                Grid.Column="0"
+                Width="4"
+                Fill="{TemplateBinding Foreground}"
+                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                Maximum="{TemplateBinding Maximum}"
+                Minimum="{TemplateBinding Minimum}"
+                Placement="Left"
+                TickFrequency="{TemplateBinding TickFrequency}"
+                Ticks="{TemplateBinding Ticks}"
+                Visibility="Collapsed" />
+
+            <Grid
+                x:Name="RangeGrid"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -150,55 +219,124 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
+                <!--  开始区域（顶部非活动区域）  -->
                 <RepeatButton
                     x:Name="PART_StartRegion"
                     Grid.Row="0"
-                    Background="{TemplateBinding Background}"
+                    Width="{TemplateBinding TrackThickness}"
+                    Background="{TemplateBinding InactiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
+
+                <!--  结束拇指（上方拇指，对应较大值）  -->
                 <Thumb
-                    x:Name="PART_StartThumb"
+                    x:Name="PART_EndThumb"
                     Grid.Row="1"
-                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                    Panel.ZIndex="99"
+                    Style="{StaticResource RangeSlider.ThumbStyle}">
+                    <Thumb.ToolTip>
+                        <ToolTip
+                            x:Name="EndThumbToolTip"
+                            Content="{TemplateBinding UpperValue}"
+                            Placement="Right"
+                            PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
+                    </Thumb.ToolTip>
+                </Thumb>
+
+                <!--  中间区域（活动区域）  -->
                 <RepeatButton
                     x:Name="PART_MiddleRegion"
                     Grid.Row="2"
+                    Width="{TemplateBinding TrackThickness}"
+                    Background="{TemplateBinding ActiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
+
+                <!--  开始拇指（下方拇指，对应较小值）  -->
                 <Thumb
-                    x:Name="PART_EndThumb"
+                    x:Name="PART_StartThumb"
                     Grid.Row="3"
-                    Style="{StaticResource RangeSlider.ThumbStyle}" />
+                    Panel.ZIndex="99"
+                    Style="{StaticResource RangeSlider.ThumbStyle}">
+                    <Thumb.ToolTip>
+                        <ToolTip
+                            x:Name="StartThumbToolTip"
+                            Content="{TemplateBinding LowerValue}"
+                            Placement="Right"
+                            PlacementTarget="{Binding RelativeSource={RelativeSource Mode=Self}}" />
+                    </Thumb.ToolTip>
+                </Thumb>
+
+                <!--  结束区域（底部非活动区域）  -->
                 <RepeatButton
                     x:Name="PART_EndRegion"
                     Grid.Row="4"
-                    Background="{TemplateBinding Background}"
+                    Width="{TemplateBinding TrackThickness}"
+                    Background="{TemplateBinding InactiveTrackColor}"
                     Style="{StaticResource RangeSlider.RepeatButtonStyle.Vertical}" />
             </Grid>
-            <!--<TickBar x:Name="BottomTickBar"
-                     Grid.Column="2"
-                     Fill="Black" />-->
+
+            <!--  右侧刻度线  -->
+            <TickBar
+                x:Name="RightTickBar"
+                Grid.Column="2"
+                Width="4"
+                Fill="{TemplateBinding Foreground}"
+                IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                Maximum="{TemplateBinding Maximum}"
+                Minimum="{TemplateBinding Minimum}"
+                Placement="Right"
+                TickFrequency="{TemplateBinding TickFrequency}"
+                Ticks="{TemplateBinding Ticks}"
+                Visibility="Collapsed" />
         </Grid>
+
+        <!--  刻度线显示触发器  -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="TickPlacement" Value="TopLeft">
+                <Setter TargetName="LeftTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="BottomRight">
+                <Setter TargetName="RightTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="Both">
+                <Setter TargetName="LeftTickBar" Property="Visibility" Value="Visible" />
+                <Setter TargetName="RightTickBar" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--  基础样式  -->
     <Style
         x:Key="RangeSlider.Style.Basic"
         BasedOn="{StaticResource Control.Style.Basic}"
         TargetType="{x:Type ctl:RangeSlider}">
         <Setter Property="Background" Value="{DynamicResource Background.Default}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground.Default}" />
         <Setter Property="Height" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="TrackThickness" Value="5" />
         <Setter Property="AutoToolTipPrecision" Value="1" />
         <Setter Property="InactiveTrackColor" Value="{DynamicResource Background.Inactive}" />
         <Setter Property="ActiveTrackColor" Value="{DynamicResource Background.Active}" />
+        <Setter Property="TickFrequency" Value="1" />
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="IsTabStop" Value="True" />
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Template" Value="{StaticResource RangeSlider.ControlTemplate.Horizontal.Basic}" />
                 <Setter Property="AutoToolTipPlacement" Value="TopLeft" />
+                <Setter Property="MinHeight" Value="20" />
+                <Setter Property="Height" Value="Auto" />
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Template" Value="{StaticResource RangeSlider.ControlTemplate.Vertical.Basic}" />
                 <Setter Property="AutoToolTipPlacement" Value="BottomRight" />
+                <Setter Property="MinWidth" Value="20" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Height" Value="300" />
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!--  默认样式  -->
     <Style BasedOn="{StaticResource RangeSlider.Style.Basic}" TargetType="{x:Type ctl:RangeSlider}" />
 </ResourceDictionary>
