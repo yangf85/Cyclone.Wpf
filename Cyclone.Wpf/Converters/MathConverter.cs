@@ -30,4 +30,7 @@ public class MathConverter
 
     public static FuncValueConverter<IEnumerable, IEnumerable> ObjectsToIndexes { get; } =
         new(objects => objects.OfType<object>().Select((i, j) => j));
+
+    public static FuncValueConverter<int, int> AddOne { get; } =
+       new(number => number + 1);
 }

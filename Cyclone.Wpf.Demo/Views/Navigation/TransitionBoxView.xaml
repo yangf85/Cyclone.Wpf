@@ -1,36 +1,35 @@
-﻿<UserControl x:Class="Cyclone.Wpf.Demo.Views.Navigation.TransitionBoxView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cy="https://www.cyclone/wpf"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views.Navigation"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
-             mc:Ignorable="d">
+﻿<UserControl
+    x:Class="Cyclone.Wpf.Demo.Views.Navigation.TransitionBoxView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cy="https://www.cyclone/wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Cyclone.Wpf.Demo.Views.Navigation"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <cy:FadeTransition x:Key="FadeTransition" />
-        <cy:SlideTransition x:Key="SlideLeftToRight"
-                            Direction="LeftToRight" />
-        <cy:SlideTransition x:Key="SlideRightToLeft"
-                            Direction="RightToLeft" />
-        <cy:SlideTransition x:Key="SlideTopToBottom"
-                            Direction="TopToBottom" />
-        <cy:SlideTransition x:Key="SlideBottomToTop"
-                            Direction="BottomToTop" />
+        <cy:SlideTransition x:Key="SlideLeftToRight" Direction="LeftToRight" />
+        <cy:SlideTransition x:Key="SlideRightToLeft" Direction="RightToLeft" />
+        <cy:SlideTransition x:Key="SlideTopToBottom" Direction="TopToBottom" />
+        <cy:SlideTransition x:Key="SlideBottomToTop" Direction="BottomToTop" />
         <cy:ScaleTransition x:Key="ScaleTransition" />
         <cy:FlipTransition x:Key="FlipTransition" />
 
         <!--  页面内容  -->
-        <Border x:Key="Page1"
-                Padding="20"
-                Background="LightBlue"
-                CornerRadius="8">
+        <Border
+            x:Key="Page1"
+            Padding="20"
+            Background="LightBlue"
+            CornerRadius="8">
             <StackPanel>
-                <TextBlock Margin="0,0,0,20"
-                           HorizontalAlignment="Center"
-                           FontSize="24"
-                           Text="Page 1" />
+                <TextBlock
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    Text="Page 1" />
                 <TextBlock TextWrapping="Wrap">
                     This is the first page content. The TransitionBox control allows you to switch
                     between different content with smooth animations.
@@ -38,15 +37,17 @@
             </StackPanel>
         </Border>
 
-        <Border x:Key="Page2"
-                Padding="20"
-                Background="LightGreen"
-                CornerRadius="8">
+        <Border
+            x:Key="Page2"
+            Padding="20"
+            Background="LightGreen"
+            CornerRadius="8">
             <StackPanel>
-                <TextBlock Margin="0,0,0,20"
-                           HorizontalAlignment="Center"
-                           FontSize="24"
-                           Text="Page 2" />
+                <TextBlock
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    Text="Page 2" />
                 <TextBlock TextWrapping="Wrap">
                     This is the second page content. Try different transition effects by selecting
                     them from the combo box below.
@@ -54,15 +55,17 @@
             </StackPanel>
         </Border>
 
-        <Border x:Key="Page3"
-                Padding="20"
-                Background="LightPink"
-                CornerRadius="8">
+        <Border
+            x:Key="Page3"
+            Padding="20"
+            Background="LightPink"
+            CornerRadius="8">
             <StackPanel>
-                <TextBlock Margin="0,0,0,20"
-                           HorizontalAlignment="Center"
-                           FontSize="24"
-                           Text="Page 3" />
+                <TextBlock
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    Text="Page 3" />
                 <TextBlock TextWrapping="Wrap">
                     This is the third page content. You can implement your own custom transitions
                     by creating a class that implements the ITransition interface.
@@ -78,67 +81,68 @@
         </Grid.RowDefinitions>
 
         <!--  TransitionBox控件  -->
-        <cy:TransitionBox x:Name="MyTransitionBox"
-                          Margin="20"
-                          Content="{StaticResource Page1}"
-                          Transition="{StaticResource FadeTransition}"
-                          TransitionDuration="0:0:0.5" />
+        <cy:TransitionBox
+            x:Name="MyTransitionBox"
+            Margin="20"
+            Content="{StaticResource Page1}"
+            Transition="{StaticResource FadeTransition}"
+            TransitionDuration="0:0:0.5" />
 
         <!--  控制面板  -->
-        <StackPanel Grid.Row="1"
-                    Margin="20,0,20,20"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-            <GroupBox Padding="10,5"
-                      Header="Content">
+        <StackPanel
+            Grid.Row="1"
+            Margin="20,0,20,20"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <GroupBox Padding="10,5" Header="Content">
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Margin="0,0,10,0"
-                                 Checked="Page1_Checked"
-                                 Content="Page 1"
-                                 IsChecked="True" />
-                    <RadioButton Margin="0,0,10,0"
-                                 Checked="Page2_Checked"
-                                 Content="Page 2" />
-                    <RadioButton Checked="Page3_Checked"
-                                 Content="Page 3" />
+                    <RadioButton
+                        Margin="0,0,10,0"
+                        Checked="Page1_Checked"
+                        Content="Page 1"
+                        IsChecked="True" />
+                    <RadioButton
+                        Margin="0,0,10,0"
+                        Checked="Page2_Checked"
+                        Content="Page 2" />
+                    <RadioButton Checked="Page3_Checked" Content="Page 3" />
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Margin="20,0,0,0"
-                      Padding="10,5"
-                      Header="Transition Effect">
-                <ComboBox x:Name="TransitionSelector"
-                          Width="150"
-                          SelectionChanged="TransitionSelector_SelectionChanged">
-                    <ComboBoxItem Content="Fade"
-                                  IsSelected="True"
-                                  Tag="{StaticResource FadeTransition}" />
-                    <ComboBoxItem Content="Slide (Left → Right)"
-                                  Tag="{StaticResource SlideLeftToRight}" />
-                    <ComboBoxItem Content="Slide (Right → Left)"
-                                  Tag="{StaticResource SlideRightToLeft}" />
-                    <ComboBoxItem Content="Slide (Top → Bottom)"
-                                  Tag="{StaticResource SlideTopToBottom}" />
-                    <ComboBoxItem Content="Slide (Bottom → Top)"
-                                  Tag="{StaticResource SlideBottomToTop}" />
-                    <ComboBoxItem Content="Filp"
-                                  Tag="{StaticResource FlipTransition}" />
-                    <ComboBoxItem Content="Scale"
-                                  Tag="{StaticResource ScaleTransition}" />
+            <GroupBox
+                Margin="20,0,0,0"
+                Padding="10,5"
+                Header="Transition Effect">
+                <ComboBox
+                    x:Name="TransitionSelector"
+                    Width="150"
+                    SelectionChanged="TransitionSelector_SelectionChanged">
+                    <ComboBoxItem
+                        Content="Fade"
+                        IsSelected="True"
+                        Tag="{StaticResource FadeTransition}" />
+                    <ComboBoxItem Content="Slide (Left → Right)" Tag="{StaticResource SlideLeftToRight}" />
+                    <ComboBoxItem Content="Slide (Right → Left)" Tag="{StaticResource SlideRightToLeft}" />
+                    <ComboBoxItem Content="Slide (Top → Bottom)" Tag="{StaticResource SlideTopToBottom}" />
+                    <ComboBoxItem Content="Slide (Bottom → Top)" Tag="{StaticResource SlideBottomToTop}" />
+                    <ComboBoxItem Content="Filp" Tag="{StaticResource FlipTransition}" />
+                    <ComboBoxItem Content="Scale" Tag="{StaticResource ScaleTransition}" />
                 </ComboBox>
             </GroupBox>
 
-            <GroupBox Margin="20,0,0,0"
-                      Padding="10,5"
-                      Header="Duration (ms)">
-                <Slider x:Name="DurationSlider"
-                        Width="150"
-                        IsSnapToTickEnabled="True"
-                        Maximum="2000"
-                        Minimum="100"
-                        TickFrequency="100"
-                        ValueChanged="DurationSlider_ValueChanged"
-                        Value="500" />
+            <GroupBox
+                Margin="20,0,0,0"
+                Padding="10,5"
+                Header="Duration (ms)">
+                <Slider
+                    x:Name="DurationSlider"
+                    Width="150"
+                    IsSnapToTickEnabled="True"
+                    Maximum="2000"
+                    Minimum="100"
+                    TickFrequency="100"
+                    ValueChanged="DurationSlider_ValueChanged"
+                    Value="500" />
             </GroupBox>
         </StackPanel>
     </Grid>
