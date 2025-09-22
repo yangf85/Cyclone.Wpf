@@ -23,8 +23,14 @@
                         SelectionMode="Extended">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name" />
-                            <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name" />
-                            <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
+                            <DataGridTextColumn
+                                Binding="{Binding LastName}"
+                                EditingElementStyle="{StaticResource DataGrid.EditingTextBox.Style}"
+                                Header="Last Name" />
+                            <DataGridTextColumn
+                                Binding="{Binding Age}"
+                                EditingElementStyle="{StaticResource DataGrid.EditingTextBox.Style}"
+                                Header="Age" />
                             <DataGridTextColumn Binding="{Binding Email}" Header="Email" />
                             <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
                             <DataGridTextColumn

@@ -7,9 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate
-        x:Key="MultiComboBox.TextBox"
-        TargetType="TextBox">
+    <ControlTemplate x:Key="MultiComboBox.TextBox" TargetType="TextBox">
         <Border
             x:Name="PART_ContentHost"
             VerticalAlignment="Center"
@@ -17,16 +15,12 @@
             Focusable="False" />
     </ControlTemplate>
 
-    <Style
-        x:Key="MultiComboBox.OpenButtonStyle"
-        TargetType="ToggleButton">
+    <Style x:Key="MultiComboBox.OpenButtonStyle" TargetType="ToggleButton">
         <Setter Property="Background" Value="{Binding Path=Background, RelativeSource={RelativeSource AncestorType=ctl:MultiComboBox}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        x:Name="RootGrid"
-                        Background="{TemplateBinding Background}">
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                         <Path
                             x:Name="Indicator"
                             Width="15"
@@ -50,9 +44,7 @@
         </Setter>
     </Style>
 
-    <Style
-        x:Key="MultiComboBox.ClearButtonStyle"
-        TargetType="Button">
+    <Style x:Key="MultiComboBox.ClearButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -211,9 +203,7 @@
                                 PopupAnimation="Slide"
                                 StaysOpen="False"
                                 VerticalOffset="1">
-                                <Grid
-                                    MinWidth="{TemplateBinding ActualWidth}"
-                                    MaxHeight="{TemplateBinding MaxContainerHeight}">
+                                <Grid MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxContainerHeight}">
                                     <Border
                                         x:Name="ContainerBorder"
                                         Background="{DynamicResource Background.Container}"
@@ -265,9 +255,7 @@
                             <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
-                        <DataTrigger
-                            Binding="{Binding SelectedItems.Count, RelativeSource={RelativeSource Self}}"
-                            Value="0">
+                        <DataTrigger Binding="{Binding SelectedItems.Count, RelativeSource={RelativeSource Self}}" Value="0">
                             <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>

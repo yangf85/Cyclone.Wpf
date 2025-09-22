@@ -80,7 +80,7 @@ public partial class PaginationViewModel<T> : ObservableValidator, IPagination
         Update();
     }
 
-    void Update()
+    private void Update()
     {
         // 计算最大页数
         int maxPage = Total > 0 ? (int)Math.Ceiling(Total / (double)PerPageCount) : 1;
@@ -120,7 +120,7 @@ public partial class DataGridViewModel : ObservableObject
     }
 
     [RelayCommand]
-    void ShowSelectedItems()
+    private void ShowSelectedItems()
     {
         if (SelectedItems == null || SelectedItems.Count == 0)
         {
@@ -132,7 +132,7 @@ public partial class DataGridViewModel : ObservableObject
         }
     }
 
-    void InitMockData()
+    private void InitMockData()
     {
         MockData =
         [
@@ -165,14 +165,18 @@ public partial class DataGridViewModel : ObservableObject
 public enum Status
 {
     Success,
+
     Warning,
+
     Error
 }
 
-public partial class DataGridItem : ObservableObject
+public partial class DataGridItem : ObservableValidator
 {
     [ObservableProperty]
     [DataGridProperty("名称", Index = 1)]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Name is required")]
     public partial string Name { get; set; }
 
     [ObservableProperty]
@@ -181,6 +185,8 @@ public partial class DataGridItem : ObservableObject
 
     [ObservableProperty]
     [DataGridProperty("年龄", Index = 3, IsReadOnly = true)]
+    [NotifyDataErrorInfo]
+    [Range(1, 100, ErrorMessage = "Age must be between 1 and 100")]
     public partial int Age { get; set; }
 
     [ObservableProperty]
