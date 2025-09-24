@@ -246,7 +246,7 @@ namespace Cyclone.Wpf.Demo.Views
         public partial Color ParticleColor { get; set; } = Colors.Orange;
 
         [ObservableProperty]
-        public partial double ParticleSpinnerSize { get; set; } = 75;
+        public partial double OrbitRadius { get; set; } = 75;
     }
 
     // Tab2: 3D Loading特效ViewModel

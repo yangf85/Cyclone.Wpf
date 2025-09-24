@@ -193,8 +193,8 @@
                                         Maximum="120"
                                         Minimum="50"
                                         TickFrequency="10"
-                                        Value="{Binding ParticleSpinnerSize}" />
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding ParticleSpinnerSize, StringFormat={}{0:F0}}" />
+                                        Value="{Binding OrbitRadius}" />
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding OrbitRadius, StringFormat={}{0:F0}}" />
 
                                     <TextBlock Margin="0,15,0,5" Text="颜色:" />
                                     <cy:SpacingStackPanel Orientation="Horizontal" Spacing="10">
@@ -222,9 +222,9 @@
                                     Background="DarkGray">
                                     <cy:LoadingParticle
                                         IsActive="{Binding IsChecked, ElementName=BasicTabSwitch}"
+                                        OrbitRadius="{Binding OrbitRadius}"
                                         ParticleColor="{Binding ParticleColor}"
-                                        ParticleRadius="{Binding ParticleSize}"
-                                        SpinnerSize="{Binding ParticleSpinnerSize}" />
+                                        ParticleRadius="{Binding ParticleSize}" />
                                 </Border>
                             </Grid>
                         </GroupBox>

@@ -22,13 +22,9 @@ public class LoadingParticle : LoadingIndicator
         DependencyProperty.Register(nameof(ParticleRadius), typeof(double), typeof(LoadingParticle),
             new PropertyMetadata(5.0, OnVisualPropertyChanged));
 
-    public static readonly DependencyProperty IsActiveProperty =
-        DependencyProperty.Register(nameof(IsActive), typeof(bool), typeof(LoadingParticle),
-            new PropertyMetadata(true, OnIsActiveChanged));
-
-    public static readonly DependencyProperty SpinnerSizeProperty =
-        DependencyProperty.Register(nameof(SpinnerSize), typeof(double), typeof(LoadingParticle),
-            new PropertyMetadata(75.0, OnVisualPropertyChanged));
+    public static readonly DependencyProperty OrbitRadiusProperty =
+        DependencyProperty.Register(nameof(OrbitRadius), typeof(double), typeof(LoadingParticle),
+            new PropertyMetadata(20.0, OnVisualPropertyChanged));
 
     /// <summary>
     /// 粒子颜色
@@ -49,63 +45,57 @@ public class LoadingParticle : LoadingIndicator
     }
 
     /// <summary>
-    /// 是否激活动画
+    /// 轨道半径
     /// </summary>
-    public bool IsActive
+    public double OrbitRadius
     {
-        get { return (bool)GetValue(IsActiveProperty); }
-        set { SetValue(IsActiveProperty, value); }
-    }
-
-    /// <summary>
-    /// 动画控件大小
-    /// </summary>
-    public double SpinnerSize
-    {
-        get { return (double)GetValue(SpinnerSizeProperty); }
-        set { SetValue(SpinnerSizeProperty, value); }
+        get { return (double)GetValue(OrbitRadiusProperty); }
+        set { SetValue(OrbitRadiusProperty, value); }
     }
 
     #endregion 依赖属性
 
-    private Viewbox _viewbox;
     private Canvas _canvas;
+
     private Ellipse[] _particles;
+
     private Border[] _particleBorders;
+
     private Storyboard _storyboard;
 
-    public LoadingParticle()
+    protected override void OnIsActiveChanged(bool oldValue, bool newValue)
     {
-        CreateVisualTree();
+        base.OnIsActiveChanged(oldValue, newValue);
 
+        if (IsLoaded)
+        {
+            UpdateAnimationState();
+        }
+    }
+
+    private static void OnVisualPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var spinner = (LoadingParticle)d;
+        spinner.UpdateVisualProperties();
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
         if (IsActive)
         {
-            Loaded += (s, e) => StartAnimation();
+            StartAnimation();
         }
     }
 
     private void CreateVisualTree()
     {
-        // 创建Viewbox
-        _viewbox = new Viewbox
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-
-        // 创建Grid容器
-        var grid = new Grid
-        {
-            Width = SpinnerSize,
-            Height = SpinnerSize
-        };
-
-        // 创建Canvas
+        // 创建Canvas - 使用固定大小，让外部控件的Width/Height通过Stretch来控制显示大小
         _canvas = new Canvas
         {
-            Width = 1,
-            Height = 1,
-            Margin = new Thickness(0)
+            Width = 100,
+            Height = 100,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
         };
 
         // 创建5个粒子
@@ -116,9 +106,11 @@ public class LoadingParticle : LoadingIndicator
 
         for (int i = 0; i < 5; i++)
         {
-            // 创建Border容器
+            // 创建Border容器 - 设置尺寸确保可见
             var border = new Border
             {
+                Width = 100,
+                Height = 100,
                 Background = Brushes.Transparent,
                 RenderTransformOrigin = new Point(0.5, 0.5),
                 RenderTransform = new RotateTransform()
@@ -127,65 +119,56 @@ public class LoadingParticle : LoadingIndicator
             // 创建粒子(Ellipse)
             var particle = new Ellipse
             {
-                Width = ParticleRadius,
-                Height = ParticleRadius,
+                Width = ParticleRadius * 2,
+                Height = ParticleRadius * 2,
                 Fill = ParticleColor,
                 RenderTransformOrigin = new Point(0.5, 0.5)
             };
 
-            // 设置粒子的初始位置和旋转
+            // 设置粒子的初始位置和旋转 - 保持原来的Transform结构
             var transformGroup = new TransformGroup();
-            transformGroup.Children.Add(new TranslateTransform(0, -20));
+            transformGroup.Children.Add(new TranslateTransform(0, -OrbitRadius));
             transformGroup.Children.Add(new RotateTransform(particleOriginAngles[i]));
             particle.RenderTransform = transformGroup;
 
             border.Child = particle;
+
+            // 将border放置在canvas中心
+            Canvas.SetLeft(border, 0);
+            Canvas.SetTop(border, 0);
+
             _canvas.Children.Add(border);
 
             _particles[i] = particle;
             _particleBorders[i] = border;
         }
 
-        grid.Children.Add(_canvas);
-        _viewbox.Child = grid;
-        this.Content = _viewbox;
-
-        // 绑定宽高
-        _viewbox.SetBinding(Viewbox.WidthProperty, new System.Windows.Data.Binding("Width") { Source = this });
-        _viewbox.SetBinding(Viewbox.HeightProperty, new System.Windows.Data.Binding("Height") { Source = this });
-    }
-
-    private static void OnVisualPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var spinner = (LoadingParticle)d;
-        spinner.UpdateVisualProperties();
-    }
-
-    private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var spinner = (LoadingParticle)d;
-        if (spinner.IsLoaded)
-        {
-            spinner.UpdateAnimationState();
-        }
+        this.Content = _canvas;
     }
 
     private void UpdateVisualProperties()
     {
         if (_particles != null)
         {
-            foreach (var particle in _particles)
+            for (int i = 0; i < _particles.Length; i++)
             {
-                particle.Width = ParticleRadius;
-                particle.Height = ParticleRadius;
+                var particle = _particles[i];
+                particle.Width = ParticleRadius * 2;
+                particle.Height = ParticleRadius * 2;
                 particle.Fill = ParticleColor;
-            }
-        }
 
-        if (_viewbox?.Child is Grid grid)
-        {
-            grid.Width = SpinnerSize;
-            grid.Height = SpinnerSize;
+                // 更新轨道位置
+                var transformGroup = particle.RenderTransform as TransformGroup;
+                if (transformGroup?.Children.Count >= 2)
+                {
+                    var translateTransform = transformGroup.Children[0] as TranslateTransform;
+                    if (translateTransform != null)
+                    {
+                        translateTransform.X = 0;
+                        translateTransform.Y = -OrbitRadius;
+                    }
+                }
+            }
         }
     }
 
@@ -203,6 +186,8 @@ public class LoadingParticle : LoadingIndicator
 
     private void StartAnimation()
     {
+        StopAnimation(); // 先停止现有动画
+
         if (_storyboard == null)
         {
             CreateAnimation();
@@ -261,5 +246,12 @@ public class LoadingParticle : LoadingIndicator
 
             _storyboard.Children.Add(particleStoryboard);
         }
+    }
+
+    public LoadingParticle()
+    {
+        CreateVisualTree();
+
+        Loaded += OnLoaded;
     }
 }
