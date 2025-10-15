@@ -182,11 +182,15 @@
 
             <!--  操作按钮  -->
             <GroupBox Padding="15" Header="操作示例">
-                <cy:SpacingUniformGrid Columns="3" HorizontalSpacing="10">
+                <cy:SpacingUniformGrid HorizontalSpacing="10" Rows="1">
                     <Button
                         Padding="10,5"
                         Command="{Binding ShowSelectedFruitsCommand}"
                         Content="显示选中水果" />
+                    <Button
+                        Padding="10,5"
+                        Command="{Binding ShowSelectedEnumCommand}"
+                        Content="显示选中枚举" />
                     <Button
                         Padding="10,5"
                         Command="{Binding ShowSelectedEmployeesCommand}"

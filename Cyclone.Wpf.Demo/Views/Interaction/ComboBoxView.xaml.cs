@@ -125,6 +125,12 @@ public partial class ComboBoxViewModel : ObservableObject
     #region 命令
 
     [RelayCommand]
+    void ShowSelectedEnum()
+    {
+        MessageBox.Show($"当前选中的枚举值: {SelectedEnum}", "枚举结果", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    [RelayCommand]
     private void ShowSelectedFruits()
     {
         if (SelectedFruits?.Count > 0)
