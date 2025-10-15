@@ -117,11 +117,6 @@
         <Setter Property="MinHeight" Value="{DynamicResource Height.Horizontal.Control}" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}, FallbackValue=False}" Value="True">
-                <Setter Property="LabelHorizontalAlignment" Value="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}, FallbackValue=Left}" />
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
     <Style BasedOn="{StaticResource FormItem.Style.Basic}" TargetType="ctl:FormItem" />

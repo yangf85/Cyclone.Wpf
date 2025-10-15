@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using Cyclone.Wpf.Helpers;
 
 namespace Cyclone.Wpf.Controls;
 
@@ -11,13 +13,14 @@ namespace Cyclone.Wpf.Controls;
 /// </summary>
 public class FormItem : ContentControl
 {
-    public FormItem()
-    {
-    }
-
     static FormItem()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(FormItem), new FrameworkPropertyMetadata(typeof(FormItem)));
+    }
+
+    public FormItem()
+    {
+        Loaded += OnLoaded;
     }
 
     #region Label
@@ -81,14 +84,14 @@ public class FormItem : ContentControl
 
     #region LabelVerticalAlignment
 
+    public static readonly DependencyProperty LabelVerticalAlignmentProperty =
+        DependencyProperty.Register(nameof(LabelVerticalAlignment), typeof(VerticalAlignment), typeof(FormItem), new PropertyMetadata(default(VerticalAlignment)));
+
     public VerticalAlignment LabelVerticalAlignment
     {
         get => (VerticalAlignment)GetValue(LabelVerticalAlignmentProperty);
         set => SetValue(LabelVerticalAlignmentProperty, value);
     }
-
-    public static readonly DependencyProperty LabelVerticalAlignmentProperty =
-        DependencyProperty.Register(nameof(LabelVerticalAlignment), typeof(VerticalAlignment), typeof(FormItem), new PropertyMetadata(default(VerticalAlignment)));
 
     #endregion LabelVerticalAlignment
 
@@ -108,14 +111,28 @@ public class FormItem : ContentControl
 
     #region Description
 
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(string), typeof(FormItem), new PropertyMetadata(default(string)));
+
     public string Description
     {
         get => (string)GetValue(DescriptionProperty);
         set => SetValue(DescriptionProperty, value);
     }
 
-    public static readonly DependencyProperty DescriptionProperty =
-        DependencyProperty.Register(nameof(Description), typeof(string), typeof(FormItem), new PropertyMetadata(default(string)));
-
     #endregion Description
+
+    #region Form 属性同步逻辑
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        var parentForm = this.TryFindVisualParent<Form>();
+        if (parentForm != null && parentForm.IsSyncLabelHorizontalAlignment)
+        {
+            // 直接从 Form 同步对齐方式
+            LabelHorizontalAlignment = parentForm.LabelHorizontalAlignment;
+        }
+    }
+
+    #endregion Form 属性同步逻辑
 }
