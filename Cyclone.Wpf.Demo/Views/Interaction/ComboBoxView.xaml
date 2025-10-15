@@ -47,6 +47,19 @@
                             SelectedItem="{Binding SelectedFruit}" />
                     </DockPanel>
 
+                    <DockPanel>
+                        <Label
+                            Width="120"
+                            VerticalAlignment="Center"
+                            Content="枚举 ComboBox:"
+                            DockPanel.Dock="Left" />
+                        <ComboBox
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            ItemsSource="{cy:EnumToItemsSource EnumType=local:ComboBoxEnum}"
+                            SelectedItem="{Binding SelectedEnum}" />
+                    </DockPanel>
+
                     <!--  分组 ComboBox  -->
                     <DockPanel>
                         <Label
