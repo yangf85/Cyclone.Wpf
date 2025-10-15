@@ -13,6 +13,14 @@
     mc:Ignorable="d">
     <Grid>
         <cy:SpacingStackPanel Grid.IsSharedSizeScope="True">
+            <cy:SpacingStackPanel Grid.IsSharedSizeScope="True">
+                <cy:FormItem Label="姓名:" SharedName="Test">
+                    <TextBox />
+                </cy:FormItem>
+                <cy:FormItem Label="性别:" SharedName="Test">
+                    <TextBox />
+                </cy:FormItem>
+            </cy:SpacingStackPanel>
             <GroupBox Header="Normal">
                 <cy:Form
                     BorderThickness="0"

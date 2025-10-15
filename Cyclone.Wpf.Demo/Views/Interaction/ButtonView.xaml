@@ -52,7 +52,7 @@
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
                 <cy:SwitchButton Content="Default Style" />
 
-                <cy:SwitchButton Style="{StaticResource SwitchButton.Style.Toggle}" />
+                <cy:SwitchButton Content="Toggle Style" Style="{StaticResource SwitchButton.Style.Toggle}" />
 
                 <cy:SwitchButton
                     CheckedBackground="#9C27B0"

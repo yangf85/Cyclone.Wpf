@@ -11,22 +11,29 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <StackPanel
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Horizontal">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" MaxWidth="300" />
+        </Grid.ColumnDefinitions>
         <Path
+            Grid.Column="0"
             Width="32"
             Height="32"
             VerticalAlignment="Center"
             Data="M512 0A512 512 0 1 1 512 1024a512 512 0 0 1 0-1024zM564.516571 814.445714l0-438.857143-109.714285 0 0 438.857143 109.714285 0z m-1e-8-621.714285l-109.71428499 0 0 109.714285 109.714285 0-1e-8-109.714285z"
             Fill="{DynamicResource Icon.Foreground.Info}"
             Stretch="Uniform" />
-        <TextBlock
+        <TextBox
+            Grid.Column="1"
+            Height="Auto"
             Margin="15,0,0,0"
             VerticalAlignment="Center"
+            BorderThickness="0"
             Foreground="{DynamicResource Text.Content}"
+            IsReadOnly="True"
+            Style="{x:Null}"
             Text="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            TextWrapping="WrapWithOverflow" />
-    </StackPanel>
+            TextWrapping="Wrap" />
+    </Grid>
 </UserControl>

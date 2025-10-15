@@ -11,22 +11,29 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <StackPanel
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Horizontal">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" MaxWidth="300" />
+        </Grid.ColumnDefinitions>
         <Path
+            Grid.Column="0"
             Width="32"
             Height="32"
             VerticalAlignment="Center"
             Data="M510.545 28.22c-267.043 0-483.521 216.477-483.521 483.52s216.479 483.521 483.521 483.521 483.52-216.479 483.52-483.521S777.588 28.22 510.545 28.22zM776.855 407.855l-315.37 315.37c-9.763 9.763-22.559 14.645-35.355 14.645-12.796 0-25.592-4.882-35.355-14.645l-176.13-176.13c-19.526-19.525-19.526-51.184 0-70.71 19.526-19.526 51.184-19.527 70.711 0L426.13 617.159l280.015-280.015c19.527-19.526 51.184-19.526 70.711 0C796.382 356.671 796.382 388.329 776.855 407.855z"
-            Fill="{DynamicResource Icon.Foreground.Success}"
+            Fill="{DynamicResource Icon.Foreground.Info}"
             Stretch="Uniform" />
-        <TextBlock
+        <TextBox
+            Grid.Column="1"
+            Height="Auto"
             Margin="15,0,0,0"
             VerticalAlignment="Center"
+            BorderThickness="0"
             Foreground="{DynamicResource Text.Content}"
+            IsReadOnly="True"
+            Style="{x:Null}"
             Text="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            TextWrapping="WrapWithOverflow" />
-    </StackPanel>
+            TextWrapping="Wrap" />
+    </Grid>
 </UserControl>

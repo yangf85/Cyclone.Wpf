@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>25.9.24.73</AssemblyVersion>
-    <FileVersion>25.9.24.73</FileVersion>
+    <AssemblyVersion>25.10.15.74</AssemblyVersion>
+    <FileVersion>25.10.15.74</FileVersion>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
@@ -51,13 +51,9 @@
 
   <ItemGroup>
     <Compile Remove="Resources\**" />
-    <Compile Remove="Themes\ResourceKey\**" />
     <EmbeddedResource Remove="Resources\**" />
-    <EmbeddedResource Remove="Themes\ResourceKey\**" />
     <None Remove="Resources\**" />
-    <None Remove="Themes\ResourceKey\**" />
     <Page Remove="Resources\**" />
-    <Page Remove="Themes\ResourceKey\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,14 +66,6 @@
 
   <ItemGroup>
     <Page Remove="Styles\NormalLoading.xaml" />
-    <Page Remove="Themes\BasicTheme.xaml" />
-    <Page Remove="Themes\Color.xaml" />
-    <Page Remove="Themes\DarkTheme.xaml" />
-    <Page Remove="Themes\LightTheme.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Cyclone.Wpf.Themes\Cyclone.Wpf.Themes.csproj" />
   </ItemGroup>
 
   <ItemGroup>

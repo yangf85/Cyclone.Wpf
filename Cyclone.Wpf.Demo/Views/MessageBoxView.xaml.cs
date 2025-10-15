@@ -26,12 +26,6 @@ namespace Cyclone.Wpf.Demo.Views
     /// </summary>
     public partial class MessageBoxView : UserControl
     {
-        public MessageBoxView()
-        {
-            InitializeComponent();
-            DataContext = new MessageBoxViewModel();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var instance = Cyclone.Wpf.Controls.NotificationService.Instance;
@@ -70,29 +64,35 @@ namespace Cyclone.Wpf.Demo.Views
             switch (button.Content)
             {
                 case "Message":
-                    service.Messgae($"通知消息");
+                    service.Messgae("这是一条很长很长的通知消息，用于测试文本换行效果是否正常工作。当文本内容超过容器宽度时，应该能够自动换行显示，而不是被截断或者溢出容器边界。");
                     break;
 
                 case "Success":
-                    service.Success("成功");
+                    service.Success("操作成功！您的数据已经保存到服务器，系统已自动生成备份文件并发送确认邮件到您的注册邮箱。请注意查收并妥善保管相关凭证。");
                     break;
 
                 case "Infomation":
-                    service.Information("信息");
+                    service.Information("系统信息");
                     break;
 
                 case "Warning":
-                    service.Warning("警告");
+                    service.Warning("警告：检测到您的账户在异地登录，如非本人操作请立即修改密码并启用二次验证。系统将在30分钟后自动锁定账户以保护您的数据安全。请及时处理以免影响正常使用。");
                     break;
 
                 case "Error":
-                    service.Error("错误");
+                    service.Error("错误代码：0x80070057 - 参数不正确。无法连接到远程服务器，请检查网络连接状态、防火墙设置以及代理配置。如果问题持续存在，请联系系统管理员获取技术支持。详细错误日志已保存至 C:\\Logs\\error.log");
                     break;
 
                 case "Question":
-                    service.Question("问题");
+                    service.Question("您确定要执行此操作吗？此操作将永久删除所有选中的文件和文件夹，并且无法撤销恢复。建议在执行前先备份重要数据。是否继续？Are you absolutely sure you want to proceed with this irreversible action?");
                     break;
             }
+        }
+
+        public MessageBoxView()
+        {
+            InitializeComponent();
+            DataContext = new MessageBoxViewModel();
         }
     }
 

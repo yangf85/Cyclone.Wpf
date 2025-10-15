@@ -4,7 +4,7 @@
     xmlns:conv="clr-namespace:Cyclone.Wpf.Converters"
     xmlns:ctl="clr-namespace:Cyclone.Wpf.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf.Themes;component/Resources/BasicTheme.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Themes/BasicTheme.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Cyclone.Wpf;component/Styles/Control.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -118,8 +118,8 @@
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template" Value="{StaticResource FormItem.ControlTemplate.Basic}" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}" Value="True">
-                <Setter Property="LabelHorizontalAlignment" Value="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}}" />
+            <DataTrigger Binding="{Binding Path=IsSyncLabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}, FallbackValue=False}" Value="True">
+                <Setter Property="LabelHorizontalAlignment" Value="{Binding Path=LabelHorizontalAlignment, RelativeSource={RelativeSource AncestorType=ctl:Form}, FallbackValue=Left}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

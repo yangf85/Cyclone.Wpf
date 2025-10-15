@@ -18,52 +18,59 @@
         <Setter Property="UncheckedBackground" Value="{DynamicResource Background.UnChecked}" />
         <Setter Property="CheckedBackground" Value="{DynamicResource Background.Checked}" />
         <Setter Property="ThumbBackground" Value="{DynamicResource Background.Default}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="AnimationDuration" Value="0:0:0.2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctl:SwitchButton}">
-                    <BulletDecorator>
-                        <BulletDecorator.Bullet>
-                            <Grid>
-                                <Border
-                                    x:Name="PART_Track"
-                                    Width="{TemplateBinding TrackWidth}"
-                                    Height="{TemplateBinding TrackHeight}"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Background="{TemplateBinding UncheckedBackground}"
-                                    BorderThickness="0"
-                                    CornerRadius="{TemplateBinding TrackCornerRadius}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                                <Border
-                                    x:Name="PART_Thumb"
-                                    Width="{TemplateBinding ThumbSize}"
-                                    Height="{TemplateBinding ThumbSize}"
-                                    Margin="{TemplateBinding ThumbMargin}"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Background="{TemplateBinding ThumbBackground}"
-                                    BorderThickness="0"
-                                    CornerRadius="{TemplateBinding ThumbCornerRadius}">
-                                    <Border.Effect>
-                                        <DropShadowEffect
-                                            BlurRadius="6"
-                                            Opacity="0.3"
-                                            ShadowDepth="2"
-                                            Color="Black" />
-                                    </Border.Effect>
-                                    <Border.RenderTransform>
-                                        <TranslateTransform x:Name="PART_ThumbTransform" X="0" />
-                                    </Border.RenderTransform>
-                                </Border>
-                            </Grid>
-                        </BulletDecorator.Bullet>
+                        <!--  开关按钮部分  -->
+                        <Grid Grid.Column="0" VerticalAlignment="Center">
+                            <Border
+                                x:Name="PART_Track"
+                                Width="{TemplateBinding TrackWidth}"
+                                Height="{TemplateBinding TrackHeight}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Background="{TemplateBinding UncheckedBackground}"
+                                BorderThickness="0"
+                                CornerRadius="{TemplateBinding TrackCornerRadius}" />
+                            <Border
+                                x:Name="PART_Thumb"
+                                Width="{TemplateBinding ThumbSize}"
+                                Height="{TemplateBinding ThumbSize}"
+                                Margin="{TemplateBinding ThumbMargin}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Background="{TemplateBinding ThumbBackground}"
+                                BorderThickness="0"
+                                CornerRadius="{TemplateBinding ThumbCornerRadius}">
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="6"
+                                        Opacity="0.3"
+                                        ShadowDepth="2"
+                                        Color="Black" />
+                                </Border.Effect>
+                                <Border.RenderTransform>
+                                    <TranslateTransform x:Name="PART_ThumbTransform" X="0" />
+                                </Border.RenderTransform>
+                            </Border>
+                        </Grid>
+
+                        <!--  文本内容部分  -->
                         <ContentPresenter
-                            Margin="8,0,0,0"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
                             HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             RecognizesAccessKey="True" />
-                    </BulletDecorator>
+                    </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
@@ -99,6 +106,7 @@
         <Setter Property="TrackCornerRadius" Value="5" />
         <Setter Property="TrackHeight" Value="10" />
         <Setter Property="TrackWidth" Value="45" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="CheckedBackground" Value="{DynamicResource Background.Checked}" />
         <Setter Property="UncheckedBackground" Value="{DynamicResource Background.UnChecked}" />
     </Style>
