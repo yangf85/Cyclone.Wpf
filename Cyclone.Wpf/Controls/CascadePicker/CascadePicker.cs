@@ -30,14 +30,21 @@ namespace Cyclone.Wpf.Controls;
 public class CascadePicker : ItemsControl
 {
     private const string PART_DisplayedTextBox = "PART_DisplayedTextBox";
+
     private const string PART_ItemsPopup = "PART_ItemsPopup";
+
     private const string PART_ClearButton = "PART_ClearButton";
+
     private const string PART_OpenToggleButton = "PART_OpenToggleButton";
 
     private TextBox _textBox;
+
     private Popup _popup;
+
     private Button _clearButton;
+
     private ToggleButton _openToggleButton;
+
     private CascadePickerItem _currentFocusedItem;
 
     #region Commands
@@ -48,6 +55,26 @@ public class CascadePicker : ItemsControl
         new InputGestureCollection { new KeyGesture(Key.Delete) });
 
     #endregion Commands
+
+    private void CascadePicker_LostFocus(object sender, RoutedEventArgs e)
+    {
+        // 检查焦点是否还在控件内部
+        if (!IsKeyboardFocusWithin)
+        {
+            SetValue(IsOpenedProperty, false);
+            SetFocusedItem(null);
+        }
+    }
+
+    private void CascadePicker_Unloaded(object sender, RoutedEventArgs e)
+    {
+        RemoveHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
+    }
+
+    private void CascadePicker_Loaded(object sender, RoutedEventArgs e)
+    {
+        AddHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
+    }
 
     static CascadePicker()
     {
@@ -281,6 +308,13 @@ public class CascadePicker : ItemsControl
 
     #region Command Handlers
 
+    public void Clear()
+    {
+        SetCurrentValue(TextProperty, string.Empty);
+        SetCurrentValue(SelectedItemProperty, null);
+        _textBox?.Focus();
+    }
+
     private static void OnClearCommandExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         if (sender is CascadePicker picker && !picker.IsReadOnly)
@@ -297,34 +331,7 @@ public class CascadePicker : ItemsControl
         }
     }
 
-    public void Clear()
-    {
-        SetCurrentValue(TextProperty, string.Empty);
-        SetCurrentValue(SelectedItemProperty, null);
-        _textBox?.Focus();
-    }
-
     #endregion Command Handlers
-
-    private void CascadePicker_LostFocus(object sender, RoutedEventArgs e)
-    {
-        // 检查焦点是否还在控件内部
-        if (!IsKeyboardFocusWithin)
-        {
-            SetValue(IsOpenedProperty, false);
-            SetFocusedItem(null);
-        }
-    }
-
-    private void CascadePicker_Unloaded(object sender, RoutedEventArgs e)
-    {
-        RemoveHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
-    }
-
-    private void CascadePicker_Loaded(object sender, RoutedEventArgs e)
-    {
-        AddHandler(CascadePickerItem.ItemClickEvent, new RoutedEventHandler(Item_Click));
-    }
 
     #region IsReadOnly
 
@@ -367,19 +374,19 @@ public class CascadePicker : ItemsControl
 
     #endregion IsReadOnly
 
-    #region NodePathMemberPath
+    #region NodeMemberPath
 
-    public static readonly DependencyProperty NodePathMemberPathProperty =
-        DependencyProperty.Register(nameof(NodePathMemberPath), typeof(string), typeof(CascadePicker),
-            new PropertyMetadata(null, OnNodePathMemberPathChanged));
+    public static readonly DependencyProperty NodeMemberPathProperty =
+        DependencyProperty.Register(nameof(NodeMemberPath), typeof(string), typeof(CascadePicker),
+            new PropertyMetadata(null, OnNodeMemberPathChanged));
 
-    public string NodePathMemberPath
+    public string NodeMemberPath
     {
-        get => (string)GetValue(NodePathMemberPathProperty);
-        set => SetValue(NodePathMemberPathProperty, value);
+        get => (string)GetValue(NodeMemberPathProperty);
+        set => SetValue(NodeMemberPathProperty, value);
     }
 
-    private static void OnNodePathMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnNodeMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is CascadePicker picker)
         {
@@ -398,7 +405,7 @@ public class CascadePicker : ItemsControl
         }
     }
 
-    #endregion NodePathMemberPath
+    #endregion NodeMemberPath
 
     #region SelectedItem
 
@@ -425,19 +432,6 @@ public class CascadePicker : ItemsControl
 
     #region Item_Click
 
-    private void Item_Click(object sender, RoutedEventArgs e)
-    {
-        if (e.OriginalSource is CascadePickerItem item && !IsReadOnly)
-        {
-            SetValue(TextProperty, GetSelectedPath(item));
-            SetCurrentValue(SelectedItemProperty, item.DataContext);
-            if (!item.HasItems)
-            {
-                SetValue(IsOpenedProperty, false);
-            }
-        }
-    }
-
     public string GetSelectedPath(CascadePickerItem item)
     {
         if (item == null) { return string.Empty; }
@@ -458,6 +452,19 @@ public class CascadePicker : ItemsControl
         else
         {
             return item.NodePath;
+        }
+    }
+
+    private void Item_Click(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is CascadePickerItem item && !IsReadOnly)
+        {
+            SetValue(TextProperty, GetSelectedPath(item));
+            SetCurrentValue(SelectedItemProperty, item.DataContext);
+            if (!item.HasItems)
+            {
+                SetValue(IsOpenedProperty, false);
+            }
         }
     }
 
@@ -568,27 +575,6 @@ public class CascadePicker : ItemsControl
 
     #region Override
 
-    protected override bool IsItemItsOwnContainerOverride(object item)
-    {
-        return item is CascadePickerItem;
-    }
-
-    protected override DependencyObject GetContainerForItemOverride()
-    {
-        return new CascadePickerItem();
-    }
-
-    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-    {
-        base.PrepareContainerForItemOverride(element, item);
-
-        if (element is CascadePickerItem container)
-        {
-            container.DataContext = item;
-            container.NodePathMemberPath = this.NodePathMemberPath;
-        }
-    }
-
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
@@ -611,6 +597,27 @@ public class CascadePicker : ItemsControl
         }
 
         UpdateIsReadOnlyState();
+    }
+
+    protected override bool IsItemItsOwnContainerOverride(object item)
+    {
+        return item is CascadePickerItem;
+    }
+
+    protected override DependencyObject GetContainerForItemOverride()
+    {
+        return new CascadePickerItem();
+    }
+
+    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    {
+        base.PrepareContainerForItemOverride(element, item);
+
+        if (element is CascadePickerItem container)
+        {
+            container.DataContext = item;
+            container.NodeMemberPath = this.NodeMemberPath;
+        }
     }
 
     private void ClearButton_Click(object sender, RoutedEventArgs e)

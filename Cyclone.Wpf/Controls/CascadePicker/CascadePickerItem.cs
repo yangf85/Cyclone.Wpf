@@ -1,5 +1,4 @@
-﻿// CascadePickerItem.cs - 添加键盘支持的版本
-using Cyclone.Wpf.Helpers;
+﻿using Cyclone.Wpf.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +19,9 @@ public class CascadePickerItem : HeaderedItemsControl
     private const string PART_ItemsPopup = "PART_ItemsPopup";
 
     private Popup _popup;
+
     private CascadePicker _root;
+
     private Binding _nodePathBinding;
 
     static CascadePickerItem()
@@ -64,19 +65,19 @@ public class CascadePickerItem : HeaderedItemsControl
 
     #endregion IsExpanded
 
-    #region NodePathMemberPath
+    #region NodeMemberPath
 
-    public static readonly DependencyProperty NodePathMemberPathProperty =
-        DependencyProperty.Register(nameof(NodePathMemberPath), typeof(string), typeof(CascadePickerItem),
-            new PropertyMetadata(null, OnNodePathMemberPathChanged));
+    public static readonly DependencyProperty NodeMemberPathProperty =
+        DependencyProperty.Register(nameof(NodeMemberPath), typeof(string), typeof(CascadePickerItem),
+            new PropertyMetadata(null, OnNodeMemberPathChanged));
 
-    public string NodePathMemberPath
+    public string NodeMemberPath
     {
-        get => (string)GetValue(NodePathMemberPathProperty);
-        set => SetValue(NodePathMemberPathProperty, value);
+        get => (string)GetValue(NodeMemberPathProperty);
+        set => SetValue(NodeMemberPathProperty, value);
     }
 
-    private static void OnNodePathMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnNodeMemberPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is CascadePickerItem item)
         {
@@ -85,9 +86,28 @@ public class CascadePickerItem : HeaderedItemsControl
         }
     }
 
-    #endregion NodePathMemberPath
+    #endregion NodeMemberPath
 
     #region Override
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        _popup = GetTemplateChild(PART_ItemsPopup) as Popup;
+        _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
+
+        if (string.IsNullOrEmpty(NodeMemberPath) && _root != null)
+        {
+            NodeMemberPath = _root.NodeMemberPath;
+        }
+
+        // 同步弹出状态
+        if (_popup != null)
+        {
+            _popup.IsOpen = IsExpanded;
+        }
+    }
 
     protected override void OnHeaderChanged(object oldHeader, object newHeader)
     {
@@ -115,23 +135,6 @@ public class CascadePickerItem : HeaderedItemsControl
         {
             IsExpanded = false;
         }
-    }
-
-    private bool IsMouseOverWithPopup()
-    {
-        // 检查鼠标是否在项目上
-        if (IsMouseOver)
-            return true;
-
-        // 检查鼠标是否在弹出菜单上
-        if (_popup != null && _popup.IsOpen && _popup.Child != null)
-        {
-            var popupPosition = Mouse.GetPosition(_popup.Child);
-            var hitTest = _popup.Child.InputHitTest(popupPosition);
-            return hitTest != null;
-        }
-
-        return false;
     }
 
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -171,27 +174,25 @@ public class CascadePickerItem : HeaderedItemsControl
 
         if (element is CascadePickerItem container)
         {
-            container.NodePathMemberPath = this.NodePathMemberPath;
+            container.NodeMemberPath = this.NodeMemberPath;
         }
     }
 
-    public override void OnApplyTemplate()
+    private bool IsMouseOverWithPopup()
     {
-        base.OnApplyTemplate();
+        // 检查鼠标是否在项目上
+        if (IsMouseOver)
+            return true;
 
-        _popup = GetTemplateChild(PART_ItemsPopup) as Popup;
-        _root = VisualTreeHelperExtension.TryFindLogicalParent<CascadePicker>(this);
-
-        if (string.IsNullOrEmpty(NodePathMemberPath) && _root != null)
+        // 检查鼠标是否在弹出菜单上
+        if (_popup != null && _popup.IsOpen && _popup.Child != null)
         {
-            NodePathMemberPath = _root.NodePathMemberPath;
+            var popupPosition = Mouse.GetPosition(_popup.Child);
+            var hitTest = _popup.Child.InputHitTest(popupPosition);
+            return hitTest != null;
         }
 
-        // 同步弹出状态
-        if (_popup != null)
-        {
-            _popup.IsOpen = IsExpanded;
-        }
+        return false;
     }
 
     #endregion Override
@@ -206,6 +207,28 @@ public class CascadePickerItem : HeaderedItemsControl
     {
         get => (string)GetValue(NodePathProperty);
         set => SetValue(NodePathProperty, value);
+    }
+
+    public void UpdateNodePath()
+    {
+        var dataContext = DataContext;
+        if (dataContext == null)
+        {
+            SetCurrentValue(NodePathProperty, Header?.ToString() ?? string.Empty);
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(NodeMemberPath))
+        {
+            var value = GetValueFromMemberPath(dataContext, NodeMemberPath);
+            if (value != null)
+            {
+                SetCurrentValue(NodePathProperty, value.ToString());
+                return;
+            }
+        }
+
+        SetCurrentValue(NodePathProperty, Header?.ToString() ?? dataContext.ToString() ?? string.Empty);
     }
 
     private object GetValueFromMemberPath(object source, string memberPath)
@@ -238,28 +261,6 @@ public class CascadePickerItem : HeaderedItemsControl
         }
     }
 
-    public void UpdateNodePath()
-    {
-        var dataContext = DataContext;
-        if (dataContext == null)
-        {
-            SetCurrentValue(NodePathProperty, Header?.ToString() ?? string.Empty);
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(NodePathMemberPath))
-        {
-            var value = GetValueFromMemberPath(dataContext, NodePathMemberPath);
-            if (value != null)
-            {
-                SetCurrentValue(NodePathProperty, value.ToString());
-                return;
-            }
-        }
-
-        SetCurrentValue(NodePathProperty, Header?.ToString() ?? dataContext.ToString() ?? string.Empty);
-    }
-
     private class BindingEvaluator : DependencyObject
     {
         public static readonly DependencyProperty ValueProperty =
@@ -278,27 +279,31 @@ public class CascadePickerItem : HeaderedItemsControl
 
     public static readonly RoutedEvent ItemClickEvent = EventManager.RegisterRoutedEvent("ItemClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CascadePickerItem));
 
+    protected virtual void OnItemClick(object sender, RoutedEventArgs e)
+    {
+        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
+    }
+
     public event RoutedEventHandler ItemClick
     {
         add => AddHandler(ItemClickEvent, value);
         remove => RemoveHandler(ItemClickEvent, value);
     }
 
-    protected virtual void OnItemClick(object sender, RoutedEventArgs e)
-    {
-        RaiseEvent(new RoutedEventArgs(ItemClickEvent, this));
-    }
-
     #endregion ItemClickEvent
 
     #region IsPressed
 
+    #region 必须放在IsPressedProperty前面 否则报空引用异常
+
     private static readonly DependencyPropertyKey IsPressedPropertyKey =
-               DependencyProperty.RegisterReadOnly(
+                   DependencyProperty.RegisterReadOnly(
            nameof(IsPressed),
            typeof(bool),
            typeof(CascadePickerItem),
            new PropertyMetadata(false));
+
+    #endregion 必须放在IsPressedProperty前面 否则报空引用异常
 
     public static readonly DependencyProperty IsPressedProperty = IsPressedPropertyKey.DependencyProperty;
 

@@ -35,9 +35,9 @@
                                 Visibility="{Binding Path=(hp:ListBoxHelper.IsSelectAllEnabled), Converter={x:Static conv:VisibilityConverter.VisibleWhenTrue}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             <ContentPresenter
                                 Grid.Column="1"
-                                Margin="5,0,0,0"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </Grid>

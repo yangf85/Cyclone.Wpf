@@ -12,20 +12,12 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <cy:SpacingStackPanel
-            Margin="20"
-            Spacing="30">
+        <cy:SpacingStackPanel Margin="20" Spacing="30">
 
-            <!--  示例1：基本用法 - 手动创建级联项  -->
             <HeaderedContentControl Header="示例1：基本用法">
                 <cy:SpacingStackPanel Spacing="10">
-                    <TextBlock
-                        Foreground="Gray"
-                        Text="手动创建级联项，支持只读模式和清除功能" />
-                    <cy:SpacingUniformGrid
-                        HorizontalSpacing="20"
-                        Rows="1">
-                        <!--  普通模式  -->
+                    <TextBlock Foreground="Gray" Text="手动创建级联项，支持只读模式和清除功能" />
+                    <cy:SpacingUniformGrid HorizontalSpacing="20" Rows="1">
                         <cy:CascadePicker
                             x:Name="BasicPicker"
                             IsShowFullPath="True"
@@ -51,7 +43,6 @@
                             </cy:CascadePickerItem>
                         </cy:CascadePicker>
 
-                        <!--  只读模式  -->
                         <cy:CascadePicker
                             IsReadOnly="True"
                             IsShowFullPath="True"
@@ -60,13 +51,8 @@
                             Watermark="只读模式" />
                     </cy:SpacingUniformGrid>
 
-                    <!--  外部清除按钮示例  -->
-                    <StackPanel
-                        Margin="0,10,0,0"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="选中的值: " />
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="选中的值: " />
                         <TextBlock
                             VerticalAlignment="Center"
                             FontWeight="Bold"
@@ -80,12 +66,9 @@
                 </cy:SpacingStackPanel>
             </HeaderedContentControl>
 
-            <!--  示例2：数据绑定 - 使用 ItemsSource  -->
             <HeaderedContentControl Header="示例2：数据绑定">
                 <cy:SpacingStackPanel Spacing="10">
-                    <TextBlock
-                        Foreground="Gray"
-                        Text="使用 ItemsSource 和 NodePathMemberPath 绑定数据" />
+                    <TextBlock Foreground="Gray" Text="使用 ItemsSource 和 NodePathMemberPath 绑定数据" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="350" />
@@ -98,7 +81,7 @@
                             Grid.Column="0"
                             IsShowFullPath="True"
                             ItemsSource="{Binding Cities}"
-                            NodePathMemberPath="Name"
+                            NodeMemberPath="Name"
                             SelectedItem="{Binding SelectedCity}"
                             Separator=" &gt; "
                             Watermark="请选择城市">
@@ -124,9 +107,7 @@
                             <TextBlock>
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="选中的城市: {0}">
-                                        <Binding
-                                            Path="SelectedCity.Name"
-                                            TargetNullValue="未选择" />
+                                        <Binding Path="SelectedCity.Name" TargetNullValue="未选择" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -135,12 +116,9 @@
                 </cy:SpacingStackPanel>
             </HeaderedContentControl>
 
-            <!--  示例3：自定义显示模板  -->
             <HeaderedContentControl Header="示例3：自定义显示模板">
                 <cy:SpacingStackPanel Spacing="10">
-                    <TextBlock
-                        Foreground="Gray"
-                        Text="使用 ItemTemplate 自定义每个级联项的显示样式" />
+                    <TextBlock Foreground="Gray" Text="使用 ItemTemplate 自定义每个级联项的显示样式" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="400" />
@@ -151,7 +129,7 @@
                             Grid.Column="0"
                             IsShowFullPath="{Binding ShowFullPath}"
                             ItemsSource="{Binding Departments}"
-                            NodePathMemberPath="Name"
+                            NodeMemberPath="Name"
                             SelectedItem="{Binding SelectedDepartment}"
                             Separator=" / "
                             Watermark="请选择部门">
@@ -162,20 +140,12 @@
                                         BorderBrush="LightGray"
                                         BorderThickness="0,0,0,1">
                                         <StackPanel Orientation="Horizontal">
-                                            <!--  部门图标  -->
-                                            <TextBlock
-                                                Margin="0,0,5,0"
-                                                Text="📁" />
-                                            <!--  部门名称  -->
-                                            <TextBlock
-                                                FontWeight="Bold"
-                                                Text="{Binding Name}" />
-                                            <!--  部门代码  -->
+                                            <TextBlock Margin="0,0,5,0" Text="📁" />
+                                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
                                             <TextBlock
                                                 FontSize="11"
                                                 Foreground="Gray"
                                                 Text="{Binding Code, StringFormat=' [{0}]'}" />
-                                            <!--  人员数量  -->
                                             <TextBlock
                                                 FontSize="11"
                                                 Foreground="Blue"
@@ -186,20 +156,12 @@
                             </cy:CascadePicker.ItemTemplate>
                         </cy:CascadePicker>
 
-                        <StackPanel
-                            Grid.Column="1"
-                            Margin="20,0,0,0">
-                            <CheckBox
-                                Content="显示完整路径"
-                                IsChecked="{Binding ShowFullPath}" />
-                            <TextBlock
-                                Margin="0,10,0,0"
-                                FontWeight="Bold">
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                            <CheckBox Content="显示完整路径" IsChecked="{Binding ShowFullPath}" />
+                            <TextBlock Margin="0,10,0,0" FontWeight="Bold">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="选中部门: {0}">
-                                        <Binding
-                                            Path="SelectedDepartment.Name"
-                                            TargetNullValue="未选择" />
+                                        <Binding Path="SelectedDepartment.Name" TargetNullValue="未选择" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -210,20 +172,14 @@
                 </cy:SpacingStackPanel>
             </HeaderedContentControl>
 
-            <!--  示例4：不同配置对比  -->
             <HeaderedContentControl Header="示例4：不同配置对比">
                 <cy:SpacingStackPanel Spacing="10">
-                    <TextBlock
-                        Foreground="Gray"
-                        Text="展示不同的分隔符和路径显示方式" />
-                    <cy:SpacingUniformGrid
-                        HorizontalSpacing="15"
-                        Rows="1">
-                        <!--  只显示最后一级  -->
+                    <TextBlock Foreground="Gray" Text="展示不同的分隔符和路径显示方式" />
+                    <cy:SpacingUniformGrid HorizontalSpacing="15" Rows="1">
                         <cy:CascadePicker
                             IsShowFullPath="False"
                             ItemsSource="{Binding Cities}"
-                            NodePathMemberPath="Name"
+                            NodeMemberPath="Name"
                             Watermark="只显示最后一级">
                             <cy:CascadePicker.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
@@ -232,11 +188,10 @@
                             </cy:CascadePicker.ItemTemplate>
                         </cy:CascadePicker>
 
-                        <!--  使用箭头分隔符  -->
                         <cy:CascadePicker
                             IsShowFullPath="True"
                             ItemsSource="{Binding Cities}"
-                            NodePathMemberPath="Name"
+                            NodeMemberPath="Name"
                             Separator=" → "
                             Watermark="使用箭头分隔符">
                             <cy:CascadePicker.ItemTemplate>
@@ -246,11 +201,10 @@
                             </cy:CascadePicker.ItemTemplate>
                         </cy:CascadePicker>
 
-                        <!--  使用点分隔符  -->
                         <cy:CascadePicker
                             IsShowFullPath="True"
                             ItemsSource="{Binding Cities}"
-                            NodePathMemberPath="Name"
+                            NodeMemberPath="Name"
                             Separator="."
                             Watermark="使用点分隔符">
                             <cy:CascadePicker.ItemTemplate>
