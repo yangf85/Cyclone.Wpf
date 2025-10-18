@@ -37,7 +37,9 @@
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
