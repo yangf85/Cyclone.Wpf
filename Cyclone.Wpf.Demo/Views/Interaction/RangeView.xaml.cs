@@ -35,23 +35,8 @@ namespace Cyclone.Wpf.Demo.Views
     public partial class RangeViewModel : ObservableObject
     {
         private readonly DispatcherTimer _timer;
+
         private readonly Random _random;
-
-        public RangeViewModel()
-        {
-            _random = new Random();
-
-            // 初始化定时器用于模拟数据更新
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
-
-            // 设置初始值
-            InitializeValues();
-        }
 
         private void InitializeValues()
         {
@@ -118,6 +103,22 @@ namespace Cyclone.Wpf.Demo.Views
             CpuUsage = Math.Max(0, Math.Min(100, CpuUsage + _random.Next(-5, 6)));
             MemoryUsage = Math.Max(0, Math.Min(100, MemoryUsage + _random.Next(-3, 4)));
             DiskUsage = Math.Max(0, Math.Min(100, DiskUsage + _random.Next(-2, 3)));
+        }
+
+        public RangeViewModel()
+        {
+            _random = new Random();
+
+            // 初始化定时器用于模拟数据更新
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+
+            // 设置初始值
+            InitializeValues();
         }
 
         #region Slider 相关属性

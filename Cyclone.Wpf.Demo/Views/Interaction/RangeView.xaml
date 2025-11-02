@@ -12,7 +12,6 @@
     mc:Ignorable="d">
     <ScrollViewer>
         <cy:SpacingStackPanel Spacing="25">
-
             <HeaderedContentControl Header="Slider 控件示例">
                 <cy:SpacingStackPanel Spacing="15">
                     <GroupBox Header="音量控制">
@@ -35,22 +34,45 @@
                                     VerticalAlignment="Center"
                                     Text="{Binding VolumeLevel, StringFormat={}{0:0}%}" />
                             </cy:SpacingUniformGrid>
+
+                            <!--  修改后的低音Slider - 添加了磁性吸附功能  -->
                             <cy:SpacingUniformGrid HorizontalSpacing="10" Rows="1">
                                 <TextBlock
                                     Width="60"
                                     VerticalAlignment="Center"
                                     Text="低音:" />
                                 <Slider
+                                    x:Name="BassSlider"
+                                    IsSnapToTickEnabled="True"
                                     Maximum="10"
                                     Minimum="-10"
                                     TickFrequency="2"
                                     TickPlacement="Both"
-                                    Value="{Binding BassLevel, Mode=TwoWay}" />
+                                    Value="{Binding BassLevel, Mode=TwoWay}">
+                                    <Slider.Ticks>
+                                        <DoubleCollection>-10,-8,-6,-4,-2,0,2,4,6,8,10</DoubleCollection>
+                                    </Slider.Ticks>
+                                </Slider>
                                 <TextBlock
                                     Width="40"
                                     VerticalAlignment="Center"
                                     Text="{Binding BassLevel, StringFormat={}{0:0}dB}" />
                             </cy:SpacingUniformGrid>
+
+                            <!--  添加说明文字  -->
+                            <Border
+                                Padding="8"
+                                Background="AliceBlue"
+                                BorderBrush="LightBlue"
+                                BorderThickness="1"
+                                CornerRadius="3">
+                                <TextBlock
+                                    FontSize="11"
+                                    FontStyle="Italic"
+                                    Foreground="DarkBlue"
+                                    Text="💡 提示：上方的低音滑块已启用磁性吸附功能！当您拖动滑块时，它会自动吸附到最近的刻度点（-10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10）。吸附阈值设置为1.0，试试看效果！"
+                                    TextWrapping="Wrap" />
+                            </Border>
                         </cy:SpacingStackPanel>
                     </GroupBox>
 
@@ -91,9 +113,97 @@
                             </cy:SpacingStackPanel>
                         </cy:SpacingUniformGrid>
                     </GroupBox>
+
+                    <!--  添加磁性吸附功能对比演示  -->
+                    <GroupBox Header="磁性吸附功能对比演示">
+                        <cy:SpacingStackPanel Spacing="15">
+                            <TextBlock FontWeight="Bold" Text="对比测试：磁性吸附 vs 普通滑块" />
+
+                            <!--  启用磁性吸附的演示滑块  -->
+                            <Border
+                                Padding="10"
+                                BorderBrush="Green"
+                                BorderThickness="1">
+                                <cy:SpacingStackPanel Spacing="8">
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="Green"
+                                        Text="✅ 启用磁性吸附的滑块" />
+                                    <cy:SpacingUniformGrid HorizontalSpacing="10" Rows="1">
+                                        <TextBlock
+                                            Width="80"
+                                            VerticalAlignment="Center"
+                                            Text="示例滑块:" />
+                                        <Slider
+                                            x:Name="MagneticDemoSlider"
+                                            cy:SliderHelper.IsEnabledMagneticSnap="True"
+                                            cy:SliderHelper.SnapThreshold="2.0"
+                                            LargeChange="0.1"
+                                            Maximum="100"
+                                            Minimum="0"
+                                            SmallChange="0.01"
+                                            TickFrequency="10"
+                                            TickPlacement="Both"
+                                            Value="50">
+                                            <Slider.Ticks>
+                                                <DoubleCollection>0,20,40,50,60,80,100</DoubleCollection>
+                                            </Slider.Ticks>
+                                        </Slider>
+                                        <TextBlock
+                                            Width="60"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding ElementName=MagneticDemoSlider, Path=Value, StringFormat={}{0:0.1}}" />
+                                    </cy:SpacingUniformGrid>
+                                    <TextBlock
+                                        FontSize="10"
+                                        Foreground="Green"
+                                        Text="🧲 会自动吸附到: 0, 20, 40, 50, 60, 80, 100" />
+                                </cy:SpacingStackPanel>
+                            </Border>
+
+                            <!--  普通滑块对比  -->
+                            <Border
+                                Padding="10"
+                                BorderBrush="Orange"
+                                BorderThickness="1">
+                                <cy:SpacingStackPanel Spacing="8">
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="Orange"
+                                        Text="🔄 普通滑块（无磁性吸附）" />
+                                    <cy:SpacingUniformGrid HorizontalSpacing="10" Rows="1">
+                                        <TextBlock
+                                            Width="80"
+                                            VerticalAlignment="Center"
+                                            Text="示例滑块:" />
+                                        <Slider
+                                            x:Name="NormalDemoSlider"
+                                            Maximum="100"
+                                            Minimum="0"
+                                            TickFrequency="10"
+                                            TickPlacement="Both"
+                                            Value="50">
+                                            <Slider.Ticks>
+                                                <DoubleCollection>0,20,40,50,60,80,100</DoubleCollection>
+                                            </Slider.Ticks>
+                                        </Slider>
+                                        <TextBlock
+                                            Width="60"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding ElementName=NormalDemoSlider, Path=Value, StringFormat={}{0:0.1}}" />
+                                    </cy:SpacingUniformGrid>
+                                    <TextBlock
+                                        FontSize="10"
+                                        Foreground="Orange"
+                                        Text="📍 可以停在任意位置" />
+                                </cy:SpacingStackPanel>
+                            </Border>
+                        </cy:SpacingStackPanel>
+                    </GroupBox>
                 </cy:SpacingStackPanel>
             </HeaderedContentControl>
 
+            <!--  继续保持原有的其他控件  -->
             <HeaderedContentControl Header="ProgressBar 控件示例">
                 <cy:SpacingStackPanel Spacing="15">
                     <GroupBox Header="文件操作进度">
