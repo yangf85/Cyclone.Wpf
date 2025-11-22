@@ -9,10 +9,13 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}" />
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness.Thin}" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource Text.Content}" />
+        <Setter Property="TextElement.FontSize" Value="{DynamicResource Font.Body}" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="0.5" />
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="Control" BasedOn="{StaticResource Control.Style.Basic}" />
 </ResourceDictionary>

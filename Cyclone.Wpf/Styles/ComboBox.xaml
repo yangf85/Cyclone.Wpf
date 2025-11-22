@@ -54,7 +54,7 @@
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border
                         Name="RootBorder"
-                        Padding="{DynamicResource Padding.Left}"
+                        Padding="4,0"
                         Background="{TemplateBinding Background}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
@@ -95,7 +95,7 @@
                             <ContentPresenter
                                 Name="ContentSite"
                                 Grid.Column="0"
-                                Margin="3,0"
+                                Margin="4,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Content="{TemplateBinding SelectionBoxItem}"

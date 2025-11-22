@@ -14,7 +14,7 @@
 
     <cy:SpacingStackPanel Spacing="20">
         <HeaderedContentControl Header="Button">
-            <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
+            <cy:SpacingStackPanel Orientation="Horizontal">
                 <Button Content="One" />
                 <Button Content="Two" />
                 <Button Content="Three" />
@@ -22,7 +22,7 @@
                     Command="{Binding SenderMessageCommand}"
                     CommandParameter="Four"
                     Content="Four" />
-            </cy:SpacingUniformGrid>
+            </cy:SpacingStackPanel>
         </HeaderedContentControl>
         <HeaderedContentControl Header="ToggleButton">
             <cy:SpacingUniformGrid HorizontalSpacing="5" Rows="1">
