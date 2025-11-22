@@ -27,13 +27,19 @@ namespace Cyclone.Wpf.Controls;
 public class NumberBox : Control
 {
     private const string PART_IncreaseRepeatButton = nameof(PART_IncreaseRepeatButton);
+
     private const string PART_InputTextBox = nameof(PART_InputTextBox);
+
     private const string PART_DecreaseRepeatButton = nameof(PART_DecreaseRepeatButton);
+
     private const string PART_ClearButton = nameof(PART_ClearButton);
 
     private RepeatButton _increaseRepeatButton;
+
     private TextBox _inputTextBox;
+
     private RepeatButton _decreaseRepeatButton;
+
     private Button _clearButton;
 
     static NumberBox()
@@ -115,7 +121,6 @@ public class NumberBox : Control
 
     private static void OnStepChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine($"Step changed from {e.OldValue} to {e.NewValue}");
     }
 
     #endregion Step
@@ -398,6 +403,32 @@ public class NumberBox : Control
 
     private string _inputText = "";
 
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        _inputTextBox = GetTemplateChild(PART_InputTextBox) as TextBox;
+        if (_inputTextBox != null)
+        {
+            _inputTextBox.Text = FormatValue(Value);
+            _inputTextBox.IsReadOnly = IsReadOnly;
+            _inputTextBox.PreviewTextInput -= InputTextBox_PreviewTextInput;
+            _inputTextBox.PreviewTextInput += InputTextBox_PreviewTextInput;
+            _inputTextBox.MouseWheel -= InputTextBox_MouseWheel;
+            _inputTextBox.MouseWheel += InputTextBox_MouseWheel;
+            _inputTextBox.TextChanged -= InputTextBox_TextChanged;
+            _inputTextBox.TextChanged += InputTextBox_TextChanged;
+            _inputTextBox.PreviewKeyDown -= InputTextBox_PreviewKeyDown;
+            _inputTextBox.PreviewKeyDown += InputTextBox_PreviewKeyDown;
+
+            // 添加粘贴事件处理
+            DataObject.RemovePastingHandler(_inputTextBox, OnPasting);
+            DataObject.AddPastingHandler(_inputTextBox, OnPasting);
+        }
+
+        _clearButton = GetTemplateChild(PART_ClearButton) as Button;
+    }
+
     private void InputTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (IsReadOnly)
@@ -468,8 +499,6 @@ public class NumberBox : Control
             e.Handled = true;
             return;
         }
-
-        System.Diagnostics.Debug.WriteLine($"Current Step: {this.Step}");
 
         // 判断滚动方向，使用命令来增加或减少值
         if (e.Delta > 0)
@@ -589,32 +618,6 @@ public class NumberBox : Control
     {
         // 根据 DecimalPlaces 格式化数字
         return value.ToString($"F{DecimalPlaces}", CultureInfo.InvariantCulture);
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-
-        _inputTextBox = GetTemplateChild(PART_InputTextBox) as TextBox;
-        if (_inputTextBox != null)
-        {
-            _inputTextBox.Text = FormatValue(Value);
-            _inputTextBox.IsReadOnly = IsReadOnly;
-            _inputTextBox.PreviewTextInput -= InputTextBox_PreviewTextInput;
-            _inputTextBox.PreviewTextInput += InputTextBox_PreviewTextInput;
-            _inputTextBox.MouseWheel -= InputTextBox_MouseWheel;
-            _inputTextBox.MouseWheel += InputTextBox_MouseWheel;
-            _inputTextBox.TextChanged -= InputTextBox_TextChanged;
-            _inputTextBox.TextChanged += InputTextBox_TextChanged;
-            _inputTextBox.PreviewKeyDown -= InputTextBox_PreviewKeyDown;
-            _inputTextBox.PreviewKeyDown += InputTextBox_PreviewKeyDown;
-
-            // 添加粘贴事件处理
-            DataObject.RemovePastingHandler(_inputTextBox, OnPasting);
-            DataObject.AddPastingHandler(_inputTextBox, OnPasting);
-        }
-
-        _clearButton = GetTemplateChild(PART_ClearButton) as Button;
     }
 
     #endregion Override
