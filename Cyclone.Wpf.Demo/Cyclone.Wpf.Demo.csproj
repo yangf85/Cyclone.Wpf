@@ -7,8 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
-    <AssemblyVersion>25.11.22.6</AssemblyVersion>
-    <FileVersion>25.11.22.6</FileVersion>
+    <AssemblyVersion>25.11.24.6</AssemblyVersion>
+    <FileVersion>25.11.24.6</FileVersion>
 	
   </PropertyGroup>
 
