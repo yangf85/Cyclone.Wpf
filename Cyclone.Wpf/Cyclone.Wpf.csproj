@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
 	  <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>25.12.13.87</AssemblyVersion>
-    <FileVersion>25.12.13.87</FileVersion>
+    <AssemblyVersion>25.12.14.87</AssemblyVersion>
+    <FileVersion>25.12.14.87</FileVersion>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Cyclone.Wpf</Title>
@@ -72,4 +72,13 @@
     <Folder Include="Controls\LcdDisplayer\" />
   </ItemGroup>
 
+
+	<!-- 生成前自动删除旧包 -->
+	<Target Name="DeleteOldNuGetPackages" BeforeTargets="GenerateNuspec">
+		<ItemGroup>
+			<OldPackages Include="$(PackageOutputPath)*.nupkg" />
+		</ItemGroup>
+		<Delete Files="@(OldPackages)" />
+		<Message Text="已删除旧的 NuGet 包" Importance="high" />
+	</Target>
 </Project>
