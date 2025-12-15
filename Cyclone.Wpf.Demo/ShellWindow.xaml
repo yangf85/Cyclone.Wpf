@@ -15,6 +15,13 @@
     d:DataContext="{d:DesignInstance Type=vm:ShellWindowViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <cy:AdvancedWindow.Icon>
+        <Image
+            Width="27"
+            Height="27"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            Source="pack://application:,,,/Cyclone.Wpf.Demo;component/Assets/Logo.png" />
+    </cy:AdvancedWindow.Icon>
     <cy:AdvancedWindow.FunctionalZone>
         <cy:SplitButton
             Height="{Binding Path=CaptionHeight, RelativeSource={RelativeSource AncestorType=cy:AdvancedWindow}}"
