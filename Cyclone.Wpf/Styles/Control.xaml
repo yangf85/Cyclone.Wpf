@@ -17,5 +17,5 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="Control" BasedOn="{StaticResource Control.Style.Basic}" />
+    <Style BasedOn="{StaticResource Control.Style.Basic}" TargetType="Control" />
 </ResourceDictionary>
